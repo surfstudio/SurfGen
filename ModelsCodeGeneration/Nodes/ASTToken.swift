@@ -7,11 +7,11 @@
 //
 
 public enum ASTToken {
-    case name
+    case name(value: String)
     case decl
     case content
-    case field
-    case type
+    case field(isOptional: Bool)
+    case type(name: String)
     case root
 }
 

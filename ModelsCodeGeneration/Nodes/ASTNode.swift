@@ -7,6 +7,18 @@
 //
 
 public protocol ASTNode: class {
-    var nodeToken: ASTToken { get }
-    var next: [ASTNode] { get }
+    var token: ASTToken { get }
+    var subNodes: [ASTNode] { get }
+}
+
+public class Node: ASTNode {
+    
+    public var token: ASTToken
+    public var subNodes: [ASTNode]
+    
+    public init(token: ASTToken, _ subNodes: [ASTNode]) {
+        self.token = token
+        self.subNodes = subNodes
+    }
+
 }

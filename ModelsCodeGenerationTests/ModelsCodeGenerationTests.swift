@@ -11,27 +11,37 @@ import XCTest
 
 class ModelsCodeGenerationTests: XCTestCase {
 
-    var root: RootNode!
-
-    override func setUp() {
-        root = RootNode([
-            formDeclNode(with: "Auth", fieldNames: ["login", "password", "device"]),
-            formDeclNode(with: "Register", fieldNames: ["test", "field", "device"]),
-            formDeclNode(with: "User", fieldNames: ["name", "surname", "region"])
-        ])
-    }
-
-    func formDeclNode(with name: String, fieldNames: [String]) -> ASTNode {
-        let name = NameNode(name: name)
-        let fields = fieldNames.map { FieldNode([NameNode(name: $0), TypeNode(name: "String")]) }
-        let content = ContentNode(fields)
-        return DeclNode([name, content])
-    }
-
-    // just to see the concent result
-    func testExample() {
-        let files = CodeGenerator().generateEntitiesCode(for: root, type: .entity)
-        files.forEach { print($0) }
+    func testEntryCodeGeneration() {
+        let declNode = Node(token: .decl,
+                            [
+                                Node(token: .name(value: "Login"), []),
+                                Node(token: .content,
+                                     [
+                                        formFieldNode(isOptional: true, name: "profile", typeName: "Profile"),
+                                        formFieldNode(isOptional: false, name: "id", typeName: "String"),
+                                        formFieldNode(isOptional: true, name: "number", typeName: "Int")
+                                     ]
+                                )
+                            ]
+        )
+        
+        let root = Node(token: .root, [declNode])
+        do {
+            let models = try RootGenerator().generateCode(for: root, type: .entry)
+            models.forEach { print($0) }
+        } catch {
+            dump(error)
+        }
     }
 
 }
+
+func formFieldNode(isOptional: Bool, name: String, typeName: String) -> Node {
+    return Node(token: .field(isOptional: isOptional),
+                [
+                    Node(token: .name(value: name), []),
+                    Node(token: .type(name: typeName), [])
+                ]
+    )
+}
+
