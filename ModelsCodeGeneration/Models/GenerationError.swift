@@ -8,7 +8,11 @@
 
 public enum GeneratorError: Error {
     /// indicates that input ASTNode is not supposed to be used in particular generator
-    case incorrectNodeToken
+    case incorrectNodeToken(String)
     /// indicates that input node is not configured appropriately for code generator
-    case nodeConfiguration
+    case nodeConfiguration(String)
+}
+
+public enum ConfiguarionError: Error {
+    case cantFindBundle(String)
 }

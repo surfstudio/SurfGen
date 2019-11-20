@@ -6,12 +6,14 @@
 //  Copyright © 2019 Surf. All rights reserved.
 //
 
+import Stencil
+
 public final class RootGenerator {
 
     /// for now this generator is supposed to generate code for complete AST
     public func generateCode(for node: ASTNode, type: ModelType) throws -> [String] {
         guard  case .root = node.token else {
-            throw GeneratorError.incorrectNodeToken
+            throw GeneratorError.incorrectNodeToken("Root generator coundn't parse input node as node with root token")
         }
         
         switch type {
@@ -27,21 +29,30 @@ public final class RootGenerator {
     }
 
     private func generateEntryCode(declNode: ASTNode) throws -> String {
-        var codeLines: [String] = [
-            KeyWords.nodekitImport + KeyWords.newLine,
-            try DeclGenerator().generateCode(for: declNode, type: .entry)
-        ]
-        guard let contentNode = declNode.subNodes.last else {
-            throw GeneratorError.nodeConfiguration
+        guard let bundle = Bundle(identifier: Identifiers.bundle) else {
+            throw ConfiguarionError.cantFindBundle("for entry generator method")
         }
+        let environment = Environment(loader: FileSystemLoader(bundle: [bundle]))
+
+        guard let contentNode = declNode.subNodes.last else {
+            throw GeneratorError.nodeConfiguration("content node couldn't be resolved for decl node")
+        }
+        
+        guard case let .name(value) = declNode.subNodes.first?.token else {
+            throw GeneratorError.nodeConfiguration("name node couldn't be resolved for decl node")
+        }
+
         let propertyGenerator = PropertyGenerator()
+        var properties = [String]()
         for node in contentNode.subNodes {
             let propertyString = try propertyGenerator.generateCode(for: node, type: .entry)
-            codeLines.append(propertyString)
+            properties.append(propertyString)
         }
-        codeLines.append(KeyWords.codeEndBracket + KeyWords.newLine)
-        codeLines.append(try RawMappableGenerator().generateCode(for: declNode, type: .entry))
-        return codeLines.compactMap { $0 }.joined(separator: KeyWords.newLine)
+        
+        return try environment.renderTemplate(name: "Codable.txt", context: [
+            "className": ModelType.entry.formName(with: value),
+            "properties": properties
+        ])
     }
 
 }

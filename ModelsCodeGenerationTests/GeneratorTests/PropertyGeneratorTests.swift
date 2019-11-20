@@ -13,7 +13,7 @@ class PropertyGeneratorTests: XCTestCase {
     
     func testStandardOptionalFieldCodeGeneration() {
         let fieldNode = formFieldNode(isOptional: true, name: "login", typeName: "String")
-        let expectedCode = "    public let login: String?"
+        let expectedCode = "public let login: String?"
         let generatedCode = try? PropertyGenerator().generateCode(for: fieldNode, type: .entity)
         XCTAssert(expectedCode == generatedCode)
     }
@@ -22,13 +22,13 @@ class PropertyGeneratorTests: XCTestCase {
         let fieldNode = formFieldNode(isOptional: true, name: "info", typeName: "MetaInfo")
         
         // entity
-        let expectedEntityCode = "    public let info: MetaInfoEntity?"
+        let expectedEntityCode = "public let info: MetaInfoEntity?"
         let generatedEntityCode = try? PropertyGenerator().generateCode(for: fieldNode, type: .entity)
         
         XCTAssert(expectedEntityCode == generatedEntityCode)
         
         // entry
-        let expectedEntryCode = "    public let info: MetaInfoEntry?"
+        let expectedEntryCode = "public let info: MetaInfoEntry?"
         let generatedEntryCode = try? PropertyGenerator().generateCode(for: fieldNode, type: .entry)
         
         XCTAssert(expectedEntryCode == generatedEntryCode)
@@ -36,7 +36,7 @@ class PropertyGeneratorTests: XCTestCase {
     
     func testStandardFieldCodeGenetaion() {
         let fieldNode = formFieldNode(isOptional: false, name: "value", typeName: "Int")
-        let expectedCode = "    public let value: Int"
+        let expectedCode = "public let value: Int"
         let generatedCode = try? PropertyGenerator().generateCode(for: fieldNode, type: .entity)
         
         XCTAssert(expectedCode == generatedCode)

@@ -6,19 +6,19 @@
 //  Copyright © 2019 Surf. All rights reserved.
 //
 
+public enum Identifiers {
+    public static let bundle = "ru.surf.ModelsCodeGeneration"
+}
+
 public enum KeyWords {
     public static let `public` = "public"
     public static let `struct` = "struct"
     public static let codeStartBracket = "{"
     public static let codeEndBracket = "}"
     public static let colon = ":"
-    public static let codable = "Codable"
     public static let `let` = "let"
     public static let newLine = "\n"
-    public static let nodekitImport = "import NodeKit"
-    public static let formattingSpace = "    "
     public static let `extension` = "extension"
-    public static let rawMappableMark = "// MARK: - RawMappable"
 }
 
 public enum StandardTypes {
