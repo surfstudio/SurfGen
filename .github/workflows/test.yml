@@ -9,7 +9,7 @@ jobs:
     name: Test
     runs-on: macOS-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v1
       - name: Pod install
         run:
           pod install
