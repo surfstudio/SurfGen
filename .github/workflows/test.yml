@@ -15,4 +15,4 @@ jobs:
           pod install
       - name: Build and test
         run: 
-          xcodebuild -workspace ModelsCodeGeneration.xcworkspace -scheme ModelsCodeGeneration -sdk iphonesimulator -destination 'platform=iOS Simulator,OS=13.0,name=iPhone 11' test
+          xcodebuild -workspace ModelsCodeGeneration.xcworkspace -scheme ModelsCodeGeneration -sdk iphonesimulator -destination 'name=iPhone 11' test
