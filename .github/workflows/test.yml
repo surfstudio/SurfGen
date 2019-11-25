@@ -1,0 +1,18 @@
+name: CI
+
+on: 
+  pull_request:
+    branches:
+      - master
+jobs:
+  test:
+    name: Test
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Pod install
+        run:
+          pod install
+      - name: Build and test
+        run: 
+          xcodebuild -workspace ModelsCodeGeneration.xcworkspace -scheme ModelsCodeGeneration -sdk iphonesimulator -destination 'name=iPhone 11' test
