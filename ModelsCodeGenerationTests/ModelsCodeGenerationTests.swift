@@ -12,26 +12,7 @@ import XCTest
 class ModelsCodeGenerationTests: XCTestCase {
 
     func testEntryCodeGeneration() {
-        let declNode = Node(token: .decl,
-                            [
-                                Node(token: .name(value: "Login"), []),
-                                Node(token: .content,
-                                     [
-                                        formFieldNode(isOptional: true, name: "profile", typeName: "Profile"),
-                                        formFieldNode(isOptional: false, name: "id", typeName: "String"),
-                                        formFieldNode(isOptional: true, name: "number", typeName: "Int")
-                                     ]
-                                )
-                            ]
-        )
         
-        let root = Node(token: .root, [declNode])
-        do {
-            let models = try RootGenerator().generateCode(for: root, type: .entry)
-            models.forEach { print($0) }
-        } catch {
-            dump(error)
-        }
     }
 
 }

@@ -11,14 +11,14 @@ import Stencil
 public final class RootGenerator {
 
     /// for now this generator is supposed to generate code for complete AST
-    public func generateCode(for node: ASTNode, type: ModelType) throws -> [String] {
+    public func generateCode(for node: ASTNode, type: ModelType) throws -> [(String, String)] {
         guard  case .root = node.token else {
             throw GeneratorError.incorrectNodeToken("Root generator coundn't parse input node as node with root token")
         }
         
         switch type {
         case .entry:
-            var models = [String]()
+            var models = [(String, String)]()
             for decl in node.subNodes {
                 models.append(try generateEntryCode(declNode: decl))
             }
@@ -28,7 +28,7 @@ public final class RootGenerator {
         }
     }
 
-    private func generateEntryCode(declNode: ASTNode) throws -> String {
+    private func generateEntryCode(declNode: ASTNode) throws -> (String, String) {
         guard let bundle = Bundle(identifier: Identifiers.bundle) else {
             throw ConfiguarionError.cantFindBundle("for entry generator method")
         }
@@ -49,10 +49,12 @@ public final class RootGenerator {
             properties.append(propertyString)
         }
         
-        return try environment.renderTemplate(name: "Codable.txt", context: [
+        let code = try environment.renderTemplate(name: "Codable.txt", context: [
             "className": ModelType.entry.formName(with: value),
             "properties": properties
         ])
+        
+        return (ModelType.entry.formName(with: value).capitalizingFirstLetter().withSwiftExt, code)
     }
 
 }
