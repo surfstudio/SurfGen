@@ -1,21 +1,12 @@
 //
-//  ModelsCodeGenerationTests.swift
+//  NodeCreation.swift
 //  ModelsCodeGenerationTests
 //
-//  Created by Mikhail Monakov on 19/10/2019.
+//  Created by Mikhail Monakov on 26/11/2019.
 //  Copyright © 2019 Surf. All rights reserved.
 //
 
-import XCTest
 @testable import ModelsCodeGeneration
-
-class ModelsCodeGenerationTests: XCTestCase {
-
-    func testEntryCodeGeneration() {
-        
-    }
-
-}
 
 func formFieldNode(isOptional: Bool, name: String, typeName: String) -> Node {
     return Node(token: .field(isOptional: isOptional),
@@ -25,4 +16,3 @@ func formFieldNode(isOptional: Bool, name: String, typeName: String) -> Node {
                 ]
     )
 }
-
