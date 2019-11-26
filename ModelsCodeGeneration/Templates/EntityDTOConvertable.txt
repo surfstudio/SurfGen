@@ -10,6 +10,8 @@ public struct {{ entityName }} {
     
     public init({% for parameter in parameters %}{{parameter}}{% if not forloop.last %},{% else %}) { {% endif %}
                 {% endfor %}
+{% for variable in variables %}    self.{{ variable }} = {{ variable }}
+{% endfor %}
 }
 
 // MARK: - DTOConvertible

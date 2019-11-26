@@ -82,10 +82,18 @@ public final class RootGenerator {
             parameters.append(value)
         }
         
+        var variables = [String]()
+        for property in properties {
+            let value: String = String(property.split(separator: " ").dropFirst(2).joined(separator: " "))
+            let variable = String(value.split(separator: ":").first ?? "")
+            variables.append(variable)
+        }
+        
         let code = try environment.renderTemplate(name: "EntityDTOConvertable.txt", context: [
             "entityName": ModelType.entity.formName(with: value),
             "entryName": ModelType.entry.formName(with: value),
             "parameters": parameters,
+            "variables": variables,
             "properties": properties
         ])
         
