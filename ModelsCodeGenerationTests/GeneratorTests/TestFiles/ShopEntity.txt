@@ -1,0 +1,46 @@
+
+import NodeKit
+
+public struct ShopEntity {
+
+    // MARK: - Public Properties
+
+    public let id: String
+    public let name: String
+    public let phone: String
+    public let location: ShopLocationEntity
+
+    // MARK: - Initialization
+
+    public init(id: String,
+                name: String,
+                phone: String,
+                location: ShopLocationEntity) {
+        self.id = id
+        self.name = name
+        self.phone = phone
+        self.location = location
+    }
+
+}
+
+// MARK: - DTOConvertible
+
+extension ShopEntity: DTOConvertible {
+
+    public static func from(dto model: ShopEntry) throws -> ShopEntity {
+        return try .init(id: model.id,
+                         name: model.name,
+                         phone: model.phone,
+                         location: .from(dto: model.location))
+    }
+
+    public func toDTO() throws -> ShopEntry {
+        return .init(id: id,
+                     name: name,
+                     phone: phone,
+                     location: try location.toDTO())
+    }
+
+}
+

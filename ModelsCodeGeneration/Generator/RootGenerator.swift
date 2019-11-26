@@ -24,15 +24,16 @@ public final class RootGenerator {
             }
             return models
         case .entity:
-            return []
+            var models = [(String, String)]()
+            for decl in node.subNodes {
+                models.append(try generateEntityCode(declNode: decl))
+            }
+            return models
         }
     }
 
     private func generateEntryCode(declNode: ASTNode) throws -> (String, String) {
-        guard let bundle = Bundle(identifier: Identifiers.bundle) else {
-            throw ConfiguarionError.cantFindBundle("for entry generator method")
-        }
-        let environment = Environment(loader: FileSystemLoader(bundle: [bundle]))
+        let environment = Environment(loader: FileSystemLoader(bundle: [Bundle(for: type(of: self))]))
 
         guard let contentNode = declNode.subNodes.last else {
             throw GeneratorError.nodeConfiguration("content node couldn't be resolved for decl node")
@@ -55,6 +56,40 @@ public final class RootGenerator {
         ])
         
         return (ModelType.entry.formName(with: value).capitalizingFirstLetter().withSwiftExt, code)
+    }
+
+    private func generateEntityCode(declNode: ASTNode) throws -> (String, String) {
+        let environment = Environment(loader: FileSystemLoader(bundle: [Bundle(for: type(of: self))]))
+
+        guard let contentNode = declNode.subNodes.last else {
+            throw GeneratorError.nodeConfiguration("content node couldn't be resolved for decl node")
+        }
+        
+        guard case let .name(value) = declNode.subNodes.first?.token else {
+            throw GeneratorError.nodeConfiguration("name node couldn't be resolved for decl node")
+        }
+
+        let propertyGenerator = PropertyGenerator()
+        var properties = [String]()
+        for node in contentNode.subNodes {
+            let propertyString = try propertyGenerator.generateCode(for: node, type: .entity)
+            properties.append(propertyString)
+        }
+        
+        var parameters = [String]()
+        for property in properties {
+            let value: String = String(property.split(separator: " ").dropFirst(2).joined(separator: " "))
+            parameters.append(value)
+        }
+        
+        let code = try environment.renderTemplate(name: "EntityDTOConvertable.txt", context: [
+            "entityName": ModelType.entity.formName(with: value),
+            "entryName": ModelType.entry.formName(with: value),
+            "parameters": parameters,
+            "properties": properties
+        ])
+        
+        return (ModelType.entity.formName(with: value).capitalizingFirstLetter().withSwiftExt, code)
     }
 
 }

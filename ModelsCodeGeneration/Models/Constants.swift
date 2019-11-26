@@ -6,10 +6,6 @@
 //  Copyright © 2019 Surf. All rights reserved.
 //
 
-public enum Identifiers {
-    public static let bundle = "ru.surf.ModelsCodeGeneration"
-}
-
 public enum KeyWords {
     public static let `public` = "public"
     public static let `struct` = "struct"

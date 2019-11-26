@@ -1,0 +1,27 @@
+
+import NodeKit
+
+public struct {{ entityName }} {
+   
+    // MARK: - Public Properties
+
+{% for property in properties %}    {{ property }}
+{% endfor %}
+    
+    public init({% for parameter in parameters %}{{parameter}}{% if not forloop.last %},{% else %}) { {% endif %}
+                {% endfor %}
+}
+
+// MARK: - DTOConvertible
+
+extension {{ entityName }}: DTOConvertible {
+
+    public static func from(dto model: {{ entryName }}) throws -> {{ entityName }} {
+        return try .init()
+    }
+
+    public func toDTO() throws -> {{ entryName }} {
+        return .init()
+    }
+
+}

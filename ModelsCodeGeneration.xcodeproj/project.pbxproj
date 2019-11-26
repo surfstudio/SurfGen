@@ -14,6 +14,9 @@
 		007DE255235B274F00748B19 /* ASTToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007DE254235B274F00748B19 /* ASTToken.swift */; };
 		007DE257235B292800748B19 /* ASTNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007DE256235B292800748B19 /* ASTNode.swift */; };
 		007DE25B235B5A6100748B19 /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007DE25A235B5A6100748B19 /* CodeGenerator.swift */; };
+		008B7EA6238D99B100A6E467 /* EntityDTOConvertable.txt in Resources */ = {isa = PBXBuildFile; fileRef = 008B7EA5238D99B100A6E467 /* EntityDTOConvertable.txt */; };
+		008B7EAD238D9FB800A6E467 /* ShopEntity.txt in Resources */ = {isa = PBXBuildFile; fileRef = 008B7EAC238D9FB800A6E467 /* ShopEntity.txt */; };
+		008B7EAF238DA1D500A6E467 /* EntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008B7EAE238DA1D500A6E467 /* EntityTests.swift */; };
 		00E8159D2376FEFA009F4CA6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8159C2376FEFA009F4CA6 /* Constants.swift */; };
 		00E815A22376FF4E009F4CA6 /* GenerationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E815A12376FF4E009F4CA6 /* GenerationError.swift */; };
 		00E815A42377004C009F4CA6 /* ModelsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E815A32377004C009F4CA6 /* ModelsType.swift */; };
@@ -49,6 +52,9 @@
 		007DE254235B274F00748B19 /* ASTToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTToken.swift; sourceTree = "<group>"; };
 		007DE256235B292800748B19 /* ASTNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTNode.swift; sourceTree = "<group>"; };
 		007DE25A235B5A6100748B19 /* CodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeGenerator.swift; sourceTree = "<group>"; };
+		008B7EA5238D99B100A6E467 /* EntityDTOConvertable.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = EntityDTOConvertable.txt; sourceTree = "<group>"; };
+		008B7EAC238D9FB800A6E467 /* ShopEntity.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ShopEntity.txt; sourceTree = "<group>"; };
+		008B7EAE238DA1D500A6E467 /* EntityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityTests.swift; sourceTree = "<group>"; };
 		00E8159C2376FEFA009F4CA6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		00E815A12376FF4E009F4CA6 /* GenerationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerationError.swift; sourceTree = "<group>"; };
 		00E815A32377004C009F4CA6 /* ModelsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsType.swift; sourceTree = "<group>"; };
@@ -163,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				86BB9C282389B407009417E3 /* TestFiles */,
+				008B7EAE238DA1D500A6E467 /* EntityTests.swift */,
 				86BB9C2B2389B563009417E3 /* EntryTests.swift */,
 				00E815A6237701DD009F4CA6 /* PropertyGeneratorTests.swift */,
 			);
@@ -173,6 +180,7 @@
 			isa = PBXGroup;
 			children = (
 				86B64DB52385E44800B0D412 /* Codable.txt */,
+				008B7EA5238D99B100A6E467 /* EntityDTOConvertable.txt */,
 			);
 			path = Templates;
 			sourceTree = "<group>";
@@ -181,6 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				86BB9C292389B43B009417E3 /* LoginEntry.txt */,
+				008B7EAC238D9FB800A6E467 /* ShopEntity.txt */,
 			);
 			path = TestFiles;
 			sourceTree = "<group>";
@@ -310,6 +319,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				86B64DB62385E44800B0D412 /* Codable.txt in Resources */,
+				008B7EA6238D99B100A6E467 /* EntityDTOConvertable.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +328,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				869E9F1E238C7F45009002A2 /* LoginEntry.txt in Resources */,
+				008B7EAD238D9FB800A6E467 /* ShopEntity.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,6 +429,7 @@
 				86BB9C2F2389B5F2009417E3 /* FileReader.swift in Sources */,
 				00E815A7237701DD009F4CA6 /* PropertyGeneratorTests.swift in Sources */,
 				86BB9C2C2389B563009417E3 /* EntryTests.swift in Sources */,
+				008B7EAF238DA1D500A6E467 /* EntityTests.swift in Sources */,
 				86BB9C2A2389B43B009417E3 /* LoginEntry.txt in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
