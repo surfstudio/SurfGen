@@ -7,11 +7,13 @@ public struct {{ entityName }} {
 
 {% for property in properties %}    {{ property }}
 {% endfor %}
-    
-    public init({% for parameter in parameters %}{{parameter}}{% if not forloop.last %},{% else %}) { {% endif %}
-                {% endfor %}
-{% for variable in variables %}    self.{{ variable }} = {{ variable }}
-{% endfor %}
+    // MARK: - Initialization
+
+    public init({% for parameter in parameters %}{{parameter}}{% if not forloop.last %},
+                {% else %}) { {% endif %}{% endfor %}
+    {% for variable in variables %}    self.{{ variable }} = {{ variable }}
+    {% endfor %}}
+
 }
 
 // MARK: - DTOConvertible
