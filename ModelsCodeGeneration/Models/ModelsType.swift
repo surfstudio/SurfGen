@@ -37,4 +37,16 @@ extension String {
     var withSwiftExt: String {
         return self + ".swift"
     }
+    
+    static private let SNAKECASE_PATTERN: String = "(\\w{0,1})_"
+
+    func snakeCaseToCamelCase() -> String {
+        let buf: NSString = self.capitalized.replacingOccurrences( of: String.SNAKECASE_PATTERN,
+                                                      with: "$1",
+                                                      options: .regularExpression,
+                                                      range: nil) as NSString
+        return buf.replacingCharacters(in: NSMakeRange(0,1), with: buf.substring(to: 1).lowercased()) as String
+    }
+
 }
+

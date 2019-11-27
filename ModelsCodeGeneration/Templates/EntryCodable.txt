@@ -5,7 +5,7 @@ public struct {{ className }}: Codable {
 
     // MARK: - Public Properties
 
-{% for property in properties %}    {{ property }}
+{% for property in properties %}    public let {{ property.entryName }}: {{ property.type }}
 {% endfor %}
 }
 
