@@ -11,6 +11,8 @@ public enum GeneratorError: Error {
     case incorrectNodeToken(String)
     /// indicates that input node is not configured appropriately for code generator
     case nodeConfiguration(String)
+    //// indicates that input node is node configured appropriately for node with contained token
+    case incorrectNodeNumber(String)
 }
 
 public enum ConfiguarionError: Error {
