@@ -78,6 +78,21 @@ class TypeNodeParserTests: XCTestCase {
             XCTAssert(false, "Parser shouldn't have thrown an error")
         }
     }
+    
+    func testIncorrectTypes() {
+        do {
+            let _ = try TypeNodeParser().detectType(for: Node(token: .type(name: "Int"),
+                                                              [Node(token: .type(name: "String"), [])]))
+            XCTAssert(false, "Parser should have thrown an error")
+        } catch {
+            switch error as? GeneratorError {
+            case .nodeConfiguration:
+                XCTAssert(true)
+            default:
+                XCTAssert(false, "TypeNodeParser error is not expected error")
+            }
+        }
+    }
 
     func testNodeTokenError() {
         let errorTokens: [ASTToken] = [.root, .decl, .content, .name(value: ""), .field(isOptional: false)]
