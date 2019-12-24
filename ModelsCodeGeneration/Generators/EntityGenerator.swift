@@ -17,7 +17,7 @@ final class EntityGenerator: ModelGeneratable {
     func generateCode(declNode: ASTNode, environment: Environment) throws -> (String, String) {
         
         let propertyGenerator = PropertyGenerator()
-        let (name, fields) = try NodesValidator.getInfo(from: declNode)
+        let (name, fields) = try DeclNodeParser.getInfo(from: declNode)
         
         var properties = [PropertyGenerationModel]()
         for node in fields {

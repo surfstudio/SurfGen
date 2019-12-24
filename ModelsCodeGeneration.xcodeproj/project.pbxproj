@@ -31,8 +31,10 @@
 		86BB9C2C2389B563009417E3 /* EntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BB9C2B2389B563009417E3 /* EntryTests.swift */; };
 		86BB9C2F2389B5F2009417E3 /* FileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BB9C2E2389B5F2009417E3 /* FileReader.swift */; };
 		86CDD7AE2392B7C400E9F9D3 /* EntryGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CDD7AD2392B7C400E9F9D3 /* EntryGenerator.swift */; };
-		86CDD7B02392BC0D00E9F9D3 /* NodesValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CDD7AF2392BC0D00E9F9D3 /* NodesValidator.swift */; };
+		86CDD7B02392BC0D00E9F9D3 /* DeclNodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CDD7AF2392BC0D00E9F9D3 /* DeclNodeParser.swift */; };
 		86CDD7B22392C52200E9F9D3 /* EntityGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CDD7B12392C52200E9F9D3 /* EntityGenerator.swift */; };
+		86CDD7B42398363000E9F9D3 /* DeclNodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CDD7B32398363000E9F9D3 /* DeclNodeParser.swift */; };
+		86CDD7B6239A8F6300E9F9D3 /* TypeNodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CDD7B5239A8F6300E9F9D3 /* TypeNodeParser.swift */; };
 		912D4C0875588B5DB0F773F8 /* Pods_ModelsCodeGeneration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C87C414172486B485066444 /* Pods_ModelsCodeGeneration.framework */; };
 /* End PBXBuildFile section */
 
@@ -75,8 +77,10 @@
 		86BB9C2B2389B563009417E3 /* EntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryTests.swift; sourceTree = "<group>"; };
 		86BB9C2E2389B5F2009417E3 /* FileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReader.swift; sourceTree = "<group>"; };
 		86CDD7AD2392B7C400E9F9D3 /* EntryGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryGenerator.swift; sourceTree = "<group>"; };
-		86CDD7AF2392BC0D00E9F9D3 /* NodesValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodesValidator.swift; sourceTree = "<group>"; };
+		86CDD7AF2392BC0D00E9F9D3 /* DeclNodeParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeclNodeParser.swift; sourceTree = "<group>"; };
 		86CDD7B12392C52200E9F9D3 /* EntityGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityGenerator.swift; sourceTree = "<group>"; };
+		86CDD7B32398363000E9F9D3 /* DeclNodeParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeclNodeParser.swift; sourceTree = "<group>"; };
+		86CDD7B5239A8F6300E9F9D3 /* TypeNodeParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeNodeParser.swift; sourceTree = "<group>"; };
 		DD82F1BA301C3057EF83FA18 /* Pods_ModelsCodeGenerationTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ModelsCodeGenerationTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF7060EBC76DB21EB35FF02B /* Pods-ModelsCodeGenerationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModelsCodeGenerationTests.debug.xcconfig"; path = "Target Support Files/Pods-ModelsCodeGenerationTests/Pods-ModelsCodeGenerationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F68B12257143EE9222259A1D /* Pods-ModelsCodeGeneration.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModelsCodeGeneration.release.xcconfig"; path = "Target Support Files/Pods-ModelsCodeGeneration/Pods-ModelsCodeGeneration.release.xcconfig"; sourceTree = "<group>"; };
@@ -190,7 +194,8 @@
 				00E8159C2376FEFA009F4CA6 /* Constants.swift */,
 				00E815A12376FF4E009F4CA6 /* GenerationError.swift */,
 				00E815A32377004C009F4CA6 /* ModelsType.swift */,
-				86CDD7AF2392BC0D00E9F9D3 /* NodesValidator.swift */,
+				86CDD7AF2392BC0D00E9F9D3 /* DeclNodeParser.swift */,
+				86CDD7B5239A8F6300E9F9D3 /* TypeNodeParser.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -202,6 +207,7 @@
 				008B7EAE238DA1D500A6E467 /* EntityTests.swift */,
 				86BB9C2B2389B563009417E3 /* EntryTests.swift */,
 				00E815A6237701DD009F4CA6 /* PropertyGeneratorTests.swift */,
+				86CDD7B32398363000E9F9D3 /* DeclNodeParser.swift */,
 			);
 			path = GeneratorTests;
 			sourceTree = "<group>";
@@ -447,8 +453,9 @@
 				00E8159D2376FEFA009F4CA6 /* Constants.swift in Sources */,
 				00E815A42377004C009F4CA6 /* ModelsType.swift in Sources */,
 				00E815A22376FF4E009F4CA6 /* GenerationError.swift in Sources */,
+				86CDD7B6239A8F6300E9F9D3 /* TypeNodeParser.swift in Sources */,
 				86CDD7B22392C52200E9F9D3 /* EntityGenerator.swift in Sources */,
-				86CDD7B02392BC0D00E9F9D3 /* NodesValidator.swift in Sources */,
+				86CDD7B02392BC0D00E9F9D3 /* DeclNodeParser.swift in Sources */,
 				0012913423770D6000E95DCA /* RootGenerator.swift in Sources */,
 				007DE257235B292800748B19 /* ASTNode.swift in Sources */,
 				0039651B236F0DE4001B1292 /* PropertyGenerator.swift in Sources */,
@@ -462,6 +469,7 @@
 			files = (
 				869E9F20238C80F1009002A2 /* NodeCreation.swift in Sources */,
 				86BB9C2F2389B5F2009417E3 /* FileReader.swift in Sources */,
+				86CDD7B42398363000E9F9D3 /* DeclNodeParser.swift in Sources */,
 				00E815A7237701DD009F4CA6 /* PropertyGeneratorTests.swift in Sources */,
 				86BB9C2C2389B563009417E3 /* EntryTests.swift in Sources */,
 				008B7EBC238EB95F00A6E467 /* NodesBuilder.swift in Sources */,

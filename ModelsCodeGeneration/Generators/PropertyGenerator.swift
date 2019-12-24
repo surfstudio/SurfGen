@@ -10,19 +10,39 @@ public struct PropertyGenerationModel: Equatable {
     var entryName: String
     var type: String
     var entityName: String
-
     var fromInit: String
     var toDTOInit: String
     
-    public init(name: String, type: String, isStandardType: Bool) {
-        self.type = type
+    init(name: String, typeName: String, type: Type, isOptional: Bool) {
+        self.type = typeName
         entryName = name
         entityName = name.snakeCaseToCamelCase()
-    
-        fromInit = isStandardType ? "model.\(entryName)" : ".from(dto: model.\(entryName))"
-        toDTOInit = isStandardType ? entityName : "try \(entityName).toDTO()"
+        
+        switch type {
+        case .plain(let value):
+            fromInit = "model.\(value)"
+            toDTOInit = entityName
+        case .object:
+            toDTOInit = "try \(entityName).toDTO()"
+            fromInit = ".from(dto: model.\(entryName))"
+        case .array(let subType):
+            switch subType {
+            case .plain(let value):
+                fromInit = "model.\(value)"
+                toDTOInit = entityName
+            default:
+                
+                
+            }
+            fromInit = "model."
+        }
     }
 
+}
+
+public class ToDTOBuilder {
+
+    func
 }
 
 public final class PropertyGenerator {
@@ -38,8 +58,6 @@ public final class PropertyGenerator {
             case let .type(name) = typeNode.token else {
                 throw GeneratorError.nodeConfiguration("Property generator couldn't parse incorrect subnodes configurations")
         }
-        let isStandard = StandardTypes.all.contains(name)
-        let typeName = isStandard ? name : type.formName(with: name)
         return .init(name: value, type: "\(typeName)\(isOptional.keyWord)", isStandardType: isStandard)
     }
 
