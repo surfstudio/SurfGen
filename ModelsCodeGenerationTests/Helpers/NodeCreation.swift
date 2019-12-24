@@ -8,11 +8,11 @@
 
 @testable import ModelsCodeGeneration
 
-func formFieldNode(isOptional: Bool, name: String, typeName: String) -> Node {
+func formFieldNode(isOptional: Bool, name: String, typeName: String, typeSubNodes: [Node] = []) -> Node {
     return Node(token: .field(isOptional: isOptional),
                 [
                     Node(token: .name(value: name), []),
-                    Node(token: .type(name: typeName), [])
+                    Node(token: .type(name: typeName), typeSubNodes)
                 ]
     )
 }

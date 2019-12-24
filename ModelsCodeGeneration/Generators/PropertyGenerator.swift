@@ -7,42 +7,21 @@
 //
 
 public struct PropertyGenerationModel: Equatable {
-    var entryName: String
-    var type: String
-    var entityName: String
-    var fromInit: String
-    var toDTOInit: String
-    
-    init(name: String, typeName: String, type: Type, isOptional: Bool) {
+
+    let entryName: String
+    let type: String
+    let entityName: String
+    let fromInit: String
+    let toDTOInit: String
+
+    init(entryName: String, entityName: String, typeName: String, fromInit: String, toDTOInit: String) {
+        self.entryName = entryName
+        self.entityName = entityName
         self.type = typeName
-        entryName = name
-        entityName = name.snakeCaseToCamelCase()
-        
-        switch type {
-        case .plain(let value):
-            fromInit = "model.\(value)"
-            toDTOInit = entityName
-        case .object:
-            toDTOInit = "try \(entityName).toDTO()"
-            fromInit = ".from(dto: model.\(entryName))"
-        case .array(let subType):
-            switch subType {
-            case .plain(let value):
-                fromInit = "model.\(value)"
-                toDTOInit = entityName
-            default:
-                
-                
-            }
-            fromInit = "model."
-        }
+        self.fromInit = fromInit
+        self.toDTOInit = toDTOInit
     }
 
-}
-
-public class ToDTOBuilder {
-
-    func
 }
 
 public final class PropertyGenerator {
@@ -51,20 +30,35 @@ public final class PropertyGenerator {
         guard case let .field(isOptional) = node.token else {
             throw GeneratorError.incorrectNodeToken("Property generator couldn't parse incorrect node")
         }
+
         guard
             let nameNode = node.subNodes.first,
             let typeNode = node.subNodes.last,
             case let .name(value) = nameNode.token,
-            case let .type(name) = typeNode.token else {
+            case .type = typeNode.token else {
                 throw GeneratorError.nodeConfiguration("Property generator couldn't parse incorrect subnodes configurations")
         }
-        return .init(name: value, type: "\(typeName)\(isOptional.keyWord)", isStandardType: isStandard)
+
+        let nodeType = try TypeNodeParser().detectType(for: typeNode)
+        return .init(entryName: value,
+                     entityName: value.snakeCaseToCamelCase(),
+                     typeName: TypeNameBuilder().buildString(for: nodeType, isOptional: isOptional, modelType: type),
+                     fromInit: FromDTOBuilder().buildString(for: nodeType, with: value, isOptional: isOptional),
+                     toDTOInit: ToDTOBuilder().buildString(for: nodeType, with: value, isOptional: isOptional))
+    }
+
+}
+
+extension String {
+
+    func formOptional(_ isOptional: Bool) -> String {
+        return self + isOptional.keyWord
     }
 
 }
 
 extension Bool {
-    
+
     var keyWord: String {
         return self ? "?" : ""
     }

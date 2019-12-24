@@ -28,6 +28,7 @@ class EntryTests: XCTestCase {
             let (fileName, code) = (try RootGenerator().generateCode(for: root, type: .entry))[0]
             
             XCTAssert(fileName == exptecedFileName, "File name is not equal to expected one (resulted value is \(fileName)")
+
             XCTAssert(code == expectedCode, "Code is not equal to expected one (resulted value is \(code)")
         } catch {
             dump(error)

@@ -20,7 +20,7 @@ final class EntryGenerator: ModelGeneratable {
             let propertyString = try propertyGenerator.generateCode(for: node, type: .entry)
             properties.append(propertyString)
         }
-        
+
         let className = ModelType.entry.formName(with: name)
 
         let code = try environment.renderTemplate(name: "EntryCodable.txt", context: [

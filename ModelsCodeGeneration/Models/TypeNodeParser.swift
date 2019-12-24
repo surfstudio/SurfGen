@@ -15,6 +15,11 @@ indirect enum Type {
 
 final class TypeNodeParser {
 
+    private enum Constants {
+        static let array = "array"
+        static let object = "object"
+    }
+
     func detectType(for typeNode: ASTNode) throws -> Type {
         guard case let .type(name) = typeNode.token else {
             throw GeneratorError.incorrectNodeToken("provided node is not type node")
@@ -24,13 +29,22 @@ final class TypeNodeParser {
         case .zero:
             return .plain(name)
         case 1:
-            guard let subNode = typeNode.subNodes.first else {
-                throw GeneratorError.nodeConfiguration("can find subnode")
+            guard let subNode = typeNode.subNodes.first, case let .type(subName) = subNode.token else {
+                throw GeneratorError.nodeConfiguration("can find subnode with correct type for typeNode with name \(name)")
             }
-            return try detectType(for: subNode)
+            
+            if Constants.array == name {
+                return .array(try detectType(for: subNode))
+            }
+            
+            if Constants.object == name {
+                return .object(subName)
+            }
+            throw GeneratorError.incorrectNodeToken("provided node with name \(name) can not be resolved")
         default:
             throw GeneratorError.incorrectNodeNumber("Type node contains to many nodes")
         }
+
     }
 
 }
