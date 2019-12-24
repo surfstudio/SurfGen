@@ -78,7 +78,7 @@ class PropertyGeneratorTests: XCTestCase {
                                                     entityName: "children",
                                                     typeName: "[ChildEntity]?",
                                                     fromInit: "try model.children?.map { try .from(dto: $0) }",
-                                                    toDTOInit: "children?.toDTO()")
+                                                    toDTOInit: "try children?.toDTO()")
 
         do {
             let generatedModel = try PropertyGenerator().generateCode(for: fieldNode, type: .entity)

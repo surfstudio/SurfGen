@@ -40,7 +40,7 @@ final class TypeNodeParser {
             if Constants.object == name {
                 return .object(subName)
             }
-            throw GeneratorError.incorrectNodeToken("provided node with name \(name) can not be resolved")
+            throw GeneratorError.nodeConfiguration("provided node with name \(name) can not be resolved")
         default:
             throw GeneratorError.incorrectNodeNumber("Type node contains to many nodes")
         }

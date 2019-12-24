@@ -7,26 +7,107 @@
 //
 
 import XCTest
+@testable import ModelsCodeGeneration
 
 class TypeNodeParserTests: XCTestCase {
-
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    func testCorrectParsingForPlainType() {
+        do {
+            let type = try TypeNodeParser().detectType(for: Node(token: .type(name: "Int"), []))
+            switch type {
+            case .plain(let value):
+                XCTAssert(value == "Int")
+            default:
+                XCTAssert(false, "Detected type is not expected one")
+            }
+        } catch {
+            XCTAssert(false, "Parser shouldn't have thrown an error")
+        }
     }
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    func testCorrectParsingForObjectType() {
+        do {
+            let type = try TypeNodeParser().detectType(for: Node(token: .type(name: "object"), [Node(token: .type(name: "Child"), [])]))
+            switch type {
+            case .object(let value):
+                XCTAssert(value == "Child")
+            default:
+                XCTAssert(false, "Detected type is not expected one")
+            }
+        } catch {
+            XCTAssert(false, "Parser shouldn't have thrown an error")
+        }
     }
 
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testCorrectParsingForArrayOfObjectType() {
+        do {
+            let type = try TypeNodeParser().detectType(for: Node(token: .type(name: "array"),
+                                                                 [Node(token: .type(name: "object"),
+                                                                       [Node(token: .type(name: "Child"), [])])]))
+            switch type {
+            case .array(let type):
+                if case let .object(value) = type {
+                    XCTAssert(value == "Child")
+                } else {
+                    XCTAssert(false, "Detected type is not expected one")
+                }
+            default:
+                XCTAssert(false, "Detected type is not expected one")
+            }
+        } catch {
+            XCTAssert(false, "Parser shouldn't have thrown an error")
+        }
     }
 
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testCorrectParsingForArrayOfPlainType() {
+        do {
+            let type = try TypeNodeParser().detectType(for: Node(token: .type(name: "array"),
+                                                                 [Node(token: .type(name: "Int"),
+                                                                       [])]))
+            switch type {
+            case .array(let type):
+                if case let .plain(value) = type {
+                    XCTAssert(value == "Int")
+                } else {
+                    XCTAssert(false, "Detected type is not expected one")
+                }
+            default:
+                XCTAssert(false, "Detected type is not expected one")
+            }
+        } catch {
+            XCTAssert(false, "Parser shouldn't have thrown an error")
+        }
+    }
+
+    func testNodeTokenError() {
+        let errorTokens: [ASTToken] = [.root, .decl, .content, .name(value: ""), .field(isOptional: false)]
+        for token in errorTokens {
+            do {
+                let _ = try TypeNodeParser().detectType(for: Node(token: token, []))
+                XCTAssert(false, "Parser should have thrown an error")
+            } catch {
+                switch error as? GeneratorError {
+                case .incorrectNodeToken:
+                    XCTAssert(true)
+                default:
+                    XCTAssert(false, "TypeNodeParser error is not expected error")
+                }
+            }
+        }
+    }
+
+    func testIncorrectSubNodesError() {
+        do {
+            let _ = try TypeNodeParser().detectType(for: Node(token: .type(name: "Int"),
+                                                              [Node(token: .type(name: "String"), []), Node(token: .type(name: "Int"), [])]))
+            XCTAssert(false, "Parser should have thrown an error")
+        } catch {
+            switch error as? GeneratorError {
+            case .incorrectNodeNumber:
+                XCTAssert(true)
+            default:
+                XCTAssert(false, "TypeNodeParser error is not expected error")
+            }
         }
     }
 

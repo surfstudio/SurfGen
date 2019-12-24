@@ -19,7 +19,7 @@ public class FromDTOBuilder {
             case .plain:
                 return "model.\(name)"
             case .object:
-                return "try model.\(name.snakeCaseToCamelCase())\(isOptional.keyWord).map { try .from(dto: $0) }"
+                return "try model.\(name)\(isOptional.keyWord).map { try .from(dto: $0) }"
             case .array:
                 return "not supported case"
             }

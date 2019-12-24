@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		0012913423770D6000E95DCA /* RootGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0012913323770D6000E95DCA /* RootGenerator.swift */; };
 		0039651B236F0DE4001B1292 /* PropertyGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0039651A236F0DE4001B1292 /* PropertyGenerator.swift */; };
+		006E659A23B25E6D00155F11 /* FromDTOBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006E659923B25E6D00155F11 /* FromDTOBuilderTests.swift */; };
+		006E659C23B261B500155F11 /* ToDTOBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006E659B23B261B500155F11 /* ToDTOBuilderTests.swift */; };
+		006E659E23B2658300155F11 /* TypeNameBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006E659D23B2658300155F11 /* TypeNameBuilderTests.swift */; };
 		007DE243235B262B00748B19 /* ModelsCodeGeneration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007DE239235B262B00748B19 /* ModelsCodeGeneration.framework */; };
 		007DE24A235B262B00748B19 /* ModelsCodeGeneration.h in Headers */ = {isa = PBXBuildFile; fileRef = 007DE23C235B262B00748B19 /* ModelsCodeGeneration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		007DE255235B274F00748B19 /* ASTToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007DE254235B274F00748B19 /* ASTToken.swift */; };
@@ -55,6 +58,9 @@
 /* Begin PBXFileReference section */
 		0012913323770D6000E95DCA /* RootGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootGenerator.swift; sourceTree = "<group>"; };
 		0039651A236F0DE4001B1292 /* PropertyGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyGenerator.swift; sourceTree = "<group>"; };
+		006E659923B25E6D00155F11 /* FromDTOBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FromDTOBuilderTests.swift; sourceTree = "<group>"; };
+		006E659B23B261B500155F11 /* ToDTOBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDTOBuilderTests.swift; sourceTree = "<group>"; };
+		006E659D23B2658300155F11 /* TypeNameBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeNameBuilderTests.swift; sourceTree = "<group>"; };
 		007DE239235B262B00748B19 /* ModelsCodeGeneration.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ModelsCodeGeneration.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		007DE23C235B262B00748B19 /* ModelsCodeGeneration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ModelsCodeGeneration.h; sourceTree = "<group>"; };
 		007DE23D235B262B00748B19 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -126,6 +132,16 @@
 			path = Generators;
 			sourceTree = "<group>";
 		};
+		006E659823B25E3000155F11 /* BuildersTests */ = {
+			isa = PBXGroup;
+			children = (
+				006E659923B25E6D00155F11 /* FromDTOBuilderTests.swift */,
+				006E659B23B261B500155F11 /* ToDTOBuilderTests.swift */,
+				006E659D23B2658300155F11 /* TypeNameBuilderTests.swift */,
+			);
+			path = BuildersTests;
+			sourceTree = "<group>";
+		};
 		007DE22F235B262B00748B19 = {
 			isa = PBXGroup;
 			children = (
@@ -163,6 +179,7 @@
 		007DE246235B262B00748B19 /* ModelsCodeGenerationTests */ = {
 			isa = PBXGroup;
 			children = (
+				006E659823B25E3000155F11 /* BuildersTests */,
 				86BB9C2D2389B5E2009417E3 /* Helpers */,
 				00E815A5237701BD009F4CA6 /* GeneratorTests */,
 				007DE249235B262B00748B19 /* Info.plist */,
@@ -485,13 +502,16 @@
 			files = (
 				869E9F20238C80F1009002A2 /* NodeCreation.swift in Sources */,
 				86BB9C2F2389B5F2009417E3 /* FileReader.swift in Sources */,
+				006E659E23B2658300155F11 /* TypeNameBuilderTests.swift in Sources */,
 				86CDD7B42398363000E9F9D3 /* DeclNodeParser.swift in Sources */,
+				006E659A23B25E6D00155F11 /* FromDTOBuilderTests.swift in Sources */,
 				00E815A7237701DD009F4CA6 /* PropertyGeneratorTests.swift in Sources */,
 				86BB9C2C2389B563009417E3 /* EntryTests.swift in Sources */,
 				008B7EBC238EB95F00A6E467 /* NodesBuilder.swift in Sources */,
 				008B7EAF238DA1D500A6E467 /* EntityTests.swift in Sources */,
 				86BB9C2A2389B43B009417E3 /* ShopLocationEntry.txt in Sources */,
 				0082E29D23B24EE2009A1BF9 /* TypeNodeParserTests.swift in Sources */,
+				006E659C23B261B500155F11 /* ToDTOBuilderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

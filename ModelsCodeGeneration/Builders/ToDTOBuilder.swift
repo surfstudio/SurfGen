@@ -19,7 +19,7 @@ public class ToDTOBuilder {
             case .plain:
                 return name.snakeCaseToCamelCase()
             case .object:
-                return "\(name.snakeCaseToCamelCase())\(isOptional.keyWord).toDTO()"
+                return "try \(name.snakeCaseToCamelCase())\(isOptional.keyWord).toDTO()"
             case .array:
                 return "not supported case"
             }
