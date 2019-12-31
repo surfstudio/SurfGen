@@ -26,6 +26,10 @@
 		008B7EB8238EA9FE00A6E467 /* ShopEntry.txt in Resources */ = {isa = PBXBuildFile; fileRef = 008B7EB7238EA9FE00A6E467 /* ShopEntry.txt */; };
 		008B7EBA238EB0BD00A6E467 /* ShopLocationEntity.txt in Resources */ = {isa = PBXBuildFile; fileRef = 008B7EB9238EB0BD00A6E467 /* ShopLocationEntity.txt */; };
 		008B7EBC238EB95F00A6E467 /* NodesBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008B7EBB238EB95F00A6E467 /* NodesBuilder.swift */; };
+		00D8567323BB73EE00127AF9 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D8567223BB73EE00127AF9 /* StringExtension.swift */; };
+		00D8567523BB740A00127AF9 /* BoolExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D8567423BB740900127AF9 /* BoolExtension.swift */; };
+		00D8567723BB84A200127AF9 /* Templates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D8567623BB84A200127AF9 /* Templates.swift */; };
+		00D8567923BB85D700127AF9 /* StencilExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D8567823BB85D700127AF9 /* StencilExtension.swift */; };
 		00E8159D2376FEFA009F4CA6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E8159C2376FEFA009F4CA6 /* Constants.swift */; };
 		00E815A22376FF4E009F4CA6 /* GenerationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E815A12376FF4E009F4CA6 /* GenerationError.swift */; };
 		00E815A42377004C009F4CA6 /* ModelsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E815A32377004C009F4CA6 /* ModelsType.swift */; };
@@ -78,6 +82,10 @@
 		008B7EB7238EA9FE00A6E467 /* ShopEntry.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ShopEntry.txt; sourceTree = "<group>"; };
 		008B7EB9238EB0BD00A6E467 /* ShopLocationEntity.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ShopLocationEntity.txt; sourceTree = "<group>"; };
 		008B7EBB238EB95F00A6E467 /* NodesBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodesBuilder.swift; sourceTree = "<group>"; };
+		00D8567223BB73EE00127AF9 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		00D8567423BB740900127AF9 /* BoolExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolExtension.swift; sourceTree = "<group>"; };
+		00D8567623BB84A200127AF9 /* Templates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Templates.swift; sourceTree = "<group>"; };
+		00D8567823BB85D700127AF9 /* StencilExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StencilExtension.swift; sourceTree = "<group>"; };
 		00E8159C2376FEFA009F4CA6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		00E815A12376FF4E009F4CA6 /* GenerationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerationError.swift; sourceTree = "<group>"; };
 		00E815A32377004C009F4CA6 /* ModelsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsType.swift; sourceTree = "<group>"; };
@@ -165,6 +173,7 @@
 		007DE23B235B262B00748B19 /* ModelsCodeGeneration */ = {
 			isa = PBXGroup;
 			children = (
+				00D8567123BB73DD00127AF9 /* Extensions */,
 				0082E29E23B24FB6009A1BF9 /* Builders */,
 				86B64DB22385DA9100B0D412 /* Templates */,
 				00E8159B2376FEED009F4CA6 /* Models */,
@@ -224,6 +233,16 @@
 			path = Entity;
 			sourceTree = "<group>";
 		};
+		00D8567123BB73DD00127AF9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				00D8567223BB73EE00127AF9 /* StringExtension.swift */,
+				00D8567423BB740900127AF9 /* BoolExtension.swift */,
+				00D8567823BB85D700127AF9 /* StencilExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		00E8159B2376FEED009F4CA6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -232,6 +251,7 @@
 				00E815A32377004C009F4CA6 /* ModelsType.swift */,
 				86CDD7AF2392BC0D00E9F9D3 /* DeclNodeParser.swift */,
 				86CDD7B5239A8F6300E9F9D3 /* TypeNodeParser.swift */,
+				00D8567623BB84A200127AF9 /* Templates.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -481,10 +501,14 @@
 			files = (
 				0082E2A223B24FFF009A1BF9 /* ToDTOBuilder.swift in Sources */,
 				86CDD7AE2392B7C400E9F9D3 /* EntryGenerator.swift in Sources */,
+				00D8567723BB84A200127AF9 /* Templates.swift in Sources */,
+				00D8567323BB73EE00127AF9 /* StringExtension.swift in Sources */,
 				0082E2A423B2510E009A1BF9 /* TypeNameBuilder.swift in Sources */,
 				0082E2A023B24FE7009A1BF9 /* FromDTOBuilder.swift in Sources */,
+				00D8567923BB85D700127AF9 /* StencilExtension.swift in Sources */,
 				00E8159D2376FEFA009F4CA6 /* Constants.swift in Sources */,
 				00E815A42377004C009F4CA6 /* ModelsType.swift in Sources */,
+				00D8567523BB740A00127AF9 /* BoolExtension.swift in Sources */,
 				00E815A22376FF4E009F4CA6 /* GenerationError.swift in Sources */,
 				86CDD7B6239A8F6300E9F9D3 /* TypeNodeParser.swift in Sources */,
 				86CDD7B22392C52200E9F9D3 /* EntityGenerator.swift in Sources */,

@@ -13,13 +13,13 @@ public class TypeNameBuilder {
         case .plain(let value):
             return value.formOptional(isOptional)
         case .object(let value):
-            return modelType.formName(with: value).formOptional(isOptional)
+            return modelType.form(name: value).formOptional(isOptional)
         case .array(let subType):
             switch subType {
             case .plain(let value):
                 return "[\(value)]".formOptional(isOptional)
             case .object(let value):
-                return "[\(modelType.formName(with: value))]".formOptional(isOptional)
+                return "[\(modelType.form(name: value))]".formOptional(isOptional)
             case .array:
                 return "not supported case"
             }

@@ -19,7 +19,7 @@ public enum ModelType {
         }
     }
 
-    func formName(with value: String) -> String {
+    func form(name value: String) -> String {
         return "\(value)\(name)"
     }
 

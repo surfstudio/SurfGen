@@ -49,18 +49,3 @@ public final class PropertyGenerator {
 
 }
 
-extension String {
-
-    func formOptional(_ isOptional: Bool) -> String {
-        return self + isOptional.keyWord
-    }
-
-}
-
-extension Bool {
-
-    var keyWord: String {
-        return self ? "?" : ""
-    }
-
-}

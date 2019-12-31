@@ -13,13 +13,13 @@ public class ToDTOBuilder {
         case .plain:
             return name.snakeCaseToCamelCase()
         case .object:
-            return "try \(name.snakeCaseToCamelCase())\(isOptional.keyWord).toDTO()"
+            return "try \(name.snakeCaseToCamelCase())\(isOptional.asOptionalSign).toDTO()"
         case .array(let subType):
             switch subType {
             case .plain:
                 return name.snakeCaseToCamelCase()
             case .object:
-                return "try \(name.snakeCaseToCamelCase())\(isOptional.keyWord).toDTO()"
+                return "try \(name.snakeCaseToCamelCase())\(isOptional.asOptionalSign).toDTO()"
             case .array:
                 return "not supported case"
             }

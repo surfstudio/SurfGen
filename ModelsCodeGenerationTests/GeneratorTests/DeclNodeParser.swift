@@ -20,7 +20,7 @@ class DeclNodeParserTests: XCTestCase {
                             ])
         
         do {
-            let _ = try DeclNodeParser.getInfo(from: declNode)
+            let _ = try DeclNodeParser().getInfo(from: declNode)
             XCTAssert(false, "Decl error was not recognized")
         } catch {
             switch error as? GeneratorError {
@@ -40,7 +40,7 @@ class DeclNodeParserTests: XCTestCase {
                             ])
         
         do {
-            let _ = try DeclNodeParser.getInfo(from: declNode)
+            let _ = try DeclNodeParser().getInfo(from: declNode)
             XCTAssert(false, "Decl error was not recognized")
         } catch {
             switch error as? GeneratorError {
@@ -60,8 +60,8 @@ class DeclNodeParserTests: XCTestCase {
                             ])
         
         do {
-            let _ = try DeclNodeParser.getInfo(from: declNode)
-            XCTAssert(false, "Decl error was not recognized")
+            let _ = try DeclNodeParser().getInfo(from: declNode)
+            XCTFail("Decl error was not recognized")
         } catch {
             switch error as? GeneratorError {
             case .nodeConfiguration:
