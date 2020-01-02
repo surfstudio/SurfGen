@@ -18,7 +18,7 @@ class ToDTOBuilderTests: XCTestCase {
 
     func testToDTOObjectType() {
         let resultString = ToDTOBuilder().buildString(for: .object("Child"), with: "child", isOptional: true)
-        XCTAssert(resultString == "try child?.toDTO()")
+        XCTAssert(resultString == "child?.toDTO()")
     }
 
     func testToDTOArrayPlainType() {
@@ -28,7 +28,7 @@ class ToDTOBuilderTests: XCTestCase {
 
     func testToDTOArrayObjectsType() {
         let resultString = ToDTOBuilder().buildString(for: .array(.object("ExpandedData")), with: "expand_data", isOptional: false)
-        XCTAssert(resultString == "try expandData.toDTO()")
+        XCTAssert(resultString == "expandData.toDTO()")
     }
 
 }

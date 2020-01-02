@@ -16,6 +16,10 @@ extension String {
         return prefix(1).capitalized + dropFirst()
     }
 
+    func lowercaseFirstLetter() -> String {
+        return prefix(1).lowercased() + dropFirst()
+    }
+
     mutating func capitalizeFirstLetter() {
         self = self.capitalizingFirstLetter()
     }
@@ -25,11 +29,10 @@ extension String {
     }
 
     func snakeCaseToCamelCase() -> String {
-        let buf: NSString = self.capitalized.replacingOccurrences(of: "(\\w{0,1})_",
-                                                                  with: "$1",
-                                                                  options: .regularExpression,
-                                                                  range: nil) as NSString
-        return buf.replacingCharacters(in: NSMakeRange(0,1), with: buf.substring(to: 1).lowercased()) as String
+        return self.split(separator: "_")
+            .map { String($0) }
+            .reduce("", { $0 + $1.capitalizingFirstLetter() })
+            .lowercaseFirstLetter()
     }
 
 }

@@ -51,4 +51,38 @@ final class NodesBuilder {
         )
     }
 
+    static func formProfileCustomDataNode() -> Node {
+        return Node(token: .decl,
+                    [
+                        Node(token: .name(value: "ProfileCustomData"), []),
+                        Node(token: .content,
+                             [
+                                formFieldNode(isOptional: true,
+                                              name: "children",
+                                              typeName: "array",
+                                              typeSubNodes: [Node(token: .type(name: "object"),
+                                                                  [Node(token: .type(name: "Child"), [])])]),
+                                formFieldNode(isOptional: false, name: "age", typeName: "Int"),
+                                formFieldNode(isOptional: true, name: "additional_info", typeName: "String")
+                            ]
+                        )
+                    ]
+        )
+    }
+
+    static func formTokenDeclNode() -> Node {
+        return Node(token: .decl,
+                    [
+                        Node(token: .name(value: "ContactToken"), []),
+                        Node(token: .content,
+                             [
+                                formFieldNode(isOptional: false,
+                                              name: "contactToken",
+                                              typeName: "String")
+                            ]
+                        )
+            ]
+        )
+    }
+
 }

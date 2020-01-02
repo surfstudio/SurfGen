@@ -11,6 +11,19 @@ indirect enum Type {
     case object(String)
     case array(Type)
     // case dictionary(key: Type, value: Type)
+
+    var isPlain: Bool {
+        switch self {
+        case .object:
+            return false
+        case .array(let subType):
+            guard case .object = subType else { return true }
+            return false
+        default:
+            return true
+        }
+    }
+
 }
 
 final class TypeNodeParser {

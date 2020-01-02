@@ -31,7 +31,8 @@ enum Template {
                 "entityName": entityName,
                 "entryName": entryName,
                 "codeOpenBracket": KeyWords.codeStartBracket,
-                "properties": properties
+                "properties": properties,
+                "isPlain": properties.first { !$0.isPlain } == nil
             ]
         }
     }

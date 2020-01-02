@@ -23,7 +23,7 @@ class TypeNodeParserTests: XCTestCase {
 
         return resultType
     }
-    
+
     func testCorrectParsingForPlainType() {
 
         let type = formParserAndGetType(for: Node(token: .type(name: "Int"), []))

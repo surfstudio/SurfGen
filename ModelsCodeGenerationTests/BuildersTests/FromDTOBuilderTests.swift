@@ -13,22 +13,22 @@ class FromDTOBuilderTests: XCTestCase {
 
     func testFromDTOPlainType() {
         let resultString = FromDTOBuilder().buildString(for: .plain("Int"), with: "count", isOptional: true)
-        XCTAssert(resultString == "model.count")
+        XCTAssertEqual(resultString, "model.count")
     }
 
     func testFromDTOObjectType() {
         let resultString = FromDTOBuilder().buildString(for: .object("Child"), with: "child", isOptional: true)
-        XCTAssert(resultString == ".from(dto: model.child)")
+        XCTAssertEqual(resultString, ".from(dto: model.child)")
     }
 
     func testFromDTOArrayPlainType() {
         let resultString = FromDTOBuilder().buildString(for: .array(.plain("String")), with: "numbers", isOptional: true)
-        XCTAssert(resultString == "model.numbers")
+        XCTAssertEqual(resultString, "model.numbers")
     }
 
     func testFromDTOArrayObjectsType() {
         let resultString = FromDTOBuilder().buildString(for: .array(.object("ExpandedData")), with: "expand_data", isOptional: false)
-        XCTAssert(resultString == "try model.expand_data.map { try .from(dto: $0) }")
+        XCTAssertEqual(resultString, ".from(dto: model.expand_data)")
     }
 
 }

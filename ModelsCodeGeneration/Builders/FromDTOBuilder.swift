@@ -41,7 +41,7 @@ public class FromDTOBuilder: DTOBuilder {
             case .plain:
                 return "model.\(name)"
             case .object:
-                return "try model.\(name)\(isOptional.asOptionalSign).map { try .from(dto: $0) }"
+                return  ".from(dto: model.\(name))"
             case .array:
                 return "not supported case"
             }

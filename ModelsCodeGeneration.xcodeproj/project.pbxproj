@@ -22,12 +22,18 @@
 		0082E2A423B2510E009A1BF9 /* TypeNameBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0082E2A323B2510E009A1BF9 /* TypeNameBuilder.swift */; };
 		008B7EA6238D99B100A6E467 /* EntityDTOConvertable.txt in Resources */ = {isa = PBXBuildFile; fileRef = 008B7EA5238D99B100A6E467 /* EntityDTOConvertable.txt */; };
 		008B7EAD238D9FB800A6E467 /* ShopEntity.txt in Resources */ = {isa = PBXBuildFile; fileRef = 008B7EAC238D9FB800A6E467 /* ShopEntity.txt */; };
-		008B7EAF238DA1D500A6E467 /* EntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008B7EAE238DA1D500A6E467 /* EntityTests.swift */; };
 		008B7EB8238EA9FE00A6E467 /* ShopEntry.txt in Resources */ = {isa = PBXBuildFile; fileRef = 008B7EB7238EA9FE00A6E467 /* ShopEntry.txt */; };
 		008B7EBA238EB0BD00A6E467 /* ShopLocationEntity.txt in Resources */ = {isa = PBXBuildFile; fileRef = 008B7EB9238EB0BD00A6E467 /* ShopLocationEntity.txt */; };
 		008B7EBC238EB95F00A6E467 /* NodesBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008B7EBB238EB95F00A6E467 /* NodesBuilder.swift */; };
 		00A2009C23BE27420089CE7E /* DTOBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2009B23BE27420089CE7E /* DTOBuilder.swift */; };
 		00A2009E23BE29660089CE7E /* XCTestExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2009D23BE29660089CE7E /* XCTestExtension.swift */; };
+		00A200A523BE46750089CE7E /* ProfileCustomDataEntity.txt in Sources */ = {isa = PBXBuildFile; fileRef = 00A200A423BE46750089CE7E /* ProfileCustomDataEntity.txt */; };
+		00A200A623BE47930089CE7E /* ProfileCustomDataEntity.txt in Resources */ = {isa = PBXBuildFile; fileRef = 00A200A423BE46750089CE7E /* ProfileCustomDataEntity.txt */; };
+		00A200A823BE49FE0089CE7E /* ProfileCustomDataEntry.txt in Resources */ = {isa = PBXBuildFile; fileRef = 00A200A723BE49FE0089CE7E /* ProfileCustomDataEntry.txt */; };
+		00A200AA23BE4DE10089CE7E /* ContactTokenEntity.txt in Resources */ = {isa = PBXBuildFile; fileRef = 00A200A923BE4DE10089CE7E /* ContactTokenEntity.txt */; };
+		00A200AC23BE5CA60089CE7E /* ContactTokenEntry.txt in Resources */ = {isa = PBXBuildFile; fileRef = 00A200AB23BE5CA60089CE7E /* ContactTokenEntry.txt */; };
+		00A200AE23BE5D160089CE7E /* TestModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A200AD23BE5D160089CE7E /* TestModels.swift */; };
+		00A200B023BE5E550089CE7E /* ModelsGenerationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A200AF23BE5E550089CE7E /* ModelsGenerationTests.swift */; };
 		00D8567323BB73EE00127AF9 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D8567223BB73EE00127AF9 /* StringExtension.swift */; };
 		00D8567523BB740A00127AF9 /* BoolExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D8567423BB740900127AF9 /* BoolExtension.swift */; };
 		00D8567723BB84A200127AF9 /* Templates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D8567623BB84A200127AF9 /* Templates.swift */; };
@@ -41,7 +47,6 @@
 		869E9F20238C80F1009002A2 /* NodeCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869E9F1F238C80F1009002A2 /* NodeCreation.swift */; };
 		86B64DB62385E44800B0D412 /* EntryCodable.txt in Resources */ = {isa = PBXBuildFile; fileRef = 86B64DB52385E44800B0D412 /* EntryCodable.txt */; };
 		86BB9C2A2389B43B009417E3 /* ShopLocationEntry.txt in Sources */ = {isa = PBXBuildFile; fileRef = 86BB9C292389B43B009417E3 /* ShopLocationEntry.txt */; };
-		86BB9C2C2389B563009417E3 /* EntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BB9C2B2389B563009417E3 /* EntryTests.swift */; };
 		86BB9C2F2389B5F2009417E3 /* FileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BB9C2E2389B5F2009417E3 /* FileReader.swift */; };
 		86CDD7AE2392B7C400E9F9D3 /* EntryGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CDD7AD2392B7C400E9F9D3 /* EntryGenerator.swift */; };
 		86CDD7B02392BC0D00E9F9D3 /* DeclNodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CDD7AF2392BC0D00E9F9D3 /* DeclNodeParser.swift */; };
@@ -80,12 +85,17 @@
 		0082E2A323B2510E009A1BF9 /* TypeNameBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeNameBuilder.swift; sourceTree = "<group>"; };
 		008B7EA5238D99B100A6E467 /* EntityDTOConvertable.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = EntityDTOConvertable.txt; sourceTree = "<group>"; };
 		008B7EAC238D9FB800A6E467 /* ShopEntity.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ShopEntity.txt; sourceTree = "<group>"; };
-		008B7EAE238DA1D500A6E467 /* EntityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityTests.swift; sourceTree = "<group>"; };
 		008B7EB7238EA9FE00A6E467 /* ShopEntry.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ShopEntry.txt; sourceTree = "<group>"; };
 		008B7EB9238EB0BD00A6E467 /* ShopLocationEntity.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ShopLocationEntity.txt; sourceTree = "<group>"; };
 		008B7EBB238EB95F00A6E467 /* NodesBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodesBuilder.swift; sourceTree = "<group>"; };
 		00A2009B23BE27420089CE7E /* DTOBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTOBuilder.swift; sourceTree = "<group>"; };
 		00A2009D23BE29660089CE7E /* XCTestExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestExtension.swift; sourceTree = "<group>"; };
+		00A200A423BE46750089CE7E /* ProfileCustomDataEntity.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ProfileCustomDataEntity.txt; sourceTree = "<group>"; };
+		00A200A723BE49FE0089CE7E /* ProfileCustomDataEntry.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ProfileCustomDataEntry.txt; sourceTree = "<group>"; };
+		00A200A923BE4DE10089CE7E /* ContactTokenEntity.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ContactTokenEntity.txt; sourceTree = "<group>"; };
+		00A200AB23BE5CA60089CE7E /* ContactTokenEntry.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ContactTokenEntry.txt; sourceTree = "<group>"; };
+		00A200AD23BE5D160089CE7E /* TestModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestModels.swift; sourceTree = "<group>"; };
+		00A200AF23BE5E550089CE7E /* ModelsGenerationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsGenerationTests.swift; sourceTree = "<group>"; };
 		00D8567223BB73EE00127AF9 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		00D8567423BB740900127AF9 /* BoolExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolExtension.swift; sourceTree = "<group>"; };
 		00D8567623BB84A200127AF9 /* Templates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Templates.swift; sourceTree = "<group>"; };
@@ -99,7 +109,6 @@
 		869E9F1F238C80F1009002A2 /* NodeCreation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeCreation.swift; sourceTree = "<group>"; };
 		86B64DB52385E44800B0D412 /* EntryCodable.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = EntryCodable.txt; sourceTree = "<group>"; };
 		86BB9C292389B43B009417E3 /* ShopLocationEntry.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ShopLocationEntry.txt; sourceTree = "<group>"; };
-		86BB9C2B2389B563009417E3 /* EntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryTests.swift; sourceTree = "<group>"; };
 		86BB9C2E2389B5F2009417E3 /* FileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReader.swift; sourceTree = "<group>"; };
 		86CDD7AD2392B7C400E9F9D3 /* EntryGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryGenerator.swift; sourceTree = "<group>"; };
 		86CDD7AF2392BC0D00E9F9D3 /* DeclNodeParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeclNodeParser.swift; sourceTree = "<group>"; };
@@ -225,6 +234,8 @@
 			children = (
 				86BB9C292389B43B009417E3 /* ShopLocationEntry.txt */,
 				008B7EB7238EA9FE00A6E467 /* ShopEntry.txt */,
+				00A200A723BE49FE0089CE7E /* ProfileCustomDataEntry.txt */,
+				00A200AB23BE5CA60089CE7E /* ContactTokenEntry.txt */,
 			);
 			path = Entry;
 			sourceTree = "<group>";
@@ -234,6 +245,8 @@
 			children = (
 				008B7EAC238D9FB800A6E467 /* ShopEntity.txt */,
 				008B7EB9238EB0BD00A6E467 /* ShopLocationEntity.txt */,
+				00A200A423BE46750089CE7E /* ProfileCustomDataEntity.txt */,
+				00A200A923BE4DE10089CE7E /* ContactTokenEntity.txt */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -264,10 +277,9 @@
 		00E815A5237701BD009F4CA6 /* GeneratorTests */ = {
 			isa = PBXGroup;
 			children = (
+				00A200AF23BE5E550089CE7E /* ModelsGenerationTests.swift */,
 				0082E29C23B24EE2009A1BF9 /* TypeNodeParserTests.swift */,
 				86BB9C282389B407009417E3 /* TestFiles */,
-				008B7EAE238DA1D500A6E467 /* EntityTests.swift */,
-				86BB9C2B2389B563009417E3 /* EntryTests.swift */,
 				00E815A6237701DD009F4CA6 /* PropertyGeneratorTests.swift */,
 				86CDD7B32398363000E9F9D3 /* DeclNodeParser.swift */,
 			);
@@ -308,6 +320,7 @@
 				869E9F1F238C80F1009002A2 /* NodeCreation.swift */,
 				008B7EBB238EB95F00A6E467 /* NodesBuilder.swift */,
 				00A2009D23BE29660089CE7E /* XCTestExtension.swift */,
+				00A200AD23BE5D160089CE7E /* TestModels.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -427,7 +440,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00A200A623BE47930089CE7E /* ProfileCustomDataEntity.txt in Resources */,
 				008B7EBA238EB0BD00A6E467 /* ShopLocationEntity.txt in Resources */,
+				00A200AC23BE5CA60089CE7E /* ContactTokenEntry.txt in Resources */,
+				00A200AA23BE4DE10089CE7E /* ContactTokenEntity.txt in Resources */,
+				00A200A823BE49FE0089CE7E /* ProfileCustomDataEntry.txt in Resources */,
 				869E9F1E238C7F45009002A2 /* ShopLocationEntry.txt in Resources */,
 				008B7EAD238D9FB800A6E467 /* ShopEntity.txt in Resources */,
 				008B7EB8238EA9FE00A6E467 /* ShopEntry.txt in Resources */,
@@ -535,13 +552,14 @@
 				86BB9C2F2389B5F2009417E3 /* FileReader.swift in Sources */,
 				006E659E23B2658300155F11 /* TypeNameBuilderTests.swift in Sources */,
 				86CDD7B42398363000E9F9D3 /* DeclNodeParser.swift in Sources */,
+				00A200B023BE5E550089CE7E /* ModelsGenerationTests.swift in Sources */,
 				006E659A23B25E6D00155F11 /* FromDTOBuilderTests.swift in Sources */,
 				00E815A7237701DD009F4CA6 /* PropertyGeneratorTests.swift in Sources */,
-				86BB9C2C2389B563009417E3 /* EntryTests.swift in Sources */,
 				00A2009E23BE29660089CE7E /* XCTestExtension.swift in Sources */,
+				00A200AE23BE5D160089CE7E /* TestModels.swift in Sources */,
 				008B7EBC238EB95F00A6E467 /* NodesBuilder.swift in Sources */,
-				008B7EAF238DA1D500A6E467 /* EntityTests.swift in Sources */,
 				86BB9C2A2389B43B009417E3 /* ShopLocationEntry.txt in Sources */,
+				00A200A523BE46750089CE7E /* ProfileCustomDataEntity.txt in Sources */,
 				0082E29D23B24EE2009A1BF9 /* TypeNodeParserTests.swift in Sources */,
 				006E659C23B261B500155F11 /* ToDTOBuilderTests.swift in Sources */,
 			);
