@@ -8,6 +8,12 @@
 
 public class TypeNameBuilder {
 
+    /**
+     Method for generating type description in code
+
+     For type: .object(Profile), isOptional: true, modelType: .entity the result string will be "ProfileEntity?"
+     Other exapmles of resulted string: [Int]?, Bool, [ProfileEntry]?
+     */
     func buildString(for type: Type, isOptional: Bool, modelType: ModelType) -> String {
         switch type {
         case .plain(let value):

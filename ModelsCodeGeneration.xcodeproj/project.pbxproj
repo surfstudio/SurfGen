@@ -26,6 +26,8 @@
 		008B7EB8238EA9FE00A6E467 /* ShopEntry.txt in Resources */ = {isa = PBXBuildFile; fileRef = 008B7EB7238EA9FE00A6E467 /* ShopEntry.txt */; };
 		008B7EBA238EB0BD00A6E467 /* ShopLocationEntity.txt in Resources */ = {isa = PBXBuildFile; fileRef = 008B7EB9238EB0BD00A6E467 /* ShopLocationEntity.txt */; };
 		008B7EBC238EB95F00A6E467 /* NodesBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008B7EBB238EB95F00A6E467 /* NodesBuilder.swift */; };
+		00A2009C23BE27420089CE7E /* DTOBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2009B23BE27420089CE7E /* DTOBuilder.swift */; };
+		00A2009E23BE29660089CE7E /* XCTestExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A2009D23BE29660089CE7E /* XCTestExtension.swift */; };
 		00D8567323BB73EE00127AF9 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D8567223BB73EE00127AF9 /* StringExtension.swift */; };
 		00D8567523BB740A00127AF9 /* BoolExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D8567423BB740900127AF9 /* BoolExtension.swift */; };
 		00D8567723BB84A200127AF9 /* Templates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D8567623BB84A200127AF9 /* Templates.swift */; };
@@ -82,6 +84,8 @@
 		008B7EB7238EA9FE00A6E467 /* ShopEntry.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ShopEntry.txt; sourceTree = "<group>"; };
 		008B7EB9238EB0BD00A6E467 /* ShopLocationEntity.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ShopLocationEntity.txt; sourceTree = "<group>"; };
 		008B7EBB238EB95F00A6E467 /* NodesBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodesBuilder.swift; sourceTree = "<group>"; };
+		00A2009B23BE27420089CE7E /* DTOBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTOBuilder.swift; sourceTree = "<group>"; };
+		00A2009D23BE29660089CE7E /* XCTestExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestExtension.swift; sourceTree = "<group>"; };
 		00D8567223BB73EE00127AF9 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		00D8567423BB740900127AF9 /* BoolExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolExtension.swift; sourceTree = "<group>"; };
 		00D8567623BB84A200127AF9 /* Templates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Templates.swift; sourceTree = "<group>"; };
@@ -211,6 +215,7 @@
 				0082E29F23B24FE7009A1BF9 /* FromDTOBuilder.swift */,
 				0082E2A123B24FFF009A1BF9 /* ToDTOBuilder.swift */,
 				0082E2A323B2510E009A1BF9 /* TypeNameBuilder.swift */,
+				00A2009B23BE27420089CE7E /* DTOBuilder.swift */,
 			);
 			path = Builders;
 			sourceTree = "<group>";
@@ -302,6 +307,7 @@
 				86BB9C2E2389B5F2009417E3 /* FileReader.swift */,
 				869E9F1F238C80F1009002A2 /* NodeCreation.swift */,
 				008B7EBB238EB95F00A6E467 /* NodesBuilder.swift */,
+				00A2009D23BE29660089CE7E /* XCTestExtension.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -515,6 +521,7 @@
 				86CDD7B02392BC0D00E9F9D3 /* DeclNodeParser.swift in Sources */,
 				0012913423770D6000E95DCA /* RootGenerator.swift in Sources */,
 				007DE257235B292800748B19 /* ASTNode.swift in Sources */,
+				00A2009C23BE27420089CE7E /* DTOBuilder.swift in Sources */,
 				0039651B236F0DE4001B1292 /* PropertyGenerator.swift in Sources */,
 				007DE255235B274F00748B19 /* ASTToken.swift in Sources */,
 			);
@@ -531,6 +538,7 @@
 				006E659A23B25E6D00155F11 /* FromDTOBuilderTests.swift in Sources */,
 				00E815A7237701DD009F4CA6 /* PropertyGeneratorTests.swift in Sources */,
 				86BB9C2C2389B563009417E3 /* EntryTests.swift in Sources */,
+				00A2009E23BE29660089CE7E /* XCTestExtension.swift in Sources */,
 				008B7EBC238EB95F00A6E467 /* NodesBuilder.swift in Sources */,
 				008B7EAF238DA1D500A6E467 /* EntityTests.swift in Sources */,
 				86BB9C2A2389B43B009417E3 /* ShopLocationEntry.txt in Sources */,

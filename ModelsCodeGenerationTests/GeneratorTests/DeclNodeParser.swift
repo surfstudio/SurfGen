@@ -19,17 +19,7 @@ class DeclNodeParserTests: XCTestCase {
                                 Node(token: .content, [ formFieldNode(isOptional: false, name: "region", typeName: "String") ])
                             ])
         
-        do {
-            let _ = try DeclNodeParser().getInfo(from: declNode)
-            XCTAssert(false, "Decl error was not recognized")
-        } catch {
-            switch error as? GeneratorError {
-            case .incorrectNodeNumber:
-                XCTAssert(true)
-            default:
-                XCTAssert(false, "Decl error is not expected error")
-            }
-        }
+        assertThrow(try DeclNodeParser().getInfo(from: declNode), throws: GeneratorError.incorrectNodeNumber(""))
     }
 
     func testNameNodeError() {
@@ -39,17 +29,7 @@ class DeclNodeParserTests: XCTestCase {
                                 Node(token: .content, [ formFieldNode(isOptional: false, name: "region", typeName: "String") ])
                             ])
         
-        do {
-            let _ = try DeclNodeParser().getInfo(from: declNode)
-            XCTAssert(false, "Decl error was not recognized")
-        } catch {
-            switch error as? GeneratorError {
-            case .nodeConfiguration:
-                XCTAssert(true)
-            default:
-                XCTAssert(false, "Decl error is not expected error")
-            }
-        }
+        assertThrow(try DeclNodeParser().getInfo(from: declNode), throws: GeneratorError.nodeConfiguration(""))
     }
 
     func testContentNodeError() {
@@ -59,17 +39,7 @@ class DeclNodeParserTests: XCTestCase {
                                 formFieldNode(isOptional: false, name: "region", typeName: "String")
                             ])
         
-        do {
-            let _ = try DeclNodeParser().getInfo(from: declNode)
-            XCTFail("Decl error was not recognized")
-        } catch {
-            switch error as? GeneratorError {
-            case .nodeConfiguration:
-                XCTAssert(true)
-            default:
-                XCTAssert(false, "Decl error is not expected error")
-            }
-        }
+        assertThrow(try DeclNodeParser().getInfo(from: declNode), throws: GeneratorError.nodeConfiguration(""))
     }
 
 }

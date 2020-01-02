@@ -20,6 +20,9 @@ final class TypeNodeParser {
         static let object = "object"
     }
 
+    /**
+     Method for detection of concreate type for ASTNode with Type token
+     */
     func detectType(for typeNode: ASTNode) throws -> Type {
         guard case let .type(name) = typeNode.token else {
             throw GeneratorError.incorrectNodeToken("provided node is not type node")

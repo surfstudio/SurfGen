@@ -8,6 +8,9 @@
 
 final class DeclNodeParser {
 
+    /**
+     Method resolves decl node for its name and its fileds subnodes
+    */
     func getInfo(from declNode: ASTNode) throws -> (name: String, fields: [ASTNode]) {
 
         guard declNode.subNodes.count == 2 else {

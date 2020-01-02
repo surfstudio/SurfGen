@@ -9,7 +9,7 @@
 /**
  Class for building initialization code for concrete property for DTOConvertible.from method from NodeKit Entity
 */
-public class FromDTOBuilder {
+public class FromDTOBuilder: DTOBuilder {
 
     /**
      Method for building concreate initialization piece of code.

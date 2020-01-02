@@ -26,6 +26,9 @@ public struct PropertyGenerationModel: Equatable {
 
 public final class PropertyGenerator {
 
+    /**
+    Method for creating model for NodeKit's templates
+    */
     public func generateCode(for node: ASTNode, type: ModelType) throws -> PropertyGenerationModel {
         guard case let .field(isOptional) = node.token else {
             throw GeneratorError.incorrectNodeToken("Property generator couldn't parse incorrect node")
