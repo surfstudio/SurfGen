@@ -21,13 +21,13 @@ public struct {{ entityName }} {
 extension {{ entityName }}: DTOConvertible {
 
     public static func from(dto model: {{ entryName }}) throws -> {{ entityName }} {
-        return try .init({% for property in properties %}{{ property.entityName }}: {{ property.fromInit }}{% if not forloop.last %},
+        return {% if not isPlain %}try {% endif %}.init({% for property in properties %}{{ property.entityName }}: {{ property.fromInit }}{% if not forloop.last %},
                          {% endif %}{% endfor %})
     }
 
     public func toDTO() throws -> {{ entryName }} {
-        return .init({% for property in properties %}{{ property.entryName }}: {{ property.toDTOInit }}{% if not forloop.last %},
-                     {% endif %}{% endfor %})
+        return {% if not isPlain %}try {% endif %}.init({% for property in properties %}{{ property.entryName }}: {{ property.toDTOInit }}{% if not forloop.last %},
+                         {% endif %}{% endfor %})
     }
 
 }

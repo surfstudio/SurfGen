@@ -16,8 +16,3 @@ public enum KeyWords {
     public static let newLine = "\n"
     public static let `extension` = "extension"
 }
-
-public enum StandardTypes {
-    
-    public static let all = ["Int", "String", "Double", "Float"]
-}

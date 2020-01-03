@@ -6,9 +6,12 @@
 //  Copyright © 2019 Surf. All rights reserved.
 //
 
-final class NodesValidator {
+final class DeclNodeParser {
 
-    static func getInfo(from declNode: ASTNode) throws -> (name: String, fields: [ASTNode]) {
+    /**
+     Method resolves decl node for its name and its fileds subnodes
+    */
+    func getInfo(from declNode: ASTNode) throws -> (name: String, fields: [ASTNode]) {
 
         guard declNode.subNodes.count == 2 else {
             throw GeneratorError.incorrectNodeNumber("decl node does not cointain expected 2 subnodes")

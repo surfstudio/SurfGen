@@ -44,12 +44,12 @@ extension ShopLocationEntity: DTOConvertible {
     }
 
     public func toDTO() throws -> ShopLocationEntry {
-        return .init(region: region,
-                     city: city,
-                     address: address,
-                     floor: floor,
-                     sector: sector,
-                     geo_pos: try geoPos.toDTO())
+        return try .init(region: region,
+                         city: city,
+                         address: address,
+                         floor: floor,
+                         sector: sector,
+                         geo_pos: geoPos.toDTO())
     }
 
 }

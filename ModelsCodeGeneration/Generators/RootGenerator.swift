@@ -33,12 +33,8 @@ public final class RootGenerator {
         case .entity:
             generator = EntityGenerator()
         }
-        
-        var models = [(String, String)]()
-        for decl in node.subNodes {
-            models.append(try generator.generateCode(declNode: decl, environment: environment))
-        }
-        return models
+
+        return try node.subNodes.map { try generator.generateCode(declNode: $0, environment: environment) }
     }
 
 }

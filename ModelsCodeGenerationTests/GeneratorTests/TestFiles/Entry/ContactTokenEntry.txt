@@ -1,0 +1,16 @@
+
+import NodeKit
+
+public struct ContactTokenEntry: Codable {
+
+    // MARK: - Public Properties
+
+    public let contactToken: String
+
+}
+
+// MARK: - RawMappable
+
+extension ContactTokenEntry: RawMappable {
+    public typealias Raw = Json
+}

@@ -40,11 +40,11 @@ extension ShopEntity: DTOConvertible {
     }
 
     public func toDTO() throws -> ShopEntry {
-        return .init(id: id,
-                     name: name,
-                     phone: phone,
-                     location: try location.toDTO(),
-                     working_hours: workingHours)
+        return try .init(id: id,
+                         name: name,
+                         phone: phone,
+                         location: location.toDTO(),
+                         working_hours: workingHours)
     }
 
 }

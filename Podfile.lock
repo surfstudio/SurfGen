@@ -7,7 +7,7 @@ DEPENDENCIES:
   - Stencil (~> 0.13.1)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - PathKit
     - Stencil
 
@@ -17,4 +17,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 7b521c223c2d5d17d3d4830d5548688629224125
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.8.4

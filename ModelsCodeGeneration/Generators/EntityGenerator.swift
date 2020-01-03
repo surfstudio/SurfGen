@@ -15,25 +15,17 @@ public protocol ModelGeneratable {
 final class EntityGenerator: ModelGeneratable {
 
     func generateCode(declNode: ASTNode, environment: Environment) throws -> (String, String) {
-        
-        let propertyGenerator = PropertyGenerator()
-        let (name, fields) = try NodesValidator.getInfo(from: declNode)
-        
-        var properties = [PropertyGenerationModel]()
-        for node in fields {
-            let propertyString = try propertyGenerator.generateCode(for: node, type: .entity)
-            properties.append(propertyString)
-        }
-        
-        let className = ModelType.entity.formName(with: name)
 
-        let code = try environment.renderTemplate(name: "EntityDTOConvertable.txt", context: [
-            "entityName": className,
-            "entryName": ModelType.entry.formName(with: name),
-            "codeOpenBracket": KeyWords.codeStartBracket,
-            "properties": properties
-        ])
-        
+        let propertyGenerator = PropertyGenerator()
+        let (name, fields) = try DeclNodeParser().getInfo(from: declNode)
+
+        let properties = try fields.map { try propertyGenerator.generateCode(for: $0, type: .entity) }
+        let className = ModelType.entity.form(name: name)
+
+        let code = try environment.renderTemplate(.nodeKitEntity(entityName: className,
+                                                                 entryName: ModelType.entry.form(name: name),
+                                                                 properties: properties))
+
         return (className.capitalizingFirstLetter().withSwiftExt, code)
     }
 
