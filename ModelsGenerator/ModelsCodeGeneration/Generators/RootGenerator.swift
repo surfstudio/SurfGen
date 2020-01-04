@@ -17,7 +17,8 @@ public final class RootGenerator {
     // MARK: - Initialization
 
     public init() {
-        environment = Environment(loader: FileSystemLoader(bundle: [Bundle(for: type(of: self))]))
+        let bundle = Bundle(for: type(of: self))
+        environment = Environment(loader: FileSystemLoader(bundle: [Bundle(path: bundle.bundlePath + "/Templates.bundle") ?? bundle]))
     }
 
     /// for now this generator is supposed to generate code for complete AST
