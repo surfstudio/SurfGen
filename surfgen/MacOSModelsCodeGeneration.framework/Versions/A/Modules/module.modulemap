@@ -1,0 +1,11 @@
+framework module MacOSModelsCodeGeneration {
+  umbrella header "MacOSModelsCodeGeneration.h"
+
+  export *
+  module * { export * }
+}
+
+module MacOSModelsCodeGeneration.Swift {
+    header "MacOSModelsCodeGeneration-Swift.h"
+    requires objc
+}
