@@ -6,7 +6,7 @@
 	<dict>
 		<key>Resources/Info.plist</key>
 		<data>
-		h8awYXB0eMcyuQoohLpuPDt0Ems=
+		J1XwZPNV7sfMwGDOrx1XlULVZIQ=
 		</data>
 		<key>Resources/Templates.bundle/EntityDTOConvertable.txt</key>
 		<data>
@@ -23,7 +23,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			o3UvRDNJTwsvD0K6BCS+Jh96TNbXQeH0RZnszN2SuQU=
+			NWoROnoRmcZtgrnmDNK4z4ZyQwqKUlay1tuAugsz0VI=
 			</data>
 		</dict>
 		<key>Headers/MacOSModelsCodeGeneration.h</key>
@@ -37,28 +37,28 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ydpa09mLDSvvWICTQyrGYYMqIvHS5iQq2tI6Rj5G3Lc=
+			/ZEwdxHXyQVE8y5tkn7VWz2qUUS4ICCFCMf81518Clo=
 			</data>
 		</dict>
 		<key>Modules/MacOSModelsCodeGeneration.swiftmodule/x86_64-apple-macos.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			F2J/L6kqlNcReoSw2SA0TX4ouVpBZXSYC/5lJRDG6Xs=
+			MYNNETKmTPwIKWxTF+jYrK7j3OvTLmVmCUevKzJIwrw=
 			</data>
 		</dict>
 		<key>Modules/MacOSModelsCodeGeneration.swiftmodule/x86_64.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ydpa09mLDSvvWICTQyrGYYMqIvHS5iQq2tI6Rj5G3Lc=
+			/ZEwdxHXyQVE8y5tkn7VWz2qUUS4ICCFCMf81518Clo=
 			</data>
 		</dict>
 		<key>Modules/MacOSModelsCodeGeneration.swiftmodule/x86_64.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			F2J/L6kqlNcReoSw2SA0TX4ouVpBZXSYC/5lJRDG6Xs=
+			MYNNETKmTPwIKWxTF+jYrK7j3OvTLmVmCUevKzJIwrw=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -72,7 +72,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			83a8NiZF8ExCqrDsryxH1bKKw2yj0W/rT2rNDbAqJzk=
+			7H26itD3GXBA4vhJgscDt2zYvrGJi5Lc0HasRs3LBA0=
 			</data>
 		</dict>
 		<key>Resources/Templates.bundle/EntityDTOConvertable.txt</key>
