@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		000E8D7B23C4C12C00C8E260 /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000E8D7A23C4C12C00C8E260 /* DataType.swift */; };
+		000E8DAA23C4FD3400C8E260 /* YamlTreeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000E8DA923C4FD3400C8E260 /* YamlTreeBuilder.swift */; };
 		006678D023C0A693004494DA /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006678CF23C0A693004494DA /* main.swift */; };
 		008B56D023C3AC9B0020E720 /* YamlParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 008B56C723C3AC9B0020E720 /* YamlParser.framework */; };
 		008B56D923C3AC9B0020E720 /* YamlParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 008B56C923C3AC9B0020E720 /* YamlParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -69,6 +71,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		000E8D7A23C4C12C00C8E260 /* DataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataType.swift; sourceTree = "<group>"; };
+		000E8DA923C4FD3400C8E260 /* YamlTreeBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YamlTreeBuilder.swift; sourceTree = "<group>"; };
 		006678BC23C0A121004494DA /* surfgen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = surfgen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		006678C823C0A121004494DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		006678CF23C0A693004494DA /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -121,6 +125,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		000E8D7923C4C11900C8E260 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				000E8D7A23C4C12C00C8E260 /* DataType.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		006678B323C0A121004494DA = {
 			isa = PBXGroup;
 			children = (
@@ -172,12 +184,14 @@
 		008B56C823C3AC9B0020E720 /* YamlParser */ = {
 			isa = PBXGroup;
 			children = (
+				000E8D7923C4C11900C8E260 /* Models */,
 				00BA137F23C3957D00B1ED7F /* DependenciesFinder.swift */,
 				008B56F423C3B6B40020E720 /* DependencyAnalyzer.swift */,
 				00AA960D23C26020000CBC66 /* YamsParser.swift */,
 				00BA138123C3966B00B1ED7F /* Extensions */,
 				008B56C923C3AC9B0020E720 /* YamlParser.h */,
 				008B56CA23C3AC9B0020E720 /* Info.plist */,
+				000E8DA923C4FD3400C8E260 /* YamlTreeBuilder.swift */,
 			);
 			path = YamlParser;
 			sourceTree = "<group>";
@@ -397,9 +411,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				008B56EE23C3AD4A0020E720 /* StringExtensions.swift in Sources */,
+				000E8D7B23C4C12C00C8E260 /* DataType.swift in Sources */,
 				008B56EF23C3AD4D0020E720 /* JSONExtension.swift in Sources */,
 				008B56F523C3B6B40020E720 /* DependencyAnalyzer.swift in Sources */,
 				008B56E923C3ACEC0020E720 /* DependenciesFinder.swift in Sources */,
+				000E8DAA23C4FD3400C8E260 /* YamlTreeBuilder.swift in Sources */,
 				008B56E823C3ACE60020E720 /* YamsParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
