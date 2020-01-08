@@ -37,6 +37,7 @@ extension DataType {
 
         if let type = json.type {
             self = .primitive(type)
+            return
         }
 
         return nil
@@ -44,7 +45,6 @@ extension DataType {
     }
 
 }
-
 
 public enum GroupType: String {
     case allOf
@@ -56,14 +56,14 @@ enum YamlToken {
     case root
     case decl(String)
     case group(String)
-    case property(String, Bool)
+    case property(name: String, isOptional: Bool)
     case type(DataType)
     case ref(String)
 }
 
 protocol YamlNode: class {
     var token: YamlToken { get }
-    var subNodes: [YamlNode] { get }
+    var subNodes: [YamlNode] { get set }
 }
 
  class Node: YamlNode {

@@ -22,8 +22,8 @@ extension JSON {
         return self["components"]["schemas"]
     }
 
-    var allOf: [String: JSON]? {
-        return self["allOf"].dictionary
+    var allOf: [JSON]? {
+        return self["allOf"].array
     }
 
     var oneOf: [String: JSON]? {
@@ -32,6 +32,14 @@ extension JSON {
 
     var type: String? {
         return self["type"].string
+    }
+
+    var requiredArray: [String] {
+        return self["required"].arrayObject as? [String] ?? []
+    }
+
+    var nullable: Bool {
+        return self["nullable"].bool ?? false
     }
 
 }

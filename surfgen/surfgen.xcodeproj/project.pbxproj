@@ -9,7 +9,12 @@
 /* Begin PBXBuildFile section */
 		000E8D7B23C4C12C00C8E260 /* DataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000E8D7A23C4C12C00C8E260 /* DataType.swift */; };
 		000E8DAA23C4FD3400C8E260 /* YamlTreeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000E8DA923C4FD3400C8E260 /* YamlTreeBuilder.swift */; };
+		00189F8323C606AE009940A1 /* YamlTreeBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00189F8223C606AE009940A1 /* YamlTreeBuilderTests.swift */; };
+		00189F8623C61F0B009940A1 /* GroupNodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00189F8523C61F0B009940A1 /* GroupNodeParser.swift */; };
+		00189F8823C61F73009940A1 /* PropertyNodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00189F8723C61F73009940A1 /* PropertyNodeParser.swift */; };
+		00189F8A23C64A85009940A1 /* DependencyAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00189F8923C64A85009940A1 /* DependencyAnalyzer.swift */; };
 		006678D023C0A693004494DA /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006678CF23C0A693004494DA /* main.swift */; };
+		0085257D23C650A300FB986E /* GroupResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0085257C23C650A300FB986E /* GroupResolver.swift */; };
 		008B56D023C3AC9B0020E720 /* YamlParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 008B56C723C3AC9B0020E720 /* YamlParser.framework */; };
 		008B56D923C3AC9B0020E720 /* YamlParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 008B56C923C3AC9B0020E720 /* YamlParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		008B56DC23C3AC9B0020E720 /* YamlParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 008B56C723C3AC9B0020E720 /* YamlParser.framework */; };
@@ -23,7 +28,6 @@
 		008B56EF23C3AD4D0020E720 /* JSONExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BA138423C3969100B1ED7F /* JSONExtension.swift */; };
 		008B56F123C3AE260020E720 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 008B56F023C3AE260020E720 /* Yams */; };
 		008B56F323C3AE260020E720 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 008B56F223C3AE260020E720 /* SwiftyJSON */; };
-		008B56F523C3B6B40020E720 /* DependencyAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008B56F423C3B6B40020E720 /* DependencyAnalyzer.swift */; };
 		008B56F723C3BA990020E720 /* DependencyAnalyzerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008B56F623C3BA990020E720 /* DependencyAnalyzerTests.swift */; };
 		008B56F923C3BBEE0020E720 /* RendesvousModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008B56F823C3BBEE0020E720 /* RendesvousModel.swift */; };
 		00AA961123C26D22000CBC66 /* surfMiddleApi.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 00AA961023C26D22000CBC66 /* surfMiddleApi.yaml */; };
@@ -73,15 +77,19 @@
 /* Begin PBXFileReference section */
 		000E8D7A23C4C12C00C8E260 /* DataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataType.swift; sourceTree = "<group>"; };
 		000E8DA923C4FD3400C8E260 /* YamlTreeBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YamlTreeBuilder.swift; sourceTree = "<group>"; };
+		00189F8223C606AE009940A1 /* YamlTreeBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YamlTreeBuilderTests.swift; sourceTree = "<group>"; };
+		00189F8523C61F0B009940A1 /* GroupNodeParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupNodeParser.swift; sourceTree = "<group>"; };
+		00189F8723C61F73009940A1 /* PropertyNodeParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyNodeParser.swift; sourceTree = "<group>"; };
+		00189F8923C64A85009940A1 /* DependencyAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyAnalyzer.swift; sourceTree = "<group>"; };
 		006678BC23C0A121004494DA /* surfgen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = surfgen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		006678C823C0A121004494DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		006678CF23C0A693004494DA /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		0085257C23C650A300FB986E /* GroupResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupResolver.swift; sourceTree = "<group>"; };
 		008B56C723C3AC9B0020E720 /* YamlParser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YamlParser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		008B56C923C3AC9B0020E720 /* YamlParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YamlParser.h; sourceTree = "<group>"; };
 		008B56CA23C3AC9B0020E720 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		008B56CF23C3AC9B0020E720 /* YamlParserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YamlParserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		008B56D823C3AC9B0020E720 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		008B56F423C3B6B40020E720 /* DependencyAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyAnalyzer.swift; sourceTree = "<group>"; };
 		008B56F623C3BA990020E720 /* DependencyAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyAnalyzerTests.swift; sourceTree = "<group>"; };
 		008B56F823C3BBEE0020E720 /* RendesvousModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendesvousModel.swift; sourceTree = "<group>"; };
 		00AA960D23C26020000CBC66 /* YamsParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YamsParser.swift; sourceTree = "<group>"; };
@@ -129,8 +137,18 @@
 			isa = PBXGroup;
 			children = (
 				000E8D7A23C4C12C00C8E260 /* DataType.swift */,
+				0085257C23C650A300FB986E /* GroupResolver.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		00189F8423C61EFC009940A1 /* Parsers */ = {
+			isa = PBXGroup;
+			children = (
+				00189F8523C61F0B009940A1 /* GroupNodeParser.swift */,
+				00189F8723C61F73009940A1 /* PropertyNodeParser.swift */,
+			);
+			path = Parsers;
 			sourceTree = "<group>";
 		};
 		006678B323C0A121004494DA = {
@@ -184,9 +202,10 @@
 		008B56C823C3AC9B0020E720 /* YamlParser */ = {
 			isa = PBXGroup;
 			children = (
+				00189F8423C61EFC009940A1 /* Parsers */,
 				000E8D7923C4C11900C8E260 /* Models */,
 				00BA137F23C3957D00B1ED7F /* DependenciesFinder.swift */,
-				008B56F423C3B6B40020E720 /* DependencyAnalyzer.swift */,
+				00189F8923C64A85009940A1 /* DependencyAnalyzer.swift */,
 				00AA960D23C26020000CBC66 /* YamsParser.swift */,
 				00BA138123C3966B00B1ED7F /* Extensions */,
 				008B56C923C3AC9B0020E720 /* YamlParser.h */,
@@ -199,6 +218,7 @@
 		008B56D523C3AC9B0020E720 /* YamlParserTests */ = {
 			isa = PBXGroup;
 			children = (
+				00189F8223C606AE009940A1 /* YamlTreeBuilderTests.swift */,
 				008B56F623C3BA990020E720 /* DependencyAnalyzerTests.swift */,
 				00AA960423C252AD000CBC66 /* TestFiles */,
 				00BA138823C39ECF00B1ED7F /* FileReader.swift */,
@@ -410,13 +430,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00189F8623C61F0B009940A1 /* GroupNodeParser.swift in Sources */,
+				0085257D23C650A300FB986E /* GroupResolver.swift in Sources */,
 				008B56EE23C3AD4A0020E720 /* StringExtensions.swift in Sources */,
+				00189F8823C61F73009940A1 /* PropertyNodeParser.swift in Sources */,
 				000E8D7B23C4C12C00C8E260 /* DataType.swift in Sources */,
 				008B56EF23C3AD4D0020E720 /* JSONExtension.swift in Sources */,
-				008B56F523C3B6B40020E720 /* DependencyAnalyzer.swift in Sources */,
 				008B56E923C3ACEC0020E720 /* DependenciesFinder.swift in Sources */,
 				000E8DAA23C4FD3400C8E260 /* YamlTreeBuilder.swift in Sources */,
 				008B56E823C3ACE60020E720 /* YamsParser.swift in Sources */,
+				00189F8A23C64A85009940A1 /* DependencyAnalyzer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +447,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00189F8323C606AE009940A1 /* YamlTreeBuilderTests.swift in Sources */,
 				008B56F723C3BA990020E720 /* DependencyAnalyzerTests.swift in Sources */,
 				008B56EB23C3AD190020E720 /* FileReader.swift in Sources */,
 				008B56EA23C3AD070020E720 /* DependenciesFinderTests.swift in Sources */,

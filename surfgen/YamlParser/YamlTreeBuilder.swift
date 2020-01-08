@@ -10,38 +10,37 @@ import SwiftyJSON
 
 final class YamlTreeBuilder {
 
-    func buildTree(from schemas: JSON, models: [String]) -> YamlNode {
+    func buildTree(from schemas: JSON, models: [String]) throws -> YamlNode {
         var declNodes = [Node]()
         for model in models {
-            guard let decl = schemas[model].dictionary else { continue }
-            declNodes.append(Node(token: .decl(model), resolveDeclSubNodes(for: schemas[model])))
+            guard schemas[model].dictionary != nil else { continue }
+            declNodes.append(Node(token: .decl(model), try resolveDeclSubNodes(for: schemas[model])))
         }
-        return Node(token: .root, [])
+        return Node(token: .root, declNodes)
     }
 
-    func resolveDeclSubNodes(for json: JSON) -> [YamlNode] {
+    func resolveDeclSubNodes(for json: JSON) throws -> [YamlNode] {
+        // model subNode may be as simple ref to another object
         if let ref = json.refModel {
             return [Node(token: .ref(ref), [])]
         }
 
-        if let allOf = json.allOf {
-            return [Node(token: .group("allOf"), resolveGroup(for: json["allOf"]))]
+        // implicit object type
+        if json.properties != nil {
+            return try PropertyNodesParser().parse(for: json)
         }
 
-        if let properties = json.properties {
-            var tmp = [YamlNode]()
-            for (name, value) in properties {
-                guard let type = DataType(json: value) else { continue }
-                tmp.append(Node(token: .property(name, false), []))
-            }
+        // in case if its not object and not ref and can be parsed as DataType then its "fake" object where type is array of any objects or its primitive type
+        if json.type != nil, let type = DataType(json: json) {
+            return [Node(token: .type(type), [])]
         }
 
-        return []
-    }
+        // the last possible option that it is group node
+        if let group = json.dictionary?.first?.key {
+            return [Node(token: .group(group), try GroupNodeParser().parse(for: json[group]))]
+        }
 
-    func resolveGroup(for json: JSON) -> [YamlNode] {
         return []
     }
 
 }
-

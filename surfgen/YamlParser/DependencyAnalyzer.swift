@@ -2,52 +2,28 @@
 //  DependencyAnalyzer.swift
 //  YamlParser
 //
-//  Created by Mikhail Monakov on 06/01/2020.
+//  Created by Mikhail Monakov on 08/01/2020.
 //  Copyright © 2020 Surf. All rights reserved.
 //
 
-import SwiftyJSON
-
 final class DependencyAnalyzer {
 
-    /**
-    After DependenciesFinder finds plain dependencies we need to separate "fake" dependecies from primite types
+    func analyze(declNodes: [YamlNode]) -> (nodesToGenerate: [YamlNode], fakeDecl: [String: YamlNode]) {
+        var nodesToGenerate = [YamlNode]()
+        var fakeDecl = [String: YamlNode]()
 
-     ```
-     schemas:
-
-     FeedComponent:
-        properties:
-            id:
-                $ref: "#/components/schemas/Id"
-
-     ...
-
-     Id:
-          description: Уникальный идентификатор
-          type: string
-
-     ```
-
-     In that case object "Id: is referred to as "fake" object ("id: $ref: "#/components/schemas/Id"") but for parsing it will be simple
-     "id: string" type. So in this method we detect real models and also create dictionary in order to replace "fake" links to hidden types
-     while generatgin G-AST
-    */
-
-    func analyze(dependencies: Set<String>, for schemas: JSON) -> (dependenciesToGenerate: Set<String>, primitiveDependencies: [String: String]) {
-        var dependenciesToGenerate = Set<String>()
-        var primitiveDependecies = [String: String]()
-        for dependency in dependencies {
+        for declNode in declNodes {
             guard
-                [schemas[dependency].properties,
-                 schemas[dependency].allOf,
-                 schemas[dependency].oneOf].lazy.first(where: { $0 != nil }) != nil else {
-                    primitiveDependecies[dependency] = schemas[dependency].type
+                case let .decl(name) = declNode.token,
+                declNode.subNodes.count == 1,
+                let typeNode = declNode.subNodes.first,
+                case .type = typeNode.token else {
+                    nodesToGenerate.append(declNode)
                     continue
             }
-            dependenciesToGenerate.insert(dependency)
+            fakeDecl[name] = typeNode
         }
-        return (dependenciesToGenerate, primitiveDependecies)
+        return (nodesToGenerate, fakeDecl)
     }
 
 }
