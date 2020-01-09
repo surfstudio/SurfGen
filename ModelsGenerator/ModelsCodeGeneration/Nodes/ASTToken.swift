@@ -14,4 +14,3 @@ public enum ASTToken {
     case type(name: String)
     case root
 }
-

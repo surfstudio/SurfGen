@@ -8,20 +8,38 @@
 
 import XCTest
 @testable import YamlParser
-import SwiftyJSON
+import Swagger
 
 class YamlTreeBuilderTests: XCTestCase {
 
     func testTree() {
-        let schemas = YamsParser().load(for: FileReader().readFile("rendezvous", "yaml")).schemas
-        let deps = DependenciesFinder().findPlainDependencies(for: schemas, modelName: "Profile")
-        let test = try? YamlTreeBuilder().buildTree(from: schemas, models: Array(deps))
+//        let schemas = YamsParser().load(for: ).schemas
+//        let deps = DependenciesFinder().findPlainDependencies(for: schemas, modelName: "Profile")
+//
+//        do {
+//            let test = try YamlTreeBuilder().buildTree(from: schemas)
+//            dump(test)
+//        } catch {
+//            dump(error)
+//        }
+        do {
+            let spec = try SwaggerSpec(string: FileReader().readFile("rendezvous", "yaml"))
 
-        if let root = test {
-            let result = DependencyAnalyzer().analyze(declNodes: root.subNodes)
-            let asd = GroupResolver().resolve(for: result.nodesToGenerate)
-            print(asd)
+
+            if case let .object(object) = spec.components.schemas.first?.value.type {
+                for property in object.properties {
+                    switch property.schema.type {
+                    case .reference(let reference):
+                        dump(reference)
+                    default: continue
+                    }
+                }
+            }
+
+        } catch {
+            dump(error.localizedDescription)
         }
+
 
     }
 

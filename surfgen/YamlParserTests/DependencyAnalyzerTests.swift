@@ -8,7 +8,7 @@
 
 import XCTest
 @testable import YamlParser
-import SwiftyJSON
+
 
 extension RendezvousModel {
 
