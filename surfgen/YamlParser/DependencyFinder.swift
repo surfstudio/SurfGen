@@ -12,8 +12,7 @@ final class DependencyFinder {
 
 
     func findDependencies(for schemas: [ComponentObject<Schema>], modelName: String) -> [ComponentObject<Schema>] {
-        var dependencies = Set<String>()
-
+        var dependencies: Set<String> = [modelName]
         var dependenciesToFind = [modelName]
 
         repeat {
@@ -26,16 +25,26 @@ final class DependencyFinder {
     }
 
     func findDependency(modelName: String, schemas: [ComponentObject<Schema>]) -> [String] {
-        guard let model = schemas.first(where: { $0.name == modelName }) else {
+        guard case let .object(object) = schemas.first(where: { $0.name == modelName })?.value.type else {
             return []
         }
+        return object.properties.map { detectRefenrencies(for: $0.schema.type) }.flatMap { $0 }
+    }
 
-        if case let .object(object) = model.value.type {
-            
+    func detectRefenrencies(for schemaType: SchemaType) -> [String] {
+        switch schemaType {
+        case .reference(let reference):
+            return [reference.name]
+        case .array(let arraySchema):
+            switch arraySchema.items {
+            case .single(let schema):
+                return detectRefenrencies(for: schema.type)
+            case .multiple(let schemas):
+                return schemas.map { detectRefenrencies(for: $0.type) }.flatMap { $0 }
+            }
+        default:
+            return []
         }
-
-        return []
-
     }
 
 }
