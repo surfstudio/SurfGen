@@ -25,13 +25,13 @@ class YamlTreeBuilderTests: XCTestCase {
         do {
             let spec = try SwaggerSpec(string: FileReader().readFile("rendezvous", "yaml"))
 
-            let tmp = DependencyFinder().findDependencies(for: spec.components.schemas, modelName: "ProductsResponse")
-//            if case let .object(object) = spec.components.schemas.first(where: { $0.name == "ProductsResponse" })?.value.type {
-//                let set: Set<String> = Set()
-//                print(set)
-//            }
+//            let tmp = DependencyFinder().findDependencies(for: spec.components.schemas, modelName: "ProductsResponse")
+            if let schema = spec.components.schemas.first(where: { $0.name == "ProductCart" }), case let .group(object) = schema.value.type {
+                let test = AliasResolver().findProperties(for: schema.value)
+                print(test.0.count, test.1.count)
+            }
 
-            print(tmp.map { $0.name })
+//            print(tmp.map { $0.name })
         } catch {
             dump(error.localizedDescription)
         }

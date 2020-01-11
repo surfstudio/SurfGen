@@ -26,11 +26,7 @@ class DependenciesFinderTests: XCTestCase {
         let resultedModels = DependencyFinder().findDependencies(for: schemas, modelName: modelName)
         XCTAssertEqual(Set(resultedModels.map { $0.name }), model.dependencies)
 
-        for model in resultedModels {
-            if model.value.type.isPrimitive {
-                dump(model.name)
-            }
-        }
+//        XCTAssertEqual(AliasFinder().findAlaises(for: resultedModels), model.primitiveDependencies)
     }
 
 }

@@ -25,6 +25,7 @@
 		00AA961123C26D22000CBC66 /* surfMiddleApi.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 00AA961023C26D22000CBC66 /* surfMiddleApi.yaml */; };
 		00AA961323C26E39000CBC66 /* Zenit_WebAPI.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 00AA961223C26E39000CBC66 /* Zenit_WebAPI.yaml */; };
 		00AD603923C0E58A005BD8BD /* MacOSModelsCodeGeneration.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 00AD603823C0E58A005BD8BD /* MacOSModelsCodeGeneration.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		00F2A62F23CA27470002259B /* AliasFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F2A62E23CA27470002259B /* AliasFinder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +87,7 @@
 		00BA138223C3967800B1ED7F /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		00BA138623C39E5700B1ED7F /* DependenciesFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependenciesFinderTests.swift; sourceTree = "<group>"; };
 		00BA138823C39ECF00B1ED7F /* FileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReader.swift; sourceTree = "<group>"; };
+		00F2A62E23CA27470002259B /* AliasFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AliasFinder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +174,7 @@
 				008B56C923C3AC9B0020E720 /* YamlParser.h */,
 				008B56CA23C3AC9B0020E720 /* Info.plist */,
 				008525AB23C786C200FB986E /* DependencyFinder.swift */,
+				00F2A62E23CA27470002259B /* AliasFinder.swift */,
 			);
 			path = YamlParser;
 			sourceTree = "<group>";
@@ -390,6 +393,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				008525AC23C786C200FB986E /* DependencyFinder.swift in Sources */,
+				00F2A62F23CA27470002259B /* AliasFinder.swift in Sources */,
 				008B56EE23C3AD4A0020E720 /* StringExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
