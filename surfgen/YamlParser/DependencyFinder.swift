@@ -10,7 +10,22 @@ import Swagger
 
 final class DependencyFinder {
 
+    /**
+        Method finds all recursive dependencies for model with modelName value.
 
+     ```
+     ProductsResponse:
+        properties:
+            products:
+                type: array
+                items:
+                    $ref: "#/components/schemas/ProductShort"
+            metadata:
+                    $ref: "#/components/schemas/Metadata"
+     ```
+      For yaml snippet above method will return  ["FurStatus", "Money", "ProductsResponse", "Id", "Color", "Metadata", "ProductShort"] compent schemas
+         because ProductShort and Metadata contain dependencies too (see YamlParserTests/TestFiles/rendezvous.yaml file). So in order our models to be consistent we find all models that are required (even thought models such Id may be String type after we detect its in Id model in schemas).
+     */
     func findDependencies(for schemas: [ComponentObject<Schema>], modelName: String) -> [ComponentObject<Schema>] {
         var dependencies: Set<String> = [modelName]
         var dependenciesToFind = [modelName]

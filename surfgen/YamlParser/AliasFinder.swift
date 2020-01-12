@@ -39,16 +39,50 @@ final class AliasFinder {
 
 }
 
-final class AliasResolver {
+struct Color {
+    let red, green, blue: Double
+    init(red: Double, green: Double, blue: Double) {
+        self.red   = red
+        self.green = green
+        self.blue  = blue
+    }
+    init(white: Double) {
+        red   = white
+        green = white
+        blue  = white
+    }
+}
 
-//    func transfrom(group: SchemaType) -> SchemaType {
-//        guard case let .group(groupSchema) = group else {
-//            return group
-//        }
-//
-//    }
+extension ObjectSchema {
 
-    func findProperties(for schema: Schema) -> ([Property], [Property]) {
+    init(requiredProperties: [Property], optionalProperties: [Property]) throws {
+        self.requiredProperties = requiredProperties
+        self.optionalProperties = optionalProperties
+        self.properties = optionalProperties + requiredProperties
+        self.abstract = false
+        self.additionalProperties = nil
+        self.discriminator = nil
+        self.maxProperties = nil
+        self.minProperties = nil
+    }
+
+}
+
+final class GroupResolver {
+
+    func transfrom(groupComponent: ComponentObject<Schema>) -> SchemaType {
+        guard case let .group(groupSchema) = groupComponent.value.type else {
+            return groupComponent.value.type
+        }
+
+        let object = try! ObjectSchema(requiredProperties: [], optionalProperties: [])
+        return SchemaType.object(object)
+    }
+
+    /**
+     Method finds all properties for provided schema. As it could contain references and groups it recursively goes through all depended schemas
+     */
+    func findProperties(for schema: Schema) -> (requiredProperties: [Property], optionalProperties: [Property]) {
         switch schema.type {
         case .object(let objectSchema):
             return (objectSchema.optionalProperties, objectSchema.requiredProperties)
@@ -63,36 +97,11 @@ final class AliasResolver {
             return findProperties(for: refSchema.value)
         case .group(let groupSchema) where groupSchema.type == .all:
             return groupSchema.schemas.map { findProperties(for: $0) }.reduce(([], [])) { (result, curr) -> ([Property], [Property]) in
-                return (result.0 + curr.0, result.1 + result.1)
+                return (result.0 + curr.0, result.1 + curr.1)
             }
         default:
             return ([], [])
         }
     }
-
-    func resolve(dict: [String: SchemaType], for schemas: [ComponentObject<Schema>]) -> [ComponentObject<Schema>] {
-//        for schema in schemas {
-//            switch schema.value.type {
-//            case .object(let object):
-//                for property in object.properties {
-//                    guard let refName = property.schema.type.reference?.name, let type = dict[refName] else {
-//                        continue
-//                    }
-//
-//                    property.schema =
-//                }
-////            case .reference(let refSchema):
-////                if let type = dict[refSchema.name] {
-////                    schema
-////                }
-//            default:
-//                break
-//            }
-//        }
-        return schemas
-    }
-
-//    func resolve(dict: [String: String], schema: SchemaType) ->
-
 
 }

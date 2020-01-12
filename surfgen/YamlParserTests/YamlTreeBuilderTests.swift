@@ -28,7 +28,7 @@ class YamlTreeBuilderTests: XCTestCase {
 //            let tmp = DependencyFinder().findDependencies(for: spec.components.schemas, modelName: "ProductsResponse")
             if let schema = spec.components.schemas.first(where: { $0.name == "ProductCart" }), case let .group(object) = schema.value.type {
                 let test = AliasResolver().findProperties(for: schema.value)
-                print(test.0.count, test.1.count)
+                print(test.0.map { ($0.name, $0.required) })
             }
 
 //            print(tmp.map { $0.name })
