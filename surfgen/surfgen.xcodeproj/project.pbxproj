@@ -26,6 +26,8 @@
 		00AA961323C26E39000CBC66 /* Zenit_WebAPI.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 00AA961223C26E39000CBC66 /* Zenit_WebAPI.yaml */; };
 		00AD603923C0E58A005BD8BD /* MacOSModelsCodeGeneration.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 00AD603823C0E58A005BD8BD /* MacOSModelsCodeGeneration.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		00F2A62F23CA27470002259B /* AliasFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F2A62E23CA27470002259B /* AliasFinder.swift */; };
+		860FA4E723CBCC4A00649940 /* PropertiesFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860FA4E623CBCC4A00649940 /* PropertiesFinder.swift */; };
+		860FA4E923CBCCEB00649940 /* PropertiesFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860FA4E823CBCCEB00649940 /* PropertiesFinderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +90,8 @@
 		00BA138623C39E5700B1ED7F /* DependenciesFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependenciesFinderTests.swift; sourceTree = "<group>"; };
 		00BA138823C39ECF00B1ED7F /* FileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReader.swift; sourceTree = "<group>"; };
 		00F2A62E23CA27470002259B /* AliasFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AliasFinder.swift; sourceTree = "<group>"; };
+		860FA4E623CBCC4A00649940 /* PropertiesFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesFinder.swift; sourceTree = "<group>"; };
+		860FA4E823CBCCEB00649940 /* PropertiesFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesFinderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +179,7 @@
 				008B56CA23C3AC9B0020E720 /* Info.plist */,
 				008525AB23C786C200FB986E /* DependencyFinder.swift */,
 				00F2A62E23CA27470002259B /* AliasFinder.swift */,
+				860FA4E623CBCC4A00649940 /* PropertiesFinder.swift */,
 			);
 			path = YamlParser;
 			sourceTree = "<group>";
@@ -188,6 +193,7 @@
 				00BA138823C39ECF00B1ED7F /* FileReader.swift */,
 				00BA138623C39E5700B1ED7F /* DependenciesFinderTests.swift */,
 				008B56D823C3AC9B0020E720 /* Info.plist */,
+				860FA4E823CBCCEB00649940 /* PropertiesFinderTests.swift */,
 			);
 			path = YamlParserTests;
 			sourceTree = "<group>";
@@ -394,6 +400,7 @@
 			files = (
 				008525AC23C786C200FB986E /* DependencyFinder.swift in Sources */,
 				00F2A62F23CA27470002259B /* AliasFinder.swift in Sources */,
+				860FA4E723CBCC4A00649940 /* PropertiesFinder.swift in Sources */,
 				008B56EE23C3AD4A0020E720 /* StringExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -406,6 +413,7 @@
 				008B56F723C3BA990020E720 /* DependencyAnalyzerTests.swift in Sources */,
 				008B56EB23C3AD190020E720 /* FileReader.swift in Sources */,
 				008B56EA23C3AD070020E720 /* DependenciesFinderTests.swift in Sources */,
+				860FA4E923CBCCEB00649940 /* PropertiesFinderTests.swift in Sources */,
 				008B56F923C3BBEE0020E720 /* RendesvousModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

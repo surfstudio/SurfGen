@@ -16,7 +16,7 @@ extension RendezvousModel {
         switch self {
         case .products:
             return ["Id": "string", "FurStatus": "integer", "Money": "string"]
-        case .geoPos, .searchHint:
+        case .geoPos, .searchHint, .productDetail:
             return [:]
         }
     }
@@ -29,6 +29,8 @@ extension RendezvousModel {
             return ["GeoPosition"]
         case .searchHint:
             return ["ExpandProductsData", "SearchHint"]
+        case .productDetail:
+            return []
         }
     }
 
