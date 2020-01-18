@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		00189F8323C606AE009940A1 /* YamlTreeBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00189F8223C606AE009940A1 /* YamlTreeBuilderTests.swift */; };
 		006678D023C0A693004494DA /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006678CF23C0A693004494DA /* main.swift */; };
-		0085258023C7798400FB986E /* Swagger in Frameworks */ = {isa = PBXBuildFile; productRef = 0085257F23C7798400FB986E /* Swagger */; };
-		0085258223C7799500FB986E /* Swagger in Frameworks */ = {isa = PBXBuildFile; productRef = 0085258123C7799500FB986E /* Swagger */; };
 		008525AC23C786C200FB986E /* DependencyFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008525AB23C786C200FB986E /* DependencyFinder.swift */; };
 		008B56D023C3AC9B0020E720 /* YamlParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 008B56C723C3AC9B0020E720 /* YamlParser.framework */; };
 		008B56D923C3AC9B0020E720 /* YamlParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 008B56C923C3AC9B0020E720 /* YamlParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -28,6 +26,8 @@
 		00F2A62F23CA27470002259B /* AliasFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F2A62E23CA27470002259B /* AliasFinder.swift */; };
 		860FA4E723CBCC4A00649940 /* PropertiesFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860FA4E623CBCC4A00649940 /* PropertiesFinder.swift */; };
 		860FA4E923CBCCEB00649940 /* PropertiesFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860FA4E823CBCCEB00649940 /* PropertiesFinderTests.swift */; };
+		860FA52223D256B300649940 /* Swagger in Frameworks */ = {isa = PBXBuildFile; productRef = 860FA52123D256B300649940 /* Swagger */; };
+		860FA52423D256BB00649940 /* Swagger in Frameworks */ = {isa = PBXBuildFile; productRef = 860FA52323D256BB00649940 /* Swagger */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,7 +100,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				008B56DC23C3AC9B0020E720 /* YamlParser.framework in Frameworks */,
-				0085258023C7798400FB986E /* Swagger in Frameworks */,
+				860FA52223D256B300649940 /* Swagger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,7 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0085258223C7799500FB986E /* Swagger in Frameworks */,
+				860FA52423D256BB00649940 /* Swagger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,7 +246,7 @@
 			);
 			name = surfgen;
 			packageProductDependencies = (
-				0085257F23C7798400FB986E /* Swagger */,
+				860FA52123D256B300649940 /* Swagger */,
 			);
 			productName = surfgen;
 			productReference = 006678BC23C0A121004494DA /* surfgen.app */;
@@ -267,7 +267,7 @@
 			);
 			name = YamlParser;
 			packageProductDependencies = (
-				0085258123C7799500FB986E /* Swagger */,
+				860FA52323D256BB00649940 /* Swagger */,
 			);
 			productName = YamlParser;
 			productReference = 008B56C723C3AC9B0020E720 /* YamlParser.framework */;
@@ -324,7 +324,7 @@
 			);
 			mainGroup = 006678B323C0A121004494DA;
 			packageReferences = (
-				0085257E23C7798400FB986E /* XCRemoteSwiftPackageReference "SwagGen" */,
+				860FA52023D256B300649940 /* XCRemoteSwiftPackageReference "SwagGen" */,
 			);
 			productRefGroup = 006678BD23C0A121004494DA /* Products */;
 			projectDirPath = "";
@@ -741,25 +741,25 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		0085257E23C7798400FB986E /* XCRemoteSwiftPackageReference "SwagGen" */ = {
+		860FA52023D256B300649940 /* XCRemoteSwiftPackageReference "SwagGen" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/yonaskolb/SwagGen.git";
+			repositoryURL = "https://github.com/JohnReeze/SwagGen/";
 			requirement = {
-				kind = exactVersion;
-				version = 4.3.0;
+				kind = revision;
+				revision = a31826bb1c505dc8d744053ef02b0bfd8418e573;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0085257F23C7798400FB986E /* Swagger */ = {
+		860FA52123D256B300649940 /* Swagger */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0085257E23C7798400FB986E /* XCRemoteSwiftPackageReference "SwagGen" */;
+			package = 860FA52023D256B300649940 /* XCRemoteSwiftPackageReference "SwagGen" */;
 			productName = Swagger;
 		};
-		0085258123C7799500FB986E /* Swagger */ = {
+		860FA52323D256BB00649940 /* Swagger */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0085257E23C7798400FB986E /* XCRemoteSwiftPackageReference "SwagGen" */;
+			package = 860FA52023D256B300649940 /* XCRemoteSwiftPackageReference "SwagGen" */;
 			productName = Swagger;
 		};
 /* End XCSwiftPackageProductDependency section */

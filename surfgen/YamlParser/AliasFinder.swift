@@ -39,45 +39,24 @@ final class AliasFinder {
 
 }
 
-struct Color {
-    let red, green, blue: Double
-    init(red: Double, green: Double, blue: Double) {
-        self.red   = red
-        self.green = green
-        self.blue  = blue
-    }
-    init(white: Double) {
-        red   = white
-        green = white
-        blue  = white
-    }
-}
-
-//extension ObjectSchema {
-//
-//    init(requiredProperties: [Property], optionalProperties: [Property]) throws {
-//        self.requiredProperties = requiredProperties
-//        self.optionalProperties = optionalProperties
-//        self.properties = optionalProperties + requiredProperties
-//        self.abstract = false
-//        self.additionalProperties = nil
-//        self.discriminator = nil
-//        self.maxProperties = nil
-//        self.minProperties = nil
-//    }
-//
-//}
 
 final class GroupResolver {
 
-//    func transfrom(groupComponent: ComponentObject<Schema>) -> SchemaType {
-//        guard case let .group(groupSchema) = groupComponent.value.type else {
-//            return groupComponent.value.type
-//        }
-//
-//        let object = try! ObjectSchema(requiredProperties: [], optionalProperties: [])
-//        return SchemaType.object(object)
-//    }
+    func resolve(for schemas: [ComponentObject<Schema>]) -> [ComponentObject<Schema>] {
+        return schemas.map(transfrom)
+    }
 
+    func transfrom(groupComponent: ComponentObject<Schema>) -> ComponentObject<Schema> {
+        guard case .group = groupComponent.value.type else {
+            return groupComponent
+        }
+
+        let (required, optional) = PropertiesFinder().findProperties(for: groupComponent.value)
+        let object = ObjectSchema(requiredProperties: required,
+                                  optionalProperties: optional,
+                                  properties: required + optional)
+
+        return ComponentObject(name: groupComponent.name, value: Schema(metadata: .init(), type: .object(object)))
+    }
 
 }
