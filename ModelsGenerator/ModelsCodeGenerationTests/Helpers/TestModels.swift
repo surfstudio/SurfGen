@@ -6,7 +6,7 @@
 //  Copyright © 2020 Surf. All rights reserved.
 //
 
-@testable import ModelsCodeGeneration
+@testable import SurfGenKit
 
 enum TestModels: CaseIterable {
     case shopLocation

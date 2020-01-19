@@ -38,6 +38,16 @@
                ReferencedContainer = "container:surfgen.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "00FB140823D46BDF00B426D7"
+               BuildableName = "SurfGenKitTests.xctest"
+               BlueprintName = "SurfGenKitTests"
+               ReferencedContainer = "container:surfgen.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

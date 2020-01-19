@@ -6,7 +6,7 @@
 //  Copyright © 2019 Surf. All rights reserved.
 //
 
-@testable import ModelsCodeGeneration
+@testable import SurfGenKit
 
 final class NodesBuilder {
 

@@ -39,14 +39,15 @@ final class DependencyFinder {
         return schemas.filter { dependencies.contains($0.name) }
     }
 
-    func findDependency(modelName: String, schemas: [ComponentObject<Schema>]) -> [String] {
-        guard case let .object(object) = schemas.first(where: { $0.name == modelName })?.value.type else {
+    private func findDependency(modelName: String, schemas: [ComponentObject<Schema>]) -> [String] {
+        guard let schemaType = schemas.first(where: { $0.name == modelName })?.value.type else {
             return []
         }
-        return object.properties.map { detectRefenrencies(for: $0.schema.type) }.flatMap { $0 }
+
+        return detectRefenrencies(for: schemaType)
     }
 
-    func detectRefenrencies(for schemaType: SchemaType) -> [String] {
+    private func detectRefenrencies(for schemaType: SchemaType) -> [String] {
         switch schemaType {
         case .reference(let reference):
             return [reference.name]
@@ -57,6 +58,14 @@ final class DependencyFinder {
             case .multiple(let schemas):
                 return schemas.map { detectRefenrencies(for: $0.type) }.flatMap { $0 }
             }
+        case .group(let groupSchema):
+            guard groupSchema.type == .all else { return [] }
+            return groupSchema.schemas.compactMap { $0.type.object?.properties }
+                .flatMap { $0 }
+                .map { detectRefenrencies(for: $0.schema.type) }
+                .flatMap { $0 }
+        case .object(let objectSchema):
+            return objectSchema.properties.map { detectRefenrencies(for: $0.schema.type) }.flatMap { $0 }
         default:
             return []
         }

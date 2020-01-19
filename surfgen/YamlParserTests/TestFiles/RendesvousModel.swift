@@ -12,6 +12,7 @@ enum RendezvousModel: String, CaseIterable {
     case searchHint = "SearchHint"
     case geoPos = "GeoPosition"
     case productDetail = "ProductDetail"
+    case profile = "Profile"
 
     var dependencies: Set<String> {
         switch self {
@@ -23,6 +24,8 @@ enum RendezvousModel: String, CaseIterable {
             return ["GeoPosition"]
         case .productDetail:
             return ["ProductDetail"]
+        case .profile:
+            return ["Profile", "ProfileCard", "Id", "Phone", "Money"]
         }
     }
 

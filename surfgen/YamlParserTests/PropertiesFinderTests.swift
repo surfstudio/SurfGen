@@ -27,6 +27,10 @@ extension RendezvousModel {
                     "is_sized", "color", "fur_status", "sizes", "promo_pictures",
                     "available_sizes", "cart_size", "favorite_size", "color_variations",
                     "pictures", "video", "video_360", "video_review", "url"]
+        case .profile:
+            return ["birthday", "gender", "id", "foot_size",
+                    "first_name", "last_name", "middle_name",
+                    "phone", "card", "email"]
         }
     }
 
@@ -53,8 +57,8 @@ class PropertiesFinderTests: XCTestCase {
         let resultedProperties = Set((result.0 + result.1).map { $0.name })
         XCTAssertEqual(model.allProperties, resultedProperties)
 
-        let newComponent = GroupResolver().resolve(for: [schema])
-        print(newComponent)
+//        let newComponent = GroupResolver().resolve(for: [schema])
+//        print(newComponent)
     }
 
 }

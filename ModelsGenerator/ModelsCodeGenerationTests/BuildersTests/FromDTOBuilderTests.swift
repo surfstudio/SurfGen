@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import ModelsCodeGeneration
+@testable import SurfGenKit
 
 class FromDTOBuilderTests: XCTestCase {
 

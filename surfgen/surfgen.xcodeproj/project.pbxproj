@@ -17,13 +17,62 @@
 		008B56EA23C3AD070020E720 /* DependenciesFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BA138623C39E5700B1ED7F /* DependenciesFinderTests.swift */; };
 		008B56EB23C3AD190020E720 /* FileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BA138823C39ECF00B1ED7F /* FileReader.swift */; };
 		008B56EC23C3AD240020E720 /* rendezvous.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 00BA137B23C3756500B1ED7F /* rendezvous.yaml */; };
-		008B56EE23C3AD4A0020E720 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BA138223C3967800B1ED7F /* StringExtensions.swift */; };
 		008B56F723C3BA990020E720 /* DependencyAnalyzerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008B56F623C3BA990020E720 /* DependencyAnalyzerTests.swift */; };
 		008B56F923C3BBEE0020E720 /* RendesvousModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008B56F823C3BBEE0020E720 /* RendesvousModel.swift */; };
 		00AA961123C26D22000CBC66 /* surfMiddleApi.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 00AA961023C26D22000CBC66 /* surfMiddleApi.yaml */; };
 		00AA961323C26E39000CBC66 /* Zenit_WebAPI.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 00AA961223C26E39000CBC66 /* Zenit_WebAPI.yaml */; };
-		00AD603923C0E58A005BD8BD /* MacOSModelsCodeGeneration.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 00AD603823C0E58A005BD8BD /* MacOSModelsCodeGeneration.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		00F2A62F23CA27470002259B /* AliasFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F2A62E23CA27470002259B /* AliasFinder.swift */; };
+		00FB140A23D46BDF00B426D7 /* SurfGenKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00FB140123D46BDF00B426D7 /* SurfGenKit.framework */; };
+		00FB141123D46BDF00B426D7 /* SurfGenKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB141023D46BDF00B426D7 /* SurfGenKitTests.swift */; };
+		00FB141323D46BDF00B426D7 /* SurfGenKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 00FB140323D46BDF00B426D7 /* SurfGenKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		00FB141723D46BDF00B426D7 /* SurfGenKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 00FB140123D46BDF00B426D7 /* SurfGenKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		00FB143623D46C0C00B426D7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB141F23D46C0B00B426D7 /* Constants.swift */; };
+		00FB143723D46C0C00B426D7 /* TypeNodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB142023D46C0B00B426D7 /* TypeNodeParser.swift */; };
+		00FB143823D46C0C00B426D7 /* ModelsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB142123D46C0B00B426D7 /* ModelsType.swift */; };
+		00FB143923D46C0C00B426D7 /* DeclNodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB142223D46C0B00B426D7 /* DeclNodeParser.swift */; };
+		00FB143A23D46C0C00B426D7 /* GenerationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB142323D46C0B00B426D7 /* GenerationError.swift */; };
+		00FB143B23D46C0C00B426D7 /* Templates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB142423D46C0B00B426D7 /* Templates.swift */; };
+		00FB143C23D46C0C00B426D7 /* DTOBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB142623D46C0B00B426D7 /* DTOBuilder.swift */; };
+		00FB143D23D46C0C00B426D7 /* TypeNameBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB142723D46C0B00B426D7 /* TypeNameBuilder.swift */; };
+		00FB143E23D46C0C00B426D7 /* ToDTOBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB142823D46C0B00B426D7 /* ToDTOBuilder.swift */; };
+		00FB143F23D46C0C00B426D7 /* FromDTOBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB142923D46C0B00B426D7 /* FromDTOBuilder.swift */; };
+		00FB144023D46C0C00B426D7 /* ASTToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB142B23D46C0C00B426D7 /* ASTToken.swift */; };
+		00FB144123D46C0C00B426D7 /* ASTNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB142C23D46C0C00B426D7 /* ASTNode.swift */; };
+		00FB144223D46C0C00B426D7 /* RootGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB142E23D46C0C00B426D7 /* RootGenerator.swift */; };
+		00FB144323D46C0C00B426D7 /* PropertyGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB142F23D46C0C00B426D7 /* PropertyGenerator.swift */; };
+		00FB144423D46C0C00B426D7 /* EntityGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB143023D46C0C00B426D7 /* EntityGenerator.swift */; };
+		00FB144523D46C0C00B426D7 /* EntryGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB143123D46C0C00B426D7 /* EntryGenerator.swift */; };
+		00FB144623D46C0C00B426D7 /* StencilExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB143323D46C0C00B426D7 /* StencilExtension.swift */; };
+		00FB144723D46C0C00B426D7 /* BoolExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB143423D46C0C00B426D7 /* BoolExtension.swift */; };
+		00FB144823D46C0C00B426D7 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB143523D46C0C00B426D7 /* StringExtension.swift */; };
+		00FB144A23D46C5700B426D7 /* Templates.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 00FB144923D46C5700B426D7 /* Templates.bundle */; };
+		00FB144D23D46CA400B426D7 /* Stencil in Frameworks */ = {isa = PBXBuildFile; productRef = 00FB144C23D46CA400B426D7 /* Stencil */; };
+		00FB146923D46D2B00B426D7 /* NodeCreation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB144F23D46D2B00B426D7 /* NodeCreation.swift */; };
+		00FB146A23D46D2B00B426D7 /* NodesBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB145023D46D2B00B426D7 /* NodesBuilder.swift */; };
+		00FB146B23D46D2B00B426D7 /* XCTestExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB145123D46D2B00B426D7 /* XCTestExtension.swift */; };
+		00FB146C23D46D2B00B426D7 /* TestModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB145223D46D2B00B426D7 /* TestModels.swift */; };
+		00FB146D23D46D2B00B426D7 /* FileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB145323D46D2B00B426D7 /* FileReader.swift */; };
+		00FB146E23D46D2B00B426D7 /* FromDTOBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB145523D46D2B00B426D7 /* FromDTOBuilderTests.swift */; };
+		00FB146F23D46D2B00B426D7 /* TypeNameBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB145623D46D2B00B426D7 /* TypeNameBuilderTests.swift */; };
+		00FB147023D46D2B00B426D7 /* ToDTOBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB145723D46D2B00B426D7 /* ToDTOBuilderTests.swift */; };
+		00FB147123D46D2B00B426D7 /* ShopEntry.txt in Resources */ = {isa = PBXBuildFile; fileRef = 00FB145B23D46D2B00B426D7 /* ShopEntry.txt */; };
+		00FB147223D46D2B00B426D7 /* ShopLocationEntry.txt in Resources */ = {isa = PBXBuildFile; fileRef = 00FB145C23D46D2B00B426D7 /* ShopLocationEntry.txt */; };
+		00FB147323D46D2B00B426D7 /* ContactTokenEntry.txt in Resources */ = {isa = PBXBuildFile; fileRef = 00FB145D23D46D2B00B426D7 /* ContactTokenEntry.txt */; };
+		00FB147423D46D2B00B426D7 /* ProfileCustomDataEntry.txt in Resources */ = {isa = PBXBuildFile; fileRef = 00FB145E23D46D2B00B426D7 /* ProfileCustomDataEntry.txt */; };
+		00FB147523D46D2B00B426D7 /* ContactTokenEntity.txt in Resources */ = {isa = PBXBuildFile; fileRef = 00FB146023D46D2B00B426D7 /* ContactTokenEntity.txt */; };
+		00FB147623D46D2B00B426D7 /* ProfileCustomDataEntity.txt in Resources */ = {isa = PBXBuildFile; fileRef = 00FB146123D46D2B00B426D7 /* ProfileCustomDataEntity.txt */; };
+		00FB147723D46D2B00B426D7 /* ShopLocationEntity.txt in Resources */ = {isa = PBXBuildFile; fileRef = 00FB146223D46D2B00B426D7 /* ShopLocationEntity.txt */; };
+		00FB147823D46D2B00B426D7 /* ShopEntity.txt in Resources */ = {isa = PBXBuildFile; fileRef = 00FB146323D46D2B00B426D7 /* ShopEntity.txt */; };
+		00FB147923D46D2B00B426D7 /* DeclNodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB146423D46D2B00B426D7 /* DeclNodeParser.swift */; };
+		00FB147B23D46D2B00B426D7 /* ModelsGenerationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB146623D46D2B00B426D7 /* ModelsGenerationTests.swift */; };
+		00FB147C23D46D2B00B426D7 /* PropertyGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB146723D46D2B00B426D7 /* PropertyGeneratorTests.swift */; };
+		00FB147D23D46D2B00B426D7 /* TypeNodeParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB146823D46D2B00B426D7 /* TypeNodeParserTests.swift */; };
+		00FB147E23D46FB200B426D7 /* SurfGenKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00FB140123D46BDF00B426D7 /* SurfGenKit.framework */; };
+		00FB148023D4712F00B426D7 /* GASTBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB147F23D4712F00B426D7 /* GASTBuilder.swift */; };
+		00FB14AD23D4B99300B426D7 /* SchemaTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB14AC23D4B99300B426D7 /* SchemaTypeExtension.swift */; };
+		00FB14AF23D4BA3900B426D7 /* AliasReplacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB14AE23D4BA3900B426D7 /* AliasReplacer.swift */; };
+		00FB14B323D4BB9600B426D7 /* GroupReplacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB14B223D4BB9600B426D7 /* GroupReplacer.swift */; };
+		00FB14B523D4C05500B426D7 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB14B423D4C05500B426D7 /* ArrayExtension.swift */; };
 		860FA4E723CBCC4A00649940 /* PropertiesFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860FA4E623CBCC4A00649940 /* PropertiesFinder.swift */; };
 		860FA4E923CBCCEB00649940 /* PropertiesFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860FA4E823CBCCEB00649940 /* PropertiesFinderTests.swift */; };
 		860FA52223D256B300649940 /* Swagger in Frameworks */ = {isa = PBXBuildFile; productRef = 860FA52123D256B300649940 /* Swagger */; };
@@ -52,6 +101,27 @@
 			remoteGlobalIDString = 008B56C623C3AC9B0020E720;
 			remoteInfo = YamlParser;
 		};
+		00FB140B23D46BDF00B426D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 006678B423C0A121004494DA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00FB140023D46BDF00B426D7;
+			remoteInfo = SurfGenKit;
+		};
+		00FB140D23D46BDF00B426D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 006678B423C0A121004494DA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 006678BB23C0A121004494DA;
+			remoteInfo = surfgen;
+		};
+		00FB141423D46BDF00B426D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 006678B423C0A121004494DA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00FB140023D46BDF00B426D7;
+			remoteInfo = SurfGenKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -62,7 +132,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				008B56DD23C3AC9B0020E720 /* YamlParser.framework in Embed Frameworks */,
-				00AD603923C0E58A005BD8BD /* MacOSModelsCodeGeneration.framework in Embed Frameworks */,
+				00FB141723D46BDF00B426D7 /* SurfGenKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,12 +154,61 @@
 		008B56F823C3BBEE0020E720 /* RendesvousModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendesvousModel.swift; sourceTree = "<group>"; };
 		00AA961023C26D22000CBC66 /* surfMiddleApi.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = surfMiddleApi.yaml; sourceTree = "<group>"; };
 		00AA961223C26E39000CBC66 /* Zenit_WebAPI.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = Zenit_WebAPI.yaml; sourceTree = "<group>"; };
-		00AD603823C0E58A005BD8BD /* MacOSModelsCodeGeneration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MacOSModelsCodeGeneration.framework; sourceTree = "<group>"; };
 		00BA137B23C3756500B1ED7F /* rendezvous.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = rendezvous.yaml; sourceTree = "<group>"; };
-		00BA138223C3967800B1ED7F /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		00BA138623C39E5700B1ED7F /* DependenciesFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependenciesFinderTests.swift; sourceTree = "<group>"; };
 		00BA138823C39ECF00B1ED7F /* FileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReader.swift; sourceTree = "<group>"; };
 		00F2A62E23CA27470002259B /* AliasFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AliasFinder.swift; sourceTree = "<group>"; };
+		00FB140123D46BDF00B426D7 /* SurfGenKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SurfGenKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		00FB140323D46BDF00B426D7 /* SurfGenKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SurfGenKit.h; sourceTree = "<group>"; };
+		00FB140423D46BDF00B426D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00FB140923D46BDF00B426D7 /* SurfGenKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SurfGenKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00FB141023D46BDF00B426D7 /* SurfGenKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurfGenKitTests.swift; sourceTree = "<group>"; };
+		00FB141223D46BDF00B426D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00FB141F23D46C0B00B426D7 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		00FB142023D46C0B00B426D7 /* TypeNodeParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeNodeParser.swift; sourceTree = "<group>"; };
+		00FB142123D46C0B00B426D7 /* ModelsType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelsType.swift; sourceTree = "<group>"; };
+		00FB142223D46C0B00B426D7 /* DeclNodeParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeclNodeParser.swift; sourceTree = "<group>"; };
+		00FB142323D46C0B00B426D7 /* GenerationError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenerationError.swift; sourceTree = "<group>"; };
+		00FB142423D46C0B00B426D7 /* Templates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Templates.swift; sourceTree = "<group>"; };
+		00FB142623D46C0B00B426D7 /* DTOBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DTOBuilder.swift; sourceTree = "<group>"; };
+		00FB142723D46C0B00B426D7 /* TypeNameBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeNameBuilder.swift; sourceTree = "<group>"; };
+		00FB142823D46C0B00B426D7 /* ToDTOBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDTOBuilder.swift; sourceTree = "<group>"; };
+		00FB142923D46C0B00B426D7 /* FromDTOBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FromDTOBuilder.swift; sourceTree = "<group>"; };
+		00FB142B23D46C0C00B426D7 /* ASTToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASTToken.swift; sourceTree = "<group>"; };
+		00FB142C23D46C0C00B426D7 /* ASTNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASTNode.swift; sourceTree = "<group>"; };
+		00FB142E23D46C0C00B426D7 /* RootGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootGenerator.swift; sourceTree = "<group>"; };
+		00FB142F23D46C0C00B426D7 /* PropertyGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyGenerator.swift; sourceTree = "<group>"; };
+		00FB143023D46C0C00B426D7 /* EntityGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityGenerator.swift; sourceTree = "<group>"; };
+		00FB143123D46C0C00B426D7 /* EntryGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntryGenerator.swift; sourceTree = "<group>"; };
+		00FB143323D46C0C00B426D7 /* StencilExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StencilExtension.swift; sourceTree = "<group>"; };
+		00FB143423D46C0C00B426D7 /* BoolExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoolExtension.swift; sourceTree = "<group>"; };
+		00FB143523D46C0C00B426D7 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		00FB144923D46C5700B426D7 /* Templates.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Templates.bundle; path = ../../ModelsGenerator/Templates.bundle; sourceTree = "<group>"; };
+		00FB144F23D46D2B00B426D7 /* NodeCreation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeCreation.swift; sourceTree = "<group>"; };
+		00FB145023D46D2B00B426D7 /* NodesBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodesBuilder.swift; sourceTree = "<group>"; };
+		00FB145123D46D2B00B426D7 /* XCTestExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCTestExtension.swift; sourceTree = "<group>"; };
+		00FB145223D46D2B00B426D7 /* TestModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestModels.swift; sourceTree = "<group>"; };
+		00FB145323D46D2B00B426D7 /* FileReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileReader.swift; sourceTree = "<group>"; };
+		00FB145523D46D2B00B426D7 /* FromDTOBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FromDTOBuilderTests.swift; sourceTree = "<group>"; };
+		00FB145623D46D2B00B426D7 /* TypeNameBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeNameBuilderTests.swift; sourceTree = "<group>"; };
+		00FB145723D46D2B00B426D7 /* ToDTOBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDTOBuilderTests.swift; sourceTree = "<group>"; };
+		00FB145B23D46D2B00B426D7 /* ShopEntry.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ShopEntry.txt; sourceTree = "<group>"; };
+		00FB145C23D46D2B00B426D7 /* ShopLocationEntry.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ShopLocationEntry.txt; sourceTree = "<group>"; };
+		00FB145D23D46D2B00B426D7 /* ContactTokenEntry.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ContactTokenEntry.txt; sourceTree = "<group>"; };
+		00FB145E23D46D2B00B426D7 /* ProfileCustomDataEntry.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ProfileCustomDataEntry.txt; sourceTree = "<group>"; };
+		00FB146023D46D2B00B426D7 /* ContactTokenEntity.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ContactTokenEntity.txt; sourceTree = "<group>"; };
+		00FB146123D46D2B00B426D7 /* ProfileCustomDataEntity.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ProfileCustomDataEntity.txt; sourceTree = "<group>"; };
+		00FB146223D46D2B00B426D7 /* ShopLocationEntity.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ShopLocationEntity.txt; sourceTree = "<group>"; };
+		00FB146323D46D2B00B426D7 /* ShopEntity.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ShopEntity.txt; sourceTree = "<group>"; };
+		00FB146423D46D2B00B426D7 /* DeclNodeParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeclNodeParser.swift; sourceTree = "<group>"; };
+		00FB146623D46D2B00B426D7 /* ModelsGenerationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelsGenerationTests.swift; sourceTree = "<group>"; };
+		00FB146723D46D2B00B426D7 /* PropertyGeneratorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyGeneratorTests.swift; sourceTree = "<group>"; };
+		00FB146823D46D2B00B426D7 /* TypeNodeParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeNodeParserTests.swift; sourceTree = "<group>"; };
+		00FB147F23D4712F00B426D7 /* GASTBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GASTBuilder.swift; sourceTree = "<group>"; };
+		00FB14AC23D4B99300B426D7 /* SchemaTypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaTypeExtension.swift; sourceTree = "<group>"; };
+		00FB14AE23D4BA3900B426D7 /* AliasReplacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AliasReplacer.swift; sourceTree = "<group>"; };
+		00FB14B223D4BB9600B426D7 /* GroupReplacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupReplacer.swift; sourceTree = "<group>"; };
+		00FB14B423D4C05500B426D7 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		860FA4E623CBCC4A00649940 /* PropertiesFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesFinder.swift; sourceTree = "<group>"; };
 		860FA4E823CBCCEB00649940 /* PropertiesFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesFinderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -108,6 +227,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00FB147E23D46FB200B426D7 /* SurfGenKit.framework in Frameworks */,
 				860FA52423D256BB00649940 /* Swagger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -120,6 +240,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		00FB13FE23D46BDF00B426D7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00FB144D23D46CA400B426D7 /* Stencil in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00FB140623D46BDF00B426D7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00FB140A23D46BDF00B426D7 /* SurfGenKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -129,8 +265,9 @@
 				006678BE23C0A121004494DA /* surfgen */,
 				008B56C823C3AC9B0020E720 /* YamlParser */,
 				008B56D523C3AC9B0020E720 /* YamlParserTests */,
+				00FB140223D46BDF00B426D7 /* SurfGenKit */,
+				00FB140F23D46BDF00B426D7 /* SurfGenKitTests */,
 				006678BD23C0A121004494DA /* Products */,
-				00AD603823C0E58A005BD8BD /* MacOSModelsCodeGeneration.framework */,
 				008B569E23C3A69D0020E720 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -141,6 +278,8 @@
 				006678BC23C0A121004494DA /* surfgen.app */,
 				008B56C723C3AC9B0020E720 /* YamlParser.framework */,
 				008B56CF23C3AC9B0020E720 /* YamlParserTests.xctest */,
+				00FB140123D46BDF00B426D7 /* SurfGenKit.framework */,
+				00FB140923D46BDF00B426D7 /* SurfGenKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -174,12 +313,12 @@
 		008B56C823C3AC9B0020E720 /* YamlParser */ = {
 			isa = PBXGroup;
 			children = (
+				00FB14B123D4BB8000B426D7 /* Replacers */,
+				00FB14B023D4BB7300B426D7 /* Finders */,
 				00BA138123C3966B00B1ED7F /* Extensions */,
 				008B56C923C3AC9B0020E720 /* YamlParser.h */,
 				008B56CA23C3AC9B0020E720 /* Info.plist */,
-				008525AB23C786C200FB986E /* DependencyFinder.swift */,
-				00F2A62E23CA27470002259B /* AliasFinder.swift */,
-				860FA4E623CBCC4A00649940 /* PropertiesFinder.swift */,
+				00FB147F23D4712F00B426D7 /* GASTBuilder.swift */,
 			);
 			path = YamlParser;
 			sourceTree = "<group>";
@@ -210,9 +349,183 @@
 		00BA138123C3966B00B1ED7F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				00BA138223C3967800B1ED7F /* StringExtensions.swift */,
+				00FB14AC23D4B99300B426D7 /* SchemaTypeExtension.swift */,
+				00FB14B423D4C05500B426D7 /* ArrayExtension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		00FB140223D46BDF00B426D7 /* SurfGenKit */ = {
+			isa = PBXGroup;
+			children = (
+				00FB144923D46C5700B426D7 /* Templates.bundle */,
+				00FB142523D46C0B00B426D7 /* Builders */,
+				00FB143223D46C0C00B426D7 /* Extensions */,
+				00FB142D23D46C0C00B426D7 /* Generators */,
+				00FB141E23D46C0B00B426D7 /* Models */,
+				00FB142A23D46C0C00B426D7 /* Nodes */,
+				00FB140323D46BDF00B426D7 /* SurfGenKit.h */,
+				00FB140423D46BDF00B426D7 /* Info.plist */,
+			);
+			path = SurfGenKit;
+			sourceTree = "<group>";
+		};
+		00FB140F23D46BDF00B426D7 /* SurfGenKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				00FB145423D46D2B00B426D7 /* BuildersTests */,
+				00FB145823D46D2B00B426D7 /* GeneratorTests */,
+				00FB144E23D46D2B00B426D7 /* Helpers */,
+				00FB141023D46BDF00B426D7 /* SurfGenKitTests.swift */,
+				00FB141223D46BDF00B426D7 /* Info.plist */,
+			);
+			path = SurfGenKitTests;
+			sourceTree = "<group>";
+		};
+		00FB141E23D46C0B00B426D7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				00FB141F23D46C0B00B426D7 /* Constants.swift */,
+				00FB142023D46C0B00B426D7 /* TypeNodeParser.swift */,
+				00FB142123D46C0B00B426D7 /* ModelsType.swift */,
+				00FB142223D46C0B00B426D7 /* DeclNodeParser.swift */,
+				00FB142323D46C0B00B426D7 /* GenerationError.swift */,
+				00FB142423D46C0B00B426D7 /* Templates.swift */,
+			);
+			name = Models;
+			path = ../../ModelsGenerator/ModelsCodeGeneration/Models;
+			sourceTree = "<group>";
+		};
+		00FB142523D46C0B00B426D7 /* Builders */ = {
+			isa = PBXGroup;
+			children = (
+				00FB142623D46C0B00B426D7 /* DTOBuilder.swift */,
+				00FB142723D46C0B00B426D7 /* TypeNameBuilder.swift */,
+				00FB142823D46C0B00B426D7 /* ToDTOBuilder.swift */,
+				00FB142923D46C0B00B426D7 /* FromDTOBuilder.swift */,
+			);
+			name = Builders;
+			path = ../../ModelsGenerator/ModelsCodeGeneration/Builders;
+			sourceTree = "<group>";
+		};
+		00FB142A23D46C0C00B426D7 /* Nodes */ = {
+			isa = PBXGroup;
+			children = (
+				00FB142B23D46C0C00B426D7 /* ASTToken.swift */,
+				00FB142C23D46C0C00B426D7 /* ASTNode.swift */,
+			);
+			name = Nodes;
+			path = ../../ModelsGenerator/ModelsCodeGeneration/Nodes;
+			sourceTree = "<group>";
+		};
+		00FB142D23D46C0C00B426D7 /* Generators */ = {
+			isa = PBXGroup;
+			children = (
+				00FB142E23D46C0C00B426D7 /* RootGenerator.swift */,
+				00FB142F23D46C0C00B426D7 /* PropertyGenerator.swift */,
+				00FB143023D46C0C00B426D7 /* EntityGenerator.swift */,
+				00FB143123D46C0C00B426D7 /* EntryGenerator.swift */,
+			);
+			name = Generators;
+			path = ../../ModelsGenerator/ModelsCodeGeneration/Generators;
+			sourceTree = "<group>";
+		};
+		00FB143223D46C0C00B426D7 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				00FB143323D46C0C00B426D7 /* StencilExtension.swift */,
+				00FB143423D46C0C00B426D7 /* BoolExtension.swift */,
+				00FB143523D46C0C00B426D7 /* StringExtension.swift */,
+			);
+			name = Extensions;
+			path = ../../ModelsGenerator/ModelsCodeGeneration/Extensions;
+			sourceTree = "<group>";
+		};
+		00FB144E23D46D2B00B426D7 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				00FB144F23D46D2B00B426D7 /* NodeCreation.swift */,
+				00FB145023D46D2B00B426D7 /* NodesBuilder.swift */,
+				00FB145123D46D2B00B426D7 /* XCTestExtension.swift */,
+				00FB145223D46D2B00B426D7 /* TestModels.swift */,
+				00FB145323D46D2B00B426D7 /* FileReader.swift */,
+			);
+			name = Helpers;
+			path = ../../ModelsGenerator/ModelsCodeGenerationTests/Helpers;
+			sourceTree = "<group>";
+		};
+		00FB145423D46D2B00B426D7 /* BuildersTests */ = {
+			isa = PBXGroup;
+			children = (
+				00FB145523D46D2B00B426D7 /* FromDTOBuilderTests.swift */,
+				00FB145623D46D2B00B426D7 /* TypeNameBuilderTests.swift */,
+				00FB145723D46D2B00B426D7 /* ToDTOBuilderTests.swift */,
+			);
+			name = BuildersTests;
+			path = ../../ModelsGenerator/ModelsCodeGenerationTests/BuildersTests;
+			sourceTree = "<group>";
+		};
+		00FB145823D46D2B00B426D7 /* GeneratorTests */ = {
+			isa = PBXGroup;
+			children = (
+				00FB145923D46D2B00B426D7 /* TestFiles */,
+				00FB146423D46D2B00B426D7 /* DeclNodeParser.swift */,
+				00FB146623D46D2B00B426D7 /* ModelsGenerationTests.swift */,
+				00FB146723D46D2B00B426D7 /* PropertyGeneratorTests.swift */,
+				00FB146823D46D2B00B426D7 /* TypeNodeParserTests.swift */,
+			);
+			name = GeneratorTests;
+			path = ../../ModelsGenerator/ModelsCodeGenerationTests/GeneratorTests;
+			sourceTree = "<group>";
+		};
+		00FB145923D46D2B00B426D7 /* TestFiles */ = {
+			isa = PBXGroup;
+			children = (
+				00FB145A23D46D2B00B426D7 /* Entry */,
+				00FB145F23D46D2B00B426D7 /* Entity */,
+			);
+			path = TestFiles;
+			sourceTree = "<group>";
+		};
+		00FB145A23D46D2B00B426D7 /* Entry */ = {
+			isa = PBXGroup;
+			children = (
+				00FB145B23D46D2B00B426D7 /* ShopEntry.txt */,
+				00FB145C23D46D2B00B426D7 /* ShopLocationEntry.txt */,
+				00FB145D23D46D2B00B426D7 /* ContactTokenEntry.txt */,
+				00FB145E23D46D2B00B426D7 /* ProfileCustomDataEntry.txt */,
+			);
+			path = Entry;
+			sourceTree = "<group>";
+		};
+		00FB145F23D46D2B00B426D7 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				00FB146023D46D2B00B426D7 /* ContactTokenEntity.txt */,
+				00FB146123D46D2B00B426D7 /* ProfileCustomDataEntity.txt */,
+				00FB146223D46D2B00B426D7 /* ShopLocationEntity.txt */,
+				00FB146323D46D2B00B426D7 /* ShopEntity.txt */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		00FB14B023D4BB7300B426D7 /* Finders */ = {
+			isa = PBXGroup;
+			children = (
+				860FA4E623CBCC4A00649940 /* PropertiesFinder.swift */,
+				00F2A62E23CA27470002259B /* AliasFinder.swift */,
+				008525AB23C786C200FB986E /* DependencyFinder.swift */,
+			);
+			path = Finders;
+			sourceTree = "<group>";
+		};
+		00FB14B123D4BB8000B426D7 /* Replacers */ = {
+			isa = PBXGroup;
+			children = (
+				00FB14AE23D4BA3900B426D7 /* AliasReplacer.swift */,
+				00FB14B223D4BB9600B426D7 /* GroupReplacer.swift */,
+			);
+			path = Replacers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -223,6 +536,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				008B56D923C3AC9B0020E720 /* YamlParser.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00FB13FC23D46BDF00B426D7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00FB141323D46BDF00B426D7 /* SurfGenKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +564,7 @@
 			);
 			dependencies = (
 				008B56DB23C3AC9B0020E720 /* PBXTargetDependency */,
+				00FB141523D46BDF00B426D7 /* PBXTargetDependency */,
 			);
 			name = surfgen;
 			packageProductDependencies = (
@@ -292,6 +614,46 @@
 			productReference = 008B56CF23C3AC9B0020E720 /* YamlParserTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		00FB140023D46BDF00B426D7 /* SurfGenKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00FB141C23D46BDF00B426D7 /* Build configuration list for PBXNativeTarget "SurfGenKit" */;
+			buildPhases = (
+				00FB13FC23D46BDF00B426D7 /* Headers */,
+				00FB13FD23D46BDF00B426D7 /* Sources */,
+				00FB13FE23D46BDF00B426D7 /* Frameworks */,
+				00FB13FF23D46BDF00B426D7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SurfGenKit;
+			packageProductDependencies = (
+				00FB144C23D46CA400B426D7 /* Stencil */,
+			);
+			productName = SurfGenKit;
+			productReference = 00FB140123D46BDF00B426D7 /* SurfGenKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		00FB140823D46BDF00B426D7 /* SurfGenKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00FB141D23D46BDF00B426D7 /* Build configuration list for PBXNativeTarget "SurfGenKitTests" */;
+			buildPhases = (
+				00FB140523D46BDF00B426D7 /* Sources */,
+				00FB140623D46BDF00B426D7 /* Frameworks */,
+				00FB140723D46BDF00B426D7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				00FB140C23D46BDF00B426D7 /* PBXTargetDependency */,
+				00FB140E23D46BDF00B426D7 /* PBXTargetDependency */,
+			);
+			name = SurfGenKitTests;
+			productName = SurfGenKitTests;
+			productReference = 00FB140923D46BDF00B426D7 /* SurfGenKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -312,6 +674,12 @@
 					008B56CE23C3AC9B0020E720 = {
 						CreatedOnToolsVersion = 11.3;
 					};
+					00FB140023D46BDF00B426D7 = {
+						CreatedOnToolsVersion = 11.3;
+					};
+					00FB140823D46BDF00B426D7 = {
+						CreatedOnToolsVersion = 11.3;
+					};
 				};
 			};
 			buildConfigurationList = 006678B723C0A121004494DA /* Build configuration list for PBXProject "surfgen" */;
@@ -325,6 +693,7 @@
 			mainGroup = 006678B323C0A121004494DA;
 			packageReferences = (
 				860FA52023D256B300649940 /* XCRemoteSwiftPackageReference "SwagGen" */,
+				00FB144B23D46CA400B426D7 /* XCRemoteSwiftPackageReference "Stencil" */,
 			);
 			productRefGroup = 006678BD23C0A121004494DA /* Products */;
 			projectDirPath = "";
@@ -333,6 +702,8 @@
 				006678BB23C0A121004494DA /* surfgen */,
 				008B56C623C3AC9B0020E720 /* YamlParser */,
 				008B56CE23C3AC9B0020E720 /* YamlParserTests */,
+				00FB140023D46BDF00B426D7 /* SurfGenKit */,
+				00FB140823D46BDF00B426D7 /* SurfGenKitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -362,6 +733,29 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		00FB13FF23D46BDF00B426D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00FB144A23D46C5700B426D7 /* Templates.bundle in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00FB140723D46BDF00B426D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00FB147423D46D2B00B426D7 /* ProfileCustomDataEntry.txt in Resources */,
+				00FB147223D46D2B00B426D7 /* ShopLocationEntry.txt in Resources */,
+				00FB147623D46D2B00B426D7 /* ProfileCustomDataEntity.txt in Resources */,
+				00FB147823D46D2B00B426D7 /* ShopEntity.txt in Resources */,
+				00FB147523D46D2B00B426D7 /* ContactTokenEntity.txt in Resources */,
+				00FB147323D46D2B00B426D7 /* ContactTokenEntry.txt in Resources */,
+				00FB147723D46D2B00B426D7 /* ShopLocationEntity.txt in Resources */,
+				00FB147123D46D2B00B426D7 /* ShopEntry.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -381,7 +775,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = ". ../scripts/build_generator_module.sh\n";
+			shellScript = "
+";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -398,10 +793,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00FB14B323D4BB9600B426D7 /* GroupReplacer.swift in Sources */,
 				008525AC23C786C200FB986E /* DependencyFinder.swift in Sources */,
 				00F2A62F23CA27470002259B /* AliasFinder.swift in Sources */,
+				00FB14B523D4C05500B426D7 /* ArrayExtension.swift in Sources */,
+				00FB14AD23D4B99300B426D7 /* SchemaTypeExtension.swift in Sources */,
+				00FB148023D4712F00B426D7 /* GASTBuilder.swift in Sources */,
+				00FB14AF23D4BA3900B426D7 /* AliasReplacer.swift in Sources */,
 				860FA4E723CBCC4A00649940 /* PropertiesFinder.swift in Sources */,
-				008B56EE23C3AD4A0020E720 /* StringExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,6 +814,52 @@
 				008B56EA23C3AD070020E720 /* DependenciesFinderTests.swift in Sources */,
 				860FA4E923CBCCEB00649940 /* PropertiesFinderTests.swift in Sources */,
 				008B56F923C3BBEE0020E720 /* RendesvousModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00FB13FD23D46BDF00B426D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00FB143A23D46C0C00B426D7 /* GenerationError.swift in Sources */,
+				00FB144223D46C0C00B426D7 /* RootGenerator.swift in Sources */,
+				00FB143F23D46C0C00B426D7 /* FromDTOBuilder.swift in Sources */,
+				00FB143823D46C0C00B426D7 /* ModelsType.swift in Sources */,
+				00FB144623D46C0C00B426D7 /* StencilExtension.swift in Sources */,
+				00FB143D23D46C0C00B426D7 /* TypeNameBuilder.swift in Sources */,
+				00FB143723D46C0C00B426D7 /* TypeNodeParser.swift in Sources */,
+				00FB144323D46C0C00B426D7 /* PropertyGenerator.swift in Sources */,
+				00FB143C23D46C0C00B426D7 /* DTOBuilder.swift in Sources */,
+				00FB144523D46C0C00B426D7 /* EntryGenerator.swift in Sources */,
+				00FB144123D46C0C00B426D7 /* ASTNode.swift in Sources */,
+				00FB144423D46C0C00B426D7 /* EntityGenerator.swift in Sources */,
+				00FB143923D46C0C00B426D7 /* DeclNodeParser.swift in Sources */,
+				00FB144023D46C0C00B426D7 /* ASTToken.swift in Sources */,
+				00FB143623D46C0C00B426D7 /* Constants.swift in Sources */,
+				00FB144723D46C0C00B426D7 /* BoolExtension.swift in Sources */,
+				00FB144823D46C0C00B426D7 /* StringExtension.swift in Sources */,
+				00FB143B23D46C0C00B426D7 /* Templates.swift in Sources */,
+				00FB143E23D46C0C00B426D7 /* ToDTOBuilder.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00FB140523D46BDF00B426D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00FB147C23D46D2B00B426D7 /* PropertyGeneratorTests.swift in Sources */,
+				00FB146D23D46D2B00B426D7 /* FileReader.swift in Sources */,
+				00FB146B23D46D2B00B426D7 /* XCTestExtension.swift in Sources */,
+				00FB146F23D46D2B00B426D7 /* TypeNameBuilderTests.swift in Sources */,
+				00FB146923D46D2B00B426D7 /* NodeCreation.swift in Sources */,
+				00FB146E23D46D2B00B426D7 /* FromDTOBuilderTests.swift in Sources */,
+				00FB146A23D46D2B00B426D7 /* NodesBuilder.swift in Sources */,
+				00FB147023D46D2B00B426D7 /* ToDTOBuilderTests.swift in Sources */,
+				00FB146C23D46D2B00B426D7 /* TestModels.swift in Sources */,
+				00FB147B23D46D2B00B426D7 /* ModelsGenerationTests.swift in Sources */,
+				00FB147923D46D2B00B426D7 /* DeclNodeParser.swift in Sources */,
+				00FB147D23D46D2B00B426D7 /* TypeNodeParserTests.swift in Sources */,
+				00FB141123D46BDF00B426D7 /* SurfGenKitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,6 +880,21 @@
 			isa = PBXTargetDependency;
 			target = 008B56C623C3AC9B0020E720 /* YamlParser */;
 			targetProxy = 008B56DA23C3AC9B0020E720 /* PBXContainerItemProxy */;
+		};
+		00FB140C23D46BDF00B426D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 00FB140023D46BDF00B426D7 /* SurfGenKit */;
+			targetProxy = 00FB140B23D46BDF00B426D7 /* PBXContainerItemProxy */;
+		};
+		00FB140E23D46BDF00B426D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 006678BB23C0A121004494DA /* surfgen */;
+			targetProxy = 00FB140D23D46BDF00B426D7 /* PBXContainerItemProxy */;
+		};
+		00FB141523D46BDF00B426D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 00FB140023D46BDF00B426D7 /* SurfGenKit */;
+			targetProxy = 00FB141423D46BDF00B426D7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -699,6 +1159,98 @@
 			};
 			name = Release;
 		};
+		00FB141823D46BDF00B426D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = EFAAG9GXN4;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = SurfGenKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ru.surf.SurfGenKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		00FB141923D46BDF00B426D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = EFAAG9GXN4;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = SurfGenKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ru.surf.SurfGenKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		00FB141A23D46BDF00B426D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = EFAAG9GXN4;
+				INFOPLIST_FILE = SurfGenKitTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ru.surf.SurfGenKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		00FB141B23D46BDF00B426D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = EFAAG9GXN4;
+				INFOPLIST_FILE = SurfGenKitTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ru.surf.SurfGenKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -738,20 +1290,51 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		00FB141C23D46BDF00B426D7 /* Build configuration list for PBXNativeTarget "SurfGenKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00FB141823D46BDF00B426D7 /* Debug */,
+				00FB141923D46BDF00B426D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00FB141D23D46BDF00B426D7 /* Build configuration list for PBXNativeTarget "SurfGenKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00FB141A23D46BDF00B426D7 /* Debug */,
+				00FB141B23D46BDF00B426D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		00FB144B23D46CA400B426D7 /* XCRemoteSwiftPackageReference "Stencil" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stencilproject/Stencil.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.13.1;
+			};
+		};
 		860FA52023D256B300649940 /* XCRemoteSwiftPackageReference "SwagGen" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/JohnReeze/SwagGen/";
 			requirement = {
 				kind = revision;
-				revision = a31826bb1c505dc8d744053ef02b0bfd8418e573;
+				revision = b89c88b02af99365acfbd78cfeb94ab66b6857f5;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		00FB144C23D46CA400B426D7 /* Stencil */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00FB144B23D46CA400B426D7 /* XCRemoteSwiftPackageReference "Stencil" */;
+			productName = Stencil;
+		};
 		860FA52123D256B300649940 /* Swagger */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 860FA52023D256B300649940 /* XCRemoteSwiftPackageReference "SwagGen" */;

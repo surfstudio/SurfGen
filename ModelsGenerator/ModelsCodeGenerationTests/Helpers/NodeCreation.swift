@@ -6,7 +6,7 @@
 //  Copyright © 2019 Surf. All rights reserved.
 //
 
-@testable import ModelsCodeGeneration
+@testable import SurfGenKit
 
 func formFieldNode(isOptional: Bool, name: String, typeName: String, typeSubNodes: [Node] = []) -> Node {
     return Node(token: .field(isOptional: isOptional),
