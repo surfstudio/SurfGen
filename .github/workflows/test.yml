@@ -10,7 +10,6 @@ jobs:
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Pod install
       - name: Build and test
         run: 
           cd surfgen &&  xcodebuild clean test -project surfgen.xcodeproj -scheme "surfgen"
