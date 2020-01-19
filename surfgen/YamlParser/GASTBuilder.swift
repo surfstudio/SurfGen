@@ -11,30 +11,22 @@ import Swagger
 
 enum GASTBuilerError: Error {
     case undefinedTypeForField
+    case nonObjectNodeFound
 }
 
+public final class GASTBuiler {
 
-final class GASTBuiler {
-
-    func build(from allModels: [ComponentObject<Schema>], modelName: String) throws -> ASTNode {
-        let aliases = AliasFinder().findAlaises(for: allModels)
-
-        let proccesedModels = allModels.apply { DependencyFinder().findDependencies(for: $0, modelName: modelName) } // find all dependent models
-                                       .apply { GroupReplacer().replace(for: $0) } // replace all group nodes
-                                       .apply { $0.filter { aliases[$0.name] == nil } } // filter alias objct nodes
-                                       .apply { AliasReplacer().replace(for: $0, aliases: aliases) } // replace aliases from all properties
-
-        return try buildGAST(for: proccesedModels)
-    }
-
-    func buildGAST(for models: [ComponentObject<Schema>]) throws -> ASTNode {
+    func build(for models: [ComponentObject<Schema>]) throws -> ASTNode {
         let decls = try models.map { Node(token: .decl, try buildDeclNode(for: $0)) }
         return Node(token: .root, decls)
     }
 
     func buildDeclNode(for model: ComponentObject<Schema>) throws -> [ASTNode] {
         let nameNode = Node(token: .name(value: model.name), [])
-        let contentNode = Node(token: .content, try buildContentSubnodes(for: model.value.type.object!))
+        guard let object = model.value.type.object else {
+            throw GASTBuilerError.nonObjectNodeFound
+        }
+        let contentNode = Node(token: .content, try buildContentSubnodes(for: object))
         return [nameNode, contentNode]
     }
 

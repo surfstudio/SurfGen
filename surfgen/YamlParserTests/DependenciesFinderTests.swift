@@ -27,16 +27,4 @@ class DependenciesFinderTests: XCTestCase {
         XCTAssertEqual(Set(resultedModels.map { $0.name }), model.dependencies)
     }
 
-    func testRendezvousSpecGAST() {
-        do {
-            let spec = try SwaggerSpec(string: FileReader().readFile("rendezvous", "yaml"))
-            let node = try GASTBuiler().build(from: spec.components.schemas, modelName: "Profile")
-
-            
-        }
-        catch {
-            dump(error)
-        }
-    }
-
 }
