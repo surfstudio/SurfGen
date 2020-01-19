@@ -15,4 +15,4 @@ jobs:
           pod install
       - name: Build and test
         run: 
-          xcodebuild -workspace ModelsCodeGeneration.xcworkspace -scheme ModelsCodeGeneration -sdk iphonesimulator -destination 'name=iPhone 11' test
+          cd surfgen &&  xcodebuild clean test -project surfgen.xcodeproj -scheme "surfgen"
