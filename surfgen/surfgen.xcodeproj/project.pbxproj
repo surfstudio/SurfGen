@@ -16,7 +16,6 @@
 		008B56EA23C3AD070020E720 /* DependenciesFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BA138623C39E5700B1ED7F /* DependenciesFinderTests.swift */; };
 		008B56EB23C3AD190020E720 /* FileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BA138823C39ECF00B1ED7F /* FileReader.swift */; };
 		008B56EC23C3AD240020E720 /* rendezvous.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 00BA137B23C3756500B1ED7F /* rendezvous.yaml */; };
-		008B56F723C3BA990020E720 /* DependencyAnalyzerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008B56F623C3BA990020E720 /* DependencyAnalyzerTests.swift */; };
 		008B56F923C3BBEE0020E720 /* RendesvousModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008B56F823C3BBEE0020E720 /* RendesvousModel.swift */; };
 		00AA961123C26D22000CBC66 /* surfMiddleApi.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 00AA961023C26D22000CBC66 /* surfMiddleApi.yaml */; };
 		00AA961323C26E39000CBC66 /* Zenit_WebAPI.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 00AA961223C26E39000CBC66 /* Zenit_WebAPI.yaml */; };
@@ -148,7 +147,6 @@
 		008B56CA23C3AC9B0020E720 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		008B56CF23C3AC9B0020E720 /* YamlParserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YamlParserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		008B56D823C3AC9B0020E720 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		008B56F623C3BA990020E720 /* DependencyAnalyzerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyAnalyzerTests.swift; sourceTree = "<group>"; };
 		008B56F823C3BBEE0020E720 /* RendesvousModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendesvousModel.swift; sourceTree = "<group>"; };
 		00AA961023C26D22000CBC66 /* surfMiddleApi.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = surfMiddleApi.yaml; sourceTree = "<group>"; };
 		00AA961223C26E39000CBC66 /* Zenit_WebAPI.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = Zenit_WebAPI.yaml; sourceTree = "<group>"; };
@@ -325,7 +323,6 @@
 		008B56D523C3AC9B0020E720 /* YamlParserTests */ = {
 			isa = PBXGroup;
 			children = (
-				008B56F623C3BA990020E720 /* DependencyAnalyzerTests.swift */,
 				00AA960423C252AD000CBC66 /* TestFiles */,
 				00BA138823C39ECF00B1ED7F /* FileReader.swift */,
 				00BA138623C39E5700B1ED7F /* DependenciesFinderTests.swift */,
@@ -799,7 +796,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				008B56F723C3BA990020E720 /* DependencyAnalyzerTests.swift in Sources */,
 				008B56EB23C3AD190020E720 /* FileReader.swift in Sources */,
 				008B56EA23C3AD070020E720 /* DependenciesFinderTests.swift in Sources */,
 				860FA4E923CBCCEB00649940 /* PropertiesFinderTests.swift in Sources */,
