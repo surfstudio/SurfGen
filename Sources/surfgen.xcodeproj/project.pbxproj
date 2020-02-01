@@ -71,6 +71,7 @@
 		00FB14B323D4BB9600B426D7 /* GroupReplacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB14B223D4BB9600B426D7 /* GroupReplacer.swift */; };
 		00FB14B523D4C05500B426D7 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB14B423D4C05500B426D7 /* ArrayExtension.swift */; };
 		00FB14B723D4C18300B426D7 /* YamlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FB14B623D4C18300B426D7 /* YamlParser.swift */; };
+		00FFA79123E5E2D70026E77A /* GenerateCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FFA79023E5E2D70026E77A /* GenerateCommand.swift */; };
 		860FA4E723CBCC4A00649940 /* PropertiesFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860FA4E623CBCC4A00649940 /* PropertiesFinder.swift */; };
 		860FA4E923CBCCEB00649940 /* PropertiesFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860FA4E823CBCCEB00649940 /* PropertiesFinderTests.swift */; };
 		860FA52223D256B300649940 /* Swagger in Frameworks */ = {isa = PBXBuildFile; productRef = 860FA52123D256B300649940 /* Swagger */; };
@@ -206,6 +207,7 @@
 		00FB14B223D4BB9600B426D7 /* GroupReplacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupReplacer.swift; sourceTree = "<group>"; };
 		00FB14B423D4C05500B426D7 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		00FB14B623D4C18300B426D7 /* YamlParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YamlParser.swift; sourceTree = "<group>"; };
+		00FFA79023E5E2D70026E77A /* GenerateCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenerateCommand.swift; sourceTree = "<group>"; };
 		860FA4E623CBCC4A00649940 /* PropertiesFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesFinder.swift; sourceTree = "<group>"; };
 		860FA4E823CBCCEB00649940 /* PropertiesFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesFinderTests.swift; sourceTree = "<group>"; };
 		8648406E23DE38ED008267A7 /* surfgen.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = surfgen.entitlements; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 				8648406E23DE38ED008267A7 /* surfgen.entitlements */,
 				0078798D23C0F5DD00734A73 /* YamlParser */,
 				006678C823C0A121004494DA /* Info.plist */,
+				00FFA79023E5E2D70026E77A /* GenerateCommand.swift */,
 				006678CF23C0A693004494DA /* main.swift */,
 			);
 			path = surfgen;
@@ -768,7 +771,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = ". ../scripts/extract-tool\n";
+			shellScript = "#. ../scripts/extract-tool\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -777,6 +780,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00FFA79123E5E2D70026E77A /* GenerateCommand.swift in Sources */,
 				006678D023C0A693004494DA /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

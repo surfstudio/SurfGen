@@ -7,11 +7,10 @@
 //
 
 import SwiftCLI
-import SurfGenKit
 
 let version = "4.3.0"
-let cli = CLI(name: "swaggen", version: version, description: "Swagger code generator", commands: [])
+let cli = CLI(name: "surfgen", version: version,
+              description: "surfgen code generator",
+              commands: [GenerateCommand()])
 cli.goAndExit()
-let root = RootGenerator()
-root.
 

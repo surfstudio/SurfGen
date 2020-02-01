@@ -7,6 +7,7 @@
 //
 
 import Stencil
+import PathKit
 import Foundation
 
 public final class RootGenerator {
@@ -20,6 +21,11 @@ public final class RootGenerator {
     public init() {
         let bundle = Bundle(for: type(of: self))
         environment = Environment(loader: FileSystemLoader(bundle: [Bundle(path: bundle.bundlePath + "/Resources/Templates.bundle") ?? bundle]))
+    }
+
+    public init(tempatesPath: Path) {
+        let loader = FileSystemLoader(paths: [tempatesPath])
+        environment = Environment(loader: loader)
     }
 
     /// for now this generator is supposed to generate code for complete AST
