@@ -75,6 +75,7 @@
 		860FA4E923CBCCEB00649940 /* PropertiesFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860FA4E823CBCCEB00649940 /* PropertiesFinderTests.swift */; };
 		860FA52223D256B300649940 /* Swagger in Frameworks */ = {isa = PBXBuildFile; productRef = 860FA52123D256B300649940 /* Swagger */; };
 		860FA52423D256BB00649940 /* Swagger in Frameworks */ = {isa = PBXBuildFile; productRef = 860FA52323D256BB00649940 /* Swagger */; };
+		8648406D23DE36BB008267A7 /* SwiftCLI in Frameworks */ = {isa = PBXBuildFile; productRef = 8648406C23DE36BB008267A7 /* SwiftCLI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -207,6 +208,7 @@
 		00FB14B623D4C18300B426D7 /* YamlParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YamlParser.swift; sourceTree = "<group>"; };
 		860FA4E623CBCC4A00649940 /* PropertiesFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesFinder.swift; sourceTree = "<group>"; };
 		860FA4E823CBCCEB00649940 /* PropertiesFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertiesFinderTests.swift; sourceTree = "<group>"; };
+		8648406E23DE38ED008267A7 /* surfgen.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = surfgen.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -214,6 +216,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8648406D23DE36BB008267A7 /* SwiftCLI in Frameworks */,
 				008B56DC23C3AC9B0020E720 /* YamlParser.framework in Frameworks */,
 				860FA52223D256B300649940 /* Swagger in Frameworks */,
 			);
@@ -283,6 +286,7 @@
 		006678BE23C0A121004494DA /* surfgen */ = {
 			isa = PBXGroup;
 			children = (
+				8648406E23DE38ED008267A7 /* surfgen.entitlements */,
 				0078798D23C0F5DD00734A73 /* YamlParser */,
 				006678C823C0A121004494DA /* Info.plist */,
 				006678CF23C0A693004494DA /* main.swift */,
@@ -555,6 +559,7 @@
 			name = surfgen;
 			packageProductDependencies = (
 				860FA52123D256B300649940 /* Swagger */,
+				8648406C23DE36BB008267A7 /* SwiftCLI */,
 			);
 			productName = surfgen;
 			productReference = 006678BC23C0A121004494DA /* surfgen.app */;
@@ -681,6 +686,7 @@
 			packageReferences = (
 				860FA52023D256B300649940 /* XCRemoteSwiftPackageReference "SwagGen" */,
 				00FB144B23D46CA400B426D7 /* XCRemoteSwiftPackageReference "Stencil" */,
+				8648406B23DE36BB008267A7 /* XCRemoteSwiftPackageReference "SwiftCLI" */,
 			);
 			productRefGroup = 006678BD23C0A121004494DA /* Products */;
 			projectDirPath = "";
@@ -762,8 +768,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = ". ../scripts/extract-tool\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1003,7 +1008,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = surfgen/surfgen.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
@@ -1031,7 +1036,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = surfgen/surfgen.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
@@ -1055,7 +1060,7 @@
 		008B56DF23C3AC9B0020E720 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -1072,6 +1077,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = ru.surf.YamlParser;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1082,7 +1088,7 @@
 		008B56E023C3AC9B0020E720 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -1099,6 +1105,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = ru.surf.YamlParser;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1315,6 +1322,14 @@
 				revision = b89c88b02af99365acfbd78cfeb94ab66b6857f5;
 			};
 		};
+		8648406B23DE36BB008267A7 /* XCRemoteSwiftPackageReference "SwiftCLI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jakeheis/SwiftCLI";
+			requirement = {
+				kind = exactVersion;
+				version = 5.3.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1332,6 +1347,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 860FA52023D256B300649940 /* XCRemoteSwiftPackageReference "SwagGen" */;
 			productName = Swagger;
+		};
+		8648406C23DE36BB008267A7 /* SwiftCLI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8648406B23DE36BB008267A7 /* XCRemoteSwiftPackageReference "SwiftCLI" */;
+			productName = SwiftCLI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

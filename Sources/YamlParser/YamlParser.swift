@@ -9,6 +9,7 @@
 import Swagger
 import PathKit
 import SurfGenKit
+import Foundation
 
 public class YamlToGASTParser {
 

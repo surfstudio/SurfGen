@@ -7,6 +7,7 @@
 //
 
 import Stencil
+import Foundation
 
 public final class RootGenerator {
     
