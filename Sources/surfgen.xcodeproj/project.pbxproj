@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		000C934323E8727C006C904E /* XcodeProj in Frameworks */ = {isa = PBXBuildFile; productRef = 000C934223E8727C006C904E /* XcodeProj */; };
 		006678D023C0A693004494DA /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006678CF23C0A693004494DA /* main.swift */; };
 		008525AC23C786C200FB986E /* DependencyFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008525AB23C786C200FB986E /* DependencyFinder.swift */; };
 		008B56D023C3AC9B0020E720 /* YamlParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 008B56C723C3AC9B0020E720 /* YamlParser.framework */; };
@@ -17,8 +18,6 @@
 		008B56EB23C3AD190020E720 /* FileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BA138823C39ECF00B1ED7F /* FileReader.swift */; };
 		008B56EC23C3AD240020E720 /* rendezvous.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 00BA137B23C3756500B1ED7F /* rendezvous.yaml */; };
 		008B56F923C3BBEE0020E720 /* RendesvousModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008B56F823C3BBEE0020E720 /* RendesvousModel.swift */; };
-		00AA961123C26D22000CBC66 /* surfMiddleApi.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 00AA961023C26D22000CBC66 /* surfMiddleApi.yaml */; };
-		00AA961323C26E39000CBC66 /* Zenit_WebAPI.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 00AA961223C26E39000CBC66 /* Zenit_WebAPI.yaml */; };
 		00D09F1A23D4C5A30096DF0D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D09F0223D4C5A20096DF0D /* Constants.swift */; };
 		00D09F1B23D4C5A30096DF0D /* TypeNodeParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D09F0323D4C5A20096DF0D /* TypeNodeParser.swift */; };
 		00D09F1C23D4C5A30096DF0D /* ModelsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D09F0423D4C5A20096DF0D /* ModelsType.swift */; };
@@ -150,8 +149,6 @@
 		008B56CF23C3AC9B0020E720 /* YamlParserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YamlParserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		008B56D823C3AC9B0020E720 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		008B56F823C3BBEE0020E720 /* RendesvousModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendesvousModel.swift; sourceTree = "<group>"; };
-		00AA961023C26D22000CBC66 /* surfMiddleApi.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = surfMiddleApi.yaml; sourceTree = "<group>"; };
-		00AA961223C26E39000CBC66 /* Zenit_WebAPI.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = Zenit_WebAPI.yaml; sourceTree = "<group>"; };
 		00BA137B23C3756500B1ED7F /* rendezvous.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = rendezvous.yaml; sourceTree = "<group>"; };
 		00BA138623C39E5700B1ED7F /* DependenciesFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependenciesFinderTests.swift; sourceTree = "<group>"; };
 		00BA138823C39ECF00B1ED7F /* FileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReader.swift; sourceTree = "<group>"; };
@@ -221,6 +218,7 @@
 				8648406D23DE36BB008267A7 /* SwiftCLI in Frameworks */,
 				008B56DC23C3AC9B0020E720 /* YamlParser.framework in Frameworks */,
 				860FA52223D256B300649940 /* Swagger in Frameworks */,
+				000C934323E8727C006C904E /* XcodeProj in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,21 +287,11 @@
 			isa = PBXGroup;
 			children = (
 				8648406E23DE38ED008267A7 /* surfgen.entitlements */,
-				0078798D23C0F5DD00734A73 /* YamlParser */,
 				006678C823C0A121004494DA /* Info.plist */,
 				00FFA79023E5E2D70026E77A /* GenerateCommand.swift */,
 				006678CF23C0A693004494DA /* main.swift */,
 			);
 			path = surfgen;
-			sourceTree = "<group>";
-		};
-		0078798D23C0F5DD00734A73 /* YamlParser */ = {
-			isa = PBXGroup;
-			children = (
-				00AA961223C26E39000CBC66 /* Zenit_WebAPI.yaml */,
-				00AA961023C26D22000CBC66 /* surfMiddleApi.yaml */,
-			);
-			path = YamlParser;
 			sourceTree = "<group>";
 		};
 		008B569E23C3A69D0020E720 /* Frameworks */ = {
@@ -563,6 +551,7 @@
 			packageProductDependencies = (
 				860FA52123D256B300649940 /* Swagger */,
 				8648406C23DE36BB008267A7 /* SwiftCLI */,
+				000C934223E8727C006C904E /* XcodeProj */,
 			);
 			productName = surfgen;
 			productReference = 006678BC23C0A121004494DA /* surfgen.app */;
@@ -690,6 +679,7 @@
 				860FA52023D256B300649940 /* XCRemoteSwiftPackageReference "SwagGen" */,
 				00FB144B23D46CA400B426D7 /* XCRemoteSwiftPackageReference "Stencil" */,
 				8648406B23DE36BB008267A7 /* XCRemoteSwiftPackageReference "SwiftCLI" */,
+				000C934123E8727C006C904E /* XCRemoteSwiftPackageReference "XcodeProj" */,
 			);
 			productRefGroup = 006678BD23C0A121004494DA /* Products */;
 			projectDirPath = "";
@@ -709,8 +699,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00AA961123C26D22000CBC66 /* surfMiddleApi.yaml in Resources */,
-				00AA961323C26E39000CBC66 /* Zenit_WebAPI.yaml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1310,6 +1298,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		000C934123E8727C006C904E /* XCRemoteSwiftPackageReference "XcodeProj" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JohnReeze/XcodeProj";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.8.1;
+			};
+		};
 		00FB144B23D46CA400B426D7 /* XCRemoteSwiftPackageReference "Stencil" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/stencilproject/Stencil.git";
@@ -1337,6 +1333,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		000C934223E8727C006C904E /* XcodeProj */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 000C934123E8727C006C904E /* XCRemoteSwiftPackageReference "XcodeProj" */;
+			productName = XcodeProj;
+		};
 		00FB144C23D46CA400B426D7 /* Stencil */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 00FB144B23D46CA400B426D7 /* XCRemoteSwiftPackageReference "Stencil" */;
