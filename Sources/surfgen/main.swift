@@ -16,6 +16,6 @@ let cli = CLI(name: "surfgen", version: version,
 cli.go(with: ["generate", "./rendezvous.yaml",
               "-m", "Profile",
               "-t", "nodeKitEntity",
-              "-d", "../rendez-vous-ios/Common/Models/Models/Entry/",
-              "-p", "../rendez-vous-ios/Common/Models/Models.xcodeproj"])
+              "-d", "/Users/monakov/Development/rendez-vous-ios/Common/Models/ProfileCardEntry.swift",
+              "-p", "/Users/monakov/Development/rendez-vous-ios/Common/Models/Models.xcodeproj"])
 

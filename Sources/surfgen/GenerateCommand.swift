@@ -109,7 +109,33 @@ final class GenerateCommand: Command {
     func tryToAddFiles() {
         do {
             let proj = try XcodeProj(path: Path(project.value ?? ""))
-            dump(try? proj.pbxproj.projects.first?.mainGroup.addFile(at: Path(destination.value ?? ""), sourceRoot: Path(project.value ?? "")))
+            let pbxproj = proj.pbxproj
+
+            let dest = Path(destination.value ?? "")
+            let root = Path(project.value ?? "")
+
+            let fileRef = try pbxproj.projects.first?.mainGroup.addFile(at: dest, sourceRoot: root)
+
+            try pbxproj.nativeTargets.forEach {
+
+                if $0.name == "Models" {
+                    print("did found")
+
+                    let element = PBXFileElement(sourceTree: fileRef?.sourceTree,
+                                                 path: fileRef?.path,
+                                                 name: fileRef?.name,
+                                                 includeInIndex: fileRef?.includeInIndex,
+                                                 usesTabs: fileRef?.usesTabs,
+                                                 indentWidth: fileRef?.indentWidth,
+                                                 tabWidth: fileRef?.tabWidth,
+                                                 wrapsLines: fileRef?.wrapsLines)
+                    let tmp = try $0.sourcesBuildPhase()?.add(file: element)
+                    print(tmp)
+
+                }
+            }
+
+            try proj.write(path: root, override: true)
         } catch {
             exitWithError(error.localizedDescription)
         }
