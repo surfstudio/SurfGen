@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		000C934323E8727C006C904E /* XcodeProj in Frameworks */ = {isa = PBXBuildFile; productRef = 000C934223E8727C006C904E /* XcodeProj */; };
+		000E4C7F240167F20038A3A2 /* Rainbow in Frameworks */ = {isa = PBXBuildFile; productRef = 000E4C7E240167F20038A3A2 /* Rainbow */; };
+		000E4C812401685F0038A3A2 /* XcodeProjManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000E4C802401685F0038A3A2 /* XcodeProjManager.swift */; };
 		006678D023C0A693004494DA /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006678CF23C0A693004494DA /* main.swift */; };
 		008525AC23C786C200FB986E /* DependencyFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008525AB23C786C200FB986E /* DependencyFinder.swift */; };
 		008B56D023C3AC9B0020E720 /* YamlParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 008B56C723C3AC9B0020E720 /* YamlParser.framework */; };
@@ -139,6 +141,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		000E4C802401685F0038A3A2 /* XcodeProjManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XcodeProjManager.swift; sourceTree = "<group>"; };
 		006678BC23C0A121004494DA /* surfgen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = surfgen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		006678C823C0A121004494DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		006678CF23C0A693004494DA /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -215,6 +218,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				000E4C7F240167F20038A3A2 /* Rainbow in Frameworks */,
 				8648406D23DE36BB008267A7 /* SwiftCLI in Frameworks */,
 				008B56DC23C3AC9B0020E720 /* YamlParser.framework in Frameworks */,
 				860FA52223D256B300649940 /* Swagger in Frameworks */,
@@ -290,6 +294,7 @@
 				006678C823C0A121004494DA /* Info.plist */,
 				00FFA79023E5E2D70026E77A /* GenerateCommand.swift */,
 				006678CF23C0A693004494DA /* main.swift */,
+				000E4C802401685F0038A3A2 /* XcodeProjManager.swift */,
 			);
 			path = surfgen;
 			sourceTree = "<group>";
@@ -552,6 +557,7 @@
 				860FA52123D256B300649940 /* Swagger */,
 				8648406C23DE36BB008267A7 /* SwiftCLI */,
 				000C934223E8727C006C904E /* XcodeProj */,
+				000E4C7E240167F20038A3A2 /* Rainbow */,
 			);
 			productName = surfgen;
 			productReference = 006678BC23C0A121004494DA /* surfgen.app */;
@@ -680,6 +686,7 @@
 				00FB144B23D46CA400B426D7 /* XCRemoteSwiftPackageReference "Stencil" */,
 				8648406B23DE36BB008267A7 /* XCRemoteSwiftPackageReference "SwiftCLI" */,
 				000C934123E8727C006C904E /* XCRemoteSwiftPackageReference "XcodeProj" */,
+				000E4C7D240167F20038A3A2 /* XCRemoteSwiftPackageReference "Rainbow" */,
 			);
 			productRefGroup = 006678BD23C0A121004494DA /* Products */;
 			projectDirPath = "";
@@ -768,6 +775,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				000E4C812401685F0038A3A2 /* XcodeProjManager.swift in Sources */,
 				00FFA79123E5E2D70026E77A /* GenerateCommand.swift in Sources */,
 				006678D023C0A693004494DA /* main.swift in Sources */,
 			);
@@ -1306,6 +1314,14 @@
 				minimumVersion = 7.8.1;
 			};
 		};
+		000E4C7D240167F20038A3A2 /* XCRemoteSwiftPackageReference "Rainbow" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Rainbow";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.5;
+			};
+		};
 		00FB144B23D46CA400B426D7 /* XCRemoteSwiftPackageReference "Stencil" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/stencilproject/Stencil.git";
@@ -1337,6 +1353,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 000C934123E8727C006C904E /* XCRemoteSwiftPackageReference "XcodeProj" */;
 			productName = XcodeProj;
+		};
+		000E4C7E240167F20038A3A2 /* Rainbow */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 000E4C7D240167F20038A3A2 /* XCRemoteSwiftPackageReference "Rainbow" */;
+			productName = Rainbow;
 		};
 		00FB144C23D46CA400B426D7 /* Stencil */ = {
 			isa = XCSwiftPackageProductDependency;

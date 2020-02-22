@@ -11,6 +11,7 @@ import Foundation
 import PathKit
 import YamlParser
 import XcodeProj
+import Rainbow
 
 final class GenerateCommand: Command {
 
@@ -108,42 +109,52 @@ final class GenerateCommand: Command {
 
     func tryToAddFiles() {
         do {
-            let proj = try XcodeProj(path: Path(project.value ?? ""))
-            let pbxproj = proj.pbxproj
-
-            let dest = Path(destination.value ?? "")
             let root = Path(project.value ?? "")
+            let dest = Path(destination.value ?? "")
 
-            let fileRef = try pbxproj.projects.first?.mainGroup.addFile(at: dest, sourceRoot: root)
+            let proj = try XcodeProj(path: root)
 
-            try pbxproj.nativeTargets.forEach {
+            let components = dest.components.dropLast()
+            let mainGroupDir = "Models"
 
-                if $0.name == "Models" {
-                    print("did found")
-
-                    let element = PBXFileElement(sourceTree: fileRef?.sourceTree,
-                                                 path: fileRef?.path,
-                                                 name: fileRef?.name,
-                                                 includeInIndex: fileRef?.includeInIndex,
-                                                 usesTabs: fileRef?.usesTabs,
-                                                 indentWidth: fileRef?.indentWidth,
-                                                 tabWidth: fileRef?.tabWidth,
-                                                 wrapsLines: fileRef?.wrapsLines)
-                    let tmp = try $0.sourcesBuildPhase()?.add(file: element)
-                    print(tmp)
-
-                }
+            guard let mainGroup = proj.pbxproj.projects.first!.mainGroup.children.first(where: { $0.path == mainGroupDir }) else {
+                return
             }
 
-            try proj.write(path: root, override: true)
+            guard let index = components.firstIndex(where: { $0 == mainGroupDir }) else {
+                return
+            }
+
+
+            let subCompents = components[index...].dropFirst()
+            if let groupToBeAdded = (mainGroup as? PBXGroup)?.group(for: Array(subCompents)) {
+                groupToBeAdded.children.forEach { print($0.name) }
+            }
+
+
+
         } catch {
             exitWithError(error.localizedDescription)
         }
     }
 
     func exitWithError(_ string: String) -> Never {
-        stderr <<< string
+        stderr <<< string.red
         exit(EXIT_FAILURE)
     }
 
 }
+
+public extension PBXGroup {
+
+    func group(for components: [String]) -> PBXGroup? {
+        var iteratorGroup: PBXGroup? = self
+        print(iteratorGroup?.children.map { $0.path })
+        for component in components {
+            iteratorGroup = group(named: component)
+        }
+        return iteratorGroup
+    }
+
+}
+

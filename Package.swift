@@ -19,7 +19,8 @@ let package = Package(
         .package(url: "https://github.com/JohnReeze/SwagGen/", from: "4.3.1"),
         .package(url: "https://github.com/stencilproject/Stencil", from: "0.13.1"),
         .package(url: "https://github.com/jakeheis/SwiftCLI", from: "5.3.3"),
-        .package(url: "https://github.com/JohnReeze/XcodeProj", .upToNextMajor(from: "7.8.1"))
+        .package(url: "https://github.com/JohnReeze/XcodeProj", .upToNextMajor(from: "7.8.1")),
+        .package(url: "https://github.com/onevcat/Rainbow", from: "3.1.5")
     ],
     targets: [
         .target(
@@ -28,7 +29,8 @@ let package = Package(
                 "SurfGenKit",
                 "SwiftCLI",
                 "YamlParser",
-                "XcodeProj"
+                "XcodeProj",
+                "Rainbow"
             ]
         ),
         .target(
