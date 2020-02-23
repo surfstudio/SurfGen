@@ -37,24 +37,48 @@ final class GenerateCommand: Command {
 
     let project = Key<String>("--project", "-p", description: "Path to .xcodeproj file where generated files are supposed to be added")
 
+    let target = VariadicKey<String>("--taget", "-tgt", description: "Target in provided Project for generated files")
+
+    let mainGroupName = Key<String>("-mainGroup", "-mg", description: "Name of root main project directory. Used to detect correct subgroup in project tree")
+
     // MARK: - Command execution
 
     func execute() throws {
-        tryToAddFiles()
         let params = (spec: getSpecURL(), name: getModelName(), type: getModelType())
         let rootGenerator = RootGenerator(tempatesPath: "./Templates")
-        tryToGenerate(specURL: params.spec,
-                      modelName: params.name,
-                      type: params.type,
-                      rootGenerator: rootGenerator)
+        stdout <<< "Generation for \(params.name) started ...".green
+        let generatedCode = tryToGenerate(specURL: params.spec,
+                                          modelName: params.name,
+                                          type: params.type,
+                                          rootGenerator: rootGenerator)
+
+        stdout <<< "Next files will be generated: ".green
+        generatedCode.forEach { stdout <<< $0.0 }
+        let filePathes = write(files: generatedCode)
+
+        guard let projectPath = project.value, let mainGroupName = mainGroupName.value else {
+            stdout <<< "No project path or mainGroupName specified".yellow
+            stdout <<< "Generated files pathes: "
+            filePathes.forEach { stdout <<< $0.components.joined(separator: "/").green }
+
+            return
+        }
+
+        stdout <<< "Adding generated files to Xcode project ...".green
+
+        let manager = try XcodeProjManager(project: Path(projectPath), mainGroupName: mainGroupName)
+        try manager.addFiles(filePaths: filePathes, targets: target.value)
+
+        stdout <<< "Adding generated files to Xcode project ...".green
+
     }
 
-    func tryToGenerate(specURL: URL, modelName: String, type: ModelType, rootGenerator: RootGenerator) {
+    func tryToGenerate(specURL: URL, modelName: String, type: ModelType, rootGenerator: RootGenerator) -> [(String, String)] {
         do {
             let parser = try YamlToGASTParser(url: specURL)
             let node = try parser.parseToGAST(for: modelName)
-            let generatedCode = try rootGenerator.generateCode(for: node, type: type)
-            write(files: generatedCode)
+            return try rootGenerator.generateCode(for: node, type: type)
+
         } catch {
             exitWithError(error.localizedDescription)
         }
@@ -95,42 +119,23 @@ final class GenerateCommand: Command {
         }
     }
 
-    func write(files: [(fileName: String, fileContent: String)]) {
+    func write(files: [(fileName: String, fileContent: String)]) -> [Path] {
+        var filePathes = [Path]()
         for file in files {
             let outputPath: Path = Path("./\(destination.value ?? "GeneratedFiles")/\(file.fileName)")
             do {
                 try outputPath.parent().mkpath()
                 try outputPath.write(file.fileContent)
+                filePathes.append(outputPath)
             } catch {
                 exitWithError(error.localizedDescription)
             }
         }
+        return filePathes
     }
 
     func tryToAddFiles() {
         do {
-            let root = Path(project.value ?? "")
-            let dest = Path(destination.value ?? "")
-
-            let proj = try XcodeProj(path: root)
-
-            let components = dest.components.dropLast()
-            let mainGroupDir = "Models"
-
-            guard let mainGroup = proj.pbxproj.projects.first!.mainGroup.children.first(where: { $0.path == mainGroupDir }) else {
-                return
-            }
-
-            guard let index = components.firstIndex(where: { $0 == mainGroupDir }) else {
-                return
-            }
-
-
-            let subCompents = components[index...].dropFirst()
-            if let groupToBeAdded = (mainGroup as? PBXGroup)?.group(for: Array(subCompents)) {
-                groupToBeAdded.children.forEach { print($0.name) }
-            }
-
 
 
         } catch {
@@ -141,19 +146,6 @@ final class GenerateCommand: Command {
     func exitWithError(_ string: String) -> Never {
         stderr <<< string.red
         exit(EXIT_FAILURE)
-    }
-
-}
-
-public extension PBXGroup {
-
-    func group(for components: [String]) -> PBXGroup? {
-        var iteratorGroup: PBXGroup? = self
-        print(iteratorGroup?.children.map { $0.path })
-        for component in components {
-            iteratorGroup = group(named: component)
-        }
-        return iteratorGroup
     }
 
 }

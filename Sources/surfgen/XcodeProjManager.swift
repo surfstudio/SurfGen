@@ -9,33 +9,82 @@
 import XcodeProj
 import PathKit
 
+enum XcodeProjError: Error {
+    case cantFindMainGroup(String)
+    case filePathIsNotInMainGroup(String)
+    case cantFindGroupForFilePath(String)
+
+    var localizedDescription: String {
+        switch self {
+        case .cantFindMainGroup(let dirName):
+            return "Provided main group name \(dirName) can not be found"
+        case .filePathIsNotInMainGroup(let filePath):
+            return "Provided files path \(filePath) does not in provided main group"
+        case .cantFindGroupForFilePath(let filePath):
+            return "Project does not have group for file at path: \(filePath)"
+        }
+    }
+
+}
+
 final class XcodeProjManager {
 
     private let proj: XcodeProj
     private let projPath: Path
+    private let mainGroupName: String
 
-    init(project: Path) throws {
+    init(project: Path, mainGroupName: String) throws {
         self.proj = try XcodeProj(path: project)
         self.projPath = project
+        self.mainGroupName = mainGroupName
     }
 
-//    func addFiles(filePaths: [Path], targets: [String]) throws {
-//        let pbxproj = proj.pbxproj
-////        let fileRef = try pbxproj.projects.first?.mainGroup.addFile(at: , sourceRoot: projPath)
-//
-////        try pbxproj.nativeTargets.forEach {
-////            if $0.name == "Models" {
-////                let tmp = try $0.sourcesBuildPhase()?.add(file: element)
-////            }
-////        }
-//
-//        try proj.write(path: projPath, override: true)
-//    }
+    func addFiles(filePaths: [Path], targets: [String]) throws {
 
-//    func findGroup(for path: Path, in group: PBXGroup) -> PBXGroup? {
-//        let pbxproj = proj.pbxproj
-//        pbxproj.projects.first?.mainGroup.children
-//
-//    }
+        guard let mainGroup = proj.pbxproj.projects.first?.mainGroup.children.first(where: { $0.path == mainGroupName }) as? PBXGroup else {
+            throw XcodeProjError.cantFindMainGroup(mainGroupName)
+        }
+
+        let targets = proj.pbxproj.nativeTargets.filter { targets.contains($0.name) }
+
+
+        try filePaths.forEach { try addFile(path: $0, mainGroup: mainGroup, targets: targets) }
+
+        try proj.write(path: projPath)
+    }
+
+    private func addFile(path: Path, mainGroup: PBXGroup, targets: [PBXNativeTarget]) throws {
+        // remove last component with file name
+        let components = path.components.dropLast()
+
+        // find path components that are relative to main group name
+        guard let index = components.firstIndex(where: { $0 == mainGroupName }) else {
+            throw XcodeProjError.filePathIsNotInMainGroup(path.components.joined(separator: "/"))
+        }
+
+        // remove main group component
+        let subComponents = components[index...].dropFirst()
+
+        // find group for
+        guard let groupToBeAdded = mainGroup.group(for: Array(subComponents)) else {
+            throw XcodeProjError.cantFindGroupForFilePath(path.components.joined(separator: "/"))
+        }
+
+        let fileReference = try groupToBeAdded.addFile(at: path, sourceRoot: projPath)
+
+        try targets.forEach { try $0.sourcesBuildPhase()?.add(file: fileReference) }
+    }
+
+}
+
+public extension PBXGroup {
+
+    func group(for components: [String]) -> PBXGroup? {
+        var iteratorGroup: PBXGroup? = self
+        for component in components {
+            iteratorGroup = children.first(where: { $0.path == component }) as? PBXGroup
+        }
+        return iteratorGroup
+    }
 
 }
