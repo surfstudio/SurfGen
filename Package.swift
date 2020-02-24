@@ -48,10 +48,11 @@ let package = Package(
         ),
         .testTarget(
             name: "SurfGenKitTests",
-            dependencies: ["SurfGenKit"],
-            exclude: [
-                "GeneratorTests/TestFiles",
-            ]
+            dependencies: ["SurfGenKit"]
+        ),
+        .testTarget(
+            name: "YamlParserTests",
+            dependencies: ["YamlParser"]
         )
     ]
 )

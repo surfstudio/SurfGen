@@ -40,7 +40,7 @@ class PropertiesFinderTests: XCTestCase {
 
     func testRendezvousPropertiesSearch() {
         do {
-            let spec = try SwaggerSpec(string: FileReader().readFile("rendezvous", "yaml"))
+            let spec = try SwaggerSpec(string: FileReader().readFile("TestFiles/rendezvous.yaml"))
             RendezvousModel.allCases.forEach { checkPropertiesFinder(for: $0, with: spec.components.schemas) }
         } catch {
             XCTFail("Error loading test spec")

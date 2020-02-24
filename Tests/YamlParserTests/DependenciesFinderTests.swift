@@ -14,7 +14,7 @@ class DependenciesFinderTests: XCTestCase {
 
     func testRendezvousDependecies() {
         do {
-            let spec = try SwaggerSpec(string: FileReader().readFile("rendezvous", "yaml"))
+            let spec = try SwaggerSpec(string: FileReader().readFile("TestFiles/rendezvous.yaml"))
             RendezvousModel.allCases.forEach { checkDependenciesFinder(for: $0, with: spec.components.schemas) }
         } catch {
             XCTFail("Error loading test spec")

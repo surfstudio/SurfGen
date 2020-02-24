@@ -24,7 +24,7 @@ class ModelsGenerationTests: XCTestCase {
     private func checkGeneratedCode(rootSubnodes: [ASTNode], testType: TestModels, modelType: ModelType) {
         // given
         
-        let expectedCode = FileReader().readFile(testType.getTestFileName(for: modelType), "txt")
+        let expectedCode = FileReader().readFile("\(testType.getFilePath(for: modelType)).txt")
         let exptecedFileName =  "\(testType.getTestFileName(for: modelType)).swift"
         
         // when
@@ -34,7 +34,7 @@ class ModelsGenerationTests: XCTestCase {
         // then
         
         do {
-            let (fileName, code) = (try RootGenerator().generateCode(for: root, type: modelType))[0]
+            let (fileName, code) = (try RootGenerator(tempatesPath: "./Templates").generateCode(for: root, type: modelType))[0]
             
             XCTAssert(fileName == exptecedFileName, "File name is not equal to expected one (resulted value is \(fileName)")
             XCTAssert(code == expectedCode, "Code is not equal to expected one (resulted value is \(code)")
