@@ -45,6 +45,13 @@ let package = Package(
                 "SurfGenKit",
                 "Swagger"
             ]
+        ),
+        .testTarget(
+            name: "SurfGenKitTests",
+            dependencies: ["SurfGenKit"],
+            exclude: [
+                "GeneratorTests/TestFiles",
+            ]
         )
     ]
 )

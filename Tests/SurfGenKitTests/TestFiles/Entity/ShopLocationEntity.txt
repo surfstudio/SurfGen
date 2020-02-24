@@ -1,0 +1,55 @@
+
+import NodeKit
+
+public struct ShopLocationEntity {
+
+    // MARK: - Public Properties
+
+    public let region: String
+    public let city: String
+    public let address: String
+    public let floor: String?
+    public let sector: String?
+    public let geoPos: GeopositionEntity
+
+    // MARK: - Initialization
+
+    public init(region: String,
+                city: String,
+                address: String,
+                floor: String?,
+                sector: String?,
+                geoPos: GeopositionEntity) {
+        self.region = region
+        self.city = city
+        self.address = address
+        self.floor = floor
+        self.sector = sector
+        self.geoPos = geoPos
+    }
+
+}
+
+// MARK: - DTOConvertible
+
+extension ShopLocationEntity: DTOConvertible {
+
+    public static func from(dto model: ShopLocationEntry) throws -> ShopLocationEntity {
+        return try .init(region: model.region,
+                         city: model.city,
+                         address: model.address,
+                         floor: model.floor,
+                         sector: model.sector,
+                         geoPos: .from(dto: model.geo_pos))
+    }
+
+    public func toDTO() throws -> ShopLocationEntry {
+        return try .init(region: region,
+                         city: city,
+                         address: address,
+                         floor: floor,
+                         sector: sector,
+                         geo_pos: geoPos.toDTO())
+    }
+
+}

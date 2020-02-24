@@ -1,0 +1,21 @@
+
+import NodeKit
+
+public struct ShopLocationEntry: Codable {
+
+    // MARK: - Public Properties
+
+    public let region: String
+    public let city: String
+    public let address: String
+    public let floor: String?
+    public let sector: String?
+    public let geo_pos: GeopositionEntry
+
+}
+
+// MARK: - RawMappable
+
+extension ShopLocationEntry: RawMappable {
+    public typealias Raw = Json
+}
