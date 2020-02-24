@@ -37,40 +37,40 @@ final class GenerateCommand: Command {
 
     let project = Key<String>("--project", "-p", description: "Path to .xcodeproj file where generated files are supposed to be added")
 
-    let target = VariadicKey<String>("--taget", "-tgt", description: "Target in provided Project for generated files")
+    let target = VariadicKey<String>("--target", "-tgt", description: "Target in provided Project for generated files")
 
-    let mainGroupName = Key<String>("-mainGroup", "-mg", description: "Name of root main project directory. Used to detect correct subgroup in project tree")
+    let mainGroupName = Key<String>("--mainGroup", "-mg", description: "Name of root main project directory. Used to detect correct subgroup in project tree")
 
     // MARK: - Command execution
 
     func execute() throws {
         let params = (spec: getSpecURL(), name: getModelName(), type: getModelType())
         let rootGenerator = RootGenerator(tempatesPath: "./Templates")
-        stdout <<< "Generation for \(params.name) started ...".green
+        stdout <<< "Generation for \(params.name) with type \(params.type) started..."
         let generatedCode = tryToGenerate(specURL: params.spec,
                                           modelName: params.name,
                                           type: params.type,
                                           rootGenerator: rootGenerator)
 
         stdout <<< "Next files will be generated: ".green
-        generatedCode.forEach { stdout <<< $0.0 }
+        stdout <<< "---------------------------------------".bold
+        generatedCode.forEach { stdout <<< "• " + $0.0 }
+        stdout <<< "---------------------------------------".bold
         let filePathes = write(files: generatedCode)
 
         guard let projectPath = project.value, let mainGroupName = mainGroupName.value else {
             stdout <<< "No project path or mainGroupName specified".yellow
             stdout <<< "Generated files pathes: "
             filePathes.forEach { stdout <<< $0.components.joined(separator: "/").green }
-
             return
         }
 
-        stdout <<< "Adding generated files to Xcode project ...".green
+        stdout <<< "Adding generated files to Xcode project...\n".green
 
         let manager = try XcodeProjManager(project: Path(projectPath), mainGroupName: mainGroupName)
         try manager.addFiles(filePaths: filePathes, targets: target.value)
 
-        stdout <<< "Adding generated files to Xcode project ...".green
-
+        stdout <<< "– – – Generation completed! – – –\n".green
     }
 
     func tryToGenerate(specURL: URL, modelName: String, type: ModelType, rootGenerator: RootGenerator) -> [(String, String)] {
@@ -78,7 +78,6 @@ final class GenerateCommand: Command {
             let parser = try YamlToGASTParser(url: specURL)
             let node = try parser.parseToGAST(for: modelName)
             return try rootGenerator.generateCode(for: node, type: type)
-
         } catch {
             exitWithError(error.localizedDescription)
         }
@@ -111,9 +110,9 @@ final class GenerateCommand: Command {
         }
         switch GeneratedModelType(rawValue: typeName) {
         case .nodeKitEntry?:
-            return .entity
-        case .nodeKitEntity?:
             return .entry
+        case .nodeKitEntity?:
+            return .entity
         case .none:
             exitWithError("--type value must be one of [nodeKitEntry, nodeKitEntity]")
         }
@@ -122,7 +121,7 @@ final class GenerateCommand: Command {
     func write(files: [(fileName: String, fileContent: String)]) -> [Path] {
         var filePathes = [Path]()
         for file in files {
-            let outputPath: Path = Path("./\(destination.value ?? "GeneratedFiles")/\(file.fileName)")
+            let outputPath: Path = Path("\(destination.value ?? "./GeneratedFiles")/\(file.fileName)")
             do {
                 try outputPath.parent().mkpath()
                 try outputPath.write(file.fileContent)
@@ -134,19 +133,9 @@ final class GenerateCommand: Command {
         return filePathes
     }
 
-    func tryToAddFiles() {
-        do {
-
-
-        } catch {
-            exitWithError(error.localizedDescription)
-        }
-    }
-
     func exitWithError(_ string: String) -> Never {
         stderr <<< string.red
         exit(EXIT_FAILURE)
     }
 
 }
-

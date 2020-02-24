@@ -70,9 +70,11 @@ final class XcodeProjManager {
             throw XcodeProjError.cantFindGroupForFilePath(path.components.joined(separator: "/"))
         }
 
-        let fileReference = try groupToBeAdded.addFile(at: path, sourceRoot: projPath)
+        // remove .xcodeproj file from path
+        let sourceRoot = Path(projPath.components.dropLast().joined(separator: "/"))
+        let fileReference = try groupToBeAdded.addFile(at: path, sourceRoot: sourceRoot)
 
-        try targets.forEach { try $0.sourcesBuildPhase()?.add(file: fileReference) }
+        try targets.forEach { _ = try $0.sourcesBuildPhase()?.add(file: fileReference) }
     }
 
 }
