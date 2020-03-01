@@ -41,11 +41,13 @@ final class GenerateCommand: Command {
 
     let mainGroupName = Key<String>("--mainGroup", "-mg", description: "Name of root main project directory. Used to detect correct subgroup in project tree")
 
+    let templatesPath = Key<String>("--templates", "-tmpls", description: "Path to template files. Default value: ./Templates")
+
     // MARK: - Command execution
 
     func execute() throws {
         let params = (spec: getSpecURL(), name: getModelName(), type: getModelType())
-        let rootGenerator = RootGenerator(tempatesPath: "./Templates")
+        let rootGenerator = RootGenerator(tempatesPath: Path(templatesPath.value ?? "./Templates"))
         stdout <<< "Generation for \(params.name) with type \(params.type) started..."
         let generatedCode = tryToGenerate(specURL: params.spec,
                                           modelName: params.name,

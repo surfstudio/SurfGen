@@ -35,7 +35,7 @@ class ModelsGenerationTests: XCTestCase {
         
         do {
             let (fileName, code) = (try RootGenerator(tempatesPath: "./Templates").generateCode(for: root, type: modelType))[0]
-            
+
             XCTAssert(fileName == exptecedFileName, "File name is not equal to expected one (resulted value is \(fileName)")
             XCTAssert(code == expectedCode, "Code is not equal to expected one (resulted value is \(code)")
         } catch {

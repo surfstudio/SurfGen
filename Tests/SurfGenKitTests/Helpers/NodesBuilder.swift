@@ -78,7 +78,13 @@ final class NodesBuilder {
                              [
                                 formFieldNode(isOptional: false,
                                               name: "contactToken",
-                                              typeName: "String")
+                                              typeName: "String"),
+                                formFieldNode(isOptional: true,
+                                              name: "id",
+                                              typeName: "String"),
+                                formFieldNode(isOptional: false,
+                                              name: "value",
+                                              typeName: "Int")
                             ]
                         )
             ]

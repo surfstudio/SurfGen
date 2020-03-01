@@ -6,6 +6,8 @@ public struct ContactTokenEntry: Codable {
     // MARK: - Public Properties
 
     public let contactToken: String
+    public let id: String?
+    public let value: Int
 
 }
 
