@@ -24,16 +24,17 @@ final class AliasReplacer {
             let proccessedRequiredProperties = object.requiredProperties.map { tranform(property: $0, aliases: aliases) }
             let proccessedOptionalProperties = object.optionalProperties.map { tranform(property: $0, aliases: aliases) }
 
-            proccessedModels.append(ComponentObject(name: model.name,
-                                                    value: .init(metadata: model.value.metadata,
-                                                                 type: .object(ObjectSchema(requiredProperties: proccessedRequiredProperties,
-                                                                                            optionalProperties: proccessedOptionalProperties,
-                                                                                            properties: proccessedRequiredProperties + proccessedOptionalProperties ,
-                                                                                            minProperties: object.minProperties,
-                                                                                            maxProperties: object.maxProperties,
-                                                                                            additionalProperties: object.additionalProperties,
-                                                                                            abstract: object.abstract,
-                                                                                            discriminator: object.discriminator)))))
+            let newObject = ObjectSchema(requiredProperties: proccessedRequiredProperties,
+                                         optionalProperties: proccessedOptionalProperties,
+                                         properties: proccessedRequiredProperties + proccessedOptionalProperties ,
+                                         minProperties: object.minProperties,
+                                         maxProperties: object.maxProperties,
+                                         additionalProperties: object.additionalProperties,
+                                         abstract: object.abstract,
+                                         discriminator: object.discriminator)
+            let newModel = Schema(metadata: model.value.metadata,
+                                  type: .object(newObject))
+            proccessedModels.append(ComponentObject(name: model.name, value: newModel))
         }
         return proccessedModels
     }

@@ -8,5 +8,5 @@ BUILD_PATH = .build/release/$(TOOL_NAME)
 build:
 	swift build $(SWIFT_BUILD_FLAGS)
 
-get_executable: build
+executable: build
 	cp $(BUILD_PATH) .
