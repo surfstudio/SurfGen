@@ -46,20 +46,28 @@ final class GenerateCommand: Command {
     // MARK: - Command execution
 
     func execute() throws {
+        // Initializing RootGenerator with templates
         let params = (spec: getSpecURL(), name: getModelName(), type: getModelType())
         let rootGenerator = RootGenerator(tempatesPath: Path(templatesPath.value ?? "./Templates"))
+
+
+        // Generation
         stdout <<< "Generation for \(params.name) with type \(params.type) started..."
         let generatedCode = tryToGenerate(specURL: params.spec,
                                           modelName: params.name,
                                           type: params.type,
                                           rootGenerator: rootGenerator)
 
+        // Handling generation results
         stdout <<< "Next files will be generated: ".green
         stdout <<< "---------------------------------------".bold
         generatedCode.forEach { stdout <<< "• " + $0.0 }
         stdout <<< "---------------------------------------".bold
+
+        // Writing files to file system
         let filePathes = write(files: generatedCode)
 
+        // Check for project parameter
         guard let projectPath = project.value, let mainGroupName = mainGroupName.value else {
             stdout <<< "No project path or mainGroupName specified".yellow
             stdout <<< "Generated files pathes: "
@@ -68,11 +76,20 @@ final class GenerateCommand: Command {
         }
 
         stdout <<< "Adding generated files to Xcode project...\n".green
-
-        let manager = try XcodeProjManager(project: Path(projectPath), mainGroupName: mainGroupName)
-        try manager.addFiles(filePaths: filePathes, targets: target.value)
-
+        tryToAddFiles(projectPath: Path(projectPath),
+                      mainGroup: mainGroupName,
+                      targets: target.value,
+                      filePathes: filePathes)
         stdout <<< "– – – Generation completed! – – –\n".green
+    }
+
+    func tryToAddFiles(projectPath: Path, mainGroup: String, targets: [String], filePathes: [Path]) {
+        do {
+            let manager = try XcodeProjManager(project: projectPath, mainGroupName: mainGroup)
+            try manager.addFiles(filePaths: filePathes, targets: targets)
+        } catch {
+            exitWithError(error.localizedDescription)
+        }
     }
 
     func tryToGenerate(specURL: URL, modelName: String, type: ModelType, rootGenerator: RootGenerator) -> [(String, String)] {

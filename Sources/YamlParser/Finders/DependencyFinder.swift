@@ -30,6 +30,7 @@ final class DependencyFinder {
         var dependencies: Set<String> = [modelName]
         var dependenciesToFind = [modelName]
 
+        // TODO: find not endless loop solution
         repeat {
             let foundDependencies = dependenciesToFind.map { findDependency(modelName: $0, schemas: schemas) }.flatMap { $0 }
             dependenciesToFind = foundDependencies.filter { !dependencies.contains($0) }

@@ -9,8 +9,9 @@
 import SwiftCLI
 import XcodeProj
 
-let version = "4.3.0"
-let cli = CLI(name: "surfgen", version: version,
+let version = "0.0.1"
+let cli = CLI(name: "surfgen",
+              version: version,
               description: "surfgen code generator",
               commands: [GenerateCommand()])
 cli.goAndExit()
