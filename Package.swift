@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "ModelsCodeGeneration",
+    name: "SurfGen",
     products: [
         .executable(name: "surfgen", targets: ["surfgen"]),
         .library(
