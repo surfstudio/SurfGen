@@ -12,4 +12,4 @@ jobs:
       - uses: actions/checkout@v1
       - name: Build and test
         run: 
-          cd surfgen &&  xcodebuild clean test -project surfgen.xcodeproj -scheme "surfgen"
+          swift test
