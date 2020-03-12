@@ -1,0 +1,1242 @@
+swagger: '2.0'
+info: 
+  version: v0.1.0
+  title: Предложения по улучшению API и методы для middleware
+  description: >
+    ## Описание 
+
+    Тут несколько контроллеров для улучшения external API и контроллер для работы с акциями, новостиями, блогами и картами сайтов.
+    
+
+    Контроллеры предложения:
+
+    - AuthController 
+
+    - CardController
+    
+    - ProfileController
+     
+
+
+    Контроллеры для middleware: 
+
+    - PostController
+
+    - ShopsController 
+
+host: rightway-test-api.omnichannel.ru
+basePath: /externalApi
+schemes: 
+  - https 
+produces: 
+  - application/json
+consumes: 
+  - application/json
+tags: 
+  - name: AuthController
+    description: Методы для авторизации и регистрации
+  - name: CardController
+    description: Методы для работы с картами 
+  - name: ProfileController
+    description: Методы для работы с пользователем
+  - name: PostController
+    description: Методы для работы с акциями, новостями, блогами
+  - name: ShopsController
+    description: Методы для работы с магазинами, их локацией и информацией 
+paths: 
+  ##############################---Auth---##############################
+
+  /auth/phone:
+    post:
+      tags: 
+      - AuthController
+      description: 
+        Первый шаг авторизации, запускает цепочку запросов авторизации. Все запросы подписываются execution сигнатурой. 
+        Этот запрос отправляет смс на предоставленный номер
+      operationId: phoneAuth
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters: 
+        - name: body
+          in: body
+          required: true
+          schema: 
+            allOf:
+              - $ref: '#/definitions/PhoneAuthBody'
+      responses: 
+        200: 
+          schema:
+            allOf:
+              - $ref: "#/definitions/PhoneAuthResponse"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        404:
+          description: "Not Found"
+      deprecated: false
+
+  /auth/phone/confirm:
+    post:
+      tags:
+      - AuthController
+      description: > 
+        Запрос подтверждающий смс для привязки. 
+        Запрос может вернуть стейт когда пользователь был ранее зарегистрирован, в таком случае КПЛ нас уже авторизует, поэтому на этом этапе нужно вернуть токены.
+        Если пользоавтель решит обновить email, запросы на email в этом случае будут подписаны этими токенами, ибо обновление информации о пользователе это авторизованный запрос.
+      operationId: phoneAuthConfirm
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters: 
+        - name: body
+          in: body
+          required: true
+          schema: 
+            $ref: '#/definitions/PhoneAuthConfirmBody'
+      responses: 
+        200: 
+          schema:
+            allOf:
+              - $ref: "#/definitions/PhoneAuthConfirmResponse"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        404:
+          description: "Not Found"
+      deprecated: false
+      
+  /auth/email/confirmExistEmail:
+    post: 
+      tags:
+        - AuthController
+      description: >
+        Подтверждение уже существующего email у уже существующего пользователя
+        Решили, что этот запрос не имеет смысла.
+      operationId: confirmExistEmail
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters: 
+        - name: body
+          in: body
+          required: true
+          schema: 
+            $ref: '#/definitions/ExistEmailConfirmBody'
+      responses: 
+        200: 
+          schema:
+            allOf:
+              - $ref: "#/definitions/AuthData"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        404:
+          description: "Not Found"
+      deprecated: true
+
+  /auth/email: 
+    post: 
+      tags: 
+        - AuthController
+      description: >
+        Этот запрос по задумке должен использоваться в двух кейсах. Если пользователь ранее был зарегистрирован и у него уже есть email, то в случае исполнения этого запроса необходимо обновить его email на новый.
+        Если пользователь не был зарегистрирован ранее, то при исполнение этого запроса, будет продолжена регистрация. 
+      operationId: emailAuth
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters: 
+        - name: body
+          in: body
+          required: true
+          schema: 
+            $ref: '#/definitions/AuthEmailBody'
+      responses: 
+        200: 
+          schema:
+            allOf:
+              - $ref: "#/definitions/AuthEmailResponse"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        404:
+          description: "Not Found"
+      deprecated: false      
+      
+  /auth/email/confirm:
+    post:
+      tags:
+        - AuthController
+      description: >
+        Метод подтверждения email. Последний шаг регистрации пользователя или подтверждения его email. 
+        После выполнения последнего шага регистрации для нового пользователя необходимо создать карту 
+        Для создания карты необходимо использовать метод КПЛ POST /cards. Он создаст карту пользователя
+      operationId: emailAuthConfirm
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters: 
+        - name: body
+          in: body
+          required: true
+          schema: 
+            $ref: '#/definitions/AuthEmailConfirmBody'
+      responses: 
+        200: 
+          schema:
+            allOf:
+              - $ref: "#/definitions/AuthResponse"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        404:
+          description: "Not Found"
+      deprecated: false  
+
+  /auth/renew:
+    post:
+      tags: 
+        - AuthController
+      description: Метод для обновлении токена авторизации
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            properties:
+              refreshToken:
+                description: Refresh token
+                type: string
+                example: eyJjYXJkSWQiOiIxMyIsImV4cCI6MTUyNzQyMTA3MCwiaWF0Ijox
+              customerId: 
+                description: id пользователя полученное при регистрации/авторизации
+                type: string
+                example: "1234asf14"
+
+      responses:
+        '200':
+          description: Токен успешно обновлен
+          schema:
+            $ref: '#/definitions/TokenInfo'
+        '400':
+          description: В запросе переданы неверные данные
+        '401':
+          description: Ошибка авторизации
+
+  ##############################---Cards---##############################
+
+  /card:
+    post:
+      tags: 
+        - CardController
+      description: >
+        Метод создания карты для пользователя. По дефолту не подписывается не на какие рассылки. Для этого должны быть отдельные методы
+        По хорошему надо отделить работу с уведомлениями на рассылки от карты. Ибо рассылки не привязаны к конкретному бренду. 
+      operationId: createCard
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      responses: 
+        200: 
+          schema:
+              $ref: '#/definitions/CardCreationResponse'
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        404:
+          description: "Not Found"
+      deprecated: false  
+
+  /card/summary:
+    get:
+      tags:
+        - CardController
+      description: >
+        Возвращает информацию по карте пользователя, которая у него может быть только одна.
+      operationId: getCardSummary
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      responses: 
+        200:
+          schema:
+            allOf:
+              - $ref: '#/definitions/CardSummaryResponse'
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        404:
+          description: "Not Found"
+      deprecated: false  
+
+  /card/{customerId}/summary: 
+    get:
+      tags:
+        - CardController
+      description: >
+        По задумке метод должен объеденить в себе запрос на summary по пользователю и информацию по бонусам
+      operationId: getCardSummaryInfo
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      responses: 
+        200:      
+          schema:
+            allOf:
+              - $ref: '#/definitions/CardSummaryResponseInfo'
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        404:
+          description: "Not Found"
+      deprecated: false            
+
+  ##############################---Profile---##############################
+
+  /profile:
+    get: 
+      tags:
+        - ProfileController
+      description: >
+        Так как для мобильного приложения анкетирвоание не является регистрацией, предлагаем вынести это в отдельные запросы, которые будут наполняться только информацией о пользователе.
+      operationId: getProfile
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'       
+      responses: 
+        200:
+          schema:
+            allOf:
+              - $ref: '#/definitions/UserProfile'
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        404:
+          description: "Not Found"
+      deprecated: false  
+    post:
+      tags: 
+        - ProfileController
+      description: >
+        Предлагаем сделать отдельный запрос для прохождения оставшегося анкетирования. Т.е. не put запросом обновлять, а отдельно дозаполнять нужные поля, а для изменения этих полей использовать запросы PUT /contacts и PUT /customers.
+        Если эти endpoints можно завести под одну гребенку, то будет гуд. т.е. /profile/contacts/{contactId} и PUT /profile 
+      operationId: createProfile
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'       
+      parameters: 
+        - name: body
+          in: body
+          required: true
+          schema: 
+            $ref: '#/definitions/UserProfileUpdate'
+      responses: 
+        200:
+          schema:
+            allOf:
+              - $ref: '#/definitions/UserProfile'
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        404:
+          description: "Not Found"
+      deprecated: false   
+    put:
+      tags: 
+        - ProfileController
+      description: >
+        Предлагаем сделать отдельный запрос для прохождения оставшегося анкетирования. Т.е. не put запросом обновлять, а отдельно дозаполнять нужные поля, а для изменения этих полей использовать запросы PUT /contacts и PUT /customers.
+        Если эти endpoints можно завести под одну гребенку, то будет гуд. т.е. /profile/contacts/{contactId} и PUT /profile 
+      operationId: updateProfile
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'    
+      parameters: 
+        - name: body
+          in: body
+          required: true
+          schema: 
+            $ref: '#/definitions/UserProfileUpdate'   
+      responses: 
+        200:
+          schema:
+            allOf:
+              - $ref: '#/definitions/UserProfile'
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        404:
+          description: "Not Found"
+      deprecated: false  
+    
+  /profile/contacts/{contactId}:
+    put:
+      tags:
+        - ProfileController
+      description: >
+        Оставить все как и было, подтверждение контакта с помощью токена из запроса на отп код. 
+
+
+  ##############################---Posts---##############################
+
+  /post/{type}/aggregation{?brandIds,category,limit,offset}:
+    get:
+      tags:
+        - PostController
+      description: >
+        Метод для получения акций, новостей, обзоров. 
+        Должен позволять фильтровать выдачу в зависимости от типа, бренда, категории
+      operationId: getPost
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      parameters: 
+      - name: type
+        in: query
+        description: > 
+          Строковое определение типа подборки, возможные action, news, overview
+        type: string
+        enum:
+        - action
+        - news
+        - overview
+        x-example: action
+      - name: brandIds
+        in: query
+        description: 'Массив брендов по их id'
+        type: array
+        items:
+          type: string
+      - name: category
+        in: query
+        description: 'Категории подборок, лучше зашить и хранить на сервере, чтобы можно было оперативно менять/добавлять/удалять. Сейчас все категории мне не известны'
+        type: string
+        enum:
+          - electronics
+          - children
+          - sportandfashion
+      - name: limit
+        in: query
+        description: 'Лимит выдачи за один запрос'
+        type: integer
+      - name: offset
+        in: query
+        description: 'Оффсет, с которым запрашиваем выдачу'
+        type: integer
+      responses: 
+        200: 
+          description: Выдача постов
+          schema:
+            allOf:
+              - $ref: "#/definitions/PostPaginationBatch"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        404:
+          description: "Not Found"
+      deprecated: false
+
+  /post/categories:
+    get:
+      tags:
+        - PostController
+      description: >
+        Все доступные категории акций/новостей/обзоров. Уточнять у менедежера
+      operationId: getPostCategories
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      responses:
+        200: 
+          description: Выдача категорий
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Categories'
+              
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        404:
+          description: "Not Found"
+      deprecated: false      
+  
+  /post/search{?term}:
+    get:
+      tags:
+      - PostController
+      description: >
+        Поиск по постам по заданной строке, чем умнее поиск, тем лучше
+      operationId: getPostSearch
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      responses:
+        200: 
+          description: Выдача поиска по постам 
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/PostPaginationBatch'
+              
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        404:
+          description: "Not Found"
+      deprecated: false
+
+  ##############################---Shops---##############################
+  /shop/{brandId}:
+    get:
+      tags:
+      - ShopsController
+      description: >
+        Возвращает список магазинов бренда. На основе этого будет строится информация на карте
+      operationId: getShops
+      consumes:
+      - 'application/json'
+      produces:
+      - 'application/json'
+      responses:
+        200: 
+          description: Выдача магазинов конкретного бренда
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Shop'
+              
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        404:
+          description: "Not Found"
+      deprecated: false
+
+
+definitions: 
+
+  PhoneAuthBody:
+    type: object
+    properties:
+      phone:
+        type: string
+        description: Номер телефона пользователя для автризации/регистрации
+
+  PhoneAuthResponse: 
+    type: object
+    properties:
+      execution: 
+        type: string
+        required: true
+        description: Подпись сессии авторизации
+        example: "NzkzMDQwMDE2OTVTb21lU2FsdHNvbWVEaWM="
+      otpRetryCount:
+        type: integer
+        description: Количество допустимых попыток для этого номера телефона
+      otpRetryTime: 
+        type: number
+        format: double
+        example: 150.0
+        description: Количество времени в секундах для попыток отправки смс
+
+  PhoneAuthConfirmBody:
+    type: object
+    properties:
+      execution:
+        type: string
+        required: true
+        description: Подпись сессии авторизации
+        example: "NzkzMDQwMDE2OTVTb21lU2FsdHNvbWVEaWM="
+      otpCode:
+        type: string
+        required: true
+        description: Отп код, который ввел пользователь 
+
+  PhoneAuthConfirmResponse:
+    type: object
+    properties:
+      execution:
+        type: string
+        required: true
+        description: Подпись сессии авторизации
+        example: "NzkzMDQwMDE2OTVTb21lU2FsdHNvbWVEaWM="
+      isUserRegister:
+        type: boolean
+        required: true
+        description: Флаг обозначающий зарегистрированного пользователя 
+      userEmail:
+        type: string
+        required: false
+        description: Маскированный email пользователя 
+        example: exa***@mail.ru
+      userInfo: 
+        $ref: "#/definitions/UserInfo"
+      tokenInfo: 
+        $ref: "#/definitions/TokenInfo"
+    
+  ExistEmailConfirmBody: 
+    type: object
+    properties:
+      execution:
+        type: string
+        required: true
+        description: Подпись сессии авторизации
+        example: "NzkzMDQwMDE2OTVTb21lU2FsdHNvbWVEaWM="  
+
+  AuthEmailBody: 
+    type: object
+    properties:
+      execution:
+        type: string
+        required: true
+        description: Подпись сессии авторизации
+        example: "NzkzMDQwMDE2OTVTb21lU2FsdHNvbWVEaWM="  
+      email: 
+        type: string
+        required: true
+        description: Новый email пользователя
+        example: example@mail.ru
+      isRegisterUser: 
+        type: boolean
+        required: true
+        description: флаг, обозначающий, что этот запрос обновления или продолжения регистрации
+      
+  AuthEmailResponse: 
+    type: object
+    properties:
+      execution:
+        type: string
+        required: true
+        description: Подпись сессии авторизации
+        example: "NzkzMDQwMDE2OTVTb21lU2FsdHNvbWVEaWM="        
+      otpRetryCount:
+        type: integer
+        description: Количество допустимых попыток для этого email
+      otpRetryTime: 
+        type: number 
+        format: double
+        description: Количество времени в секундах для попыток отправки писем на email  
+        example: 150.00
+
+  AuthEmailConfirmBody: 
+    type: object
+    properties:
+      execution:
+        type: string
+        required: true
+        description: Подпись сессии авторизации
+        example: "NzkzMDQwMDE2OTVTb21lU2FsdHNvbWVEaWM="     
+      otpCode:
+        type: string
+        required: true
+        description: Код из письма на почте
+
+  AuthResponse: 
+    type: object
+    description: "Данные авторизации"
+    properties:
+      userInfo:
+        $ref: "#/definitions/UserInfo"
+      tokenInfo: 
+        $ref: "#/definitions/TokenInfo"
+
+  UserInfo: 
+    type: object
+    description: "Данные пользователя, передаваемые после авторизации" 
+    properties: 
+      cardNumber: 
+        type: string
+        description: Номер созданной карты или карты пользователя, которая у него уже была         
+      cardId: 
+        type: string
+        description: Id созданной карты или карты пользователя, которая у него уже была         
+      customerId: 
+        type: string
+        description: Id пользователя 
+
+  TokenInfo:
+    description: 'Ответ от сервиса авторизации, содержащий данные токена'
+    type: object
+    properties:
+      accessToken:
+        description: Токен авторизациии
+        type: string
+        example: eyJhbGciOiJSUzI1NiJ9.eyJjYXJkSWQiOiIzIiwiZXhwIjoxNTI2
+      refreshToken:
+        description: Токен для обновления токена аутентификации
+        type: string
+        example: eyJjYXJkSWQiOiIxMyIsImV4cCI6MTUyNzQyMTA3MCwiaWF0Ijox
+      expirationDate:
+        description: Дата окончания времени жизни токена аутентификации
+        type: string
+        format: date-time
+        example: '2018-05-20T14:39:02+03:00'
+
+  CardCreationResponse:
+    type: object
+    properties: 
+      id:
+        type: integer
+        description: Идентификатор созданной карты
+      number: 
+        type: string
+        description: Номер созданной карты
+
+  CardSummaryResponse:
+    description: 'Информация о карте, ее владельце и суммах бонусов'
+    allOf:
+      - $ref: '#/definitions/CardIdentificationInfo'
+      - $ref: '#/definitions/AccountInfo'
+      - type: object
+        properties:
+          canUseBonus:
+            description: >-
+              Если true, то бонусы карты могут быть использованы для оплаты
+              покупки.
+            type: boolean
+          owner:
+            $ref: '#/definitions/Customer'
+          contacts:
+            type: array
+            items:
+              $ref: '#/definitions/Contact'
+          communicationSettings:
+            allOf:
+              - $ref: '#/definitions/SubscriptionsSettings'
+              - $ref: '#/definitions/ChannelSettings'
+          status:
+            properties:
+              saleSum:
+                type: integer
+                format: uint32
+                description: Накопления по статусу
+                example: 1023
+            allOf:
+              - $ref: '#/definitions/CardStatus'
+          creationDate:
+            type: string
+            format: date
+            description: Дата регистрации карты в формате «YYYY-MM-DD»
+            example: '2017-07-21'
+          lastModifiedDate:
+            type: string
+            format: date
+            description: Дата последнего изменения информации по карте в формате «YYYY-MM-DD»
+            example: '2017-07-21'
+          accrualPercent:
+            type: integer
+            description: Процент начисления бонусов (По интервалам начисления, либо фиксированное начисление бонусов)
+          usePercent:
+            type: integer
+            description: Процент списания бонусов
+
+  CardIdentificationInfo:
+    description: Идентификационная информация карты
+    type: object
+    properties:
+      id:
+        description: Уникальный идентификатор карты
+        type: integer
+      number:
+        description: Номер карты
+        example: '6495291439761'
+        type: string
+      brandId:
+        description: Идентификатор бренда
+        type: integer
+      shopId:
+        description: Идентификатор магазина в котором выдана карта
+        type: integer
+      customerId:
+        description: Идентификатор покупателя (digital_id)
+        type: integer
+      isBlocked:
+        description: >-
+          Возвращает true в случае, если карта заблокирована. По умолчанию
+          false.
+        type: boolean
+      walletInstalled:
+        description: Установлена ли электронная версия (Apple Wallet)
+        type: boolean
+      attachedToInternetShop:
+        description: Наличие привязки к ЛК (deprecated)
+        type: boolean  
+
+  Customer:
+    properties:
+      firstName:
+        description: Имя покупателя
+        example: Иван
+        type: string
+      middleName:
+        description: Отчество покупателя
+        example: Иванович
+        type: string
+      lastName:
+        description: Фамилия покупателя
+        example: Иванов
+        type: string
+      gender:
+        $ref: '#/definitions/GenderType'
+      birthDate:
+        type: string
+        format: date
+        example: '2017-07-21'
+        description: |
+          Дата рождения покупателя в формате «YYYY-MM-DD»
+
+  GenderType:
+    type: string
+    description: |
+      Пол пользователя. Должен содержать одно из двух значений
+       * "m" — мужской
+       * "f" — женский
+       * "u" — не определён
+    enum:
+      - m
+      - f
+      - u
+
+  Contact:
+    description: Контакт покупателя
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Идентификатор контакта
+      value:
+        type: string
+        description: Фрагмент контакта
+        example: "v***v@h***ru"
+      confirmed:
+        type: boolean
+        description: Подтвержден ли контакт
+
+  CardStatus:
+    description: Информация о статусе карты покупателя
+    properties:
+      accrualPercent:
+        type: integer
+        description: Процент начисления бонусов
+      usePercent:
+        type: integer
+        description: Процент списания бонусов
+      discountPercent:
+        type: integer
+        description: Процент скидки
+      name:
+        type: string
+        description: Название статуса
+
+  ChannelSettings:
+    properties:
+      allowSms:
+        description: Разрешение отправки смс оповещений
+        type: boolean
+      allowEmail:
+        description: Разрешение отправки email оповещений
+        type: boolean
+      allowViber:
+        description: Разрешение отправки Viber оповещений
+        type: boolean
+
+  SubscriptionsSettings:
+    properties:
+      allowMarketingCommunication:
+        description: Статус подписки на маркетинговые рассылки
+        type: boolean 
+
+  PostPaginationBatch: 
+    type: object
+    description: Внешний объект для работы с выдачей постов 
+    properties: 
+      posts: 
+        type: array
+        items:
+          $ref: '#/definitions/Post'
+      totalElements: 
+        type: integer 
+        format: int64
+      currentOffset: 
+        type: integer
+        format: int64
+  Post: 
+    type: object
+    properties:
+      title: 
+        type: string
+        description: Основной заголовок поста
+      datetime:
+        type: string
+        description: Время создания поста, лучше всего с указанием UTC таймзоны или мск 
+        example: 2019-10-20T18:37:49+0000
+      brandId: 
+        type: integer
+        description: id бренда, у которого эту новость взяли
+      category: 
+        type: string
+        description: Тип категории, к которой относится пост. Уточнять все категории у менеджера по факту
+        enum:
+        - electronics
+        - children
+      bannerImage: 
+        type: string
+        description: Основная картинка поста, должна всегда присутствовать, если нет, то nil
+      weblink:
+        type: string
+        description: Ссылка на сайт с этим постом
+      mediaObjects: 
+        type: array
+        items:
+          $ref: '#/definitions/MediaObject'
+
+  MediaObject: 
+    type: object
+    properties: 
+      type:
+        type: string
+        description: Вид медиа объекта
+        enum: 
+        - text
+        - header
+        - image
+        - video
+        - list
+      value: 
+        type: string 
+        description: Всегда стринговое значение, меняется в зависимости от типа медиа объекта
+      list:
+        type: array
+        description: Список текстовых значений
+        items: 
+          type: string
+      width: 
+        type: number
+        format: double
+        description: Значение ширины для медиа объекта
+      height: 
+        type: number 
+        format: double
+        description: Значение высоты для медиа объекта 
+      size: 
+        type: integer
+        description: Используется для хедеров заголовков. Соответствует <h1> и тд. 
+        enum: 
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+      host:
+        type: string
+        description: Используется для видео медиа объекта. По хорошему обозначить все допустимые медиа объекты 
+        enum: 
+        - youtube 
+        - site
+        - vimeo 
+        - rutube 
+  
+  Categories:
+    type: object
+    properties:
+      name: 
+        type: string
+        description: Название категории
+      brands:
+        type: array
+        items:
+          type: string
+
+  Shop:
+    description: Информация о магазине
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Идентификатор магазина
+      code:
+        type: string
+        description: Код магазина, указаный в выгрузке
+      city:
+        type: string
+        description: 'Название города, в котором находится магазин'
+      name:
+        type: string
+        description: Название магазина
+      mallName:
+        type: string
+        description: 'Название торгового центра, в котором находится магазин'
+      brandId:
+        type: integer
+        description: 'Идентификатор бренда, в котором находится магазин'
+      location:
+        $ref: '#/definitions/Location'
+      additionalInformation:
+        type: string
+        description: Дополнительная информация о магазине
+      shopAttributes:
+        $ref: '#/definitions/ShopAttributes'
+
+  ShopAttributes:
+    description: объект с дополнительными атрибутами магазина
+    type: object
+    properties:
+      typeName:
+        type: string
+        description: Наименование типа магазина
+      phone:
+        type: string
+        description: Телефон магазина
+      district:
+        type: string
+        description: Район, в котром расположен магазин
+      map: 
+        type: string
+        description: Ссылка на карту торгового центра, или на карту пути до магазина, если есть
+  Location:
+    description: Объект с географическими координатами магазина
+    type: object
+    properties:
+      latitude:
+        type: number
+        format: double
+        description: Координата широты магазина (десятичная дробь)
+        example: 52.654654
+      longitude:
+        type: number
+        format: double
+        description: Координата долготы магазина (десятичная дробь)
+        example: 52.654654
+      address:
+        type: string
+        description: Адрес
+
+  UserProfile:
+    description: Объект профиля пользователя
+    type: object
+    properties: 
+      firstName: 
+        type: string
+        description: Имя пользователя
+      middleName: 
+        type: string
+        description: Отчество пользователя, если есть
+      lastName: 
+        type: string
+        description: Фамилия пользователя
+      gender:
+        required: true
+        $ref: '#/definitions/GenderType'
+      birthDate: 
+        type: string
+        format: date
+        description: Дата рождения пользователя
+        example: '2017-07-21'
+      phone: 
+        type: string
+        example: 9304001695
+        required: true
+        description: Привязанный к этому пользователю номер телефона. Указывает при регистрации
+      email:
+        type: string
+        example: example@example.ru
+        required: true
+        description: Привязанный к этому пользователю email. Указывается при регистрации
+
+  UserProfileUpdate:
+    description: Объект профиля пользователя
+    type: object
+    properties: 
+      firstName: 
+        type: string
+        description: Имя пользователя
+      middleName: 
+        type: string
+        description: Отчество пользователя, если есть
+      lastName: 
+        type: string
+        description: Фамилия пользователя
+      gender:
+        required: true
+        $ref: '#/definitions/GenderType'
+      birthDate: 
+        type: string
+        format: date
+        description: Дата рождения пользователя
+        example: '2017-07-21'
+
+  CardSummaryResponseInfo: 
+    description: Обеъкт возвращающий всю информацию по карте 
+    type: object
+    properties:
+      cardId: 
+        type: string
+        description: Уникальный идентификатор карты
+      cardNumber: 
+        type: string
+        description: Номер карты пользователя
+      salesSum:
+        type: number
+        description: Общая сумма покупок по карте с точностью до двух знаков после запятой
+      bonusInfo:
+        type: object
+        allOf:
+          - $ref: '#/definitions/BonusesCountInfo'
+        properties:
+          express:
+            description: Количество экспресс-бонусов
+            type: integer
+      canUseBonus:
+        description: >
+          Если true, то бонусы карты могут быть использованы для оплаты
+          покупки.
+        type: boolean
+      accrualPercent:
+        type: integer
+        description: Процент начисления бонусов (По интервалам начисления, либо фиксированное начисление бонусов)
+      usePercent:
+        type: integer
+        description: Процент списания бонусов            
+      creationDate:
+        type: string
+        format: date
+        description: Дата регистрации карты в формате «YYYY-MM-DD»
+        example: '2019-10-21'
+      status:
+        type: array
+        items:
+          $ref: '#/definitions/CustomerStatus'        
+      owner:
+        $ref: '#/definitions/Customer'
+      contacts:
+        type: array
+        items:
+          $ref: '#/definitions/Contact'
+      communicationSettings:
+        allOf:
+          - $ref: '#/definitions/SubscriptionsSettings'
+          - $ref: '#/definitions/ChannelSettings'                  
+      
+  CustomerStatus:
+    description: Информация о статусе покупателя
+    type: object
+    properties:
+      accrualPercent:
+        type: integer
+        description: Процент начисления бонусов
+      usePercent:
+        type: integer
+        description: Процент списания бонусов
+      discountPercent:
+        type: integer
+        description: Процент скидки
+      name:
+        type: string
+        description: Название статуса
+      division:
+        type: string
+        description: Название дивизиона в котором у покупателя данный статус
+      divisionStatusInfo: 
+        type: array
+        items:
+          $ref: "#/definitions/DivisionStatusInfo"
+      type:
+        type: string
+        enum:
+          - electronics
+          - children
+          - sportandfashion      
+
+  DivisionStatusInfo: 
+    description: Объект с массивом уровней
+    type: object 
+    properties: 
+      level:
+        type: string
+        description: Уровень, которого будет описание
+        example: "1"
+      minSum: 
+        type: string
+        description: Сумма для достижения уровня
+        example: "36000,00"
+      description:
+        type: array
+        items:
+          type: string
+             
+        
+
+  DevisionStatuses: 
+    description: Объект с массивом уровней
+    type: object
+    properties:
+      
+
+
+  AccountInfo:
+    description: Информация по количеству бонусов, проценте начисления/списания и накопленным суммам
+    type: object
+    properties:
+      salesSum:
+        type: number
+        description: Общая сумма покупок по карте с точностью до двух знаков после запятой
+      bonusInfo:
+        $ref: '#/definitions/BonusesCountInfo'
+      canUseBonus:
+        description:  Если true, то бонусы карты могут быть использованы для оплаты покупки
+        type: boolean
+      accrualPercent:
+        type: integer
+        description: Процент начисления бонусов (По интервалам начисления, либо фиксированное начисление бонусов)
+      usePercent:
+        type: integer
+        description: Процент списания бонусов
+
+  BonusesCountInfo:
+    description: Информация о количестве бонусных баллов
+    type: object
+    properties:
+      expected:
+        description: 'Количество бонусов, находящихся в состоянии «Ожидаемые»'
+        type: integer
+      active:
+        description: Количество обычных активных бонусов
+        type: integer
+      used:
+        description: Количество уже использованных бонусов
+        type: integer
+      express:
+        description: Количество экспресс-бонусов
+        type: integer
