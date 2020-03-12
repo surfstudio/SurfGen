@@ -50,7 +50,6 @@ final class GenerateCommand: Command {
         let params = (spec: getSpecURL(), name: getModelName(), type: getModelType())
         let rootGenerator = RootGenerator(tempatesPath: Path(templatesPath.value ?? "./Templates"))
 
-
         // Generation
         stdout <<< "Generation for \(params.name) with type \(params.type) started..."
         let generatedCode = tryToGenerate(specURL: params.spec,
