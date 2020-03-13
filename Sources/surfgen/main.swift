@@ -14,8 +14,5 @@ let cli = CLI(name: "surfgen",
               version: version,
               description: "surfgen code generator",
               commands: [GenerateCommand()])
-cli.go(with: [
-    "generate", "/Users/monakov/Development/openapi.yaml",
-    "-m", "UserLocations", "-t", "nodeKitEntry"
-])
+cli.goAndExit()
 
