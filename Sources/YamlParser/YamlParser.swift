@@ -54,7 +54,7 @@ public class YamlToGASTParser {
                                        .apply { $0.filter { aliases[$0.name] == nil } } // # 3
                                        .apply { AliasReplacer().replace(for: $0, aliases: aliases) } // # 4
 
-        return try GASTBuiler().build(for: proccesedModels)
+        return try GASTBuilder().build(for: proccesedModels)
     }
 
 }

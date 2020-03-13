@@ -8,12 +8,22 @@
 import Foundation
 import Swagger
 
-enum GASTBuilerError: Error {
+enum GASTBuilderError: Error, Equatable {
     case undefinedTypeForField(String)
     case nonObjectNodeFound(String)
+
+    public static func ==(lhs: GASTBuilderError, rhs: GASTBuilderError) -> Bool {
+        switch (lhs, rhs) {
+        case (.undefinedTypeForField, .undefinedTypeForField),
+             (.nonObjectNodeFound, .nonObjectNodeFound):
+            return true
+        default:
+            return false
+        }
+    }
 }
 
-extension GASTBuilerError: LocalizedError {
+extension GASTBuilderError: LocalizedError {
 
     public var errorDescription: String? {
         switch self {
