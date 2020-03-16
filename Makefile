@@ -1,12 +1,11 @@
-SWIFT_BUILD_FLAGS=--configuration release
-TOOL_NAME = surfgen
+TOOL_NAME =surfgen
+BUILD_PATH =.build/release/$(TOOL_NAME)
 
+test:
+	swift test
 
-SHARE_PATH = $(PREFIX)/share/$(TOOL_NAME)
-BUILD_PATH = .build/release/$(TOOL_NAME)
+release_build:
+	swift build --configuration release
 
-build:
-	swift build $(SWIFT_BUILD_FLAGS)
-
-executable: build
+executable: release_build
 	cp $(BUILD_PATH) .

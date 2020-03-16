@@ -57,34 +57,48 @@ final class GenerateCommand: Command {
                                           type: params.type,
                                           rootGenerator: rootGenerator)
 
+        let files = generatedCode.map { $0.0 }
         // Handling generation results
-        stdout <<< "Next files will be generated: ".green
-        stdout <<< "---------------------------------------".bold
-        generatedCode.forEach { stdout <<< "• " + $0.0 }
-        stdout <<< "---------------------------------------".bold
-
-        // Writing files to file system
-        let filePathes = write(files: generatedCode)
+        stdout <<< "Surfgen found next dependencies for provided model: ".green
+        printAsList(files)
 
         // Check for project parameter
         guard let projectPath = project.value, let mainGroupName = mainGroupName.value else {
             stdout <<< "No project path or mainGroupName specified".yellow
             stdout <<< "Generated files pathes: "
+            // Writing files to file system
+            let filePathes = write(files: generatedCode)
             filePathes.forEach { stdout <<< $0.components.joined(separator: "/").green }
             return
         }
 
-        stdout <<< "Adding generated files to Xcode project...\n".green
-        tryToAddFiles(projectPath: Path(projectPath),
-                      mainGroup: mainGroupName,
-                      targets: target.value,
-                      filePathes: filePathes)
+        let pathToProject = Path(projectPath)
+        stdout <<< "Adding generated files to Xcode project named: \(pathToProject.lastComponent)...\n".green
+        let manager = try XcodeProjManager(project: pathToProject, mainGroupName: mainGroupName)
+        let existingFiles = manager.findExistingFiles(files)
+
+        if !existingFiles.isEmpty {
+            stdout <<< "Next files already exist in project".yellow
+            printAsList(existingFiles)
+        }
+
+        let newFiles = files.filter { !existingFiles.contains($0) }
+
+        guard !newFiles.isEmpty else {
+            stdout <<< "– – – All dependencies already exist in project – – –\n".yellow
+            return
+        }
+
+        stdout <<< "Next models will be generated:".green
+        printAsList(newFiles)
+
+        let filePathes = write(files: generatedCode.filter { newFiles.contains($0.0) })
+        tryToAddFiles(manager: manager, targets: target.value, filePathes: filePathes)
         stdout <<< "– – – Generation completed! – – –\n".green
     }
 
-    func tryToAddFiles(projectPath: Path, mainGroup: String, targets: [String], filePathes: [Path]) {
+    func tryToAddFiles(manager: XcodeProjManager, targets: [String], filePathes: [Path]) {
         do {
-            let manager = try XcodeProjManager(project: projectPath, mainGroupName: mainGroup)
             try manager.addFiles(filePaths: filePathes, targets: targets)
         } catch {
             exitWithError(error.localizedDescription)
@@ -149,6 +163,12 @@ final class GenerateCommand: Command {
             }
         }
         return filePathes
+    }
+
+    func printAsList(_ list: [String]) {
+        stdout <<< "---------------------------------------".bold
+        list.forEach { stdout <<< "• " + $0 }
+        stdout <<< "---------------------------------------\n".bold
     }
 
     func exitWithError(_ string: String) -> Never {

@@ -53,6 +53,14 @@ final class XcodeProjManager {
         try proj.write(path: projPath)
     }
 
+    func findExistingFiles(_ fileNames: [String]) -> [String] {
+        return fileNames.filter { isFileExist(fileName: $0) }
+    }
+
+    func isFileExist(fileName: String) -> Bool {
+        return proj.pbxproj.buildFiles.first { $0.file?.path == fileName } != nil
+    }
+
     private func addFile(path: Path, mainGroup: PBXGroup, targets: [PBXNativeTarget]) throws {
         // remove last component with file name
         let components = path.components.dropLast()
