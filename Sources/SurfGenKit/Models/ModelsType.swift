@@ -9,13 +9,16 @@
 public enum ModelType {
     case entity
     case entry
-    
+    case `enum`
+
     var name: String {
         switch self {
         case .entity:
             return "Entity"
         case .entry:
             return "Entry"
+        case .enum:
+            return ""
         }
     }
 

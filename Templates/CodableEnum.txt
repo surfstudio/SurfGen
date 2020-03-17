@@ -1,0 +1,4 @@
+
+public enum {{ enumName }}: {{ enumType }}, Codable {
+    {% for case in cases %} case <#caseValue#> = {{ case.value }}
+}

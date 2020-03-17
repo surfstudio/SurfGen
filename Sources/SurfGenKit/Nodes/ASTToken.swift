@@ -13,4 +13,6 @@ public enum ASTToken {
     case field(isOptional: Bool)
     case type(name: String)
     case root
+    case description(String)
+    case value(String)
 }
