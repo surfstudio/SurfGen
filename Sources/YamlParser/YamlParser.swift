@@ -33,7 +33,10 @@ public class YamlToGASTParser {
 
     // MARK: - Public Methods
 
-    public func parseToGAST(for modelName: String) throws -> ASTNode {
+    /**
+     Method parses swagger spec for provided 'modelName' excluding from generating objects model names from 'blackList' parameter
+     */
+    public func parseToGAST(for modelName: String, blackList: [String]) throws -> ASTNode {
         let allModels = spec.components.schemas
         let aliases = AliasFinder().findAlaises(for: allModels)
 
@@ -45,14 +48,16 @@ public class YamlToGASTParser {
             so we use GroupReplacer to change complex objects to plain
          3) We've already found alias-objects (for more info check AliasFinder description). And now we need to remove all alias objects from
             dependent models
-         4) And the last proccess step is to find properties in dependent models with alias types and change them to their real types
+         4) Filter all models from blackList
+         5) And the last proccess step is to find properties in dependent models with alias types and change them to their real types
             (for example: we have property 'let id: ID' but ID is typealias for String, so we replace such typealiases using AliasReplacer, and
             as a result we would get 'let id: String')
          */
         let proccesedModels = allModels.apply { DependencyFinder().findDependencies(for: $0, modelName: modelName) } // # 1
                                        .apply { GroupReplacer().replace(for: $0) } // # 2
                                        .apply { $0.filter { aliases[$0.name] == nil } } // # 3
-                                       .apply { AliasReplacer().replace(for: $0, aliases: aliases) } // # 4
+                                       .apply { $0.filter { !blackList.contains($0.name) } } // # 4
+                                       .apply { AliasReplacer().replace(for: $0, aliases: aliases) } // # 5
 
         return try GASTBuilder().build(for: proccesedModels)
     }

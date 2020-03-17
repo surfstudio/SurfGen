@@ -43,19 +43,28 @@ final class GenerateCommand: Command {
 
     let templatesPath = Key<String>("--templates", "-tmpls", description: "Path to template files. Default value: ./Templates")
 
+    let blackList = Key<String>("--black_list", "-bl", description: "Path to black list file. Model names in this list will be ignored during generation proccess")
+
     // MARK: - Command execution
 
     func execute() throws {
         // Initializing RootGenerator with templates
         let params = (spec: getSpecURL(), name: getModelName(), type: getModelType())
         let rootGenerator = RootGenerator(tempatesPath: Path(templatesPath.value ?? "./Templates"))
-
+        let blackList = getBlackList()
         // Generation
         stdout <<< "Generation for \(params.name) with type \(params.type) started..."
+
+        if !blackList.isEmpty {
+            stdout <<< "Black list contains next models:".yellow
+            printAsList(blackList)
+        }
+
         let generatedCode = tryToGenerate(specURL: params.spec,
                                           modelName: params.name,
                                           type: params.type,
-                                          rootGenerator: rootGenerator)
+                                          rootGenerator: rootGenerator,
+                                          blackList: blackList)
 
         let files = generatedCode.map { $0.0 }
         // Handling generation results
@@ -85,7 +94,7 @@ final class GenerateCommand: Command {
         let newFiles = files.filter { !existingFiles.contains($0) }
 
         guard !newFiles.isEmpty else {
-            stdout <<< "– – – All dependencies already exist in project – – –\n".yellow
+            stdout <<< "– – – All dependencies already exist in project // in black list – – –\n".yellow
             return
         }
 
@@ -105,10 +114,14 @@ final class GenerateCommand: Command {
         }
     }
 
-    func tryToGenerate(specURL: URL, modelName: String, type: ModelType, rootGenerator: RootGenerator) -> [(String, String)] {
+    func tryToGenerate(specURL: URL,
+                       modelName: String,
+                       type: ModelType,
+                       rootGenerator: RootGenerator,
+                       blackList: [String]) -> [(String, String)] {
         do {
             let parser = try YamlToGASTParser(url: specURL)
-            let node = try parser.parseToGAST(for: modelName)
+            let node = try parser.parseToGAST(for: modelName, blackList: blackList)
             return try rootGenerator.generateCode(for: node, type: type)
         } catch {
             exitWithError(error.localizedDescription)
@@ -147,6 +160,18 @@ final class GenerateCommand: Command {
             return .entity
         case .none:
             exitWithError("--type value must be one of [nodeKitEntry, nodeKitEntity]")
+        }
+    }
+
+    func getBlackList() -> [String] {
+        guard let blackList = blackList.value else {
+            return []
+        }
+        do {
+            let blackListFile: String = try Path(blackList).read()
+            return blackListFile.split(separator: "\n").map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
+        } catch {
+            exitWithError(error.localizedDescription)
         }
     }
 
