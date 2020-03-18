@@ -11,17 +11,6 @@ import XCTest
 
 class DeclNodeParserTests: XCTestCase {
 
-    func testSubnodesError() {
-        let declNode = Node(token: .decl,
-                            [
-                                Node(token: .type(name: ""), []),
-                                Node(token: .name(value: "ShopLocation"), []),
-                                Node(token: .content, [ formFieldNode(isOptional: false, name: "region", typeName: "String") ])
-                            ])
-        
-        assertThrow(try DeclNodeParser().getInfo(from: declNode), throws: GeneratorError.incorrectNodeNumber(""))
-    }
-
     func testNameNodeError() {
         let declNode = Node(token: .decl,
                             [

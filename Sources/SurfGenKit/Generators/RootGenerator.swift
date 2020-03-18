@@ -32,19 +32,6 @@ public final class RootGenerator {
         environment = Environment(loader: loader)
     }
 
-//    /// for now this generator is supposed to generate code for complete AST
-//    public func generateCode(for node: ASTNode, types: ModelType) throws -> [(String, String)] {
-//        let generator: ModelGeneratable
-//        switch type {
-//        case .entry:
-//            generator = EntryGenerator()
-//        case .entity:
-//            generator = EntityGenerator()
-//        }
-//
-//        return try node.subNodes.map { try generator.generateCode(declNode: $0, environment: environment) }
-//    }
-
     public func generateCode(for node: ASTNode, types: [ModelType]) throws -> GenerationModel {
         guard case .root = node.token else {
             throw GeneratorError.incorrectNodeToken("Root generator coundn't parse input node as node with root token")
@@ -53,9 +40,13 @@ public final class RootGenerator {
         let (objectDecls, enumDecls) = DeclNodeSplitter().split(nodes: node.subNodes)
 
         var model: GenerationModel = [:]
-        for type in types {
+        try types.forEach { try generate(for: $0, to: &model, from: $0 == .enum ? enumDecls : objectDecls) }
+        return model
+    }
 
-        }
+    private func generate(for type: ModelType, to model: inout GenerationModel, from nodes: [ASTNode]) throws {
+        let generator = type.gererator
+        model[type] = try nodes.map { try generator.generateCode(declNode: $0, environment: environment) }
     }
 
 }
@@ -96,9 +87,5 @@ private extension ModelType {
             return EnumGenerator()
         }
     }
-
-}
-
-final class EnumGenerator: ModelGeneratable {
 
 }

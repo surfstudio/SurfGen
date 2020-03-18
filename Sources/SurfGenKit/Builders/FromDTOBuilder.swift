@@ -32,13 +32,13 @@ public class FromDTOBuilder: DTOBuilder {
     */
     func buildString(for type: Type, with name: String, isOptional: Bool) -> String {
         switch type {
-        case .plain:
+        case .plain, .enum:
             return "model.\(name)"
         case .object:
             return ".from(dto: model.\(name))"
         case .array(let subType):
             switch subType {
-            case .plain:
+            case .plain, .enum:
                 return "model.\(name)"
             case .object:
                 return  ".from(dto: model.\(name))"

@@ -6,7 +6,7 @@
 //  Copyright © 2019 Surf. All rights reserved.
 //
 
-public enum ASTToken {
+public enum ASTToken: Equatable {
     case name(value: String)
     case decl
     case content
@@ -15,4 +15,21 @@ public enum ASTToken {
     case root
     case description(String)
     case value(String)
+
+    public static func ==(lhs: ASTToken, rhs: ASTToken) -> Bool {
+        switch (lhs, rhs) {
+        case (.name, .name),
+             (.decl, .decl),
+             (.content, .content),
+             (.field, .field),
+             (.type, .type),
+             (.description, .description),
+             (.root, .root),
+             (.value, .value):
+            return true
+        default:
+            return false
+        }
+    }
+
 }

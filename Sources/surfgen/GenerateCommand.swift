@@ -122,7 +122,8 @@ final class GenerateCommand: Command {
         do {
             let parser = try YamlToGASTParser(url: specURL)
             let node = try parser.parseToGAST(for: modelName, blackList: blackList)
-            return try rootGenerator.generateCode(for: node, type: type)
+            let genModel = try rootGenerator.generateCode(for: node, types: [type, .enum])
+            return genModel.map { $0.value }.flatMap { $0 }
         } catch {
             exitWithError(error.localizedDescription)
         }

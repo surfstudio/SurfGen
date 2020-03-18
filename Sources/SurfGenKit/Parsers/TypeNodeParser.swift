@@ -10,6 +10,7 @@ indirect enum Type {
     case plain(String)
     case object(String)
     case array(Type)
+    case `enum`(String)
     // case dictionary(key: Type, value: Type)
 
     var isPlain: Bool {
@@ -31,6 +32,7 @@ final class TypeNodeParser {
     private enum Constants {
         static let array = "array"
         static let object = "object"
+        static let `enum` = "enum"
     }
 
     /**
@@ -48,15 +50,17 @@ final class TypeNodeParser {
             guard let subNode = typeNode.subNodes.first, case let .type(subName) = subNode.token else {
                 throw GeneratorError.nodeConfiguration("can find subnode with correct type for typeNode with name \(name)")
             }
-            
-            if Constants.array == name {
+
+            switch name {
+            case Constants.array:
                 return .array(try detectType(for: subNode))
-            }
-            
-            if Constants.object == name {
+            case Constants.object:
                 return .object(subName)
+            case Constants.enum:
+                return .enum(subName)
+            default:
+                throw GeneratorError.nodeConfiguration("provided node with name \(name) can not be resolved")
             }
-            throw GeneratorError.nodeConfiguration("provided node with name \(name) can not be resolved")
         default:
             throw GeneratorError.incorrectNodeNumber("Type node contains to many nodes")
         }

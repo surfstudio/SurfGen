@@ -35,7 +35,10 @@ class ModelsGenerationTests: XCTestCase {
         // then
         
         do {
-            let (fileName, code) = (try RootGenerator(tempatesPath: Path(#file) + "../../../../Templates").generateCode(for: root, type: modelType))[0]
+            let path = Path(#file) + "../../../../Templates"
+            let genModel = try RootGenerator(tempatesPath: path).generateCode(for: root, types: [modelType])
+            let fileName = genModel[modelType]![0].0
+            let code = genModel[modelType]![0].1
 
             XCTAssert(fileName == exptecedFileName, "File name is not equal to expected one (resulted value is \(fileName)")
             XCTAssert(code == expectedCode, "Code is not equal to expected one (resulted value is \(code)")
@@ -51,7 +54,7 @@ class ModelsGenerationTests: XCTestCase {
         let errorTokens: [ASTToken] = [.decl, .content, .name(value: ""), .field(isOptional: false), .type(name: "")]
         for errorToken in errorTokens {
             assertThrow(try RootGenerator().generateCode(for: Node(token: errorToken, []),
-                                                         type: .entity),
+                                                         types: [.entity]),
                         throws: GeneratorError.incorrectNodeToken(""))
         }
     }

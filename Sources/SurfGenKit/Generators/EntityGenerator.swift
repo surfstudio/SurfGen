@@ -8,22 +8,18 @@
 
 import Stencil
 
-public protocol ModelGeneratable {
-    func generateCode(declNode: ASTNode, environment: Environment) throws -> (String, String)
-}
-
 final class EntityGenerator: ModelGeneratable {
 
     func generateCode(declNode: ASTNode, environment: Environment) throws -> (String, String) {
 
         let propertyGenerator = PropertyGenerator()
-        let (name, fields) = try DeclNodeParser().getInfo(from: declNode)
+        let declModel = try DeclNodeParser().getInfo(from: declNode)
 
-        let properties = try fields.map { try propertyGenerator.generateCode(for: $0, type: .entity) }
-        let className = ModelType.entity.form(name: name)
+        let properties = try declModel.fields.map { try propertyGenerator.generateCode(for: $0, type: .entity) }
+        let className = ModelType.entity.form(name: declModel.name)
 
         let code = try environment.renderTemplate(.nodeKitEntity(entityName: className,
-                                                                 entryName: ModelType.entry.form(name: name),
+                                                                 entryName: ModelType.entry.form(name: declModel.name),
                                                                  properties: properties))
 
         return (className.capitalizingFirstLetter().withSwiftExt, code)

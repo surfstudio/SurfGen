@@ -14,6 +14,7 @@ final class NodesBuilder {
         return Node(token: .decl,
                     [
                         Node(token: .name(value: "ShopLocation"), []),
+                        Node(token: .type(name: "object"), []),
                         Node(token: .content,
                              [
                                 formFieldNode(isOptional: false, name: "region", typeName: "String"),
@@ -35,6 +36,7 @@ final class NodesBuilder {
         return Node(token: .decl,
                             [
                                 Node(token: .name(value: "Shop"), []),
+                                Node(token: .type(name: "object"), []),
                                 Node(token: .content,
                                      [
                                         formFieldNode(isOptional: false, name: "id", typeName: "String"),
@@ -55,6 +57,7 @@ final class NodesBuilder {
         return Node(token: .decl,
                     [
                         Node(token: .name(value: "ProfileCustomData"), []),
+                        Node(token: .type(name: "object"), []),
                         Node(token: .content,
                              [
                                 formFieldNode(isOptional: true,
@@ -74,6 +77,7 @@ final class NodesBuilder {
         return Node(token: .decl,
                     [
                         Node(token: .name(value: "ContactToken"), []),
+                        Node(token: .type(name: "object"), []),
                         Node(token: .content,
                              [
                                 formFieldNode(isOptional: false,

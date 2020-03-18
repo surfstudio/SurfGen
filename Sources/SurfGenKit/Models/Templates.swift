@@ -9,6 +9,7 @@
 enum Template {
     case nodeKitEntity(entityName: String, entryName: String, properties: [PropertyGenerationModel])
     case nodeKitEntry(className: String, properties: [PropertyGenerationModel])
+    case `enum`(EnumGenerationModel)
 
     var fileName: String {
         switch self {
@@ -16,11 +17,19 @@ enum Template {
             return "EntityDTOConvertable.txt"
         case .nodeKitEntry:
             return "EntryCodable.txt"
+        case .enum:
+            return "CodableEnum.txt"
         }
     }
 
     var context: [String: Any] {
         switch self {
+        case .enum(let enumModel):
+            return [
+                "enumName": enumModel.enumName,
+                "enumType": enumModel.enumType,
+                "cases": enumModel.cases
+            ]
         case .nodeKitEntry(let className, let properties):
             return [
                 "className": className,

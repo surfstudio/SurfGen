@@ -13,8 +13,7 @@ public class ToDTOBuilder: DTOBuilder {
 
      Example
 
-     This method will return "geoPosition.toDTO()" for (type: .object, name: "geo_position", isOptional: false) parameters. This resulted
-     string is supposed to be used as parameter for .toDTO method as in snippet below.
+     This method will return "geoPosition.toDTO()" for (type: .object, name: "geo_position", isOptional: false) parameters. This resulted string is supposed to be used as parameter for .toDTO method as in snippet below.
 
 
     ```
@@ -33,13 +32,13 @@ public class ToDTOBuilder: DTOBuilder {
     */
     func buildString(for type: Type, with name: String, isOptional: Bool) -> String {
         switch type {
-        case .plain:
+        case .plain, .enum:
             return name.snakeCaseToCamelCase()
         case .object:
             return "\(name.snakeCaseToCamelCase())\(isOptional.asOptionalSign).toDTO()"
         case .array(let subType):
             switch subType {
-            case .plain:
+            case .plain, .enum:
                 return name.snakeCaseToCamelCase()
             case .object:
                 return "\(name.snakeCaseToCamelCase())\(isOptional.asOptionalSign).toDTO()"

@@ -18,10 +18,14 @@ public class TypeNameBuilder {
         switch type {
         case .plain(let value):
             return value.formOptional(isOptional)
+        case .enum(let value):
+            return value.formOptional(isOptional)
         case .object(let value):
             return modelType.form(name: value).formOptional(isOptional)
         case .array(let subType):
             switch subType {
+            case .enum(let value):
+                return "[\(value)]".formOptional(isOptional)
             case .plain(let value):
                 return "[\(value)]".formOptional(isOptional)
             case .object(let value):
