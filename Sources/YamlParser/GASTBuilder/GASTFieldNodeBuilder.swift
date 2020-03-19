@@ -10,23 +10,28 @@ import SurfGenKit
 
 final class GASTFieldNodeBuilder {
 
-    func buildFieldType(for schemaType: SchemaType) throws -> ASTNode {
+    func buildFieldType(for schema: Schema) throws -> ASTNode {
+        // case schema is enum
+        if schema.metadata.enumValues != nil, let typeName = schema.type.typeName {
+            Node(token: .type(name: "enum"), [Node(token: .type(name: typeName), [])])
+        }
+
         // case schema type is plain: Int, String, Double, Bool
-        if let typeName = schemaType.typeName {
+        if let typeName = schema.type.typeName {
             return Node(token: .type(name: typeName), [])
         }
 
         // case schema type is a reference to object
-        if let ref = schemaType.reference {
+        if let ref = schema.type.reference {
             return Node(token: .type(name: "object"), [Node(token: .type(name: ref.name), [])])
         }
 
         // case schema type is an array of any type
-        if case let .array(arrayObject) = schemaType, case let .single(subSchema) = arrayObject.items {
-            return Node(token: .type(name: "array"), [try buildFieldType(for: subSchema.type)])
+        if case let .array(arrayObject) = schema.type, case let .single(subSchema) = arrayObject.items {
+            return Node(token: .type(name: "array"), [try buildFieldType(for: subSchema)])
         }
 
-        throw GASTBuilderError.undefinedTypeForField(schemaType.description)
+        throw GASTBuilderError.undefinedTypeForField(schema.type.description)
     }
 
 }

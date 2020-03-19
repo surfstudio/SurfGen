@@ -10,8 +10,20 @@ import SurfGenKit
 
 final class GASTContentNodeBuilder {
 
-    func buildContentSubnodes(for object: ObjectSchema) throws -> ASTNode {
+    func buildObjectContentSubnodes(for object: ObjectSchema) throws -> ASTNode {
         return Node(token: .content, try buildSubnodes(for: object))
+    }
+
+    func buildEnumContentSubnodes(for schema: ComponentObject<Schema>) throws -> ASTNode {
+        if let values = schema.value.metadata.enumValues as? [String]  {
+            return Node(token: .content, values.map { Node(token: .value($0), []) })
+        }
+
+        if let values = schema.value.metadata.enumValues as? [Int]  {
+            return Node(token: .content, values.map { Node(token: .value(String($0)), []) })
+        }
+
+        throw GASTBuilderError.incorrectEnumObjectConfiguration(schema.name)
     }
 
     private func buildSubnodes(for object: ObjectSchema) throws -> [ASTNode] {
@@ -20,7 +32,7 @@ final class GASTContentNodeBuilder {
         for property in object.properties {
             fieldNodes.append(Node(token: .field(isOptional: !property.required),
                                    [Node(token: .name(value: property.name), []),
-                                    try builder.buildFieldType(for: property.schema.type)]))
+                                    try builder.buildFieldType(for: property.schema)]))
         }
         return fieldNodes
     }

@@ -37,7 +37,7 @@ class GASTContentNodeBuilderTests: XCTestCase {
     func plainObjectTest(_ object: ObjectSchema, numberOfProperties: Int) {
         let builder = GASTContentNodeBuilder()
         do {
-            let node = try builder.buildContentSubnodes(for: object)
+            let node = try builder.buildObjectContentSubnodes(for: object)
             guard case .content = node.token else {
                 XCTFail("built node with incorrect token")
                 return

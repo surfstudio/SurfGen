@@ -27,8 +27,9 @@ class GASTFieldNodeBuilderTests: XCTestCase {
     func testPlainType() {
         // test plain types
         guard
-            let canceledProperty = orderObject.properties.first(where: { $0.name == "can_be_canceled" })?.schema.type,
-            let nameProperty = orderObject.properties.first(where: { $0.name == "name" })?.schema.type else {
+            let canceledProperty = orderObject.properties.first(where: { $0.name == "can_be_canceled" })?.schema,
+            let nameProperty = orderObject.properties.first(where: { $0.name == "name" })?.schema
+        else {
                 XCTFail("Error while loading models")
                 return
         }
@@ -36,6 +37,7 @@ class GASTFieldNodeBuilderTests: XCTestCase {
         do {
             let canceledPropertyNode = try GASTFieldNodeBuilder().buildFieldType(for: canceledProperty)
             let namePropertyNode = try GASTFieldNodeBuilder().buildFieldType(for: nameProperty)
+
             guard
                 case let .type(cancelType) = canceledPropertyNode.token,
                 case let .type(nameType) = namePropertyNode.token else {
@@ -60,8 +62,12 @@ class GASTFieldNodeBuilderTests: XCTestCase {
         complexNodeTest(propertyName: "products", expectedNodeType: "array", expectedSubNodeType: "object", expectedSubSubNodeType: "OrderBoughtProduct")
     }
 
+    func testEnumType() {
+        complexNodeTest(propertyName: "state", expectedNodeType: "enum", expectedSubNodeType: "OrderState")
+    }
+
     func complexNodeTest(propertyName: String, expectedNodeType: String, expectedSubNodeType: String, expectedSubSubNodeType: String? = nil) {
-        guard let recipientSchema = orderObject.properties.first(where: { $0.name == propertyName })?.schema.type else {
+        guard let recipientSchema = orderObject.properties.first(where: { $0.name == propertyName })?.schema else {
             XCTFail("Error while loading model")
             return
         }
@@ -106,9 +112,8 @@ class GASTFieldNodeBuilderTests: XCTestCase {
             XCTFail("Error while loading model")
             return
         }
-        assertThrow(try GASTFieldNodeBuilder().buildFieldType(for: shop.value.type), throws: GASTBuilderError.undefinedTypeForField(""))
+        assertThrow(try GASTFieldNodeBuilder().buildFieldType(for: shop.value), throws: GASTBuilderError.undefinedTypeForField(""))
 
-        assertThrow(try GASTFieldNodeBuilder().buildFieldType(for: .any), throws: GASTBuilderError.undefinedTypeForField(""))
     }
 
 }

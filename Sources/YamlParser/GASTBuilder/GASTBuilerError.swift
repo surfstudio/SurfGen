@@ -11,11 +11,13 @@ import Swagger
 enum GASTBuilderError: Error, Equatable {
     case undefinedTypeForField(String)
     case nonObjectNodeFound(String)
+    case incorrectEnumObjectConfiguration(String)
 
     public static func ==(lhs: GASTBuilderError, rhs: GASTBuilderError) -> Bool {
         switch (lhs, rhs) {
         case (.undefinedTypeForField, .undefinedTypeForField),
-             (.nonObjectNodeFound, .nonObjectNodeFound):
+             (.nonObjectNodeFound, .nonObjectNodeFound),
+             (.incorrectEnumObjectConfiguration, .incorrectEnumObjectConfiguration):
             return true
         default:
             return false
@@ -31,6 +33,8 @@ extension GASTBuilderError: LocalizedError {
             return "Can not resolve type for provided SchemaType which is type of \(type)"
         case .nonObjectNodeFound(let name):
             return "Can not find object in provided Component object with name: \(name)"
+        case .incorrectEnumObjectConfiguration(let name):
+            return "Enum object with name: \(name) has no correct enum values"
         }
     }
 

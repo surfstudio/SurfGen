@@ -25,6 +25,9 @@ class DependenciesFinderTests: XCTestCase {
         let modelName = model.rawValue
         let resultedModels = DependencyFinder().findDependencies(for: schemas, modelName: modelName)
         XCTAssertEqual(Set(resultedModels.map { $0.name }), model.dependencies)
+
+        let temp = schemas.first(where: { $0.name == "DeliveryType" })!
+        dump(temp)
     }
 
 }

@@ -32,7 +32,6 @@ class EnumGeneratorTests: XCTestCase {
 
             let (fileName, code) = try EnumGenerator().generateCode(declNode: type.typeDeclNode, environment: environment)
 
-            print(code)
             XCTAssert(fileName == exptecedFileName, "File name is not equal to expected one (resulted value is \(fileName)")
             XCTAssert(code == expectedCode, "Code is not equal to expected one (resulted value is \(code)")
         } catch {
