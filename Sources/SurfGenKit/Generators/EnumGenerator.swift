@@ -19,16 +19,17 @@ final class EnumGenerator: ModelGeneratable {
 
         let cases: [String] = declModel.fields.compactMap {
             if case let .value(value) = $0.token {
-                return value
+                return type.enumType == "String" ? "\"\(value)\"" : value
             }
             return nil
         }
         let enumModel = EnumGenerationModel(enumName: declModel.name,
                                             enumType: type.enumType ?? "",
-                                            cases: cases)
+                                            cases: cases,
+                                            description: declModel.description)
         let code = try environment.renderTemplate(.enum(enumModel))
 
-        return (declModel.name.withSwiftExt, code)
+        return (declModel.name.withSwiftExt, code.trimmingCharacters(in: .whitespacesAndNewlines))
     }
 
 }

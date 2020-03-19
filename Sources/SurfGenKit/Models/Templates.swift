@@ -26,6 +26,7 @@ enum Template {
         switch self {
         case .enum(let enumModel):
             return [
+                "description": enumModel.description,
                 "enumName": enumModel.enumName,
                 "enumType": enumModel.enumType,
                 "cases": enumModel.cases

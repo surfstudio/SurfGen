@@ -1,0 +1,12 @@
+/**
+Тип оплаты
+* 0 - Оплата при получении
+* 1 - Оплата картой онлайн
+* 2 - Оплата Google Pay / Apple Pay
+*/
+
+public enum DeliveryType: String, Codable {
+    case <#caseValue#> = "CDEK"
+    case <#caseValue#> = "PickPoint"
+    case <#caseValue#> = "Amazon"
+}
