@@ -1,0 +1,18 @@
+# Generation Pathes
+
+entities_path: ./Common/Models/Models/Entity
+entries_path: ./Common/Models/Models/Entry
+enums_path: ./Common/Models/Models/Shared
+
+# Project Info
+
+project_path: ./Common/Models/Models.xcodeproj
+project_main_group: Models
+targets:
+    - Models
+
+# Resources Pathes
+
+templetes_path: ./surfgen/SurfGenTemplates
+# black_list_path: .
+

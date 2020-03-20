@@ -20,7 +20,8 @@ let package = Package(
         .package(url: "https://github.com/stencilproject/Stencil", from: "0.13.1"),
         .package(url: "https://github.com/jakeheis/SwiftCLI", from: "5.3.3"),
         .package(url: "https://github.com/JohnReeze/XcodeProj", .upToNextMajor(from: "7.8.2")),
-        .package(url: "https://github.com/onevcat/Rainbow", from: "3.1.5")
+        .package(url: "https://github.com/onevcat/Rainbow", from: "3.1.5"),
+        .package(url: "https://github.com/jpsim/Yams", from: "1.0.0")
     ],
     targets: [
         .target(
@@ -30,7 +31,8 @@ let package = Package(
                 "SwiftCLI",
                 "YamlParser",
                 "XcodeProj",
-                "Rainbow"
+                "Rainbow",
+                "Yams"
             ]
         ),
         .target(

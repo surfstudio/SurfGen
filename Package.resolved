@@ -84,7 +84,7 @@
       },
       {
         "package": "Yams",
-        "repositoryURL": "https://github.com/jpsim/Yams.git",
+        "repositoryURL": "https://github.com/jpsim/Yams",
         "state": {
           "branch": null,
           "revision": "b08dba4bcea978bf1ad37703a384097d3efce5af",

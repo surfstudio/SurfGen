@@ -12,15 +12,9 @@ import PathKit
 import YamlParser
 import XcodeProj
 import Rainbow
+import Yams
 
 final class GenerateCommand: Command {
-
-    // MARK: - Nested types
-
-    private enum GeneratedModelType: String {
-        case nodeKitEntry
-        case nodeKitEntity
-    }
 
     let name = "generate"
     let shortDescription = "Generates models for provided spec"
@@ -29,29 +23,24 @@ final class GenerateCommand: Command {
 
     let spec = SwiftCLI.Parameter()
 
-    let modelName = Key<String>("--modelName", "-m", description: "Model name to be generated")
+    let modelNames = Key<String>("--modelNames", "-m", description: "Model names to be generated. Example: --modelNames Order,StatusType")
 
-    let destination = Key<String>("--destination", "-d", description: "The directory where the generated files will be created. Defaults to \"GeneratedFiles\"")
-
-    let type = Key<String>("--type", "-t", description: "Type of models supposed to be generated, current values: \"nodeKitEntry\" and \"nodeKitEntity\"")
-
-    let project = Key<String>("--project", "-p", description: "Path to .xcodeproj file where generated files are supposed to be added")
-
-    let target = VariadicKey<String>("--target", "-tgt", description: "Target in provided Project for generated files")
-
-    let mainGroupName = Key<String>("--mainGroup", "-mg", description: "Name of root main project directory. Used to detect correct subgroup in project tree")
-
-    let templatesPath = Key<String>("--templates", "-tmpls", description: "Path to template files. Default value: ./Templates")
-
-    let blackList = Key<String>("--black_list", "-bl", description: "Path to black list file. Model names in this list will be ignored during generation proccess")
+    let configPath = Key<String>("--config", "-m", description: "Path to config yaml-file")
 
     // MARK: - Command execution
 
     func execute() throws {
         // Initializing RootGenerator with templates
-        let params = (spec: getSpecURL(), name: getModelName(), type: getModelType())
-        let rootGenerator = RootGenerator(tempatesPath: Path(templatesPath.value ?? "./Templates"))
-        let blackList = getBlackList()
+
+        guard let configPath = configPath.value else {
+            exitWithError("No config path was specified")
+        }
+        let configManager = try ConfigManager(path: Path(configPath))
+
+        let params = (spec: getSpecURL(), names: getModelNames(), type: try configManager.getGenerationTypes())
+        let rootGenerator = RootGenerator(tempatesPath: configManager.tempatePath))
+
+        let blackList = try configManager.getBlackList()
         // Generation
         stdout <<< "Generation for \(params.name) with type \(params.type) started..."
 
@@ -61,8 +50,8 @@ final class GenerateCommand: Command {
         }
 
         let generatedCode = tryToGenerate(specURL: params.spec,
-                                          modelName: params.name,
-                                          type: params.type,
+                                          modelNames: params.names,
+                                          types: params.type,
                                           rootGenerator: rootGenerator,
                                           blackList: blackList)
 
@@ -71,19 +60,20 @@ final class GenerateCommand: Command {
         stdout <<< "Surfgen found next dependencies for provided model: ".green
         printAsList(files)
 
+        let destinations = configManager.generationPathes
+
         // Check for project parameter
-        guard let projectPath = project.value, let mainGroupName = mainGroupName.value else {
+        guard let projectPath = configManager.projectPath, let mainGroupName = configManager.mainGroup  else {
             stdout <<< "No project path or mainGroupName specified".yellow
             stdout <<< "Generated files pathes: "
             // Writing files to file system
-            let filePathes = write(files: generatedCode)
+            let filePathes = write(files: generatedCode, to: destinations[])
             filePathes.forEach { stdout <<< $0.components.joined(separator: "/").green }
             return
         }
 
-        let pathToProject = Path(projectPath)
-        stdout <<< "Adding generated files to Xcode project named: \(pathToProject.lastComponent)...\n".green
-        let manager = try XcodeProjManager(project: pathToProject, mainGroupName: mainGroupName)
+        stdout <<< "Adding generated files to Xcode project named: \(projectPath.lastComponent)...\n".green
+        let manager = try XcodeProjManager(project: projectPath, mainGroupName: mainGroupName)
         let existingFiles = manager.findExistingFiles(files)
 
         if !existingFiles.isEmpty {
@@ -102,7 +92,7 @@ final class GenerateCommand: Command {
         printAsList(newFiles)
 
         let filePathes = write(files: generatedCode.filter { newFiles.contains($0.0) })
-        tryToAddFiles(manager: manager, targets: target.value, filePathes: filePathes)
+        tryToAddFiles(manager: manager, targets: configManager.targets, filePathes: filePathes)
         stdout <<< "– – – Generation completed! – – –\n".green
     }
 
@@ -115,14 +105,16 @@ final class GenerateCommand: Command {
     }
 
     func tryToGenerate(specURL: URL,
-                       modelName: String,
-                       type: ModelType,
+                       modelNames: [String],
+                       types: [ModelType],
                        rootGenerator: RootGenerator,
                        blackList: [String]) -> [(String, String)] {
         do {
             let parser = try YamlToGASTParser(url: specURL)
-            let node = try parser.parseToGAST(for: modelName, blackList: blackList)
-            let genModel = try rootGenerator.generateCode(for: node, types: [type, .enum])
+            for modelName in modelNames {
+                let node = try parser.parseToGAST(for: modelName, blackList: blackList)
+                let genModel = try rootGenerator.generateCode(for: node, types: types)
+            }
             return genModel.map { $0.value }.flatMap { $0 }
         } catch {
             exitWithError(error.localizedDescription)
@@ -143,43 +135,17 @@ final class GenerateCommand: Command {
         return url
     }
 
-    func getModelName() -> String {
-        guard let modelName = modelName.value, !modelName.isEmpty else {
+    func getModelNames() -> [String] {
+        guard let modelNames = modelNames.value, !modelNames.isEmpty else {
             exitWithError("--modelName value must be provided")
         }
-        return modelName
+        return modelNames.split(separator: ",").map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
     }
 
-    func getModelType() -> ModelType {
-        guard let typeName = type.value else {
-            exitWithError("--type value must be provided [nodeKitEntry, nodeKitEntity] avaliable")
-        }
-        switch GeneratedModelType(rawValue: typeName) {
-        case .nodeKitEntry?:
-            return .entry
-        case .nodeKitEntity?:
-            return .entity
-        case .none:
-            exitWithError("--type value must be one of [nodeKitEntry, nodeKitEntity]")
-        }
-    }
-
-    func getBlackList() -> [String] {
-        guard let blackList = blackList.value else {
-            return []
-        }
-        do {
-            let blackListFile: String = try Path(blackList).read()
-            return blackListFile.split(separator: "\n").map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
-        } catch {
-            exitWithError(error.localizedDescription)
-        }
-    }
-
-    func write(files: [(fileName: String, fileContent: String)]) -> [Path] {
+    func write(files: [(fileName: String, fileContent: String)], to destination: String?) -> [Path] {
         var filePathes = [Path]()
         for file in files {
-            let outputPath: Path = Path("\(destination.value ?? "./GeneratedFiles")/\(file.fileName)")
+            let outputPath: Path = Path("\(destination ?? "./GeneratedFiles")/\(file.fileName)")
             do {
                 try outputPath.parent().mkpath()
                 try outputPath.write(file.fileContent)
