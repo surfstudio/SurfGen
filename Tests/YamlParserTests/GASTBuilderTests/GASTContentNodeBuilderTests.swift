@@ -17,7 +17,7 @@ class GASTContentNodeBuilderTests: XCTestCase {
     // MARK: - Constants
 
     private enum Constants {
-        static let plainObjects = ["Order": 10, "OrderBoughtProduct": 2, "OrderPriceInfo": 3]
+        static let plainObjects = ["Order": 11, "OrderBoughtProduct": 2, "OrderPriceInfo": 3]
     }
 
     override func setUp() {
