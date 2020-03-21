@@ -10,11 +10,9 @@ import Stencil
 import PathKit
 import Foundation
 
+public typealias GenerationModel = [ModelType: [(fileName: String, code: String)]]
+
 public final class RootGenerator {
-
-    // MARK: - Typealiases
-
-    public typealias GenerationModel = [ModelType: [(fileName: String, code: String)]]
 
     // MARK: - Private Properties
 

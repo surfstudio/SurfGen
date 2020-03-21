@@ -38,24 +38,24 @@ final class GenerateCommand: Command {
         let configManager = try ConfigManager(path: Path(configPath))
 
         let params = (spec: getSpecURL(), names: getModelNames(), type: try configManager.getGenerationTypes())
-        let rootGenerator = RootGenerator(tempatesPath: configManager.tempatePath))
+        let rootGenerator = RootGenerator(tempatesPath: configManager.tempatePath)
 
         let blackList = try configManager.getBlackList()
         // Generation
-        stdout <<< "Generation for \(params.name) with type \(params.type) started..."
+        stdout <<< "Generation for \(params.names) with type \(params.type) started..."
 
         if !blackList.isEmpty {
             stdout <<< "Black list contains next models:".yellow
             printAsList(blackList)
         }
 
-        let generatedCode = tryToGenerate(specURL: params.spec,
-                                          modelNames: params.names,
-                                          types: params.type,
-                                          rootGenerator: rootGenerator,
-                                          blackList: blackList)
+        var generatedModel = tryToGenerate(specURL: params.spec,
+                                           modelNames: params.names,
+                                           types: params.type,
+                                           rootGenerator: rootGenerator,
+                                           blackList: blackList)
 
-        let files = generatedCode.map { $0.0 }
+        let files = generatedModel.map { $0.value.map { $0.fileName } }.flatMap { $0 }
         // Handling generation results
         stdout <<< "Surfgen found next dependencies for provided model: ".green
         printAsList(files)
@@ -67,8 +67,7 @@ final class GenerateCommand: Command {
             stdout <<< "No project path or mainGroupName specified".yellow
             stdout <<< "Generated files pathes: "
             // Writing files to file system
-            let filePathes = write(files: generatedCode, to: destinations[])
-            filePathes.forEach { stdout <<< $0.components.joined(separator: "/").green }
+            write(generationModel: generatedModel, to: destinations)
             return
         }
 
@@ -91,7 +90,8 @@ final class GenerateCommand: Command {
         stdout <<< "Next models will be generated:".green
         printAsList(newFiles)
 
-        let filePathes = write(files: generatedCode.filter { newFiles.contains($0.0) })
+        generatedModel.forEach { $0.value.filter { newFiles. } }
+        let filePathes = write(files: generatedCode.filter { newFiles.contains($0.0) }, to: )
         tryToAddFiles(manager: manager, targets: configManager.targets, filePathes: filePathes)
         stdout <<< "– – – Generation completed! – – –\n".green
     }
@@ -108,14 +108,16 @@ final class GenerateCommand: Command {
                        modelNames: [String],
                        types: [ModelType],
                        rootGenerator: RootGenerator,
-                       blackList: [String]) -> [(String, String)] {
+                       blackList: [String]) -> GenerationModel {
         do {
             let parser = try YamlToGASTParser(url: specURL)
+            var generatedModels: GenerationModel = [:]
             for modelName in modelNames {
-                let node = try parser.parseToGAST(for: modelName, blackList: blackList)
-                let genModel = try rootGenerator.generateCode(for: node, types: types)
+                let root = try parser.parseToGAST(for: modelName, blackList: blackList)
+                let genModel = try rootGenerator.generateCode(for: root, types: types)
+                genModel.forEach { generatedModels[$0.key] = $0.value + (generatedModels[$0.key] ?? []) }
             }
-            return genModel.map { $0.value }.flatMap { $0 }
+            return generatedModels
         } catch {
             exitWithError(error.localizedDescription)
         }
@@ -142,18 +144,22 @@ final class GenerateCommand: Command {
         return modelNames.split(separator: ",").map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
     }
 
-    func write(files: [(fileName: String, fileContent: String)], to destination: String?) -> [Path] {
+    func write(generationModel: GenerationModel, to destinations: [ModelType: String]) -> [Path] {
         var filePathes = [Path]()
-        for file in files {
-            let outputPath: Path = Path("\(destination ?? "./GeneratedFiles")/\(file.fileName)")
-            do {
-                try outputPath.parent().mkpath()
-                try outputPath.write(file.fileContent)
-                filePathes.append(outputPath)
-            } catch {
-                exitWithError(error.localizedDescription)
+        for (model, files) in generationModel {
+            let destination = destinations[model]
+            for file in files {
+                let outputPath: Path = Path("\(destination ?? "./GeneratedFiles")/\(file.fileName)")
+                do {
+                    try outputPath.parent().mkpath()
+                    try outputPath.write(file.code)
+                    filePathes.append(outputPath)
+                } catch {
+                    exitWithError(error.localizedDescription)
+                }
             }
         }
+
         return filePathes
     }
 
