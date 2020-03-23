@@ -10,8 +10,6 @@ import Stencil
 import PathKit
 import Foundation
 
-public typealias GenerationModel = [ModelType: [(fileName: String, code: String)]]
-
 public final class RootGenerator {
 
     // MARK: - Private Properties
@@ -45,30 +43,6 @@ public final class RootGenerator {
     private func generate(for type: ModelType, to model: inout GenerationModel, from nodes: [ASTNode]) throws {
         let generator = type.gererator
         model[type] = try nodes.map { try generator.generateCode(declNode: $0, environment: environment) }
-    }
-
-}
-
-final class DeclNodeSplitter {
-
-    func split(nodes: [ASTNode]) -> (objectDecls: [ASTNode], enumDecls: [ASTNode]) {
-        var objectDecls: [ASTNode] = []
-        var enumDecls: [ASTNode] = []
-
-        for node in nodes {
-            guard node.subNodes.contains(where: {
-                guard case let .type(name) = $0.token else {
-                    return false
-                }
-                return name == "enum"
-            }) else {
-                objectDecls.append(node)
-                continue
-            }
-            enumDecls.append(node)
-        }
-
-        return (objectDecls, enumDecls)
     }
 
 }

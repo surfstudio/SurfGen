@@ -8,5 +8,5 @@
 import Stencil
 
 public protocol ModelGeneratable {
-    func generateCode(declNode: ASTNode, environment: Environment) throws -> (String, String)
+    func generateCode(declNode: ASTNode, environment: Environment) throws -> FileModel
 }

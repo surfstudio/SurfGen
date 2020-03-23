@@ -25,40 +25,34 @@ final class GenerateCommand: Command {
 
     let modelNames = Key<String>("--modelNames", "-m", description: "Model names to be generated. Example: --modelNames Order,StatusType")
 
-    let configPath = Key<String>("--config", "-m", description: "Path to config yaml-file")
+    let configPath = Key<String>("--config", "-c", description: "Path to config yaml-file")
 
     // MARK: - Command execution
 
     func execute() throws {
-        // Initializing RootGenerator with templates
-
         guard let configPath = configPath.value else {
             exitWithError("No config path was specified")
         }
         let configManager = try ConfigManager(path: Path(configPath))
 
-        let params = (spec: getSpecURL(), names: getModelNames(), type: try configManager.getGenerationTypes())
+        let params = (spec: getSpecURL(), names: getModelNames(), types: try configManager.getGenerationTypes())
         let rootGenerator = RootGenerator(tempatesPath: configManager.tempatePath)
 
         let blackList = try configManager.getBlackList()
         // Generation
-        stdout <<< "Generation for \(params.names) with type \(params.type) started..."
+        stdout <<< "Generation for \(params.names) started..."
+        printListWithHeader("Black list contains next models:".yellow, list: blackList)
 
-        if !blackList.isEmpty {
-            stdout <<< "Black list contains next models:".yellow
-            printAsList(blackList)
-        }
-
-        var generatedModel = tryToGenerate(specURL: params.spec,
+        let generatedModel = tryToGenerate(specURL: params.spec,
                                            modelNames: params.names,
-                                           types: params.type,
+                                           types: params.types,
                                            rootGenerator: rootGenerator,
                                            blackList: blackList)
 
-        let files = generatedModel.map { $0.value.map { $0.fileName } }.flatMap { $0 }
         // Handling generation results
-        stdout <<< "Surfgen found next dependencies for provided model: ".green
-        printAsList(files)
+
+        let files = generatedModel.map { $0.value.map { $0.fileName } }.flatMap { $0 }
+        printListWithHeader("Surfgen found next dependencies for provided model: ".green, list: files)
 
         let destinations = configManager.generationPathes
 
@@ -67,18 +61,30 @@ final class GenerateCommand: Command {
             stdout <<< "No project path or mainGroupName specified".yellow
             stdout <<< "Generated files pathes: "
             // Writing files to file system
-            write(generationModel: generatedModel, to: destinations)
+            let filePathesModel = write(generationModel: generatedModel, to: destinations)
+            printGenerationResult(filePathesModel)
             return
         }
 
+        try addFiles(files: files,
+                     genModel: generatedModel,
+                     projectPath: projectPath,
+                     mainGroup: mainGroupName,
+                     targets: configManager.targets,
+                     destinations: destinations)
+    }
+
+    func addFiles(files: [String],
+                  genModel: GenerationModel,
+                  projectPath: Path,
+                  mainGroup: String,
+                  targets: [String],
+                  destinations: [ModelType: String]) throws {
         stdout <<< "Adding generated files to Xcode project named: \(projectPath.lastComponent)...\n".green
-        let manager = try XcodeProjManager(project: projectPath, mainGroupName: mainGroupName)
+        let manager = try XcodeProjManager(project: projectPath, mainGroupName: mainGroup)
         let existingFiles = manager.findExistingFiles(files)
 
-        if !existingFiles.isEmpty {
-            stdout <<< "Next files already exist in project".yellow
-            printAsList(existingFiles)
-        }
+        printListWithHeader("Next files already exist in project".yellow, list: existingFiles)
 
         let newFiles = files.filter { !existingFiles.contains($0) }
 
@@ -87,12 +93,12 @@ final class GenerateCommand: Command {
             return
         }
 
-        stdout <<< "Next models will be generated:".green
-        printAsList(newFiles)
+        let filteredGenModel: GenerationModel = genModel.mapValues { $0.filter { newFiles.contains($0.fileName) } }
+        let filePathesModel = write(generationModel: filteredGenModel, to: destinations)
+        printGenerationResult(filePathesModel)
 
-        generatedModel.forEach { $0.value.filter { newFiles. } }
-        let filePathes = write(files: generatedCode.filter { newFiles.contains($0.0) }, to: )
-        tryToAddFiles(manager: manager, targets: configManager.targets, filePathes: filePathes)
+        filePathesModel.forEach { tryToAddFiles(manager: manager, targets: targets, filePathes: $0.value) }
+
         stdout <<< "– – – Generation completed! – – –\n".green
     }
 
@@ -117,7 +123,7 @@ final class GenerateCommand: Command {
                 let genModel = try rootGenerator.generateCode(for: root, types: types)
                 genModel.forEach { generatedModels[$0.key] = $0.value + (generatedModels[$0.key] ?? []) }
             }
-            return generatedModels
+            return generatedModels.mapValues { Array(Set($0)) }
         } catch {
             exitWithError(error.localizedDescription)
         }
@@ -144,16 +150,17 @@ final class GenerateCommand: Command {
         return modelNames.split(separator: ",").map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
     }
 
-    func write(generationModel: GenerationModel, to destinations: [ModelType: String]) -> [Path] {
-        var filePathes = [Path]()
+    func write(generationModel: GenerationModel, to destinations: [ModelType: String]) -> [ModelType: [Path]] {
+        var filePathes = [ModelType: [Path]]()
         for (model, files) in generationModel {
             let destination = destinations[model]
+            filePathes[model] = []
             for file in files {
                 let outputPath: Path = Path("\(destination ?? "./GeneratedFiles")/\(file.fileName)")
                 do {
                     try outputPath.parent().mkpath()
                     try outputPath.write(file.code)
-                    filePathes.append(outputPath)
+                    filePathes[model]?.append(outputPath)
                 } catch {
                     exitWithError(error.localizedDescription)
                 }
@@ -163,10 +170,36 @@ final class GenerateCommand: Command {
         return filePathes
     }
 
+
+}
+
+// MARK: - Console Info Output method
+
+private extension GenerateCommand {
+
     func printAsList(_ list: [String]) {
         stdout <<< "---------------------------------------".bold
         list.forEach { stdout <<< "• " + $0 }
         stdout <<< "---------------------------------------\n".bold
+    }
+
+    func printGenerationResult(_ result: [ModelType: [Path]]) {
+        result.forEach {
+            switch $0.key {
+            case .entity:
+                printListWithHeader("Next Enities were generated:".green, list: $0.value.map { $0.lastComponent })
+            case .entry:
+                printListWithHeader("Next Entries were generated".green, list: $0.value.map { $0.lastComponent })
+            case .enum:
+                printListWithHeader("Next Enums were generated".green, list: $0.value.map { $0.lastComponent })
+            }
+        }
+    }
+
+    func printListWithHeader(_ header: String, list: [String]) {
+        guard !list.isEmpty else { return }
+        stdout <<< header
+        printAsList(list)
     }
 
     func exitWithError(_ string: String) -> Never {

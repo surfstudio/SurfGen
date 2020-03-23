@@ -9,7 +9,7 @@ import Stencil
 
 final class EnumGenerator: ModelGeneratable {
 
-    func generateCode(declNode: ASTNode, environment: Environment) throws -> (String, String) {
+    func generateCode(declNode: ASTNode, environment: Environment) throws -> FileModel {
         let declModel = try DeclNodeParser().getInfo(from: declNode)
 
         guard let typeNode = declNode.subNodes.typeNode else {
@@ -29,7 +29,7 @@ final class EnumGenerator: ModelGeneratable {
                                             description: declModel.description)
         let code = try environment.renderTemplate(.enum(enumModel))
 
-        return (declModel.name.withSwiftExt, code.trimmingCharacters(in: .whitespacesAndNewlines))
+        return .init(fileName: declModel.name.withSwiftExt, code: code.trimmingCharacters(in: .whitespacesAndNewlines))
     }
 
 }

@@ -10,7 +10,7 @@ import Stencil
 
 final class EntityGenerator: ModelGeneratable {
 
-    func generateCode(declNode: ASTNode, environment: Environment) throws -> (String, String) {
+    func generateCode(declNode: ASTNode, environment: Environment) throws -> FileModel {
 
         let propertyGenerator = PropertyGenerator()
         let declModel = try DeclNodeParser().getInfo(from: declNode)
@@ -22,7 +22,7 @@ final class EntityGenerator: ModelGeneratable {
                                                                  entryName: ModelType.entry.form(name: declModel.name),
                                                                  properties: properties))
 
-        return (className.capitalizingFirstLetter().withSwiftExt, code)
+        return .init(fileName: className.capitalizingFirstLetter().withSwiftExt, code: code)
     }
 
 }

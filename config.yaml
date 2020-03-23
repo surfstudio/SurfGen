@@ -6,13 +6,27 @@ enums_path: ./Common/Models/Models/Shared
 
 # Project Info
 
+# Path to .xcodeproj file where generated files are supposed to be added
 project_path: ./Common/Models/Models.xcodeproj
+
+# Name of root main project directory. Used to detect correct subgroup in project tree
 project_main_group: Models
+
+# Targets in provided Project for generated files
 targets:
     - Models
 
+# Types of models supposed to be generated, current values: \"nodeKitEntry\" and \"nodeKitEntity\"
+generation_types:
+  - nodeKitEntity
+  - nodeKitEntry
+  - enum
+
 # Resources Pathes
 
-templetes_path: ./surfgen/SurfGenTemplates
+# Path to template files. Default value: ./Templates
+templates_path: ./surfgen/SurfGenTemplates
+
+# Path to black list file. Model names in this list will be ignored during generation proccess
 # black_list_path: .
 
