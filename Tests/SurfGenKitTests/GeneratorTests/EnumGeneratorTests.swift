@@ -30,10 +30,10 @@ class EnumGeneratorTests: XCTestCase {
             let loader = FileSystemLoader(paths: [path])
             let environment = Environment(loader: loader)
 
-            let (fileName, code) = try EnumGenerator().generateCode(declNode: type.typeDeclNode, environment: environment)
+            let model = try EnumGenerator().generateCode(declNode: type.typeDeclNode, environment: environment)
 
-            XCTAssert(fileName == exptecedFileName, "File name is not equal to expected one (resulted value is \(fileName)")
-            XCTAssert(code == expectedCode, "Code is not equal to expected one (resulted value is \(code)")
+            XCTAssert(model.fileName == exptecedFileName, "File name is not equal to expected one (resulted value is \(model.fileName)")
+            XCTAssert(model.code == expectedCode, "Code is not equal to expected one (resulted value is \(model.code)")
         } catch {
             dump(error)
             assertionFailure("Code generation thrown an exception")
