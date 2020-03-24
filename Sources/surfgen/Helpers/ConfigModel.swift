@@ -20,6 +20,8 @@ struct ConfigModel: Decodable {
     let mainGroup: String?
     let targets: [String]?
 
+    let gitlabToken: String?
+
     enum CodingKeys: String, CodingKey {
         case entitiesPath = "entities_path"
         case entriesPath = "entries_path"
@@ -32,6 +34,8 @@ struct ConfigModel: Decodable {
         case generationTypes = "generation_types"
         case tempatesPath = "templates_path"
         case blackList = "black_list_path"
+
+        case gitlabToken = "gitlab_token"
     }
 
 }
