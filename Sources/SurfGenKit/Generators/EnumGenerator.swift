@@ -26,7 +26,7 @@ final class EnumGenerator: ModelGeneratable {
         let enumModel = EnumGenerationModel(enumName: declModel.name,
                                             enumType: type.enumType ?? "",
                                             cases: cases,
-                                            description: declModel.description)
+                                            description: declModel.description ?? "")
         let code = try environment.renderTemplate(.enum(enumModel))
 
         return .init(fileName: declModel.name.withSwiftExt, code: code.trimmingCharacters(in: .whitespacesAndNewlines))

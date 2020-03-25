@@ -1,14 +1,19 @@
 
 import NodeKit
 
+/**
+ Главная модель магазина
+*/
 public struct ShopEntity {
 
     // MARK: - Public Properties
 
     public let id: String
+    // Название магазина
     public let name: String
     public let phone: String
     public let location: ShopLocationEntity
+    // Время работы магазина. Может содержать строку в формате "10.00-22.00", если время работы магазина не зависит от дня недели. Либо строку формата "пт-сб 10.00-23.00" в противном случае.
     public let workingHours: String?
 
     // MARK: - Initialization

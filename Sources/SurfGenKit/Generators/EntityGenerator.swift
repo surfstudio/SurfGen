@@ -15,12 +15,15 @@ final class EntityGenerator: ModelGeneratable {
         let propertyGenerator = PropertyGenerator()
         let declModel = try DeclNodeParser().getInfo(from: declNode)
 
-        let properties = try declModel.fields.map { try propertyGenerator.generateCode(for: $0, type: .entity) }
+        let properties = try declModel.fields
+            .map { try propertyGenerator.generateCode(for: $0, type: .entity) }
+            .sorted { $0.entityName.propertyPriorityIndex > $1.entityName.propertyPriorityIndex }
         let className = ModelType.entity.form(name: declModel.name)
 
         let code = try environment.renderTemplate(.nodeKitEntity(entityName: className,
                                                                  entryName: ModelType.entry.form(name: declModel.name),
-                                                                 properties: properties))
+                                                                 properties: properties,
+                                                                 description: declNode.description ?? ""))
 
         return .init(fileName: className.capitalizingFirstLetter().withSwiftExt, code: code)
     }

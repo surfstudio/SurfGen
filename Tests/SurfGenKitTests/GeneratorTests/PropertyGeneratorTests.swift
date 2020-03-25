@@ -18,7 +18,8 @@ class PropertyGeneratorTests: XCTestCase {
                                                     typeName: "String?",
                                                     fromInit: "model.login",
                                                     toDTOInit: "login",
-                                                    isPlain: true)
+                                                    isPlain: true,
+                                                    description: nil)
         do {
             let generatedModel = try PropertyGenerator().generateCode(for: fieldNode, type: .entity)
             XCTAssert(expectedModel == generatedModel)
@@ -38,7 +39,8 @@ class PropertyGeneratorTests: XCTestCase {
                                                     typeName: "MetaInfoEntity?",
                                                     fromInit: ".from(dto: model.info)",
                                                     toDTOInit: "info?.toDTO()",
-                                                    isPlain: false)
+                                                    isPlain: false,
+                                                    description: nil)
 
         do {
             let generatedModel = try PropertyGenerator().generateCode(for: fieldNode, type: .entity)
@@ -60,7 +62,8 @@ class PropertyGeneratorTests: XCTestCase {
                                                     typeName: "[String]",
                                                     fromInit: "model.working_hours",
                                                     toDTOInit: "workingHours",
-                                                    isPlain: true)
+                                                    isPlain: true,
+                                                    description: nil)
 
         do {
             let generatedModel = try PropertyGenerator().generateCode(for: fieldNode, type: .entry)
@@ -82,7 +85,8 @@ class PropertyGeneratorTests: XCTestCase {
                                                     typeName: "[ChildEntity]?",
                                                     fromInit: ".from(dto: model.children)",
                                                     toDTOInit: "children?.toDTO()",
-                                                    isPlain: false)
+                                                    isPlain: false,
+                                                    description: nil)
 
         do {
             let generatedModel = try PropertyGenerator().generateCode(for: fieldNode, type: .entity)

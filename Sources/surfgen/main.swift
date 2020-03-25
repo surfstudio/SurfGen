@@ -16,7 +16,3 @@ let cli = CLI(name: "surfgen",
               commands: [GenerateCommand()])
 
 cli.goAndExit()
-
-
-
-

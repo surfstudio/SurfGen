@@ -35,5 +35,18 @@ extension String {
             .lowercaseFirstLetter()
     }
 
-}
+    /// index for default model properties order
+    var propertyPriorityIndex: Int {
+        switch self {
+        case "id":
+            return 10
+        case "name":
+            return 9
+        case "type":
+            return 8
+        default:
+            return 0
+        }
+    }
 
+}

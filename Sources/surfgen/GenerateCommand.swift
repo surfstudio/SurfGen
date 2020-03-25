@@ -50,7 +50,8 @@ final class GenerateCommand: Command {
                                            modelNames: params.names,
                                            types: params.types,
                                            rootGenerator: rootGenerator,
-                                           blackList: blackList)
+                                           blackList: blackList,
+                                           isDescriptionsEnabled: configManager.isDescriptionsEnabled)
 
         // Handling generation results
 
@@ -117,13 +118,16 @@ final class GenerateCommand: Command {
                        modelNames: [String],
                        types: [ModelType],
                        rootGenerator: RootGenerator,
-                       blackList: [String]) -> GenerationModel {
+                       blackList: [String],
+                       isDescriptionsEnabled: Bool) -> GenerationModel {
         do {
             let parser = try YamlToGASTParser(string: spec)
             var generatedModels: GenerationModel = [:]
             for modelName in modelNames {
                 let root = try parser.parseToGAST(for: modelName, blackList: blackList)
-                let genModel = try rootGenerator.generateCode(for: root, types: types)
+                let genModel = try rootGenerator.generateCode(for: root,
+                                                              types: types,
+                                                              generateDescriptions: isDescriptionsEnabled)
                 genModel.forEach { generatedModels[$0.key] = $0.value + (generatedModels[$0.key] ?? []) }
             }
             return generatedModels.mapValues { Array(Set($0)) }

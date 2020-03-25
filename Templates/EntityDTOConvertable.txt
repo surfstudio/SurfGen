@@ -1,11 +1,15 @@
 
 import NodeKit
-
+{% if description %}
+/**
+ {{ description }}
+*/{% endif %}
 public struct {{ entityName }} {
 
     // MARK: - Public Properties
 
-{% for property in properties %}    public let {{ property.entityName }}: {{ property.type }}
+{% for property in properties %}    {% if property.description %}/// {{ property.description }}
+    {% endif %}public let {{ property.entityName }}: {{ property.type }}
 {% endfor %}
     // MARK: - Initialization
 

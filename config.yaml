@@ -1,13 +1,13 @@
 # Generation Pathes
 
-entities_path: ./Common/Models/Models/Entity
-entries_path: .Common/Models/Models/Entry
-enums_path: ./Common/Models/Models/Shared
+entities_path: /Users/monakov/Development/rendez-vous-ios/Common/Models/Models/Entity
+entries_path: /Users/monakov/Development/rendez-vous-ios/Common/Models/Models/Entry
+enums_path: /Users/monakov/Development/rendez-vous-ios/Common/Models/Models/Shared
 
 # Project Info
 
 # Path to .xcodeproj file where generated files are supposed to be added
-project_path: .Common/Models/Models.xcodeproj
+project_path: /Users/monakov/Development/rendez-vous-ios/Common/Models/Models.xcodeproj
 
 # Name of root main project directory. Used to detect correct subgroup in project tree
 project_main_group: Models
@@ -22,10 +22,13 @@ generation_types:
   - nodeKitEntry
   - enum
 
+# Flag responsible for properties and models comments
+generate_descriptions: true
+
 # Resources Pathes
 
 # Path to template files. Default value: ./Templates
-templates_path: ./surfgen/SurfGenTemplates
+templates_path: /Users/monakov/Development/SurfGen/Templates
 
 # Path to black list file. Model names in this list will be ignored during generation proccess
 # black_list_path: .

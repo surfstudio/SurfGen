@@ -28,12 +28,13 @@ public final class RootGenerator {
         environment = Environment(loader: loader)
     }
 
-    public func generateCode(for node: ASTNode, types: [ModelType]) throws -> GenerationModel {
+    public func generateCode(for node: ASTNode, types: [ModelType], generateDescriptions: Bool) throws -> GenerationModel {
         guard case .root = node.token else {
             throw GeneratorError.incorrectNodeToken("Root generator coundn't parse input node as node with root token")
         }
 
-        let (objectDecls, enumDecls) = DeclNodeSplitter().split(nodes: node.subNodes)
+        let root = generateDescriptions ? node : node.filterAllDescriptions()
+        let (objectDecls, enumDecls) = DeclNodeSplitter().split(nodes: root.subNodes)
 
         var model: GenerationModel = [:]
         try types.forEach { try generate(for: $0, to: &model, from: $0 == .enum ? enumDecls : objectDecls) }

@@ -56,9 +56,6 @@ class PropertiesFinderTests: XCTestCase {
         let result = PropertiesFinder().findProperties(for: schema.value)
         let resultedProperties = Set((result.0 + result.1).map { $0.name })
         XCTAssertEqual(model.allProperties, resultedProperties)
-
-//        let newComponent = GroupResolver().resolve(for: [schema])
-//        print(newComponent)
     }
 
 }

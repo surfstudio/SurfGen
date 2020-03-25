@@ -32,13 +32,8 @@ final class DeclNodeParser {
             throw GeneratorError.nodeConfiguration("type node couldn't be resolved for decl node")
         }
 
-        var description: String?
-        if let descNode = declNode.subNodes.descriptionNode, case let .description(desc) = descNode.token {
-            description = desc
-        }
-
         return .init(name: name,
-                     description: description,
+                     description: declNode.description,
                      type: typeName,
                      fields: declNode.subNodes[contentIndex].subNodes)
     }

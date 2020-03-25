@@ -60,6 +60,10 @@ final class ConfigManager {
         return model.gitlabToken
     }
 
+    var isDescriptionsEnabled: Bool {
+        return model.generateDescriptions ?? false
+    }
+
     // MARK: - Private Properties
 
     private let model: ConfigModel
