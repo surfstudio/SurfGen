@@ -99,7 +99,7 @@ final class NodesBuilder {
         return Node(token: .decl,
                     [
                         Node(token: .name(value: "DeliveryType"), []),
-                        Node(token: .type(name: "enum"), [Node(token: .type(name: "String"), [])]),
+                        Node(token: .type(name: ASTConstants.enum), [Node(token: .type(name: "String"), [])]),
                         Node(token: .description("Тип оплаты\n* 0 - Оплата при получении\n* 1 - Оплата картой онлайн\n* 2 - Оплата Google Pay / Apple Pay"), []),
                         Node(token: .content,
                              [
@@ -116,7 +116,7 @@ final class NodesBuilder {
         return Node(token: .decl,
                     [
                         Node(token: .name(value: "OrderCancelReason"), []),
-                        Node(token: .type(name: "enum"), [Node(token: .type(name: "Int"), [])]),
+                        Node(token: .type(name: ASTConstants.enum), [Node(token: .type(name: "Int"), [])]),
                         Node(token: .content,
                              [
                                 Node(token: .value("0"), []),

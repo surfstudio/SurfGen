@@ -31,7 +31,7 @@ class PropertyGeneratorTests: XCTestCase {
     func testObjectOptionalFieldCodeGeneration() {
         let fieldNode = formFieldNode(isOptional: true,
                                       name: "info",
-                                      typeName: "object",
+                                      typeName: ASTConstants.object,
                                       typeSubNodes: [Node(token: .type(name: "MetaInfo"), [])])
         let expectedModel = PropertyGenerationModel(entryName: "info",
                                                     entityName: "info",
@@ -75,7 +75,7 @@ class PropertyGeneratorTests: XCTestCase {
         let fieldNode = formFieldNode(isOptional: true,
                                       name: "children",
                                       typeName: "array",
-                                      typeSubNodes: [Node(token: .type(name: "object"),
+                                      typeSubNodes: [Node(token: .type(name: ASTConstants.object),
                                                           [Node(token: .type(name: "Child"), [])])])
         let expectedModel = PropertyGenerationModel(entryName: "children",
                                                     entityName: "children",

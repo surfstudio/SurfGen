@@ -38,7 +38,7 @@ class TypeNodeParserTests: XCTestCase {
 
     func testCorrectParsingForObjectType() {
 
-        let type = formParserAndGetType(for: Node(token: .type(name: "object"), [Node(token: .type(name: "Child"), [])]))
+        let type = formParserAndGetType(for: Node(token: .type(name: ASTConstants.object), [Node(token: .type(name: "Child"), [])]))
 
         guard case let .object(value) = type else {
             XCTFail("Detected type is not expected one")

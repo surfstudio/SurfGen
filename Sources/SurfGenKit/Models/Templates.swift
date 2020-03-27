@@ -40,7 +40,7 @@ enum Template {
             return [
                 "entityName": entityName,
                 "entryName": entryName,
-                "codeOpenBracket": KeyWords.codeStartBracket,
+                "codeOpenBracket": "{",
                 "properties": properties,
                 "isPlain": properties.first { !$0.isPlain } == nil
             ]

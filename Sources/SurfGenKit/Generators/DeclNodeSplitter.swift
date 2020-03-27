@@ -16,7 +16,7 @@ final class DeclNodeSplitter {
                 guard case let .type(name) = $0.token else {
                     return false
                 }
-                return name == "enum"
+                return name == ASTConstants.enum
             }) else {
                 objectDecls.append(node)
                 continue
