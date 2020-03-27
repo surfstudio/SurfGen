@@ -46,11 +46,12 @@ final class FileLoader {
             request.addValue(token, forHTTPHeaderField: Constants.gitlabTokenHeader)
         }
 
-        let sm = DispatchSemaphore(value: 0)
+        let dispatchGroup = DispatchGroup()
         let session = URLSession(configuration: URLSessionConfiguration.default)
 
         var resultFile: String?
         var resultError: Error?
+        dispatchGroup.enter()
         let task: URLSessionDataTask = session.dataTask(with: request) { (data, response, error) -> Void in
             resultError = error
             let status = (response as? HTTPURLResponse)?.statusCode
@@ -58,14 +59,15 @@ final class FileLoader {
             case Constants.successCode?:
                 if let data = data {
                     resultFile = String(decoding: data, as: UTF8.self)
-                }
+                }	
             default:
                 resultError = error ?? FileLoaderError.cantLoadFile("Response returned code: \(String(describing: status))")
             }
-            sm.signal()
+            dispatchGroup.leave()
         }
         task.resume()
-        _ = sm.wait(timeout: .distantFuture)
+
+        _ = dispatchGroup.wait(wallTimeout: .distantFuture)
 
         if let error = resultError {
             throw error
