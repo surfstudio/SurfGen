@@ -1,0 +1,5 @@
+public enum OrderCancelReason: Int, Codable {
+    case <#caseValue#> = 0
+    case <#caseValue#> = 1
+    case <#caseValue#> = 2
+}
