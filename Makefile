@@ -8,4 +8,4 @@ release_build:
 	swift build --configuration release
 
 executable: release_build
-	cp $(BUILD_PATH) .
+	cp $(BUILD_PATH) ./Binary
