@@ -48,12 +48,12 @@ final class GASTFieldNodeBuilder {
 
         // case schema type is a reference to object/enum
         if let ref = schema.type.reference {
-            return Node(token: .type(name: ref.component.isEnum ? "enum" : "object"), [Node(token: .type(name: ref.name), [])])
+            return Node(token: .type(name: ref.component.isEnum ? ASTConstants.enum : "object"), [Node(token: .type(name: ref.name), [])])
         }
 
         // case schema type is an array of any type
         if case let .array(arrayObject) = schema.type, case let .single(subSchema) = arrayObject.items {
-            return Node(token: .type(name: "array"), [try buildFieldType(for: subSchema)])
+            return Node(token: .type(name: ASTConstants.array), [try buildFieldType(for: subSchema)])
         }
 
         throw GASTBuilderError.undefinedTypeForField(schema.type.description)

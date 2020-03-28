@@ -25,7 +25,7 @@ final class GASTDeclNodeBuilder {
         var subNodes: [ASTNode] = [
             nameNode,
             contentNode,
-            Node(token: .type(name: "object"), [])
+            Node(token: .type(name: ASTConstants.object), [])
         ]
         if let decription = model.value.metadata.description {
             subNodes.append(Node(token: .description(decription), []))
@@ -40,7 +40,7 @@ final class GASTDeclNodeBuilder {
         var subNodes: [ASTNode] = [
             nameNode,
             contentNode,
-            Node(token: .type(name: "enum"), [Node(token: .type(name: model.value.type.typeName ?? ""), [])])
+            Node(token: .type(name: ASTConstants.enum), [Node(token: .type(name: model.value.type.typeName ?? ""), [])])
         ]
         if let decription = model.value.metadata.description {
             subNodes.append(Node(token: .description(decription), []))

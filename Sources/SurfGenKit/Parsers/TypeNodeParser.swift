@@ -29,12 +29,6 @@ indirect enum Type {
 
 final class TypeNodeParser {
 
-    private enum Constants {
-        static let array = "array"
-        static let object = "object"
-        static let `enum` = "enum"
-    }
-
     /**
      Method for detection of concreate type for ASTNode with Type token
      */
@@ -52,11 +46,11 @@ final class TypeNodeParser {
             }
 
             switch name {
-            case Constants.array:
+            case ASTConstants.array:
                 return .array(try detectType(for: subNode))
-            case Constants.object:
+            case ASTConstants.object:
                 return .object(subName)
-            case Constants.enum:
+            case ASTConstants.enum:
                 return .enum(subName)
             default:
                 throw GeneratorError.nodeConfiguration("provided node with name \(name) can not be resolved")

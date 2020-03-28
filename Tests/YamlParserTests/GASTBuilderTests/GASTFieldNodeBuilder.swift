@@ -63,7 +63,7 @@ class GASTFieldNodeBuilderTests: XCTestCase {
     }
 
     func testEnumType() {
-        complexNodeTest(propertyName: "state", expectedNodeType: "enum", expectedSubNodeType: "OrderState")
+        complexNodeTest(propertyName: "state", expectedNodeType: ASTConstants.enum, expectedSubNodeType: "OrderState")
     }
 
     func complexNodeTest(propertyName: String, expectedNodeType: String, expectedSubNodeType: String, expectedSubSubNodeType: String? = nil) {
