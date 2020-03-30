@@ -8,11 +8,13 @@
 
 @testable import SurfGenKit
 
-func formFieldNode(isOptional: Bool, name: String, typeName: String, typeSubNodes: [Node] = []) -> Node {
-    return Node(token: .field(isOptional: isOptional),
-                [
-                    Node(token: .name(value: name), []),
-                    Node(token: .type(name: typeName), typeSubNodes)
-                ]
-    )
+func formFieldNode(isOptional: Bool, name: String, typeName: String, typeSubNodes: [Node] = [], description: String? = nil) -> Node {
+    var filedSubnodes: [Node] =  [
+        Node(token: .name(value: name), []),
+        Node(token: .type(name: typeName), typeSubNodes)
+    ]
+    if let description = description {
+        filedSubnodes.append(Node(token: .description(description), []))
+    }
+    return Node(token: .field(isOptional: isOptional), filedSubnodes)
 }

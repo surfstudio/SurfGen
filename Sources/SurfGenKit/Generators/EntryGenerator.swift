@@ -15,7 +15,10 @@ final class EntryGenerator: ModelGeneratable {
         let propertyGenerator = PropertyGenerator()
         let declModel = try DeclNodeParser().getInfo(from: declNode)
         
-        let properties = try declModel.fields.map { try propertyGenerator.generateCode(for: $0, type: .entry) }
+        let properties = try declModel.fields
+            .map { try propertyGenerator.generateCode(for: $0, type: .entry) }
+            .sorted { $0.entryName.propertyPriorityIndex > $1.entryName.propertyPriorityIndex }
+
         let className = ModelType.entry.form(name: declModel.name)
 
         let code = try environment.renderTemplate(.nodeKitEntry(className: className, properties: properties))

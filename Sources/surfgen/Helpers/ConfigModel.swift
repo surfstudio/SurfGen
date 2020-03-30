@@ -13,6 +13,7 @@ struct ConfigModel: Decodable {
     let enumPath: String
 
     let generationTypes: [String]
+    let generateDescriptions: Bool?
     let tempatesPath: String
     let blackList: String?
 
@@ -32,6 +33,7 @@ struct ConfigModel: Decodable {
         case targets = "targets"
 
         case generationTypes = "generation_types"
+        case generateDescriptions = "generate_descriptions"
         case tempatesPath = "templates_path"
         case blackList = "black_list_path"
 

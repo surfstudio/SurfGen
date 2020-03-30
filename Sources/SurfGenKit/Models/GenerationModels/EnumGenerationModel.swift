@@ -9,5 +9,5 @@ public struct EnumGenerationModel: Equatable {
     let enumName: String
     let enumType: String
     let cases: [String]
-    let description: String?
+    let description: String
 }

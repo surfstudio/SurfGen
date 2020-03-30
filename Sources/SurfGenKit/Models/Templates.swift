@@ -7,7 +7,7 @@
 //
 
 enum Template {
-    case nodeKitEntity(entityName: String, entryName: String, properties: [PropertyGenerationModel])
+    case nodeKitEntity(entityName: String, entryName: String, properties: [PropertyGenerationModel], description: String)
     case nodeKitEntry(className: String, properties: [PropertyGenerationModel])
     case `enum`(EnumGenerationModel)
 
@@ -36,8 +36,9 @@ enum Template {
                 "className": className,
                 "properties": properties
             ]
-        case .nodeKitEntity(let entityName, let entryName, let properties):
+        case .nodeKitEntity(let entityName, let entryName, let properties, let description):
             return [
+                "description": description,
                 "entityName": entityName,
                 "entryName": entryName,
                 "codeOpenBracket": "{",

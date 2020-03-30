@@ -17,8 +17,8 @@ public final class PropertyGenerator {
         }
 
         guard
-            let nameNode = node.subNodes.first,
-            let typeNode = node.subNodes.last,
+            let nameNode = node.subNodes.nameNode,
+            let typeNode = node.subNodes.typeNode,
             case let .name(value) = nameNode.token,
             case .type = typeNode.token else {
                 throw GeneratorError.nodeConfiguration("Property generator couldn't parse incorrect subnodes configurations")
@@ -31,7 +31,8 @@ public final class PropertyGenerator {
                      typeName: TypeNameBuilder().buildString(for: nodeType, isOptional: isOptional, modelType: type),
                      fromInit: FromDTOBuilder().buildString(for: nodeType, with: value, isOptional: isOptional),
                      toDTOInit: ToDTOBuilder().buildString(for: nodeType, with: value, isOptional: isOptional),
-                     isPlain: nodeType.isPlain)
+                     isPlain: nodeType.isPlain,
+                     description: node.description?.replacingOccurrences(of: "\n", with: " "))
     }
 
 }

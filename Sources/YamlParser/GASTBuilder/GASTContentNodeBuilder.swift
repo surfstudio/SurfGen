@@ -30,9 +30,14 @@ final class GASTContentNodeBuilder {
         let builder = GASTFieldNodeBuilder()
         var fieldNodes = [ASTNode]()
         for property in object.properties {
-            fieldNodes.append(Node(token: .field(isOptional: !property.required),
-                                   [Node(token: .name(value: property.name), []),
-                                    try builder.buildFieldType(for: property.schema)]))
+            var fieldSubNodes = [
+                Node(token: .name(value: property.name), []),
+                try builder.buildFieldType(for: property.schema)
+            ]
+            if let description = property.schema.metadata.description {
+                fieldSubNodes.append(Node(token: .description(description), []))
+            }
+            fieldNodes.append(Node(token: .field(isOptional: !property.required), fieldSubNodes))
         }
         return fieldNodes
     }

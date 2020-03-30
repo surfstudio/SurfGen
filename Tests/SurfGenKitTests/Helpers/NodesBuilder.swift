@@ -37,16 +37,17 @@ final class NodesBuilder {
                             [
                                 Node(token: .name(value: "Shop"), []),
                                 Node(token: .type(name: "object"), []),
+                                Node(token: .description("Главная модель магазина"), []),
                                 Node(token: .content,
                                      [
                                         formFieldNode(isOptional: false, name: "id", typeName: "String"),
-                                        formFieldNode(isOptional: false, name: "name", typeName: "String"),
+                                        formFieldNode(isOptional: false, name: "name", typeName: "String", description: "Название магазина"),
                                         formFieldNode(isOptional: false, name: "phone", typeName: "String"),
                                         formFieldNode(isOptional: false,
                                                       name: "location",
                                                       typeName: "object",
                                                       typeSubNodes: [Node(token: .type(name: "ShopLocation"), [])]),
-                                        formFieldNode(isOptional: true, name: "working_hours", typeName: "String")
+                                        formFieldNode(isOptional: true, name: "working_hours", typeName: "String", description: "Время работы магазина. Может содержать строку в формате \"10.00-22.00\", если время работы магазина не зависит от дня недели. Либо строку формата \"пт-сб 10.00-23.00\" в противном случае.")
                                      ]
                                 )
                             ]
