@@ -56,6 +56,10 @@ final class ConfigManager {
         return model.targets ?? []
     }
 
+    var gitlabToken: String? {
+        return model.gitlabToken
+    }
+
     // MARK: - Private Properties
 
     private let model: ConfigModel

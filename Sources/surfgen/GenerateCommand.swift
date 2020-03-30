@@ -35,7 +35,10 @@ final class GenerateCommand: Command {
         }
         let configManager = try ConfigManager(path: Path(configPath))
 
-        let params = (spec: getSpecURL(), names: getModelNames(), types: try configManager.getGenerationTypes())
+        let params = (spec: try getSpec(token: configManager.gitlabToken),
+                      names: getModelNames(),
+                      types: try configManager.getGenerationTypes())
+
         let rootGenerator = RootGenerator(tempatesPath: configManager.tempatePath)
 
         let blackList = try configManager.getBlackList()
@@ -43,7 +46,7 @@ final class GenerateCommand: Command {
         stdout <<< "Generation for \(params.names) started..."
         printListWithHeader("Black list contains next models:".yellow, list: blackList)
 
-        let generatedModel = tryToGenerate(specURL: params.spec,
+        let generatedModel = tryToGenerate(spec: params.spec,
                                            modelNames: params.names,
                                            types: params.types,
                                            rootGenerator: rootGenerator,
@@ -110,13 +113,13 @@ final class GenerateCommand: Command {
         }
     }
 
-    func tryToGenerate(specURL: URL,
+    func tryToGenerate(spec: String,
                        modelNames: [String],
                        types: [ModelType],
                        rootGenerator: RootGenerator,
                        blackList: [String]) -> GenerationModel {
         do {
-            let parser = try YamlToGASTParser(url: specURL)
+            let parser = try YamlToGASTParser(string: spec)
             var generatedModels: GenerationModel = [:]
             for modelName in modelNames {
                 let root = try parser.parseToGAST(for: modelName, blackList: blackList)
@@ -129,18 +132,16 @@ final class GenerateCommand: Command {
         }
     }
 
-    func getSpecURL() -> URL {
-        if URL(string: spec.value)?.scheme == nil {
-            let path = Path(spec.value).normalize()
-            guard path.exists else {
-                exitWithError("Could not find spec at \(path)")
-            }
-            return URL(fileURLWithPath: path.string)
+    func getSpec(token: String?) throws -> String {
+        guard URL(string: spec.value)?.scheme == nil else {
+            return try FileLoader().loadFile(spec.value, token: token)
         }
-        guard let url = URL(string: spec.value) else {
-            exitWithError("No valid spec parameter. It can be a path or a url")
+
+        let path = Path(spec.value).normalize()
+        guard path.exists else {
+            exitWithError("Could not find spec at \(path)")
         }
-        return url
+        return try path.read()
     }
 
     func getModelNames() -> [String] {
