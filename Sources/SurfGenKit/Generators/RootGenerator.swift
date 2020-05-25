@@ -28,7 +28,7 @@ public final class RootGenerator {
         environment = Environment(loader: loader)
     }
 
-    public func generateCode(for node: ASTNode, types: [ModelType], generateDescriptions: Bool) throws -> GenerationModel {
+    public func generateCode(for node: ASTNode, types: [ModelType], generateDescriptions: Bool = true) throws -> GenerationModel {
         guard case .root = node.token else {
             throw GeneratorError.incorrectNodeToken("Root generator coundn't parse input node as node with root token")
         }

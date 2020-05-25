@@ -15,4 +15,4 @@ let cli = CLI(name: "surfgen",
               description: "surfgen code generator",
               commands: [GenerateCommand()])
 
-cli.goAndExit()
+_ = cli.goAndExit()
