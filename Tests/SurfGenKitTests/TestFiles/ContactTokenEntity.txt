@@ -5,17 +5,17 @@ public struct ContactTokenEntity {
 
     // MARK: - Public Properties
 
-    public let contactToken: String
     public let id: String?
+    public let contactToken: String
     public let value: Int
 
     // MARK: - Initialization
 
-    public init(contactToken: String,
-                id: String?,
+    public init(id: String?,
+                contactToken: String,
                 value: Int) {
-        self.contactToken = contactToken
         self.id = id
+        self.contactToken = contactToken
         self.value = value
     }
 
@@ -26,14 +26,14 @@ public struct ContactTokenEntity {
 extension ContactTokenEntity: DTOConvertible {
 
     public static func from(dto model: ContactTokenEntry) throws -> ContactTokenEntity {
-        return .init(contactToken: model.contactToken,
-                     id: model.id,
+        return .init(id: model.id,
+                     contactToken: model.contactToken,
                      value: model.value)
     }
 
     public func toDTO() throws -> ContactTokenEntry {
-        return .init(contactToken: contactToken,
-                     id: id,
+        return .init(id: id,
+                     contactToken: contactToken,
                      value: value)
     }
 
