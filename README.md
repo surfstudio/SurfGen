@@ -1,7 +1,8 @@
 
 
 # SurfGen
-[![Build Status](https://travis-ci.com/JohnReeze/SurfGen.svg?token=ZXokqeDnBGm8WAqyowYA&branch=master)](https://travis-ci.com/JohnReeze/SurfGen) [![codebeat badge](https://codebeat.co/badges/09676c44-a507-48e8-bfa7-c286ce949212)](https://codebeat.co/projects/github-com-johnreeze-surfgen-master) ![Swift Version](https://img.shields.io/badge/swift-5.0-orange)
+[![Build Status](https://travis-ci.com/JohnReeze/SurfGen.svg?token=ZXokqeDnBGm8WAqyowYA&branch=master)](https://travis-ci.com/JohnReeze/SurfGen) [![codebeat badge](https://codebeat.co/badges/09676c44-a507-48e8-bfa7-c286ce949212)](https://codebeat.co/projects/github-com-johnreeze-surfgen-master) [![codecov](https://codecov.io/gh/JohnReeze/SurfGen/branch/master/graph/badge.svg)](https://codecov.io/gh/JohnReeze/SurfGen)
+ ![Swift Version](https://img.shields.io/badge/swift-5.0-orange)
 
 SurfGen is a CLI written in Swift for generating Swift code from OpenApi specification(maybe from blueprint in future). Main purpose is to generate DTO and application layer models for [NodeKit](https://github.com/surfstudio/NodeKit). But you can modify templates written in Stencil or just change models generation to suit your needs in own your fork. 
 
