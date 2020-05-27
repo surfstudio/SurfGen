@@ -91,6 +91,9 @@ targets:
     - Models
     - AnyOtherTargetInProject
 
+# Flag responsible for properties and models comments
+generate_descriptions: true
+
 # Types of models supposed to be generated, current avaliable values: 'nodeKitEntry', 'nodeKitEntity', 'enum'"
 generation_types:
   - nodeKitEntity
@@ -133,6 +136,22 @@ model:
 ```
 ---
 
+## Models
+
+Currently there are only three types of models avaliable (btw you can create you own):
+
+* nodeKitEntity
+* nodeKitEntry
+* enum
+
+First two types are supposed to be used with [NodeKit](https://github.com/surfstudio/NodeKiti). 
+Enum model is a regular Codable enum:
+
+```swift
+public enum ExampleType: Int, Codable { 
+}
+```
+
 ## Editing
 
 ```
@@ -142,3 +161,12 @@ $ open SurfGen.xcodeproj
 This use Swift Project Manager to create an `xcodeproj` file that you can open, edit and run in Xcode, which makes editing any code easier.
 
 If you want to pass any required arguments when running in XCode, you can edit the scheme to include launch arguments.
+
+## How it works
+
+![](./Docs/surfgen_work_scheme.jpg)
+
+## Templates
+
+Templates are just .txt files in Templates directory. You need to specify path to that directory in config file. These files follow the **Stencil** file format outlined here [https://stencil.fuller.li](https://stencil.fuller.li)
+
