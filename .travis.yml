@@ -1,4 +1,8 @@
 language: Swift
 osx_image: xcode11.3
+before_install:
+  - pip install --user codecov
 script:
   - swift build
+after_success:
+  - codecov --file coverage/lcov.info --disable search
