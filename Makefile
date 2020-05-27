@@ -9,3 +9,4 @@ release_build:
 
 executable: release_build
 	cp $(BUILD_PATH) ./Binary
+	cp -R Templates ./Binary
