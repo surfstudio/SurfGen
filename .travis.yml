@@ -1,6 +1,7 @@
 language: Swift
 osx_image: xcode11.3
 script:
-  - swift test --enable-code-coverage
+  - swift package generate-xcodeproj
+  - xcodebuild test -scheme surfgen -destination platform="macOS" -enableCodeCoverage YES
 after_success:
   - bash <(curl -s https://codecov.io/bash)
