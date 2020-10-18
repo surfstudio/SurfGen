@@ -62,4 +62,11 @@ public class YamlToGASTParser {
         return try GASTBuilder().build(for: proccesedModels)
     }
 
+    public func parseToGAST(forService serviceName: String) {
+        let allPaths = spec.paths
+        let servicePaths = allPaths.apply { PathFinder().findMatchingPaths(from: $0, for: serviceName) }
+                                   .apply { DeprecatedFinder().removeDeprecated(from: $0) }
+        
+    }
+
 }
