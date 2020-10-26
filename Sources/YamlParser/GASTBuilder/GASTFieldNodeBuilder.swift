@@ -60,30 +60,3 @@ final class GASTFieldNodeBuilder {
     }
 
 }
-
-private extension SchemaType {
-
-    var description: String {
-        switch self {
-        case .any:
-            return "any"
-        case .array(let array):
-            return "array of \(array.items)"
-        case .boolean:
-            return "boolean"
-        case .group(let group):
-            return "group of \(group.type)"
-        case .object(let object):
-            return "object of \(object)"
-        case .reference(let ref):
-            return "refenerence of \(ref.name)"
-        case .string(let string):
-            return "string of \(string)"
-        case .number(let number):
-            return "string of \(number)"
-        case .integer(let integer):
-            return "string of \(integer)"
-        }
-    }
-
-}

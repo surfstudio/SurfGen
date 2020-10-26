@@ -9,11 +9,11 @@ import Swagger
 
 final class DeprecatedFinder {
     
-    /// Removes paths, where all operations are deprecated
-    /// - Parameter paths: paths found in API
-    /// - Returns: paths without all deprecated operations
-    func removeDeprecated(from paths: [Path]) -> [Path] {
-        return paths.filter { !$0.operations.allSatisfy { $0.deprecated } }
+    /// Removes deprecated operations
+    /// - Parameter paths: all operations found in API
+    /// - Returns: operations without deprecated ones
+    func removeDeprecated(from operations: [Operation]) -> [Operation] {
+        return operations.filter { !$0.deprecated }
     }
 
 }

@@ -12,6 +12,7 @@ enum GASTBuilderError: Error, Equatable {
     case undefinedTypeForField(String)
     case nonObjectNodeFound(String)
     case incorrectEnumObjectConfiguration(String)
+    case undefindedContentBody(String)
 
     public static func ==(lhs: GASTBuilderError, rhs: GASTBuilderError) -> Bool {
         switch (lhs, rhs) {
@@ -35,6 +36,8 @@ extension GASTBuilderError: LocalizedError {
             return "Can not find object in provided Component object with name: \(name)"
         case .incorrectEnumObjectConfiguration(let name):
             return "Enum object with name: \(name) has no correct enum values"
+        case .undefindedContentBody(let type):
+            return "Cannot resolve content body of type \(type)"
         }
     }
 

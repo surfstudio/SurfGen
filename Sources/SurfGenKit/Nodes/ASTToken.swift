@@ -15,6 +15,14 @@ public enum ASTToken: Equatable {
     case root
     case description(String)
     case value(String)
+    case operation
+    case path(value: String)
+    case encoding(type: String)
+    case mediaContent
+    case parameters
+    case parameter(isOptional: Bool)
+    case requestBody(isOptional: Bool)
+    case responseBody
 
     public static func ==(lhs: ASTToken, rhs: ASTToken) -> Bool {
         switch (lhs, rhs) {

@@ -16,5 +16,11 @@ public final class GASTBuilder {
         let decls = try models.map { try builder.buildDeclNode(for: $0) }
         return Node(token: .root, decls)
     }
+    
+    func build(service serviceName: String, with operations: [Operation]) throws -> ASTNode {
+        let builder = GASTDeclNodeBuilder()
+        let decl = try builder.buildDeclNode(forService: serviceName, with: operations)
+        return Node(token: .root, [decl])
+    }
 
 }

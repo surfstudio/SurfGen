@@ -22,6 +22,7 @@ class DeprecatedFinderTests: XCTestCase {
 
     func checkDeprecatedFinder(for service: TestService, with paths: [Path]) {
         let pathsWithoutDeprecated = paths.filter { service.matchingPaths.contains($0.path) }
+                                          .flatMap { $0.operations }
                                           .apply { DeprecatedFinder().removeDeprecated(from: $0) }
                                           .map { $0.path }
         XCTAssertEqual(Set(pathsWithoutDeprecated), service.pathsWithoutDeprecated)

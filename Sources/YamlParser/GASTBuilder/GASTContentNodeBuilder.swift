@@ -25,6 +25,10 @@ final class GASTContentNodeBuilder {
 
         throw GASTBuilderError.incorrectEnumObjectConfiguration(schema.name)
     }
+    
+    func buildServiceContentSubnodes(with operations: [Operation]) throws -> ASTNode {
+        return Node(token: .content, try operations.map { try GASTOperationNodeBuilder().buildMethodNode(for: $0) })
+    }
 
     private func buildSubnodes(for object: ObjectSchema) throws -> [ASTNode] {
         let builder = GASTFieldNodeBuilder()
