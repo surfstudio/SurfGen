@@ -11,23 +11,26 @@ import SurfGenKit
 final class GASTEncodingNodeBuilder {
 
     func buildEncodingNode(for content: Content) throws -> Node {
-        return Node(token: .encoding(type: try content.mediaEncoding().rawValue), [])
+        return Node(token: .encoding(type: try content.mediaEncodingDescription()), [])
     }
 }
 
 private extension Content {
     
-    func mediaEncoding() throws -> MediaType {
+    func mediaEncodingDescription() throws -> String {
         if jsonSchema != nil {
-            return .json
+            return MediaType.json.rawValue
         }
         if formSchema != nil {
-            return .form
+            return MediaType.form.rawValue
         }
         if multipartFormSchema != nil {
-            return .multipartForm
+            return MediaType.multipartForm.rawValue
         }
-        throw GASTBuilderError.undefindedContentBody(mediaItems.keys.description)
+        guard let encoding =  mediaItems.keys.first else {
+            throw GASTBuilderError.undefindedContentBody(mediaItems.keys.description)
+        }
+        return encoding
     }
 
 }

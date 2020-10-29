@@ -12,7 +12,11 @@ final class GASTMediaContentNodeBuilder {
     
     func buildMediaContentNode(with content: Content) throws -> ASTNode {
         let encodingNode = try GASTEncodingNodeBuilder().buildEncodingNode(for: content)
-        return try Node(token: .mediaContent, [encodingNode, subNodeForEncoded(schema: content.anySchema())])
+        if let encodedSchema = content.anySchema {
+            return try Node(token: .mediaContent, [encodingNode, subNodeForEncoded(schema: encodedSchema)])
+        } else {
+            return Node(token: .mediaContent, [encodingNode])
+        }
     }
 
     private func subNodeForEncoded(schema: Schema) throws -> ASTNode {
@@ -46,12 +50,8 @@ final class GASTMediaContentNodeBuilder {
 
 private extension Content {
 
-    func anySchema() throws -> Schema {
-        let schema = jsonSchema ?? formSchema ?? multipartFormSchema
-        guard let guardedSchema = schema else {
-            throw GASTBuilderError.undefindedContentBody(mediaItems.keys.description)
-        }
-        return guardedSchema
+    var anySchema: Schema? {
+        return jsonSchema ?? formSchema ?? multipartFormSchema
     }
 
 }

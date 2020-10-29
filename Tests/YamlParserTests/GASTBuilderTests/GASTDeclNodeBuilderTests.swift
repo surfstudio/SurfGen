@@ -12,17 +12,19 @@ import SurfGenKit
 
 class GASTDeclNodeBuilderTests: XCTestCase {
 
-    var schemas: [ComponentObject<Schema>]!
     var shopObject: ComponentObject<Schema>!
     var deleveryEnumObject: ComponentObject<Schema>!
+    var operations: [Swagger.Operation]!
 
     // MARK: - Constants
 
     override func setUp() {
         do {
-            schemas = try SwaggerSpec(string: FileReader().readFile("TestFiles/rendezvous.yaml")).components.schemas
-            shopObject = schemas.first(where: { $0.name == "ShopLocation" })!
-            deleveryEnumObject = schemas.first(where: { $0.name == "DeliveryType" })!
+            let spec = try SwaggerSpec(string: FileReader().readFile("TestFiles/rendezvous.yaml"))
+            shopObject = spec.components.schemas.first(where: { $0.name == "ShopLocation" })!
+            deleveryEnumObject = spec.components.schemas.first(where: { $0.name == "DeliveryType" })!
+
+            operations = spec.operations.filter { $0.path.starts(with: "/pet") && !$0.deprecated }
         } catch {
             XCTFail("Error loading test spec")
         }
@@ -76,6 +78,35 @@ class GASTDeclNodeBuilderTests: XCTestCase {
             }
 
             XCTAssert(value == "DeliveryType", "Name subnode is incorrect")
+
+            guard case .content = node.subNodes[1].token else {
+                XCTFail("built node with incorrect token")
+                return
+            }
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+
+    func testServiceDeclNodeBuilder() {
+        do {
+            
+            let node = try GASTDeclNodeBuilder().buildDeclNode(forService: "Pet", with: operations)
+
+            // check for correct node
+            guard case .decl = node.token else {
+                XCTFail("built node with incorrect token")
+                return
+            }
+
+            // check subnodes
+
+            guard case let .name(value) = node.subNodes[0].token else {
+                XCTFail("built node with incorrect token")
+                return
+            }
+
+            XCTAssert(value == "Pet", "Name subnode is incorrect")
 
             guard case .content = node.subNodes[1].token else {
                 XCTFail("built node with incorrect token")

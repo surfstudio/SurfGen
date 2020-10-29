@@ -1,5 +1,5 @@
 //
-//  GASTBuilerError.swift
+//  GASTBuilderError.swift
 //  AEXML
 //
 //  Created by Mikhail Monakov on 12/03/2020.

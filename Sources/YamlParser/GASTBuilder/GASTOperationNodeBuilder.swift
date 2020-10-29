@@ -36,9 +36,11 @@ final class GASTOperationNodeBuilder {
         }
 
         // Request parameters
-        subNodes.append(Node(token: .parameters, operation.parameters.map {
-            GASTParameterNodeBuilder().buildNode(for: $0.value)
-        }))
+        if !operation.parameters.isEmpty {
+            subNodes.append(Node(token: .parameters, operation.parameters.map {
+                GASTParameterNodeBuilder().buildNode(for: $0.value)
+            }))
+        }
 
         // Response type, schema or Void
         if let responseContent = operation.responses.filter({ $0.statusCode == 200 }).first?.response.value.content {
