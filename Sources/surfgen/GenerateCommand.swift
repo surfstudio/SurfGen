@@ -79,7 +79,7 @@ final class GenerateCommand: Command {
     }
 
     func addFiles(files: [String],
-                  genModel: GenerationModel,
+                  genModel: ModelGenerationModel,
                   projectPath: Path,
                   mainGroup: String,
                   targets: [String],
@@ -97,7 +97,7 @@ final class GenerateCommand: Command {
             return
         }
 
-        let filteredGenModel: GenerationModel = genModel.mapValues { $0.filter { newFiles.contains($0.fileName) } }
+        let filteredGenModel: ModelGenerationModel = genModel.mapValues { $0.filter { newFiles.contains($0.fileName) } }
         let filePathesModel = write(generationModel: filteredGenModel, to: destinations)
         printGenerationResult(filePathesModel)
 
@@ -119,13 +119,13 @@ final class GenerateCommand: Command {
                        types: [ModelType],
                        rootGenerator: RootGenerator,
                        blackList: [String],
-                       isDescriptionsEnabled: Bool) -> GenerationModel {
+                       isDescriptionsEnabled: Bool) -> ModelGenerationModel {
         do {
             let parser = try YamlToGASTParser(string: spec)
-            var generatedModels: GenerationModel = [:]
+            var generatedModels: ModelGenerationModel = [:]
             for modelName in modelNames {
                 let root = try parser.parseToGAST(for: modelName, blackList: blackList)
-                let genModel = try rootGenerator.generateCode(for: root,
+                let genModel = try rootGenerator.generateModel(from: root,
                                                               types: types,
                                                               generateDescriptions: isDescriptionsEnabled)
                 genModel.forEach { generatedModels[$0.key] = $0.value + (generatedModels[$0.key] ?? []) }
@@ -155,7 +155,7 @@ final class GenerateCommand: Command {
         return modelNames.split(separator: ",").map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
     }
 
-    func write(generationModel: GenerationModel, to destinations: [ModelType: String]) -> [ModelType: [Path]] {
+    func write(generationModel: ModelGenerationModel, to destinations: [ModelType: String]) -> [ModelType: [Path]] {
         var filePathes = [ModelType: [Path]]()
         for (model, files) in generationModel {
             let destination = destinations[model]

@@ -18,7 +18,7 @@ class DeclNodeParserTests: XCTestCase {
                                 Node(token: .content, [ formFieldNode(isOptional: false, name: "region", typeName: "String") ])
                             ])
         
-        assertThrow(try DeclNodeParser().getInfo(from: declNode), throws: GeneratorError.nodeConfiguration(""))
+        assertThrow(try ModelDeclNodeParser().getInfo(from: declNode), throws: GeneratorError.nodeConfiguration(""))
     }
 
     func testContentNodeError() {
@@ -28,7 +28,7 @@ class DeclNodeParserTests: XCTestCase {
                                 formFieldNode(isOptional: false, name: "region", typeName: "String")
                             ])
         
-        assertThrow(try DeclNodeParser().getInfo(from: declNode), throws: GeneratorError.nodeConfiguration(""))
+        assertThrow(try ModelDeclNodeParser().getInfo(from: declNode), throws: GeneratorError.nodeConfiguration(""))
     }
 
 }

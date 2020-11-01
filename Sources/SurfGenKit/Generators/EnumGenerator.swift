@@ -7,10 +7,10 @@
 
 import Stencil
 
-final class EnumGenerator: ModelGeneratable {
+final class EnumGenerator: CodeGenerator {
 
     func generateCode(declNode: ASTNode, environment: Environment) throws -> FileModel {
-        let declModel = try DeclNodeParser().getInfo(from: declNode)
+        let declModel = try ModelDeclNodeParser().getInfo(from: declNode)
 
         guard let typeNode = declNode.subNodes.typeNode else {
             throw GeneratorError.nodeConfiguration("decl node does not contain type")

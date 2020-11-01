@@ -28,6 +28,32 @@ extension String {
         return self + ".swift"
     }
 
+    var pathName: String {
+        guard self.pathPartsCount > 1 else {
+            return self.pathToCamelCase()
+        }
+        return self
+            .replacingOccurrences(of: "[{}]", with: "", options: .regularExpression)
+            .split(separator: "/")
+            .map { String($0) }
+            .removingFirst()
+            .reduce("", { $0 + $1.capitalizingFirstLetter() })
+            .snakeCaseToCamelCase()
+    }
+
+    func pathToCamelCase() -> String {
+        return self.split(whereSeparator: { $0 == "/" || $0 == "_" })
+            .map { String($0) }
+            .reduce("", { $0 + $1.capitalizingFirstLetter() })
+            .lowercaseFirstLetter()
+    }
+
+    func pathWithSwiftParameters() -> String {
+        return self
+            .replacingOccurrences(of: "{", with: "\\(")
+            .replacingOccurrences(of: "}", with: ")")
+    }
+
     func snakeCaseToCamelCase() -> String {
         return self.split(separator: "_")
             .map { String($0) }
@@ -47,6 +73,10 @@ extension String {
         default:
             return 0
         }
+    }
+
+    private var pathPartsCount: Int {
+        return self.split(separator: "/").count
     }
 
 }

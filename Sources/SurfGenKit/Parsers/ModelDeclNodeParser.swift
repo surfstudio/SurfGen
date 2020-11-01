@@ -6,19 +6,19 @@
 //  Copyright © 2019 Surf. All rights reserved.
 //
 
-struct DeclModel {
+struct ModelDeclaration {
     let name: String
     let description: String?
     let type: String
     let fields: [ASTNode]
 }
 
-final class DeclNodeParser {
+final class ModelDeclNodeParser {
 
     /**
      Method resolves decl node for its name, description, type type, fileds subnodes
     */
-    func getInfo(from declNode: ASTNode) throws -> DeclModel {
+    func getInfo(from declNode: ASTNode) throws -> ModelDeclaration {
         // find content node
         guard let contentIndex = declNode.subNodes.indexOf(.content) else {
             throw GeneratorError.nodeConfiguration("content node couldn't be resolved for decl node")

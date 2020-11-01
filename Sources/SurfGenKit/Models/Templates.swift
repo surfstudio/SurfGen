@@ -10,6 +10,7 @@ enum Template {
     case nodeKitEntity(entityName: String, entryName: String, properties: [PropertyGenerationModel], description: String)
     case nodeKitEntry(className: String, properties: [PropertyGenerationModel])
     case `enum`(EnumGenerationModel)
+    case urlRoute(UrlRouteGenerationModel)
 
     var fileName: String {
         switch self {
@@ -19,6 +20,8 @@ enum Template {
             return "EntryCodable.txt"
         case .enum:
             return "CodableEnum.txt"
+        case .urlRoute:
+            return "UrlRoute.txt"
         }
     }
 
@@ -44,6 +47,11 @@ enum Template {
                 "codeOpenBracket": "{",
                 "properties": properties,
                 "isPlain": properties.first { !$0.isPlain } == nil
+            ]
+        case .urlRoute(let routeModel):
+            return [
+                "name": routeModel.name,
+                "paths": routeModel.paths
             ]
         }
     }

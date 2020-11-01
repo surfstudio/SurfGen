@@ -7,6 +7,6 @@
 
 import Stencil
 
-public protocol ModelGeneratable {
+public protocol CodeGenerator {
     func generateCode(declNode: ASTNode, environment: Environment) throws -> FileModel
 }
