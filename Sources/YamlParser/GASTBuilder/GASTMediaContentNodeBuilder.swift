@@ -23,12 +23,9 @@ final class GASTMediaContentNodeBuilder {
         switch schema.type {
         case .object(let object):
             return Node(token: .type(name: ASTConstants.object), try object.properties.map { property in
-                guard let propertyType = property.schema.type.typeName else {
-                    throw GASTBuilderError.undefindedContentBody(schema.type.description)
-                }
                 return Node(token: .field(isOptional: !property.required), [
                     Node(token: .name(value: property.name), []),
-                    Node(token: .type(name: propertyType), [])
+                    try GASTTypeNodeBuilder().buildTypeNode(for: property.schema)
                 ])
             })
         case .array(let array):

@@ -1,5 +1,5 @@
 //
-//  GASTFieldNodeBuilder.swift
+//  GASTTypeNodeBuilder.swift
 //  YamlParser
 //
 //  Created by Mikhail Monakov on 13/03/2020.
@@ -37,9 +37,9 @@ required:
 There is not enum name so we can not genenerate and track all such cases in models
 */
 
-final class GASTFieldNodeBuilder {
+final class GASTTypeNodeBuilder {
 
-    func buildFieldType(for schema: Schema) throws -> ASTNode {
+    func buildTypeNode(for schema: Schema) throws -> ASTNode {
 
         // case schema type is plain: Int, String, Double, Bool
         if let typeName = schema.type.typeName {
@@ -53,7 +53,7 @@ final class GASTFieldNodeBuilder {
 
         // case schema type is an array of any type
         if case let .array(arrayObject) = schema.type, case let .single(subSchema) = arrayObject.items {
-            return Node(token: .type(name: ASTConstants.array), [try buildFieldType(for: subSchema)])
+            return Node(token: .type(name: ASTConstants.array), [try buildTypeNode(for: subSchema)])
         }
 
         throw GASTBuilderError.undefinedTypeForField(schema.type.description)

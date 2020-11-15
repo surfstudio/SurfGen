@@ -15,10 +15,25 @@ extension Array {
 
 }
 
+extension Array where Element: Hashable {
+
+    func uniqueElements() -> [Element] {
+        return Array(Set(self))
+    }
+
+}
+
 extension Array where Element == ASTNode {
 
     var contentNode: ASTNode? {
         guard let index = indexOf(.content) else {
+            return nil
+        }
+        return self[index]
+    }
+
+    var encodingNode: ASTNode? {
+        guard let index = indexOf(.encoding(type: "")) else {
             return nil
         }
         return self[index]
@@ -33,6 +48,13 @@ extension Array where Element == ASTNode {
 
     var descriptionNode: ASTNode? {
         guard let index = indexOf(.description("")) else {
+            return nil
+        }
+        return self[index]
+    }
+
+    var locationNode: ASTNode? {
+        guard let index = indexOf(.location(type: "")) else {
             return nil
         }
         return self[index]
@@ -54,6 +76,20 @@ extension Array where Element == ASTNode {
 
     var parametersNode: ASTNode? {
         guard let index = indexOf(.parameters) else {
+            return nil
+        }
+        return self[index]
+    }
+
+    var requestBodyNode: ASTNode? {
+        guard let index = indexOf(.requestBody(isOptional: Bool())) else {
+            return nil
+        }
+        return self[index]
+    }
+
+    var responseBodyNode: ASTNode? {
+        guard let index = indexOf(.responseBody) else {
             return nil
         }
         return self[index]

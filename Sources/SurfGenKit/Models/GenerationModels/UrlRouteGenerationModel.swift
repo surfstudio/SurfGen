@@ -11,7 +11,7 @@ struct UrlRouteGenerationModel {
     let paths: [PathGenerationModel]
 
     init(name: String, paths: [PathGenerationModel]) {
-        self.name = name + "UrlRoute"
+        self.name = ServicePart.urlRoute.buildName(for: name)
         self.paths = paths
     }
 

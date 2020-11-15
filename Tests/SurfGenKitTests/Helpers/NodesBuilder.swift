@@ -10,6 +10,8 @@
 
 final class NodesBuilder {
 
+    // MARK: - Model declaration nodes
+
     static func formShopLocationDeclNode() -> Node {
         return Node(token: .decl,
                     [
@@ -129,5 +131,160 @@ final class NodesBuilder {
         )
     }
 
+    // MARK: - MediaContent nodes
+
+    static func formJsonEncodedModelContentNode() -> ASTNode {
+        return Node(token: .mediaContent,
+                    [
+                        Node(token: .encoding(type: "application/json"), []),
+                        Node(token: .type(name: "Pet"), [])
+                    ]
+        )
+    }
+
+    static func formJsonEncodedArrayContentNode() -> ASTNode {
+        return Node(token: .mediaContent,
+                    [
+                        Node(token: .encoding(type: "application/json"), []),
+                        Node(token: .type(name: "array"),
+                             [
+                                Node(token: .type(name: "Pet"), [])
+                             ]
+                        )
+                    ]
+        )
+    }
+
+    static func formFormEncodedObjectContentNode() -> ASTNode {
+        return Node(token: .mediaContent,
+                    [
+                       Node(token: .encoding(type: "application/x-www-form-urlencoded"), []),
+                       Node(token: .type(name: "object"),
+                            [
+                               Node(token: .field(isOptional: false),
+                                    [
+                                       Node(token: .name(value: "testIntValue"), []),
+                                       Node(token: .type(name: "Int"), [])
+                                    ]
+                               ),
+                               Node(token: .field(isOptional: false),
+                                    [
+                                       Node(token: .name(value: "testDoubleValue"), []),
+                                       Node(token: .type(name: "Double"), [])
+                                    ]
+                               ),
+                               Node(token: .field(isOptional: false),
+                                    [
+                                       Node(token: .name(value: "testBoolValue"), []),
+                                       Node(token: .type(name: "Bool"), [])
+                                    ]
+                               )
+                            ]
+                       )
+                    ]
+        )
+    }
+
+    static func formMultipartModelContentNode() -> ASTNode {
+        return Node(token: .mediaContent,
+                    [
+                        Node(token: .encoding(type: "multipart/form-data"), []),
+                        Node(token: .type(name: "Image"), [])
+                    ]
+        )
+    }
+
+    static func formUnsupportedEncodingContentNode() -> ASTNode {
+        return Node(token: .mediaContent,
+                    [
+                        Node(token: .encoding(type: "testEncoding"), []),
+                        Node(token: .type(name: "Model"), [])
+                    ]
+        )
+    }
+
+    // MARK: - Request/response body nodes
+
+    static func formRequestBodyNode(with content: ASTNode) -> ASTNode {
+        return Node(token: .requestBody(isOptional: false), [content])
+    }
+
+    static func formResponseBodyNode(with content: ASTNode) -> ASTNode {
+        return Node(token: .responseBody, [content])
+    }
+
+    // MARK: - Operation nodes
+
+    static func formPostPetByIdOperationNode() -> ASTNode {
+        return Node(token: .operation,
+                    [
+                        Node(token: .type(name: "post"), []),
+                        Node(token: .path(value: "/pet/{petId}"), []),
+                        Node(token: .requestBody(isOptional: false),
+                             [
+                                formJsonEncodedModelContentNode()
+                             ]
+                        ),
+                        Node(token: .parameters,
+                             [
+                                Node(token: .parameter(isOptional: false),
+                                     [
+                                        Node(token: .name(value: "petId"), []),
+                                        Node(token: .type(name: "String"), []),
+                                        Node(token: .location(type: "path"), [])
+                                     ]
+                                )
+                             ]
+                        )
+                    ]
+        )
+    }
+
+    static func formFindPetByStatusOperationNode() -> ASTNode {
+        return Node(token: .operation,
+                    [
+                        Node(token: .type(name: "get"), []),
+                        Node(token: .path(value: "/pet/findByStatus"), []),
+                        Node(token: .description("Finds Pets by status"), []),
+                        Node(token: .requestBody(isOptional: false),
+                             [
+                                formFormEncodedObjectContentNode()
+                             ]
+                        ),
+                        Node(token: .parameters,
+                             [
+                                Node(token: .parameter(isOptional: false),
+                                     [
+                                        Node(token: .name(value: "status"), []),
+                                        Node(token: .type(name: "String"), []),
+                                        Node(token: .location(type: "query"), [])
+                                     ]
+                                )
+                             ]
+                        ),
+                        Node(token: .responseBody,
+                             [
+                                formJsonEncodedArrayContentNode()
+                             ]
+                        )
+                    ]
+        )
+    }
+
+    // MARK: - Service declaration nodes
+
+    static func formTestServiceDeclarationNode() -> ASTNode {
+        return Node(token: .decl,
+                    [
+                        Node(token: .name(value: "Pet"), []),
+                        Node(token: .content,
+                             [
+                                formPostPetByIdOperationNode(),
+                                formFindPetByStatusOperationNode()
+                             ]
+                        )
+                    ]
+        )
+    }
 
 }

@@ -1,0 +1,29 @@
+//
+//  StoreUrlRoute.swift
+//
+
+import NodeKit
+
+enum StoreUrlRoute {
+    case inventory
+    case order
+    case orderOrderId(orderId: String)
+}
+
+// MARK: - UrlRouteProvider
+
+extension StoreUrlRoute: UrlRouteProvider {
+
+    func url() throws -> URL {
+        let base = URL(string: Urls.base)
+        switch self {
+        case .inventory:
+            return try base + "/store/inventory"
+        case .order:
+            return try base + "/store/order"
+        case .orderOrderId(let orderId):
+            return try base + "/store/order/\(orderId)"
+        }
+    }
+
+}

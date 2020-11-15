@@ -55,6 +55,10 @@ let package = Package(
         .testTarget(
             name: "YamlParserTests",
             dependencies: ["YamlParser"]
+        ),
+        .testTarget(
+            name: "EndToEndTests",
+            dependencies: ["YamlParser", "SurfGenKit"]
         )
     ]
 )

@@ -24,6 +24,8 @@ final class GenerateCommand: Command {
     let spec = SwiftCLI.Parameter()
 
     let modelNames = Key<String>("--modelNames", "-m", description: "Model names to be generated. Example: --modelNames Order,StatusType")
+    
+    let serviceName = Key<String>("--serviceName", "-s", description: "Service name to be generated. Example: --serviceName Profile")
 
     let configPath = Key<String>("--config", "-c", description: "Path to config yaml-file")
 
@@ -36,50 +38,59 @@ final class GenerateCommand: Command {
         let configManager = try ConfigManager(path: Path(configPath))
 
         let params = (spec: try getSpec(token: configManager.gitlabToken),
-                      names: getModelNames(),
+                      generationType: getGenerationType(),
                       types: try configManager.getGenerationTypes())
 
         let rootGenerator = RootGenerator(tempatesPath: configManager.tempatePath)
+        
+        stdout <<< "Generation for \(params.generationType.description) started..."
+        
+        switch params.generationType {
+        case .models(let modelNames):
+            let blackList = try configManager.getBlackList()
+            printListWithHeader("Black list contains next models:".yellow, list: blackList)
+            let generatedModel = tryToGenerate(modelNames: modelNames,
+                                               spec: params.spec,
+                                               types: params.types,
+                                               rootGenerator: rootGenerator,
+                                               blackList: blackList,
+                                               isDescriptionsEnabled: configManager.isDescriptionsEnabled)
+            // Handling generation results
 
-        let blackList = try configManager.getBlackList()
-        // Generation
-        stdout <<< "Generation for \(params.names) started..."
-        printListWithHeader("Black list contains next models:".yellow, list: blackList)
+            let files = generatedModel.map { $0.value.map { $0.fileName } }.flatMap { $0 }
+            printListWithHeader("Surfgen found next dependencies for provided model: ".green, list: files)
 
-        let generatedModel = tryToGenerate(spec: params.spec,
-                                           modelNames: params.names,
-                                           types: params.types,
-                                           rootGenerator: rootGenerator,
-                                           blackList: blackList,
-                                           isDescriptionsEnabled: configManager.isDescriptionsEnabled)
+            let destinations = configManager.generationPathes
 
-        // Handling generation results
+            // Check for project parameter
+            guard let projectPath = configManager.projectPath, let mainGroupName = configManager.mainGroup  else {
+                stdout <<< "No project path or mainGroupName specified".yellow
+                stdout <<< "Generated files pathes: "
+                // Writing files to file system
+                let filePathesModel = write(generationModel: generatedModel, to: destinations)
+                printGenerationResult(filePathesModel)
+                return
+            }
 
-        let files = generatedModel.map { $0.value.map { $0.fileName } }.flatMap { $0 }
-        printListWithHeader("Surfgen found next dependencies for provided model: ".green, list: files)
-
-        let destinations = configManager.generationPathes
-
-        // Check for project parameter
-        guard let projectPath = configManager.projectPath, let mainGroupName = configManager.mainGroup  else {
-            stdout <<< "No project path or mainGroupName specified".yellow
-            stdout <<< "Generated files pathes: "
-            // Writing files to file system
-            let filePathesModel = write(generationModel: generatedModel, to: destinations)
-            printGenerationResult(filePathesModel)
-            return
+            try addFiles(files: files,
+                         genModel: generatedModel,
+                         projectPath: projectPath,
+                         mainGroup: mainGroupName,
+                         targets: configManager.targets,
+                         destinations: destinations)
+        case .service(let serviceName):
+            let generatedModel = tryToGenerate(serviceName: serviceName,
+                                               spec: params.spec,
+                                               rootGenerator: rootGenerator,
+                                               isDescriptionsEnabled: configManager.isDescriptionsEnabled)
+            for file in generatedModel {
+                print(file.value.code)
+            }
         }
-
-        try addFiles(files: files,
-                     genModel: generatedModel,
-                     projectPath: projectPath,
-                     mainGroup: mainGroupName,
-                     targets: configManager.targets,
-                     destinations: destinations)
     }
 
     func addFiles(files: [String],
-                  genModel: ModelGenerationModel,
+                  genModel: ModelGeneratedModel,
                   projectPath: Path,
                   mainGroup: String,
                   targets: [String],
@@ -97,7 +108,7 @@ final class GenerateCommand: Command {
             return
         }
 
-        let filteredGenModel: ModelGenerationModel = genModel.mapValues { $0.filter { newFiles.contains($0.fileName) } }
+        let filteredGenModel: ModelGeneratedModel = genModel.mapValues { $0.filter { newFiles.contains($0.fileName) } }
         let filePathesModel = write(generationModel: filteredGenModel, to: destinations)
         printGenerationResult(filePathesModel)
 
@@ -114,15 +125,15 @@ final class GenerateCommand: Command {
         }
     }
 
-    func tryToGenerate(spec: String,
-                       modelNames: [String],
+    func tryToGenerate(modelNames: [String],
+                       spec: String,
                        types: [ModelType],
                        rootGenerator: RootGenerator,
                        blackList: [String],
-                       isDescriptionsEnabled: Bool) -> ModelGenerationModel {
+                       isDescriptionsEnabled: Bool) -> ModelGeneratedModel {
         do {
             let parser = try YamlToGASTParser(string: spec)
-            var generatedModels: ModelGenerationModel = [:]
+            var generatedModels: ModelGeneratedModel = [:]
             for modelName in modelNames {
                 let root = try parser.parseToGAST(for: modelName, blackList: blackList)
                 let genModel = try rootGenerator.generateModel(from: root,
@@ -131,6 +142,19 @@ final class GenerateCommand: Command {
                 genModel.forEach { generatedModels[$0.key] = $0.value + (generatedModels[$0.key] ?? []) }
             }
             return generatedModels.mapValues { Array(Set($0)) }
+        } catch {
+            exitWithError(error.localizedDescription)
+        }
+    }
+    
+    func tryToGenerate(serviceName: String,
+                       spec: String,
+                       rootGenerator: RootGenerator,
+                       isDescriptionsEnabled: Bool) -> ServiceGeneratedModel {
+        do {
+            let parser = try YamlToGASTParser(string: spec)
+            let service = try parser.parseToGAST(forService: serviceName)
+            return try rootGenerator.generateService(from: service, generateDescriptions: isDescriptionsEnabled)
         } catch {
             exitWithError(error.localizedDescription)
         }
@@ -148,6 +172,18 @@ final class GenerateCommand: Command {
         return try path.read()
     }
 
+    func getGenerationType() -> GenerationType {
+        if let modelNames = modelNames.value, !modelNames.isEmpty {
+            return .models(modelNames
+                            .split(separator: ",")
+                            .map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) })
+        }
+        if let serviceName = serviceName.value, !serviceName.isEmpty {
+            return .service(serviceName)
+        }
+        exitWithError("--modelNames or --serviceName value must be provided")
+    }
+
     func getModelNames() -> [String] {
         guard let modelNames = modelNames.value, !modelNames.isEmpty else {
             exitWithError("--modelName value must be provided")
@@ -155,7 +191,7 @@ final class GenerateCommand: Command {
         return modelNames.split(separator: ",").map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
     }
 
-    func write(generationModel: ModelGenerationModel, to destinations: [ModelType: String]) -> [ModelType: [Path]] {
+    func write(generationModel: ModelGeneratedModel, to destinations: [ModelType: String]) -> [ModelType: [Path]] {
         var filePathes = [ModelType: [Path]]()
         for (model, files) in generationModel {
             let destination = destinations[model]

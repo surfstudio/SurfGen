@@ -7,7 +7,7 @@
 
 class ParametersNodeParser {
 
-    func parseParameters(node: ASTNode, location: ParameterLocation? = nil) throws -> [ParameterGenerationModel] {
+    func parseParameters(node: ASTNode) throws -> [ParameterGenerationModel] {
         guard node.token == .parameters else {
             throw GeneratorError.incorrectNodeToken("Parameters header node has incorrect token")
         }
@@ -16,8 +16,11 @@ class ParametersNodeParser {
             guard case let .parameter(isOptional) = parameterNode.token else {
                 throw GeneratorError.incorrectNodeToken("Parameter node has incorrect token")
             }
+            guard case let .type(name: type) = parameterNode.subNodes.typeNode?.token else {
+                throw GeneratorError.incorrectNodeToken("Parameter node has incorrect type")
+            }
             guard
-                case let .type(locationString) = parameterNode.subNodes.typeNode?.token,
+                case let .location(locationString) = parameterNode.subNodes.locationNode?.token,
                 let location = ParameterLocation(rawValue: locationString)
             else {
                 throw GeneratorError.incorrectNodeToken("Parameter node has incorrect location type")
@@ -26,14 +29,14 @@ class ParametersNodeParser {
                 throw GeneratorError.incorrectNodeToken("Parameter node has incorrect name")
             }
 
-            return ParameterGenerationModel(name: name, isOptional: isOptional, location: location)
+            return ParameterGenerationModel(name: name.snakeCaseToCamelCase(),
+                                            serverName: name,
+                                            type: type,
+                                            isOptional: isOptional,
+                                            location: location)
         }
         
-        guard let specifiedLocation = location else {
-            return parameters
-        }
-        
-        return parameters.filter { $0.location == specifiedLocation }
+        return parameters
     }
 
 }

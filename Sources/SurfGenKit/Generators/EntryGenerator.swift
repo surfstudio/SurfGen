@@ -10,7 +10,7 @@ import Stencil
 
 final class EntryGenerator: CodeGenerator {
 
-    func generateCode(declNode: ASTNode, environment: Environment) throws -> FileModel {
+    func generateCode(for declNode: ASTNode, environment: Environment) throws -> FileModel {
 
         let propertyGenerator = PropertyGenerator()
         let declModel = try ModelDeclNodeParser().getInfo(from: declNode)

@@ -11,6 +11,8 @@ enum Template {
     case nodeKitEntry(className: String, properties: [PropertyGenerationModel])
     case `enum`(EnumGenerationModel)
     case urlRoute(UrlRouteGenerationModel)
+    case serviceProtocol(ServiceGenerationModel)
+    case service(ServiceGenerationModel)
 
     var fileName: String {
         switch self {
@@ -22,6 +24,10 @@ enum Template {
             return "CodableEnum.txt"
         case .urlRoute:
             return "UrlRoute.txt"
+        case .serviceProtocol:
+            return "ServiceProtocol.txt"
+        case .service:
+            return "Service.txt"
         }
     }
 
@@ -52,6 +58,13 @@ enum Template {
             return [
                 "name": routeModel.name,
                 "paths": routeModel.paths
+            ]
+        case .serviceProtocol(let serviceModel), .service(let serviceModel):
+            return [
+                "name": serviceModel.name,
+                "hasKeys": serviceModel.hasKeys,
+                "keys": serviceModel.keys,
+                "operations": serviceModel.operations
             ]
         }
     }

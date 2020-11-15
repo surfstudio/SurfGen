@@ -10,7 +10,7 @@ public enum ServicePart: CaseIterable {
     case `protocol`
     case service
 
-    var name: String {
+    private var partName: String {
         switch self {
         case .urlRoute:
             return "UrlRoute"
@@ -21,8 +21,8 @@ public enum ServicePart: CaseIterable {
         }
     }
 
-    func form(name value: String) -> String {
-        return "\(value)\(name)"
+    public func buildName(for service: String) -> String {
+        return "\(service)\(partName)"
     }
 
 }

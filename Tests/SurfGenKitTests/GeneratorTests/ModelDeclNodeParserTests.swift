@@ -1,5 +1,5 @@
 //
-//  DeclNodeParser.swift
+//  ModelDeclNodeParserTests.swift
 //  ModelsCodeGenerationTests
 //
 //  Created by Mikhail Monakov on 04/12/2019.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import SurfGenKit
 
-class DeclNodeParserTests: XCTestCase {
+class ModelDeclNodeParserTests: XCTestCase {
 
     func testNameNodeError() {
         let declNode = Node(token: .decl,

@@ -1,0 +1,44 @@
+//
+//  PetNetworkService.swift
+//
+
+import NodeKit
+
+public class PetNetworkService: PetService {
+    
+    // MARK: - Constants
+
+    private enum Keys {
+        static let status = "status"
+        static let testBoolValue = "testBoolValue"
+        static let testDoubleValue = "testDoubleValue"
+        static let testIntValue = "testIntValue"
+    }
+    
+    // MARK: - Private Properties
+
+    private var builder: DefaultChain<PetUrlRoute> {
+        return DefaultChain()
+    }
+
+    // MARK: - Public Methods
+
+    func getFindByStatus(status: String, testBoolValue: Bool, testDoubleValue: Double, testIntValue: Int) -> Observer<[PetEntity]> {
+        return builder
+            .set(query: [Keys.status: status])
+            .route(.get, .findByStatus)
+            .encode(as: .formUrl)
+            .build()
+            .process([Keys.testBoolValue: testBoolValue, Keys.testDoubleValue: testDoubleValue, Keys.testIntValue: testIntValue])
+        }
+    }
+
+    func postPetPetId(petId: String, pet: PetEntity) -> Observer<Void> {
+        return builder
+            .route(.post, .petPetId)
+            .build()
+            .process(pet)
+        }
+    }
+
+}

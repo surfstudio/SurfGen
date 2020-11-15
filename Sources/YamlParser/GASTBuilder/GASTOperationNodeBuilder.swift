@@ -36,9 +36,10 @@ final class GASTOperationNodeBuilder {
         }
 
         // Request parameters
-        if !operation.parameters.isEmpty {
-            subNodes.append(Node(token: .parameters, operation.parameters.map {
-                GASTParameterNodeBuilder().buildNode(for: $0.value)
+        let suitableParameters = operation.parameters.filter { $0.value.location.needsRecording }
+        if !suitableParameters.isEmpty {
+            subNodes.append(Node(token: .parameters, try suitableParameters.map {
+                try GASTParameterNodeBuilder().buildNode(for: $0.value)
             }))
         }
 
@@ -46,8 +47,6 @@ final class GASTOperationNodeBuilder {
         if let responseContent = operation.responses.filter({ $0.statusCode == 200 }).first?.response.value.content {
             let mediaContent = try GASTMediaContentNodeBuilder().buildMediaContentNode(with: responseContent)
             subNodes.append(Node(token: .responseBody, [mediaContent]))
-        } else {
-            subNodes.append(Node(token: .responseBody, []))
         }
         
         return Node(token: .operation, subNodes)

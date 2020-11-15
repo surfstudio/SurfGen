@@ -18,6 +18,7 @@ public enum ASTToken: Equatable {
     case operation
     case path(value: String)
     case encoding(type: String)
+    case location(type: String)
     case mediaContent
     case parameters
     case parameter(isOptional: Bool)
@@ -37,6 +38,7 @@ public enum ASTToken: Equatable {
              (.operation, .operation),
              (.path, .path),
              (.encoding, .encoding),
+             (.location, .location),
              (.mediaContent, .mediaContent),
              (.parameters, .parameters),
              (.parameter, .parameter),

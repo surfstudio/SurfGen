@@ -1,12 +1,12 @@
-// 
+//
 //  {{ name }}.swift
 //
 
 import NodeKit
 
 enum {{ name }} {
-	{% for path in paths %}case {{ path.name }}{% if path.hasParameters %}({% for parameter in path.parameters %}{{ parameter }}: String{% if not forloop.last %}, {% endif %}{% endfor %}){% endif %}{% if not forloop.last %}
-	{% endif %}{% endfor %}
+{% for path in paths %}    case {{ path.name }}{% if path.hasParameters %}({% for parameter in path.parameters %}{{ parameter }}: String{% if not forloop.last %}, {% endif %}{% endfor %}){% endif %}{% if not forloop.last %}
+{% endif %}{% endfor %}
 }
 
 // MARK: - UrlRouteProvider

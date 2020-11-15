@@ -28,7 +28,7 @@ public final class RootGenerator {
         environment = Environment(loader: loader)
     }
 
-    public func generateModel(from node: ASTNode, types: [ModelType], generateDescriptions: Bool = true) throws -> ModelGenerationModel {
+    public func generateModel(from node: ASTNode, types: [ModelType], generateDescriptions: Bool = true) throws -> ModelGeneratedModel {
         guard case .root = node.token else {
             throw GeneratorError.incorrectNodeToken("Root generator coundn't parse input node as node with root token")
         }
@@ -36,12 +36,12 @@ public final class RootGenerator {
         let root = generateDescriptions ? node : node.filterAllDescriptions()
         let (objectDecls, enumDecls) = DeclNodeSplitter().split(nodes: root.subNodes)
 
-        var model: ModelGenerationModel = [:]
+        var model: ModelGeneratedModel = [:]
         try types.forEach { try generate(for: $0, to: &model, from: $0 == .enum ? enumDecls : objectDecls) }
         return model
     }
 
-    public func generateService(from node: ASTNode, generateDescriptions: Bool = true) throws -> ServiceGenerationModel {
+    public func generateService(from node: ASTNode, generateDescriptions: Bool = true) throws -> ServiceGeneratedModel {
         guard
             case .root = node.token,
             let declNode = node.subNodes.declNode
@@ -53,19 +53,17 @@ public final class RootGenerator {
             _ = node.filterAllDescriptions()
         }
 
-        var serviceModel: ServiceGenerationModel = [:]
-        try generate(part: .urlRoute, to: &serviceModel, from: declNode)
+        var serviceModel = ServiceGeneratedModel()
+        serviceModel[.urlRoute] = try UrlRouteGenerator().generateCode(for: declNode, environment: environment)
+        let serviceFiles = try ServiceGenerator().generateCode(for: declNode, environment: environment)
+        serviceModel[.protocol] = serviceFiles.protocol
+        serviceModel[.service] = serviceFiles.service
         return serviceModel
     }
 
-    private func generate(for type: ModelType, to model: inout ModelGenerationModel, from nodes: [ASTNode]) throws {
+    private func generate(for type: ModelType, to model: inout ModelGeneratedModel, from nodes: [ASTNode]) throws {
         let generator = type.generator
-        model[type] = try nodes.map { try generator.generateCode(declNode: $0, environment: environment) }
-    }
-
-    private func generate(part: ServicePart, to model: inout ServiceGenerationModel, from node: ASTNode) throws {
-        let generator = part.generator
-        model[part] = try generator.generateCode(declNode: node, environment: environment)
+        model[type] = try nodes.map { try generator.generateCode(for: $0, environment: environment) }
     }
 
 }
@@ -83,21 +81,4 @@ private extension ModelType {
         }
     }
 
-}
-
-private extension ServicePart {
-
-    var generator: CodeGenerator {
-        switch self {
-        case .urlRoute:
-            return UrlRouteGenerator()
-        case .protocol:
-            // TODO: write generator
-            return UrlRouteGenerator()
-        case .service:
-            // TODO: write generator
-            return UrlRouteGenerator()
-        }
-    }
-    
 }
