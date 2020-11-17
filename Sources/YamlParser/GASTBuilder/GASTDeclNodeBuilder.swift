@@ -10,6 +10,12 @@ import SurfGenKit
 
 final class GASTDeclNodeBuilder {
 
+    private let contentNodeBuilder: GASTContentNodeBuilder
+
+    init(contentNodeBuilder: GASTContentNodeBuilder) {
+        self.contentNodeBuilder = contentNodeBuilder
+    }
+
     func buildDeclNode(for model: ComponentObject<Schema>) throws -> ASTNode {
         return model.isEnum ? try buildEnumDecl(for: model) : try buildObjectDecl(for: model)
     }
@@ -22,7 +28,8 @@ final class GASTDeclNodeBuilder {
 
     private func buildObjectDecl(for model: ComponentObject<Schema>) throws -> ASTNode {
         guard let object = model.value.type.object else {
-            throw GASTBuilderError.nonObjectNodeFound(model.name)
+            throw SurfGenError(nested: GASTBuilderError.nonObjectNodeFound(model.name),
+                               message: "Could not build object declaration")
         }
 
         let nameNode = Node(token: .name(value: model.name), [])

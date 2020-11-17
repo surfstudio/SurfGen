@@ -23,25 +23,31 @@ class GASTParameterNodeBuilderTests: XCTestCase {
         }
     }
 
-    func testParameters() {
+    /// Checks if parameter nodes for operation `updatePetWithForm` are built as expected
+    func testUpdatePetParameterNodesMatchExpected() {
+        // given
         guard let updatePet = operations.first(where: { $0.identifier == "updatePetWithForm" }) else {
             XCTFail("Couldn't find operation for test")
             return
         }
+
+        // when
         for parameter in updatePet.parameters {
             let node = GASTParameterNodeBuilder().buildNode(for: parameter.value)
 
+            // then
             guard case let .name(name) = node.subNodes[0].token else {
-                XCTFail("built node with incorrect token")
+                XCTFail("Built name node with incorrect token")
                 return
             }
-            XCTAssert(parameter.value.name == name, "generated token is not of correct type")
+            XCTAssert(parameter.value.name == name, "Generated name token is not of correct type")
 
             guard case let .type(location) = node.subNodes[1].token else {
-                XCTFail("built node with incorrect token")
+                XCTFail("Built type node with incorrect token")
                 return
             }
-            XCTAssert(parameter.value.location.rawValue == location, "generated token is not of correct type")
+            XCTAssert(parameter.value.location.rawValue == location, "Generated type token is not of correct type")
         }
     }
+
 }

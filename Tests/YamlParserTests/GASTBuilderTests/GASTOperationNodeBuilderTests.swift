@@ -10,6 +10,7 @@ import XCTest
 import Swagger
 import SurfGenKit
 
+/// Tests for building operation node and its content
 class GASTOperationNodeBuilderTests: XCTestCase {
 
     var operations: [Swagger.Operation]!
@@ -23,96 +24,91 @@ class GASTOperationNodeBuilderTests: XCTestCase {
         }
     }
 
-    func testGetMethod() {
+    func testGetPetOperationNodeMatchesExpected() throws {
         guard let getPet = operations.first(where: { $0.identifier == "getPetById" }) else {
             XCTFail("Couldn't find operation for test")
             return
         }
-        do {
-            let node = try GASTOperationNodeBuilder().buildMethodNode(for: getPet)
-            
-            guard case let .type(method) = node.subNodes[0].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-            XCTAssert("get" == method, "generated token is not of correct type")
+        let node = try GASTOperationNodeBuilder().buildMethodNode(for: getPet)
+        
+        guard case let .type(method) = node.subNodes[0].token else {
+            XCTFail("Built type node with incorrect token")
+            return
+        }
+        XCTAssert("get" == method, "Generated method token is not of correct type")
 
-            guard case let .path(path) = node.subNodes[1].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-            XCTAssert("/pet/{petId}" == path, "generated token is not of correct type")
+        guard case let .path(path) = node.subNodes[1].token else {
+            XCTFail("Built path node with incorrect token")
+            return
+        }
+        XCTAssert("/pet/{petId}" == path, "Generated path token is not of correct type")
 
-            guard case let .name(name) = node.subNodes[2].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-            XCTAssert("getPetById" == name, "generated token is not of correct type")
+        guard case let .name(name) = node.subNodes[2].token else {
+            XCTFail("Built name node with incorrect token")
+            return
+        }
+        XCTAssert("getPetById" == name, "Generated name token is not of correct type")
 
-            guard case let .description(description) = node.subNodes[3].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-            XCTAssert("Find pet by ID" == description, "generated token is not of correct type")
+        guard case let .description(description) = node.subNodes[3].token else {
+            XCTFail("Built description node with incorrect token")
+            return
+        }
+        XCTAssert("Find pet by ID" == description, "Generated description token is not of correct type")
 
-            guard node.subNodes[4].token == .parameters else {
-                XCTFail("built node with incorrect token")
-                return
-            }
+        guard node.subNodes[4].token == .parameters else {
+            XCTFail("Built parameters node with incorrect token")
+            return
+        }
 
-            guard node.subNodes[5].token == .responseBody else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-        } catch {
-            XCTFail(error.localizedDescription)
+        guard node.subNodes[5].token == .responseBody else {
+            XCTFail("Built responseBody node with incorrect token")
+            return
         }
     }
 
-    func testPostMethod() {
+    func testAddPetOperationNodeMatchesExpected() throws {
+        // given
         guard let postPet = operations.first(where: { $0.identifier == "addPet" }) else {
             XCTFail("Couldn't find operation for test")
             return
         }
-        do {
-            let node = try GASTOperationNodeBuilder().buildMethodNode(for: postPet)
-            
-            guard case let .type(method) = node.subNodes[0].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-            XCTAssert("post" == method, "generated token is not of correct type")
+        // when
+        let node = try GASTOperationNodeBuilder().buildMethodNode(for: postPet)
 
-            guard case let .path(path) = node.subNodes[1].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-            XCTAssert("/pet" == path, "generated token is not of correct type")
+        // then
+        guard case let .type(method) = node.subNodes[0].token else {
+            XCTFail("Built method node with incorrect token")
+            return
+        }
+        XCTAssert("post" == method, "Generated method token is not of correct type")
 
-            guard case let .name(name) = node.subNodes[2].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-            XCTAssert("addPet" == name, "generated token is not of correct type")
+        guard case let .path(path) = node.subNodes[1].token else {
+            XCTFail("Built path node with incorrect token")
+            return
+        }
+        XCTAssert("/pet" == path, "Generated path token is not of correct type")
 
-            guard case let .description(description) = node.subNodes[3].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-            XCTAssert("Add a new pet to the store" == description, "generated token is not of correct type")
+        guard case let .name(name) = node.subNodes[2].token else {
+            XCTFail("Built name node with incorrect token")
+            return
+        }
+        XCTAssert("addPet" == name, "Generated name token is not of correct type")
 
-            guard case let .requestBody(isRequestBodyOptional) = node.subNodes[4].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-            XCTAssert(false == isRequestBodyOptional, "generated token is not of correct type")
+        guard case let .description(description) = node.subNodes[3].token else {
+            XCTFail("Built description node with incorrect token")
+            return
+        }
+        XCTAssert("Add a new pet to the store" == description, "Generated description token is not of correct type")
 
-            guard node.subNodes[5].token == .responseBody else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-        } catch {
-            XCTFail(error.localizedDescription)
+        guard case let .requestBody(isRequestBodyOptional) = node.subNodes[4].token else {
+            XCTFail("Built requestBody node with incorrect token")
+            return
+        }
+        XCTAssert(false == isRequestBodyOptional, "Generated requestBody token is not of correct type")
+
+        guard node.subNodes[5].token == .responseBody else {
+            XCTFail("Built responseBody node with incorrect token")
+            return
         }
     }
 

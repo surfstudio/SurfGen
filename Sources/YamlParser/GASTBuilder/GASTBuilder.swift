@@ -11,15 +11,29 @@ import Swagger
 
 public final class GASTBuilder {
 
+    static var defaultBuilder: GASTBuilder {
+        let contentNodeBuilder = GASTContentNodeBuilder()
+        let declarationNodeBuilder = GASTDeclNodeBuilder(contentNodeBuilder: contentNodeBuilder)
+        return GASTBuilder(declarationNodeBuilder: declarationNodeBuilder)
+    }
+    
+    private let declarationNodeBuilder: GASTDeclNodeBuilder
+
+    init(declarationNodeBuilder: GASTDeclNodeBuilder) {
+        self.declarationNodeBuilder = declarationNodeBuilder
+    }
+
     func build(for models: [ComponentObject<Schema>]) throws -> ASTNode {
-        let builder = GASTDeclNodeBuilder()
-        let decls = try models.map { try builder.buildDeclNode(for: $0) }
+        let decls = try models.map {
+            try wrap(declarationNodeBuilder.buildDeclNode(for: $0),
+                     with: "Could not build declatration for model")
+        }
         return Node(token: .root, decls)
     }
     
     func build(service serviceName: String, with operations: [Operation]) throws -> ASTNode {
-        let builder = GASTDeclNodeBuilder()
-        let decl = try builder.buildDeclNode(forService: serviceName, with: operations)
+        let decl = try wrap(declarationNodeBuilder.buildDeclNode(forService: serviceName, with: operations),
+                            with: "Could not build declaration for service")
         return Node(token: .root, [decl])
     }
 

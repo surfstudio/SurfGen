@@ -10,6 +10,7 @@ import XCTest
 import Swagger
 import SurfGenKit
 
+/// Tests for building operation request/response body node
 class GASTMediaContentNodeBuilderTests: XCTestCase {
 
     var operations: [Swagger.Operation]!
@@ -23,7 +24,9 @@ class GASTMediaContentNodeBuilderTests: XCTestCase {
         }
     }
 
-    func testRequestBodyContent() {
+    /// Checks if request content node for operation `addPet` matches expected
+    func testRequestBodyContentNodeMatchesExpected() throws {
+        // given
         guard
             let postPet = operations.first(where: { $0.identifier == "addPet" }),
             let requestBody = postPet.requestBody?.value.content
@@ -31,26 +34,27 @@ class GASTMediaContentNodeBuilderTests: XCTestCase {
             XCTFail("Couldn't find operation for test")
             return
         }
-        do {
-            let node = try GASTMediaContentNodeBuilder().buildMediaContentNode(with: requestBody)
 
-            guard case let .encoding(encoding) = node.subNodes[0].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-            XCTAssert("application/json" == encoding, "generated token is not of correct type")
+        // when
+        let node = try GASTMediaContentNodeBuilder().buildMediaContentNode(with: requestBody)
 
-            guard case let .type(bodyType) = node.subNodes[1].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-            XCTAssert("Pet" == bodyType, "generated token is not of correct type")
-        } catch {
-            XCTFail(error.localizedDescription)
+        // then
+        guard case let .encoding(encoding) = node.subNodes[0].token else {
+            XCTFail("Encoding subnode has incorrect token")
+            return
         }
+        XCTAssert("application/json" == encoding, "Generated encoding token is not of correct type")
+
+        guard case let .type(bodyType) = node.subNodes[1].token else {
+            XCTFail("Type subnode has incorrect token")
+            return
+        }
+        XCTAssert("Pet" == bodyType, "Generated type token is not of correct type")
     }
 
-    func testResponseBodyContent() {
+    /// Checks if response content node for operation `getPetById` matches expected
+    func testResponseBodyContentNodeMatchesExpected() throws {
+        // given
         guard
             let postPet = operations.first(where: { $0.identifier == "getPetById" }),
             let responseBody = postPet.responses.filter({ $0.statusCode == 200 }).first?.response.value.content
@@ -58,23 +62,22 @@ class GASTMediaContentNodeBuilderTests: XCTestCase {
             XCTFail("Couldn't find operation for test")
             return
         }
-        do {
-            let node = try GASTMediaContentNodeBuilder().buildMediaContentNode(with: responseBody)
 
-            guard case let .encoding(encoding) = node.subNodes[0].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-            XCTAssert("application/json" == encoding, "generated token is not of correct type")
+        // when
+        let node = try GASTMediaContentNodeBuilder().buildMediaContentNode(with: responseBody)
 
-            guard case let .type(bodyType) = node.subNodes[1].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-            XCTAssert("Pet" == bodyType, "generated token is not of correct type")
-        } catch {
-            XCTFail(error.localizedDescription)
+        // then
+        guard case let .encoding(encoding) = node.subNodes[0].token else {
+            XCTFail("Encoding subnode has incorrect token")
+            return
         }
+        XCTAssert("application/json" == encoding, "Generated encoding token is not of correct type")
+
+        guard case let .type(bodyType) = node.subNodes[1].token else {
+            XCTFail("Type subnode has incorrect token")
+            return
+        }
+        XCTAssert("Pet" == bodyType, "Generated type token is not of correct type")
     }
 
 }
