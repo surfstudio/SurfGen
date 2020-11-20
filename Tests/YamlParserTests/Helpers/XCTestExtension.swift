@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import SurfGenKit
 
 extension XCTestCase {
     // https://www.swiftbysundell.com/posts/testing-error-code-paths-in-swift
@@ -22,14 +23,19 @@ extension XCTestCase {
                                 thrownError = $0
         }
 
+        guard let errorContainer = thrownError as? SurfGenError else {
+            XCTFail("Unknown error type")
+            return
+        }
+
         XCTAssertTrue(
-            thrownError is E,
+            errorContainer.rootError is E,
             "Unexpected error type: \(type(of: thrownError))",
             file: file, line: line
         )
 
         XCTAssertEqual(
-            thrownError as? E, error,
+            errorContainer.rootError as? E, error,
             file: file, line: line
         )
     }

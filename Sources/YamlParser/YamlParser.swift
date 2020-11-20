@@ -59,7 +59,17 @@ public class YamlToGASTParser {
                                        .apply { $0.filter { !blackList.contains($0.name) } } // # 4
                                        .apply { AliasReplacer().replace(for: $0, aliases: aliases) } // # 5
 
-        return try GASTBuilder().build(for: proccesedModels)
+        return try GASTBuilder.defaultBuilder.build(for: proccesedModels)
+    }
+
+    public func parseToGAST(forService serviceName: String) throws -> ASTNode {
+        let allPaths = spec.paths
+        let operations = allPaths.apply { PathFinder().findMatchingPaths(from: $0, for: serviceName) }
+                                 .flatMap { $0.operations }
+                                 .apply { DeprecatedFinder().removeDeprecated(from: $0) }
+    
+        return try GASTBuilder.defaultBuilder.build(service: serviceName, with: operations)
+        
     }
 
 }
