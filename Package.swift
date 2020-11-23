@@ -16,7 +16,8 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/JohnReeze/SwagGen/", from: "4.3.1"),
+        .package(url: "https://github.com/dmitryd20/SwagGen", .branch("external_reference_support")),
+        .package(url: "https://github.com/kylef/PathKit", from: "0.9.0"),
         .package(url: "https://github.com/stencilproject/Stencil", from: "0.13.1"),
         .package(url: "https://github.com/jakeheis/SwiftCLI", from: "5.3.3"),
         .package(url: "https://github.com/JohnReeze/XcodeProj", .upToNextMajor(from: "7.8.2")),

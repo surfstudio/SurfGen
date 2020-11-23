@@ -1,0 +1,18 @@
+//
+//  FeedbackService.swift
+//
+
+import NodeKit
+
+public protocol FeedbackService {
+
+    /// Файлы для обратной связи
+    func postAttachments(multipartModel: MultipartModel) -> Observer<AttachmentEntity>
+
+    /// Этот метод используется для того, чтобы отправить форму на тему "Другое". То есть на любую другую тему кроме объединения аккаунтов
+    func postReport(report: ReportEntity) -> Observer<InfoMessageEntity>
+
+    /// Этот метод используется для того, чтобы заполнить форму на объединение аккаунтов
+    func postReportAddAccounts(reportAddAccounts: ReportAddAccountsEntity) -> Observer<InfoMessageEntity>
+
+}

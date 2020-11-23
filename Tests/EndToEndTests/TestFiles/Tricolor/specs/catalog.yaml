@@ -1,0 +1,108 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+  contact:
+    name: Starkina Maria
+    email: starkina@surfstudio.ru
+
+servers:
+  - url: https://mobile-dev.tricolor.tv/mobile-api/v1
+    description: Dev-сервер. 
+  - url:  https://mobile-rel.tricolor.tv/mobile-api/v1
+    description: Stage-сервер
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+
+security:
+  - bearerAuth: []
+      
+paths:
+  /billings/services:       
+    get:
+      summary: Услуги для каталога
+      parameters:
+        - name: isActive
+          required: false
+          in: query
+          schema:
+            type: boolean
+          description: Если true, возвращаются активные и приостановленные услуги. По умолчанию - все 
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "models.yaml#/components/schemas/CatalogItem"
+        default:
+          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+
+  /billings/service?serviceId={serviceId}:       
+      get:
+        summary: Детальная информация по услуге
+        parameters:
+          - name: serviceId
+            required: true
+            in: query
+            schema:
+              type: string
+            description: ID услуги
+        responses:
+          "200":
+            description: "Все ок"
+            content:
+              application/json:
+                schema:
+                  $ref: "models.yaml#/components/schemas/Service"
+          default:
+            $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+
+  /billings/tariffs?serviceId={serviceId}:       
+    get:
+      summary: Доступные тарифы
+      parameters:
+        - name: serviceId
+          required: true
+          in: query
+          schema:
+            type: string
+          description: ID услуги
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "../billings/models.yaml#/components/schemas/Tariffs"
+        default:
+          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+  
+  /billings/setTariff:
+    post:
+      summary: Изменение тарифа
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema:
+              $ref: "models.yaml#/components/schemas/SetTariffRequest"
+      responses:
+        "200":
+          description: "Успех"
+          content:
+            application/json:
+              schema:
+                $ref: "../common/models.yaml#/components/schemas/InfoMessage" 
+        default:
+          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+

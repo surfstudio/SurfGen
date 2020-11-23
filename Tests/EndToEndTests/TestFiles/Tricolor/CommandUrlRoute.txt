@@ -1,0 +1,23 @@
+//
+//  CommandUrlRoute.swift
+//
+
+import NodeKit
+
+enum CommandUrlRoute {
+    case command
+}
+
+// MARK: - UrlRouteProvider
+
+extension CommandUrlRoute: UrlRouteProvider {
+
+    func url() throws -> URL {
+        let base = URL(string: Urls.base)
+        switch self {
+        case .command:
+            return try base + "/command"
+        }
+    }
+
+}
