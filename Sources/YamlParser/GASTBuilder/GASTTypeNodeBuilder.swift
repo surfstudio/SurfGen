@@ -56,7 +56,8 @@ final class GASTTypeNodeBuilder {
             return Node(token: .type(name: ASTConstants.array), [try buildTypeNode(for: subSchema)])
         }
 
-        throw GASTBuilderError.undefinedTypeForField(schema.type.description)
+        throw SurfGenError(nested: GASTBuilderError.undefinedTypeForField(schema.type.description),
+                           message: "Could not determine field type")
     }
 
 }

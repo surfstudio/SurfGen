@@ -84,6 +84,10 @@ extension String {
             .lowercaseFirstLetter()
     }
 
+    func tabShifted() -> String {
+        return self.replacingOccurrences(of: "\n", with: "\n\t")
+    }
+
     /// index for default model properties order
     var propertyPriorityIndex: Int {
         switch self {

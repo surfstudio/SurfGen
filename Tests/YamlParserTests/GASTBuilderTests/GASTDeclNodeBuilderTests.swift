@@ -10,7 +10,10 @@ import XCTest
 import Swagger
 import SurfGenKit
 
+/// Tests for building object, enum and service decl nodes
 class GASTDeclNodeBuilderTests: XCTestCase {
+
+    let declNodeBuilder = GASTDeclNodeBuilder(contentNodeBuilder: GASTContentNodeBuilder())
 
     var shopObject: ComponentObject<Schema>!
     var deleveryEnumObject: ComponentObject<Schema>!
@@ -30,90 +33,86 @@ class GASTDeclNodeBuilderTests: XCTestCase {
         }
     }
 
-    func testDeclNodeBuilder() {
-        do {
-            let node = try GASTDeclNodeBuilder().buildDeclNode(for: shopObject)
+    // Checks if built decl node for model has correct token, name and content subnodes
+    func testDeclNodeMatchesExpected() throws {
+        // when
+        let node = try declNodeBuilder.buildDeclNode(for: shopObject)
 
+        // then
 
-            // check for correct node
-            guard case .decl = node.token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
+        // check for correct node token
+        guard case .decl = node.token else {
+            XCTFail("decl node has incorrect token")
+            return
+        }
 
-            // check subnodes
+        // check subnodes
 
-            guard case let .name(value) = node.subNodes[0].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
+        guard case let .name(value) = node.subNodes[0].token else {
+            XCTFail("decl name subnode has incorrect token")
+            return
+        }
 
-            XCTAssert(value == "ShopLocation", "Name subnode is incorrect")
+        XCTAssert(value == "ShopLocation", "Name subnode is incorrect")
 
-            guard case .content = node.subNodes[1].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-        } catch {
-            XCTFail(error.localizedDescription)
+        guard case .content = node.subNodes[1].token else {
+            XCTFail("decl content subnode has incorrect token")
+            return
         }
     }
 
-    func testEnumDeclNodeBuilder() {
-        do {
-            let node = try GASTDeclNodeBuilder().buildDeclNode(for: deleveryEnumObject)
+    // Checks if built decl node for enum has correct token, name and content subnodes
+    func testEnumDeclNodeMatchesExpected() throws {
+        // when
+        let node = try declNodeBuilder.buildDeclNode(for: deleveryEnumObject)
 
+        // then
 
-            // check for correct node
-            guard case .decl = node.token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
+        // check for correct node token
+        guard case .decl = node.token else {
+            XCTFail("decl node has incorrect token")
+            return
+        }
 
-            // check subnodes
+        // check subnodes
 
-            guard case let .name(value) = node.subNodes[0].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
+        guard case let .name(value) = node.subNodes[0].token else {
+            XCTFail("decl name subnode has incorrect token")
+            return
+        }
 
-            XCTAssert(value == "DeliveryType", "Name subnode is incorrect")
+        XCTAssert(value == "DeliveryType", "Name subnode is incorrect")
 
-            guard case .content = node.subNodes[1].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-        } catch {
-            XCTFail(error.localizedDescription)
+        guard case .content = node.subNodes[1].token else {
+            XCTFail("decl content subnode has incorrect token")
+            return
         }
     }
 
-    func testServiceDeclNodeBuilder() {
-        do {
-            
-            let node = try GASTDeclNodeBuilder().buildDeclNode(forService: "Pet", with: operations)
+    // Checks if built decl node for service has correct token, name and content subnodes
+    func testServiceDeclNodeMatchesExpected() throws {
+        // when
+        let node = try declNodeBuilder.buildDeclNode(forService: "Pet", with: operations)
 
-            // check for correct node
-            guard case .decl = node.token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
+        //then
+        
+        // check for correct node token
+        guard case .decl = node.token else {
+            XCTFail("decl node has incorrect token")
+            return
+        }
 
-            // check subnodes
+        // check subnodes
+        guard case let .name(value) = node.subNodes[0].token else {
+            XCTFail("decl name subnode has incorrect token")
+            return
+        }
 
-            guard case let .name(value) = node.subNodes[0].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
+        XCTAssert(value == "Pet", "Name subnode is incorrect")
 
-            XCTAssert(value == "Pet", "Name subnode is incorrect")
-
-            guard case .content = node.subNodes[1].token else {
-                XCTFail("built node with incorrect token")
-                return
-            }
-        } catch {
-            XCTFail(error.localizedDescription)
+        guard case .content = node.subNodes[1].token else {
+            XCTFail("decl content subnode has incorrect token")
+            return
         }
     }
 

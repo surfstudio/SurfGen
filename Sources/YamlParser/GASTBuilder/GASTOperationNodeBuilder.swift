@@ -31,7 +31,8 @@ final class GASTOperationNodeBuilder {
 
         // Request body, if exists
         if let requestBody = operation.requestBody?.value {
-            let mediaContent = try GASTMediaContentNodeBuilder().buildMediaContentNode(with: requestBody.content)
+            let mediaContent = try wrap(GASTMediaContentNodeBuilder().buildMediaContentNode(with: requestBody.content),
+                                        with: "Could not parse request body for operation")
             subNodes.append(Node(token: .requestBody(isOptional: !requestBody.required), [mediaContent]))
         }
 
@@ -45,7 +46,8 @@ final class GASTOperationNodeBuilder {
 
         // Response type, schema or Void
         if let responseContent = operation.responses.filter({ $0.statusCode == 200 }).first?.response.value.content {
-            let mediaContent = try GASTMediaContentNodeBuilder().buildMediaContentNode(with: responseContent)
+            let mediaContent = try wrap(GASTMediaContentNodeBuilder().buildMediaContentNode(with: responseContent),
+                                        with: "Could not parse response body for operation")
             subNodes.append(Node(token: .responseBody, [mediaContent]))
         }
         

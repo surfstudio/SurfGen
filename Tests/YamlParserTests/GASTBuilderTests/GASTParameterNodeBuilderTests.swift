@@ -23,35 +23,36 @@ class GASTParameterNodeBuilderTests: XCTestCase {
         }
     }
 
-    func testParameters() {
+    /// Checks if parameter nodes for operation `updatePetWithForm` are built as expected
+    func testUpdatePetParameterNodesMatchExpected() throws {
+        // given
         guard let updatePet = operations.first(where: { $0.identifier == "updatePetWithForm" }) else {
             XCTFail("Couldn't find operation for test")
             return
         }
-        do {
-            for parameter in updatePet.parameters {
-                let node = try GASTParameterNodeBuilder().buildNode(for: parameter.value)
 
-                guard case let .name(name) = node.subNodes[0].token else {
-                    XCTFail("built node with incorrect token")
-                    return
-                }
-                XCTAssert(parameter.value.name == name, "generated token is not of correct type")
-                
-                guard case let .type(type) = node.subNodes[1].token else {
-                    XCTFail("built node with incorrect token")
-                    return
-                }
-                XCTAssert(correctTypeForParameter(name: name) == type, "generated token is not of correct type")
+        // when
+        for parameter in updatePet.parameters {
+            let node = try GASTParameterNodeBuilder().buildNode(for: parameter.value)
 
-                guard case let .location(location) = node.subNodes[2].token else {
-                    XCTFail("built node with incorrect token")
-                    return
-                }
-                XCTAssert(parameter.value.location.rawValue == location, "generated token is not of correct type")
+            // then
+            guard case let .name(name) = node.subNodes[0].token else {
+                XCTFail("Built name node with incorrect token")
+                return
             }
-        } catch {
-            XCTFail(error.localizedDescription)
+            XCTAssert(parameter.value.name == name, "Generated name token is not of correct type")
+
+            guard case let .type(type) = node.subNodes[1].token else {
+                XCTFail("Built type node with incorrect token")
+                return
+            }
+            XCTAssert(correctTypeForParameter(name: name) == type, "Generated type token is not of correct type")
+
+            guard case let .location(location) = node.subNodes[2].token else {
+                XCTFail("Built location node with incorrect token")
+                return
+            }
+            XCTAssert(parameter.value.location.rawValue == location, "Generated location token is not of correct type")
         }
     }
 
@@ -59,9 +60,7 @@ class GASTParameterNodeBuilderTests: XCTestCase {
         switch name {
         case "petId":
             return "Int"
-        case "name":
-            return "String"
-        case "status":
+        case "name", "status":
             return "String"
         default:
             XCTFail("Couldn't check type for parameter with name: \(name)")

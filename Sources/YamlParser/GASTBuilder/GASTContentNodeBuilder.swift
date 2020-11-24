@@ -22,12 +22,16 @@ final class GASTContentNodeBuilder {
         if let values = schema.value.metadata.enumValues as? [Int]  {
             return Node(token: .content, values.map { Node(token: .value(String($0)), []) })
         }
-
-        throw GASTBuilderError.incorrectEnumObjectConfiguration(schema.name)
+        throw SurfGenError(nested: GASTBuilderError.incorrectEnumObjectConfiguration(schema.name),
+                           message: "Could not build enum content subnodes")
     }
     
     func buildServiceContentSubnodes(with operations: [Operation]) throws -> ASTNode {
-        return Node(token: .content, try operations.map { try GASTOperationNodeBuilder().buildMethodNode(for: $0) })
+        return Node(token: .content, try operations.map {
+            try wrap(GASTOperationNodeBuilder().buildMethodNode(for: $0),
+                     with: "Could not build service conent subnodes")
+            
+        })
     }
 
     private func buildSubnodes(for object: ObjectSchema) throws -> [ASTNode] {
@@ -36,7 +40,8 @@ final class GASTContentNodeBuilder {
         for property in object.properties {
             var fieldSubNodes = [
                 Node(token: .name(value: property.name), []),
-                try builder.buildTypeNode(for: property.schema)
+                try wrap(builder.buildTypeNode(for: property.schema),
+                         with: "Could not build object content subnodes")
             ]
             if let description = property.schema.metadata.description {
                 fieldSubNodes.append(Node(token: .description(description), []))

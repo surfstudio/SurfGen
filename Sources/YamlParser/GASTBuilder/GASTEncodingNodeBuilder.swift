@@ -28,7 +28,8 @@ private extension Content {
             return MediaType.multipartForm.rawValue
         }
         guard let encoding =  mediaItems.keys.first else {
-            throw GASTBuilderError.undefindedContentBody(mediaItems.keys.description)
+            throw SurfGenError(nested: GASTBuilderError.undefindedContentBody(mediaItems.keys.description),
+                               message: "Could not determine encoding for request body")
         }
         return encoding
     }
