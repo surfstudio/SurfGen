@@ -7,13 +7,18 @@
 //
 
 public final class PropertyGenerator {
+    
+    private enum Constants {
+        static let errorMessage = "Could not generate property model"
+    }
 
     /**
     Method for creating model for NodeKit's templates
     */
     public func generateCode(for node: ASTNode, type: ModelType) throws -> PropertyGenerationModel {
         guard case let .field(isOptional) = node.token else {
-            throw GeneratorError.incorrectNodeToken("Property generator couldn't parse incorrect node")
+            throw SurfGenError(nested: GeneratorError.incorrectNodeToken("Property generator couldn't parse incorrect node"),
+                               message: Constants.errorMessage)
         }
 
         guard
@@ -21,10 +26,12 @@ public final class PropertyGenerator {
             let typeNode = node.subNodes.typeNode,
             case let .name(value) = nameNode.token,
             case .type = typeNode.token else {
-                throw GeneratorError.nodeConfiguration("Property generator couldn't parse incorrect subnodes configurations")
+                throw SurfGenError(nested: GeneratorError.nodeConfiguration("Property generator couldn't parse incorrect subnodes configurations"),
+                                   message: Constants.errorMessage)
         }
 
-        let nodeType = try TypeNodeParser().detectType(for: typeNode)
+        let nodeType = try wrap(TypeNodeParser().detectType(for: typeNode),
+                                with: Constants.errorMessage)
 
         return .init(entryName: value,
                      entityName: value.snakeCaseToCamelCase(),

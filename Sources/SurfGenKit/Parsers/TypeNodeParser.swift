@@ -29,12 +29,17 @@ indirect enum Type {
 
 final class TypeNodeParser {
 
+    private enum Constants {
+        static let errorMessage = "Could not detect type"
+    }
+
     /**
      Method for detection of concreate type for ASTNode with Type token
      */
     func detectType(for typeNode: ASTNode) throws -> Type {
         guard case let .type(name) = typeNode.token else {
-            throw GeneratorError.incorrectNodeToken("provided node is not type node")
+            throw SurfGenError(nested: GeneratorError.incorrectNodeToken("provided node is not type node"),
+                               message: Constants.errorMessage)
         }
 
         switch typeNode.subNodes.count {
@@ -42,7 +47,8 @@ final class TypeNodeParser {
             return .plain(name)
         case 1:
             guard let subNode = typeNode.subNodes.first, case let .type(subName) = subNode.token else {
-                throw GeneratorError.nodeConfiguration("can find subnode with correct type for typeNode with name \(name)")
+                throw SurfGenError(nested: GeneratorError.nodeConfiguration("can find subnode with correct type for typeNode with name \(name)"),
+                                   message: Constants.errorMessage)
             }
 
             switch name {
@@ -53,10 +59,13 @@ final class TypeNodeParser {
             case ASTConstants.enum:
                 return .enum(subName)
             default:
-                throw GeneratorError.nodeConfiguration("provided node with name \(name) can not be resolved")
+                throw SurfGenError(nested: GeneratorError.nodeConfiguration("provided node with name \(name) can not be resolved"),
+                                   message: Constants.errorMessage)
+
             }
         default:
-            throw GeneratorError.incorrectNodeNumber("Type node contains to many nodes")
+            throw SurfGenError(nested: GeneratorError.incorrectNodeNumber("Type node contains to many nodes"),
+                               message: Constants.errorMessage)
         }
 
     }

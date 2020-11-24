@@ -30,7 +30,8 @@ public final class RootGenerator {
 
     public func generateModel(from node: ASTNode, types: [ModelType], generateDescriptions: Bool = true) throws -> ModelGeneratedModel {
         guard case .root = node.token else {
-            throw GeneratorError.incorrectNodeToken("Root generator coundn't parse input node as node with root token")
+            throw SurfGenError(nested: GeneratorError.incorrectNodeToken("Root generator coundn't parse input node as node with root token"),
+                               message: "Could not generate model")
         }
 
         let root = generateDescriptions ? node : node.filterAllDescriptions()
@@ -46,7 +47,8 @@ public final class RootGenerator {
             case .root = node.token,
             let declNode = node.subNodes.declNode
         else {
-            throw GeneratorError.incorrectNodeToken("Root generator coundn't parse input node as service root node")
+            throw SurfGenError(nested: GeneratorError.incorrectNodeToken("Root generator coundn't parse input node as service root node"),
+                               message: "Could not generate service")
         }
 
         if !generateDescriptions {

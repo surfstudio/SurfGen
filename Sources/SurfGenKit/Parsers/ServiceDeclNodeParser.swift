@@ -12,14 +12,20 @@ struct ServiceDeclaration {
 
 class ServiceDeclNodeParser {
 
+    private enum Constants {
+        static let errorMessage = "Could not get info from service decl node"
+    }
+
     func getInfo(from declNode: ASTNode) throws -> ServiceDeclaration {
         // find content node
         guard let contentNode = declNode.subNodes.contentNode else {
-            throw GeneratorError.nodeConfiguration("content node couldn't be resolved for decl node")
+            throw SurfGenError(nested: GeneratorError.nodeConfiguration("content node couldn't be resolved for decl node"),
+                               message: Constants.errorMessage)
         }
         // find name node
         guard let nameNode = declNode.subNodes.nameNode, case let .name(name) = nameNode.token else {
-            throw GeneratorError.nodeConfiguration("name node couldn't be resolved for decl node")
+            throw SurfGenError(nested: GeneratorError.nodeConfiguration("name node couldn't be resolved for decl node"),
+                               message: Constants.errorMessage)
         }
 
         return .init(name: name, operations: contentNode.subNodes)

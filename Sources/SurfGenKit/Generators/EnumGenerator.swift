@@ -10,12 +10,15 @@ import Stencil
 final class EnumGenerator: CodeGenerator {
 
     func generateCode(for declNode: ASTNode, environment: Environment) throws -> FileModel {
-        let declModel = try ModelDeclNodeParser().getInfo(from: declNode)
+        let declModel = try wrap(ModelDeclNodeParser().getInfo(from: declNode),
+                                 with: "Could not generate num code")
 
         guard let typeNode = declNode.subNodes.typeNode else {
-            throw GeneratorError.nodeConfiguration("decl node does not contain type")
+            throw SurfGenError(nested: GeneratorError.nodeConfiguration("decl node does not contain type"),
+                               message: "Could not parse decl node")
         }
-        let type = try TypeNodeParser().detectType(for: typeNode)
+        let type = try wrap(TypeNodeParser().detectType(for: typeNode),
+                            with: "Could not generate num code")
 
         let cases: [String] = declModel.fields.compactMap {
             if case let .value(value) = $0.token {
