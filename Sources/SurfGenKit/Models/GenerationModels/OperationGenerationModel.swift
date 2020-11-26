@@ -54,7 +54,7 @@ public struct OperationGenerationModel {
     let name: String
     let hasDescription: Bool
     let description: String?
-    let path: String
+    let path: PathGenerationModel
     let httpMethod: String
     let hasPathParameters: Bool
     let pathParameters: [ParameterGenerationModel]
@@ -77,7 +77,7 @@ public struct OperationGenerationModel {
     
     init(name: String,
          description: String?,
-         path: String,
+         path: PathGenerationModel,
          httpMethod: String,
          pathParameters: [ParameterGenerationModel],
          queryParameters: [ParameterGenerationModel],

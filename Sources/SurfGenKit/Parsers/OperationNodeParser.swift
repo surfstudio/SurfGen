@@ -11,6 +11,14 @@ class OperationNodeParser {
         static let errorMessage = "Could not parse operation node"
     }
 
+    private let mediaContentParser: MediaContentNodeParser
+    private let parametersParser: ParametersNodeParser
+
+    init(mediaContentParser: MediaContentNodeParser, parametersParser: ParametersNodeParser) {
+        self.mediaContentParser = mediaContentParser
+        self.parametersParser = parametersParser
+    }
+
     func parse(operation: ASTNode, forServiceName serviceName: String) throws -> OperationGenerationModel {
         // get http method
         guard
@@ -32,7 +40,7 @@ class OperationNodeParser {
         // get parameters
         var parameters = [ParameterGenerationModel]()
         if let parametersNode = operation.subNodes.parametersNode {
-            parameters = try wrap(ParametersNodeParser().parseParameters(node: parametersNode),
+            parameters = try wrap(parametersParser.parseParameters(node: parametersNode),
                                   with: Constants.errorMessage)
         }
 
@@ -44,6 +52,9 @@ class OperationNodeParser {
             throw SurfGenError(nested: GeneratorError.nodeConfiguration("Couldn't get path node from operation"),
                                message: Constants.errorMessage)
         }
+        let pathModel = PathGenerationModel(name: path.pathName,
+                                            path: path.pathWithSwiftParameters(),
+                                            parameters: parameters.filter { $0.location == .path }.map { $0.name })
 
         // get name
         var name: String
@@ -54,17 +65,17 @@ class OperationNodeParser {
         }
 
         // get request body
-        let requestBody = try wrap(MediaContentNodeParser().parseRequestBody(node: operation.subNodes.requestBodyNode),
+        let requestBody = try wrap(mediaContentParser.parseRequestBody(node: operation.subNodes.requestBodyNode),
                                    with: Constants.errorMessage)
 
         // get response body
-        let responseBody = try wrap(MediaContentNodeParser().parseResponseBody(node: operation.subNodes.responseBodyNode),
+        let responseBody = try wrap(mediaContentParser.parseResponseBody(node: operation.subNodes.responseBodyNode),
                                     with: Constants.errorMessage)
         
 
         return OperationGenerationModel(name: name,
                                         description: description,
-                                        path: path.pathName,
+                                        path: pathModel,
                                         httpMethod: method,
                                         pathParameters: parameters.filter { $0.location == .path },
                                         queryParameters: parameters.filter { $0.location == .query },

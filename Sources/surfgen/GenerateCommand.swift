@@ -150,10 +150,12 @@ final class GenerateCommand: Command {
     func tryToGenerate(serviceName: String,
                        spec: String,
                        rootGenerator: RootGenerator,
-                       isDescriptionsEnabled: Bool) -> ServiceGeneratedModel {
+                       isDescriptionsEnabled: Bool,
+                       serviceGenerator: ServiceGenerator = ServiceGenerator.defaultGenerator) -> ServiceGeneratedModel {
         do {
             let parser = try YamlToGASTParser(string: spec)
             let service = try parser.parseToGAST(forService: serviceName)
+            rootGenerator.configureServiceGenerator(serviceGenerator)
             return try rootGenerator.generateService(from: service, generateDescriptions: isDescriptionsEnabled)
         } catch {
             exitWithError(error.localizedDescription)

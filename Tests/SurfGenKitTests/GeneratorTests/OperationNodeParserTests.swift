@@ -16,13 +16,16 @@ class OperationNodeParserTests: XCTestCase {
         static let testServiceName = "Pet"
     }
 
+    private let operationNodeParser = OperationNodeParser(mediaContentParser: MediaContentNodeParser(),
+                                                          parametersParser: ParametersNodeParser())
+
     func testPostOperationMethodParsingMatchesExpected() throws {
         // given
         let operation = NodesBuilder.formPostPetByIdOperationNode()
         let expectedMethod = "post"
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
                                                                  forServiceName: Constants.testServiceName)
         
         // then
@@ -35,7 +38,7 @@ class OperationNodeParserTests: XCTestCase {
         let expectedMethod = "get"
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
                                                                  forServiceName: Constants.testServiceName)
         
         // then
@@ -48,7 +51,7 @@ class OperationNodeParserTests: XCTestCase {
         let expectedName = "postPetPetId"
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
                                                                  forServiceName: Constants.testServiceName)
         
         // then
@@ -61,7 +64,7 @@ class OperationNodeParserTests: XCTestCase {
         let expectedDescription = "Finds Pets by status"
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
                                                                  forServiceName: Constants.testServiceName)
         
         // then
@@ -78,7 +81,7 @@ class OperationNodeParserTests: XCTestCase {
         let expectedPathParameters = ["petId"]
         
         // when
-        let generatedPathModel = try OperationNodeParser().parsePath(from: operation)
+        let generatedPathModel = try operationNodeParser.parsePath(from: operation)
         
         // then
         XCTAssertEqual(generatedPathModel.name, expectedPathName)
@@ -97,7 +100,7 @@ class OperationNodeParserTests: XCTestCase {
         let expectedPathParameters = [String]()
         
         // when
-        let generatedPathModel = try OperationNodeParser().parsePath(from: operation)
+        let generatedPathModel = try operationNodeParser.parsePath(from: operation)
         
         // then
         XCTAssertEqual(generatedPathModel.name, expectedPathName)
@@ -117,7 +120,7 @@ class OperationNodeParserTests: XCTestCase {
                                                            location: .query)]
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
                                                                  forServiceName: Constants.testServiceName)
         
         // then
@@ -139,7 +142,7 @@ class OperationNodeParserTests: XCTestCase {
         
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
                                                                  forServiceName: Constants.testServiceName)
         
         // then
@@ -183,7 +186,7 @@ class OperationNodeParserTests: XCTestCase {
         
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
                                                                  forServiceName: Constants.testServiceName)
         
         // then
@@ -205,7 +208,7 @@ class OperationNodeParserTests: XCTestCase {
         
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
                                                                  forServiceName: Constants.testServiceName)
         
         // then
@@ -222,7 +225,7 @@ class OperationNodeParserTests: XCTestCase {
         
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
                                                                  forServiceName: Constants.testServiceName)
         
         // then

@@ -15,7 +15,9 @@ class TricolorEndToEndTests: XCTestCase {
 
     lazy var rootGenerator: RootGenerator = {
         let templatesPath = Path(#file) + "../../../Templates"
-        return RootGenerator(tempatesPath: templatesPath)
+        let rootGenerator = RootGenerator(tempatesPath: templatesPath)
+        rootGenerator.configureServiceGenerator(ServiceGenerator.defaultGenerator)
+        return rootGenerator
     }()
 
     /// Checks if generated services for Tricolor API are equal to expected ones

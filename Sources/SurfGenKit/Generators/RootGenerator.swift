@@ -15,6 +15,7 @@ public final class RootGenerator {
     // MARK: - Private Properties
 
     private let environment: Environment
+    private var serviceGenerator: ServiceGenerator?
     
     // MARK: - Initialization
 
@@ -26,6 +27,10 @@ public final class RootGenerator {
     public init(tempatesPath: Path) {
         let loader = FileSystemLoader(paths: [tempatesPath])
         environment = Environment(loader: loader)
+    }
+
+    public func configureServiceGenerator(_ generator: ServiceGenerator) {
+        serviceGenerator = generator
     }
 
     public func generateModel(from node: ASTNode, types: [ModelType], generateDescriptions: Bool = true) throws -> ModelGeneratedModel {
@@ -43,6 +48,9 @@ public final class RootGenerator {
     }
 
     public func generateService(from node: ASTNode, generateDescriptions: Bool = true) throws -> ServiceGeneratedModel {
+        guard let generator = serviceGenerator else {
+            fatalError("serviceGenerator not provided")
+        }
         guard
             case .root = node.token,
             let declNode = node.subNodes.declNode
@@ -55,12 +63,7 @@ public final class RootGenerator {
             _ = node.filterAllDescriptions()
         }
 
-        var serviceModel = ServiceGeneratedModel()
-        serviceModel[.urlRoute] = try UrlRouteGenerator().generateCode(for: declNode, environment: environment)
-        let serviceFiles = try ServiceGenerator().generateCode(for: declNode, environment: environment)
-        serviceModel[.protocol] = serviceFiles.protocol
-        serviceModel[.service] = serviceFiles.service
-        return serviceModel
+        return try generator.generateCode(for: declNode, environment: environment)
     }
 
     private func generate(for type: ModelType, to model: inout ModelGeneratedModel, from nodes: [ASTNode]) throws {

@@ -24,10 +24,6 @@ final class GASTMediaContentNodeBuilder {
         switch schema.type {
         case .object(let object):
             return Node(token: .type(name: ASTConstants.object), try object.properties.map { property in
-                guard let propertyType = property.schema.type.typeName else {
-                    throw SurfGenError(nested: GASTBuilderError.undefindedContentBody(schema.type.description),
-                                       message: "Could not determine fields of request body object")
-                }
                 return Node(token: .field(isOptional: !property.required), [
                     Node(token: .name(value: property.name), []),
                     try GASTTypeNodeBuilder().buildTypeNode(for: property.schema)
