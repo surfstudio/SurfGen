@@ -37,6 +37,9 @@ final class GASTMediaContentNodeBuilder {
             return Node(token: .type(name: ASTConstants.array), [
                 Node(token: .type(name: modelName), [])
             ])
+        case .group(let group):
+            return Node(token: .type(name: ASTConstants.group),
+                        try group.schemas.map { try subNodeForEncoded(schema: $0) })
         default:
             guard let typeName = schema.type.modelName else {
                 throw SurfGenError(nested: GASTBuilderError.undefindedContentBody(schema.type.description),

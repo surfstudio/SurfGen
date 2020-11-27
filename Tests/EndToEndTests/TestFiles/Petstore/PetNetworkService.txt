@@ -5,7 +5,7 @@
 import NodeKit
 
 public class PetNetworkService: PetService {
-    
+
     // MARK: - Constants
 
     private enum Keys {
@@ -13,7 +13,7 @@ public class PetNetworkService: PetService {
         static let name = "name"
         static let status = "status"
     }
-    
+
     // MARK: - Private Properties
 
     private var builder: DefaultChain<PetUrlRoute> {

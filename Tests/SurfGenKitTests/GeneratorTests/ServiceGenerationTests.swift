@@ -40,7 +40,7 @@ class ServiceGenerationTests: XCTestCase {
                        "File name is not equal to expected one. Resulted value:\n\(generatedRoute.fileName)")
         XCTAssertEqual(generatedRoute.code,
                        expectedCode,
-                       "Code is not equal to expected one. Resulted value:\n\(generatedRoute.code)")
+                       FileComparator().getDifference(for: generatedRoute.code, expectedFile: expectedCode))
     }
 
     func testGeneratedServiceProtocolMatchesExpected() throws {
@@ -63,7 +63,7 @@ class ServiceGenerationTests: XCTestCase {
                        "File name is not equal to expected one. Resulted value:\n\(generatedProtocol.fileName)")
         XCTAssertEqual(generatedProtocol.code,
                        expectedCode,
-                       "Code is not equal to expected one. Resulted value:\n\(generatedProtocol.code)")
+                       FileComparator().getDifference(for: generatedProtocol.code, expectedFile: expectedCode))
     }
 
     func testGeneratedServiceImplementationMatchesExpected() throws {
@@ -85,7 +85,7 @@ class ServiceGenerationTests: XCTestCase {
                        "File name is not equal to expected one. Resulted value:\n\(generatedImplementation.fileName)")
         XCTAssertEqual(generatedImplementation.code,
                        expectedCode,
-                       "Code is not equal to expected one. Resulted value:\n\(generatedImplementation.code)")
+                       FileComparator().getDifference(for: generatedImplementation.code, expectedFile: expectedCode))
     }
 
 }

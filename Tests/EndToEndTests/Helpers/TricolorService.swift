@@ -9,7 +9,7 @@ import SurfGenKit
 
 enum TricolorService: String, CaseIterable {
     case activation
-//    case auth
+    case auth
     case billings
 //    case catalog
     case command
@@ -30,6 +30,8 @@ enum TricolorService: String, CaseIterable {
         switch self {
         case .activation:
             return "Activation"
+        case .auth:
+            return "Auth"
         case .billings:
             return "Billings"
         case .command:

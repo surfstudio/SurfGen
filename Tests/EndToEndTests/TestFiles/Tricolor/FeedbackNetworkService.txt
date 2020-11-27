@@ -5,7 +5,7 @@
 import NodeKit
 
 public class FeedbackNetworkService: FeedbackService {
-    
+
     // MARK: - Private Properties
 
     private var builder: DefaultChain<FeedbackUrlRoute> {

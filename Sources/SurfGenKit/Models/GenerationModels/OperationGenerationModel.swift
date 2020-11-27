@@ -22,22 +22,6 @@ enum HttpMethod: String {
     }
 }
 
-enum RequestBody: Equatable {
-
-    enum Encoding: String {
-        case json = "application/json"
-        case form = "application/x-www-form-urlencoded"
-        case multipartForm = "multipart/form-data"
-    }
-
-    case model(Encoding, String)
-    case array(Encoding, String)
-    case dictionary(Encoding, [String: String])
-    case multipartModel
-    case unsupportedEncoding(String)
-
-}
-
 enum ResponseBody: Equatable {
     case model(String)
     case arrayOf(String)
@@ -62,15 +46,7 @@ public struct OperationGenerationModel {
     let queryParameters: [ParameterGenerationModel]
 
     let hasBody: Bool
-    private(set) var hasFormEncoding: Bool = false
-    private(set) var hasUnsupportedEncoding = false
-    private(set) var encodingDescription: String?
-    private(set) var isBodyModel = false
-    private(set) var isBodyArray = false
-    private(set) var bodyModelName: String?
-    private(set) var bodyModelType: String?
-    private(set) var isBodyDictionary = false
-    private(set) var bodyParameters: [ParameterGenerationModel]?
+    var requestBody: RequestBodyGenerationModel?
 
     private(set) var hasUndefinedResponseBody = false
     private(set) var responseModel: String?
@@ -81,7 +57,7 @@ public struct OperationGenerationModel {
          httpMethod: String,
          pathParameters: [ParameterGenerationModel],
          queryParameters: [ParameterGenerationModel],
-         requestBody: RequestBody?,
+         requestBody: RequestBodyGenerationModel.BodyType?,
          responseBody: ResponseBody?) {
         self.name = name
         self.hasDescription = description != nil
@@ -93,37 +69,7 @@ public struct OperationGenerationModel {
         self.hasQueryParameters = !queryParameters.isEmpty
         self.queryParameters = queryParameters
         self.hasBody = requestBody != nil
-
-        switch requestBody {
-        case .model(let encoding, let modelName):
-            self.hasFormEncoding = encoding == .form
-            self.isBodyModel = true
-            self.bodyModelName = modelName.lowercaseFirstLetter()
-            self.bodyModelType = ModelType.entity.form(name: modelName)
-        case .array(let encoding, let modelName):
-            self.hasFormEncoding = encoding == .form
-            self.isBodyArray = true
-            self.bodyModelName = modelName.lowercaseFirstLetter()
-            self.bodyModelType = ModelType.entity.form(name: modelName)
-        case .dictionary(let encoding, let dictionary):
-            self.hasFormEncoding = encoding == .form
-            self.isBodyDictionary = true
-            self.bodyParameters = dictionary
-                .map { ParameterGenerationModel(name: $0.snakeCaseToCamelCase(),
-                                                serverName: $0,
-                                                type: $1,
-                                                location: .body) }
-                .sorted { $0.name < $1.name }
-        case .multipartModel:
-            self.isBodyModel = true
-            self.bodyModelName = Constants.multipartModel.lowercaseFirstLetter()
-            self.bodyModelType = Constants.multipartModel
-        case .unsupportedEncoding(let encodingDescription):
-            self.hasUnsupportedEncoding = true
-            self.encodingDescription = encodingDescription
-        case .none:
-            break
-        }
+        self.requestBody = RequestBodyGenerationModel(type: requestBody)
 
         switch responseBody {
         case .model(let modelName):

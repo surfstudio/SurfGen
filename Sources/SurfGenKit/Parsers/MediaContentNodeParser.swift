@@ -13,7 +13,7 @@ class MediaContentNodeParser {
         static let objectErrorMessage = "Could not parse object body"
     }
 
-    func parseRequestBody(node: ASTNode?) throws -> RequestBody? {
+    func parseRequestBody(node: ASTNode?) throws -> RequestBodyGenerationModel.BodyType? {
         guard let requestBodyNode = node else {
             return nil
         }
@@ -29,12 +29,12 @@ class MediaContentNodeParser {
                                message: Constants.requestErrorMessage)
         }
 
-        switch RequestBody.Encoding(rawValue: encoding) {
+        switch RequestBodyGenerationModel.Encoding(rawValue: encoding) {
         case .json:
-            return try wrap(parseBodyModel(node: mediaContentNode, withEncoding: .json),
+            return try wrap(parseBodyModel(node: mediaContentNode.subNodes.typeNode, withEncoding: .json),
                             with: Constants.requestErrorMessage)
         case .form:
-            return try wrap(parseBodyModel(node: mediaContentNode, withEncoding: .form),
+            return try wrap(parseBodyModel(node: mediaContentNode.subNodes.typeNode, withEncoding: .form),
                             with: Constants.requestErrorMessage)
         case .multipartForm:
             return .multipartModel
@@ -73,10 +73,10 @@ class MediaContentNodeParser {
         }
     }
 
-    private func parseBodyModel(node: ASTNode, withEncoding encoding: RequestBody.Encoding) throws -> RequestBody {
+    private func parseBodyModel(node: ASTNode?, withEncoding encoding: RequestBodyGenerationModel.Encoding) throws -> RequestBodyGenerationModel.BodyType {
         guard
-            let typeNode = node.subNodes.typeNode,
-            case let .type(bodyType) = typeNode.token
+            let bodyNode = node,
+            case let .type(bodyType) = bodyNode.token
         else {
             throw SurfGenError(nested: GeneratorError.nodeConfiguration("Couldn't get encoded schema from request body"),
                                message: Constants.requestErrorMessage)
@@ -84,17 +84,19 @@ class MediaContentNodeParser {
 
         switch bodyType {
         case ASTConstants.object:
-            return .dictionary(encoding, try wrap(parseObject(node: typeNode),
+            return .dictionary(encoding, try wrap(parseObject(node: bodyNode),
                                                   with: "Could not parse request body"))
         case ASTConstants.array:
             guard
-                let arrayTypeNode = typeNode.subNodes.typeNode,
+                let arrayTypeNode = bodyNode.subNodes.typeNode,
                 case let .type(arrayModel) = arrayTypeNode.token
             else {
                 throw SurfGenError(nested: GeneratorError.nodeConfiguration("Couldn't get array schema from request body"),
                                    message: Constants.requestErrorMessage)
             }
             return .array(encoding, arrayModel)
+        case ASTConstants.group:
+            return .complex(try bodyNode.subNodes.map { try parseBodyModel(node: $0, withEncoding: encoding) })
         default:
             return .model(encoding, bodyType)
         }

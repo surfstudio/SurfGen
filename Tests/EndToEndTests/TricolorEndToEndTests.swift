@@ -43,7 +43,8 @@ class TricolorEndToEndTests: XCTestCase {
                            "File name is not equal to expected one. Resulted value:\n\(servicePart.value.fileName)")
             XCTAssertEqual(servicePart.value.code,
                            service.getCode(for: servicePart.key),
-                           "Code is not equal to expected one. Resulted value:\n\(servicePart.value.code)")
+                           FileComparator().getDifference(for: service.getCode(for: servicePart.key),
+                                                          expectedFile: servicePart.value.code))
         }
     }
 

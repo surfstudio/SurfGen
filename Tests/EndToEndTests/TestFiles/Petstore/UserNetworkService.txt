@@ -5,14 +5,14 @@
 import NodeKit
 
 public class UserNetworkService: UserService {
-    
+
     // MARK: - Constants
 
     private enum Keys {
         static let password = "password"
         static let username = "username"
     }
-    
+
     // MARK: - Private Properties
 
     private var builder: DefaultChain<UserUrlRoute> {

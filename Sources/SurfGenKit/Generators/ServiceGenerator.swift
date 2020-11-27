@@ -36,6 +36,7 @@ public class ServiceGenerator {
         let operations = try wrap(declModel.operations
                                     .map { try operationNodeParser.parse(operation: $0,
                                                                          forServiceName: declModel.name) }
+                                    .flatMap { OperationSplitter().splitMultipleBodyOptions(operation: $0) }
                                     .sorted { $0.name < $1.name },
                                   with: Constants.errorMessage)
 
@@ -45,7 +46,7 @@ public class ServiceGenerator {
             .sorted { $0.name < $1.name }
 
         let keys = operations
-            .flatMap { $0.queryParameters + ($0.bodyParameters ?? []) }
+            .flatMap { $0.queryParameters + ($0.requestBody?.parameters ?? []) }
             .map { $0.serverName }
             .uniqueElements()
             .map { CodingKey(name: $0.snakeCaseToCamelCase(), serverName: $0) }

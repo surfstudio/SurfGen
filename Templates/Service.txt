@@ -5,14 +5,14 @@
 import NodeKit
 
 public class {{ name }}NetworkService: {{ name }}Service {
-    {% if hasKeys %}
+{% if hasKeys %}
     // MARK: - Constants
 
     private enum Keys {
         {% for key in keys %}static let {{ key.name }} = "{{ key.serverName }}"{% if not forloop.last %}
         {% endif %}{% endfor %}
     }
-    {% endif %}
+{% endif %}
     // MARK: - Private Properties
 
     private var builder: DefaultChain<{{ name }}UrlRoute> {
@@ -24,22 +24,22 @@ public class {{ name }}NetworkService: {{ name }}Service {
     {% for operation in operations %}func {{ operation.name }}({% for parameter in operation.pathParameters %}{#
     #}{{ parameter.name }}: String{% if not forloop.last or operation.hasQueryParameters or operation.hasBody %}, {% endif %}{% endfor %}{#
     #}{% for parameter in operation.queryParameters %}{{ parameter.name }}: {{ parameter.type }}{% if not forloop.last or operation.hasBody %}, {% endif %}{% endfor %}{#
-    #}{% if operation.hasBody %}{% if operation.hasUnsupportedEncoding %}/* body with unsupported encoding */{% endif %}{#
-    #}{% if operation.isBodyModel %}{{ operation.bodyModelName }}: {{ operation.bodyModelType }}{% endif %}{#
-    #}{% if operation.isBodyArray %}{{ operation.bodyModelName }}: [{{ operation.bodyModelType }}]{% endif %}{#
-    #}{% if operation.isBodyDictionary %}{% for parameter in operation.bodyParameters %}{{ parameter.name }}: {{ parameter.type }}{% if not forloop.last %}, {% endif %}{#
+    #}{% if operation.hasBody %}{% if operation.requestBody.hasUnsupportedEncoding %}/* body with unsupported encoding */{% endif %}{#
+    #}{% if operation.requestBody.isModel %}{{ operation.requestBody.modelName }}: {{ operation.requestBody.modelType }}{% endif %}{#
+    #}{% if operation.requestBody.isArray %}{{ operation.requestBody.modelName }}: [{{ operation.requestBody.modelType }}]{% endif %}{#
+    #}{% if operation.requestBody.isDictionary %}{% for parameter in operation.requestBody.parameters %}{{ parameter.name }}: {{ parameter.type }}{% if not forloop.last %}, {% endif %}{#
     #}{% endfor %}{% endif %}{% endif %}){#
     #} -> Observer<{% if operation.hasUndefinedResponseBody %}/* response with undefined model name */{#
     #}{% else %}{{ operation.responseModel }}{% endif %}> {
-        {% if operation.hasUnsupportedEncoding %}// body with unsupported encoding: {{ operation.encodingDescription }}{% else %}{#
+        {% if operation.requestBody.hasUnsupportedEncoding %}// body with unsupported encoding: {{ operation.requestBody.encodingDescription }}{% else %}{#
         #}return builder{% if operation.hasQueryParameters %}
             .set(query: [{% for parameter in operation.queryParameters %}{#
             #}Keys.{{ parameter.name }}: {{ parameter.name }}{% if not forloop.last %}, {% endif %}{% endfor %}]){% endif %}
-            .route(.{{ operation.httpMethod }}, .{{ operation.path.name }}){% if operation.hasFormEncoding %}
+            .route(.{{ operation.httpMethod }}, .{{ operation.path.name }}){% if operation.requestBody.hasFormEncoding %}
             .encode(as: .formUrl){% endif %}
             .build()
-            .process({% if operation.isBodyModel %}{{ operation.bodyModelName }}{% endif %}{#
-            #}{% if operation.isBodyDictionary %}[{% for parameter in operation.bodyParameters %}{#
+            .process({% if operation.requestBody.isModel %}{{ operation.requestBody.modelName }}{% endif %}{#
+            #}{% if operation.requestBody.isDictionary %}[{% for parameter in operation.requestBody.parameters %}{#
             #}Keys.{{ parameter.name }}: {{ parameter.name }}{% if not forloop.last %}, {% endif %}{% endfor %}]{% endif %})
         }{% endif %}
     }

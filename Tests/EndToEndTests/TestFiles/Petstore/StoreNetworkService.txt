@@ -5,7 +5,7 @@
 import NodeKit
 
 public class StoreNetworkService: StoreService {
-    
+
     // MARK: - Private Properties
 
     private var builder: DefaultChain<StoreUrlRoute> {
