@@ -7,8 +7,12 @@
 
 class OperationNodeParser {
 
-    private enum Constants {
-        static let errorMessage = "Could not parse operation node"
+    private enum ErrorMessages {
+
+        static func errorMessage(for operationName: String = "") -> String {
+            return "Could not parse operation \(operationName) node"
+        }
+
     }
 
     private let mediaContentParser: MediaContentNodeParser
@@ -27,7 +31,7 @@ class OperationNodeParser {
             let operationMethod = HttpMethod(rawValue: method)
         else {
             throw SurfGenError(nested: GeneratorError.nodeConfiguration("Couldn't get method node from operation"),
-                               message: Constants.errorMessage)
+                               message: ErrorMessages.errorMessage())
         }
 
         // get description
@@ -41,7 +45,7 @@ class OperationNodeParser {
         var parameters = [ParameterGenerationModel]()
         if let parametersNode = operation.subNodes.parametersNode {
             parameters = try wrap(parametersParser.parseParameters(node: parametersNode),
-                                  with: Constants.errorMessage)
+                                  with: ErrorMessages.errorMessage())
         }
 
         // get path
@@ -50,7 +54,7 @@ class OperationNodeParser {
             case let .path(path) = pathNode.token
         else {
             throw SurfGenError(nested: GeneratorError.nodeConfiguration("Couldn't get path node from operation"),
-                               message: Constants.errorMessage)
+                               message: ErrorMessages.errorMessage())
         }
         let pathModel = PathGenerationModel(name: path.pathName,
                                             path: path.pathWithSwiftParameters(),
@@ -65,12 +69,14 @@ class OperationNodeParser {
         }
 
         // get request body
-        let requestBody = try wrap(mediaContentParser.parseRequestBody(node: operation.subNodes.requestBodyNode),
-                                   with: Constants.errorMessage)
+        let requestBody = try wrap(mediaContentParser.parseRequestBody(node: operation.subNodes.requestBodyNode,
+                                                                       forOperationName: name),
+                                   with: ErrorMessages.errorMessage(for: name))
 
         // get response body
-        let responseBody = try wrap(mediaContentParser.parseResponseBody(node: operation.subNodes.responseBodyNode),
-                                    with: Constants.errorMessage)
+        let responseBody = try wrap(mediaContentParser.parseResponseBody(node: operation.subNodes.responseBodyNode,
+                                                                         forOperationName: name),
+                                    with: ErrorMessages.errorMessage(for: name))
         
 
         return OperationGenerationModel(name: name,
@@ -81,26 +87,6 @@ class OperationNodeParser {
                                         queryParameters: parameters.filter { $0.location == .query },
                                         requestBody: requestBody,
                                         responseBody: responseBody)
-    }
-
-    func parsePath(from operation: ASTNode) throws -> PathGenerationModel {
-        guard
-            let pathNode = operation.subNodes.pathNode,
-            case let .path(path) = pathNode.token
-        else {
-            throw SurfGenError(nested: GeneratorError.nodeConfiguration("Couldn't get path node from operation"),
-                               message: Constants.errorMessage)
-        }
-
-        var parameters = [ParameterGenerationModel]()
-        if let parametersNode = operation.subNodes.parametersNode {
-            parameters = try wrap(ParametersNodeParser().parseParameters(node: parametersNode),
-                                  with: Constants.errorMessage)
-        }
-
-        return PathGenerationModel(name: path.pathName,
-                                   path: path.pathWithSwiftParameters(),
-                                   parameters: parameters.filter { $0.location == .path }.map { $0.name })
     }
     
 }

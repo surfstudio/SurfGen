@@ -12,13 +12,15 @@ import XCTest
 /// Perform checks if generated request/response body models match expected ones
 class MediaContentNodeParserTests: XCTestCase {
 
+    private let operationName = "testOperation"
+
     func testJsonEncodedModelRequestBodyParsing() throws {
         // given
         let requestContentNode = NodesBuilder.formRequestBodyNode(with: NodesBuilder.formJsonEncodedModelContentNode())
         let expectedRequestBody = RequestBodyGenerationModel.BodyType.model(.json, "Pet")
         
         // when
-        let realRequestBody = try MediaContentNodeParser().parseRequestBody(node: requestContentNode)
+        let realRequestBody = try MediaContentNodeParser().parseRequestBody(node: requestContentNode, forOperationName: operationName)
         
         // then
         XCTAssertEqual(realRequestBody, expectedRequestBody)
@@ -30,7 +32,7 @@ class MediaContentNodeParserTests: XCTestCase {
         let expectedRequestBody = RequestBodyGenerationModel.BodyType.array(.json, "Pet")
         
         // when
-        let realRequestBody = try MediaContentNodeParser().parseRequestBody(node: requestContentNode)
+        let realRequestBody = try MediaContentNodeParser().parseRequestBody(node: requestContentNode, forOperationName: operationName)
         
         // then
         XCTAssertEqual(realRequestBody, expectedRequestBody)
@@ -48,7 +50,7 @@ class MediaContentNodeParserTests: XCTestCase {
         )
         
         // when
-        let realRequestBody = try MediaContentNodeParser().parseRequestBody(node: requestContentNode)
+        let realRequestBody = try MediaContentNodeParser().parseRequestBody(node: requestContentNode, forOperationName: operationName)
         
         // then
         XCTAssertEqual(realRequestBody, expectedRequestBody)
@@ -60,7 +62,7 @@ class MediaContentNodeParserTests: XCTestCase {
         let expectedRequestBody = RequestBodyGenerationModel.BodyType.multipartModel
         
         // when
-        let realRequestBody = try MediaContentNodeParser().parseRequestBody(node: requestContentNode)
+        let realRequestBody = try MediaContentNodeParser().parseRequestBody(node: requestContentNode, forOperationName: operationName)
         
         // then
         XCTAssertEqual(realRequestBody, expectedRequestBody)
@@ -72,7 +74,7 @@ class MediaContentNodeParserTests: XCTestCase {
         let expectedRequestBody = RequestBodyGenerationModel.BodyType.unsupportedEncoding("testEncoding")
         
         // when
-        let realRequestBody = try MediaContentNodeParser().parseRequestBody(node: requestContentNode)
+        let realRequestBody = try MediaContentNodeParser().parseRequestBody(node: requestContentNode, forOperationName: operationName)
         
         // then
         XCTAssertEqual(realRequestBody, expectedRequestBody)
@@ -84,7 +86,7 @@ class MediaContentNodeParserTests: XCTestCase {
         let expectedResponseBody = ResponseBody.model("Pet")
         
         // when
-        let realResponseBody = try MediaContentNodeParser().parseResponseBody(node: responseContentNode)
+        let realResponseBody = try MediaContentNodeParser().parseResponseBody(node: responseContentNode, forOperationName: operationName)
         
         // then
         XCTAssertEqual(realResponseBody, expectedResponseBody)
@@ -96,7 +98,7 @@ class MediaContentNodeParserTests: XCTestCase {
         let expectedResponseBody = ResponseBody.arrayOf("Pet")
         
         // when
-        let realResponseBody = try MediaContentNodeParser().parseResponseBody(node: responseContentNode)
+        let realResponseBody = try MediaContentNodeParser().parseResponseBody(node: responseContentNode, forOperationName: operationName)
         
         // then
         XCTAssertEqual(realResponseBody, expectedResponseBody)
@@ -108,7 +110,7 @@ class MediaContentNodeParserTests: XCTestCase {
         let expectedResponseBody = ResponseBody.unsupportedObject
         
         // when
-        let realResponseBody = try MediaContentNodeParser().parseResponseBody(node: responseContentNode)
+        let realResponseBody = try MediaContentNodeParser().parseResponseBody(node: responseContentNode, forOperationName: operationName)
         
         // then
         XCTAssertEqual(realResponseBody, expectedResponseBody)

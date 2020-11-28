@@ -37,7 +37,7 @@ public class ServiceGenerator {
                                     .map { try operationNodeParser.parse(operation: $0,
                                                                          forServiceName: declModel.name) }
                                     .flatMap { OperationSplitter().splitMultipleBodyOptions(operation: $0) }
-                                    .sorted { $0.name < $1.name },
+                                    .sorted { $0.signature < $1.signature },
                                   with: Constants.errorMessage)
 
         let paths = operations
@@ -69,6 +69,18 @@ public class ServiceGenerator {
             .service: FileModel(fileName: ServicePart.service.buildName(for: serviceModel.name).withSwiftExt,
                                 code: serviceCode)
         ]
+    }
+
+}
+
+private extension OperationGenerationModel {
+
+    var signature: String {
+        return [
+            name,
+            requestBody?.modelName ?? "",
+            requestBody?.parameters?.map { $0.name }.joined() ?? ""
+        ].joined(separator: "+")
     }
 
 }

@@ -81,7 +81,7 @@ class OperationNodeParserTests: XCTestCase {
         let expectedPathParameters = ["petId"]
         
         // when
-        let generatedPathModel = try operationNodeParser.parsePath(from: operation)
+        let generatedPathModel = try operationNodeParser.parse(operation: operation, forServiceName: "Pet").path
         
         // then
         XCTAssertEqual(generatedPathModel.name, expectedPathName)
@@ -100,7 +100,7 @@ class OperationNodeParserTests: XCTestCase {
         let expectedPathParameters = [String]()
         
         // when
-        let generatedPathModel = try operationNodeParser.parsePath(from: operation)
+        let generatedPathModel = try operationNodeParser.parse(operation: operation, forServiceName: "Pet").path
         
         // then
         XCTAssertEqual(generatedPathModel.name, expectedPathName)

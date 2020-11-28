@@ -13,7 +13,7 @@ import PathKit
 
 class TricolorEndToEndTests: XCTestCase {
 
-    lazy var rootGenerator: RootGenerator = {
+    private lazy var rootGenerator: RootGenerator = {
         let templatesPath = Path(#file) + "../../../Templates"
         let rootGenerator = RootGenerator(tempatesPath: templatesPath)
         rootGenerator.configureServiceGenerator(ServiceGenerator.defaultGenerator)

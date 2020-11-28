@@ -16,7 +16,7 @@ enum TricolorService: String, CaseIterable {
     case feedback
 //    case help
 //    case history
-//    case profile
+    case profile
 //    case promotions
 //    case push
 //    case united
@@ -38,6 +38,8 @@ enum TricolorService: String, CaseIterable {
             return "Command"
         case .feedback:
             return "Feedback"
+        case .profile:
+            return "UserProfile"
         case .user:
             return "User"
         }
@@ -56,7 +58,7 @@ enum TricolorService: String, CaseIterable {
     }
 
     private func filePath(for servicePart: ServicePart) -> String {
-        return Constants.basePath + servicePart.buildName(for: rawValue)
+        return Constants.basePath + servicePart.buildName(for: serviceName)
     }
 
 }

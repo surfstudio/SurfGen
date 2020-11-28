@@ -13,7 +13,13 @@ class MediaContentNodeParser {
         static let objectErrorMessage = "Could not parse object body"
     }
 
-    func parseRequestBody(node: ASTNode?) throws -> RequestBodyGenerationModel.BodyType? {
+    let warningCollector: WarningCollector
+
+    init(warningCollector: WarningCollector = WarningCollector.shared) {
+        self.warningCollector = warningCollector
+    }
+
+    func parseRequestBody(node: ASTNode?, forOperationName operationName: String) throws -> RequestBodyGenerationModel.BodyType? {
         guard let requestBodyNode = node else {
             return nil
         }
@@ -39,11 +45,12 @@ class MediaContentNodeParser {
         case .multipartForm:
             return .multipartModel
         case .none:
+            warningCollector.add(warning: .unsupportedRequestEncoding(operationName, encoding))
             return .unsupportedEncoding(encoding)
         }
     }
 
-    func parseResponseBody(node: ASTNode?) throws -> ResponseBody? {
+    func parseResponseBody(node: ASTNode?, forOperationName operationName: String) throws -> ResponseBody? {
         guard let responseBodyNode = node else {
             return nil
         }
@@ -58,6 +65,7 @@ class MediaContentNodeParser {
 
         switch bodyType {
         case ASTConstants.object:
+            warningCollector.add(warning: .complexObjectResponseBody(operationName))
             return .unsupportedObject
         case ASTConstants.array:
             guard
@@ -68,6 +76,9 @@ class MediaContentNodeParser {
                                    message: Constants.responseErrorMessage)
             }
             return .arrayOf(arrayModel)
+        case ASTConstants.group:
+            warningCollector.add(warning: .undefinedModelResponseBody(operationName))
+            return .unsupportedObject
         default:
             return .model(bodyType)
         }
@@ -104,7 +115,7 @@ class MediaContentNodeParser {
 
     private func parseObject(node objectNode: ASTNode) throws -> [String: String] {
         guard !objectNode.subNodes.isEmpty else {
-            throw SurfGenError(nested: GeneratorError.nodeConfiguration("Couldn't get object properties from request body"),
+            throw SurfGenError(nested: GeneratorError.nodeConfiguration("Couldn't get object properties from body"),
                                message: Constants.objectErrorMessage)
         }
 
