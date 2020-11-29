@@ -13,12 +13,16 @@ enum GASTBuilderError: Error, Equatable {
     case nonObjectNodeFound(String)
     case incorrectEnumObjectConfiguration(String)
     case undefindedContentBody(String)
+    case invalidPath(String)
+    case invalidParameter(String)
 
     public static func ==(lhs: GASTBuilderError, rhs: GASTBuilderError) -> Bool {
         switch (lhs, rhs) {
         case (.undefinedTypeForField, .undefinedTypeForField),
              (.nonObjectNodeFound, .nonObjectNodeFound),
-             (.incorrectEnumObjectConfiguration, .incorrectEnumObjectConfiguration):
+             (.incorrectEnumObjectConfiguration, .incorrectEnumObjectConfiguration),
+             (.invalidPath, .invalidPath),
+             (.invalidParameter, .invalidParameter):
             return true
         default:
             return false
@@ -38,6 +42,10 @@ extension GASTBuilderError: LocalizedError {
             return "Enum object with name: \(name) has no correct enum values"
         case .undefindedContentBody(let type):
             return "Cannot resolve content body of type \(type)"
+        case .invalidPath(let path):
+            return "Invalid path: \(path)"
+        case .invalidParameter(let parameter):
+            return "Can not resolve external reference for parameter \(parameter)"
         }
     }
 

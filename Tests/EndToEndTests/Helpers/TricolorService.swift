@@ -11,19 +11,29 @@ enum TricolorService: String, CaseIterable {
     case activation
     case auth
     case billings
-//    case catalog
+    case catalog
     case command
     case feedback
 //    case help
-//    case history
+    case history
+    case messages
+//    case payment
     case profile
-//    case promotions
+    case promotions
 //    case push
 //    case united
     case user
     
     private enum Constants {
         static let basePath = "TestFiles/Tricolor/"
+    }
+
+    static var passingGenerationCases: [Self] {
+        return [activation, auth, billings, command, feedback, profile, user]
+    }
+
+    static var externalParametersCases: [Self] {
+        return [history, messages, promotions]
     }
 
     var serviceName: String {
@@ -34,12 +44,20 @@ enum TricolorService: String, CaseIterable {
             return "Auth"
         case .billings:
             return "Billings"
+        case .catalog:
+            return "Billings"
         case .command:
             return "Command"
         case .feedback:
             return "Feedback"
+        case .history:
+            return "Billings"
+        case .messages:
+            return "Messages"
         case .profile:
             return "UserProfile"
+        case .promotions:
+            return "Promotions"
         case .user:
             return "User"
         }

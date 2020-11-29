@@ -22,8 +22,35 @@ class TricolorEndToEndTests: XCTestCase {
 
     /// Checks if generated services for Tricolor API are equal to expected ones
     func testFullTricolorApiGeneratedServicesMatchExpected() throws {
-        for service in TricolorService.allCases {
-            try testFullServiceGeneration(for: service)
+        for service in TricolorService.passingGenerationCases {
+            if service == .catalog {
+                try testFullServiceGeneration(for: service)
+            }
+        }
+    }
+
+    /// Checks if spec with invalid paths fails to generate
+    func testTricolorApiCatalogSpecIsDetectedAsInvalid() throws {
+        // given
+        let service = TricolorService.catalog
+        let spec = FileReader().readFile(service.specPath)
+        let parser = try YamlToGASTParser(string: spec)
+
+        // then
+        assertThrow(try parser.parseToGAST(forService: service.serviceName),
+                    throws: GASTBuilderError.invalidPath(""))
+    }
+
+    /// Checks if spec with external parameters fails to generate
+    func testTricolorApiExternalParametersAreDetectedAsInvalid() throws {
+        for service in TricolorService.externalParametersCases {
+            // given
+            let spec = FileReader().readFile(service.specPath)
+            let parser = try YamlToGASTParser(string: spec)
+
+            // then
+            assertThrow(try parser.parseToGAST(forService: service.serviceName),
+                        throws: GASTBuilderError.invalidParameter(""))
         }
     }
 
@@ -38,6 +65,7 @@ class TricolorEndToEndTests: XCTestCase {
 
         // then
         for servicePart in generatedService {
+            print(servicePart.value.code)
             XCTAssertEqual(servicePart.value.fileName,
                            service.fileName(for: servicePart.key),
                            "File name is not equal to expected one. Resulted value:\n\(servicePart.value.fileName)")
