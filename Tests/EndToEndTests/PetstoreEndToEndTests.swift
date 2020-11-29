@@ -34,8 +34,8 @@ class PetstoreEndToEndTests: XCTestCase {
         let parser = try YamlToGASTParser(string: spec)
 
         //when
-        let gastTree = try parser.parseToGAST(forService: service.rawValue)
-        let generatedService = try rootGenerator.generateService(from: gastTree)
+        let gastTree = try parser.parseToGAST(forServiceRootPath: service.rawValue)
+        let generatedService = try rootGenerator.generateService(name: service.rawValue, from: gastTree)
 
         // then
         for servicePart in generatedService {

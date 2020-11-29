@@ -14,14 +14,14 @@ enum TricolorService: String, CaseIterable {
     case catalog
     case command
     case feedback
-//    case help
+    case help
     case history
     case messages
-//    case payment
+    case payment
     case profile
     case promotions
-//    case push
-//    case united
+    case push
+    case united
     case user
     
     private enum Constants {
@@ -29,37 +29,29 @@ enum TricolorService: String, CaseIterable {
     }
 
     static var passingGenerationCases: [Self] {
-        return [activation, auth, billings, command, feedback, profile, user]
+        return [activation, auth, billings, command, feedback, help, payment, profile, push, united, user]
     }
 
     static var externalParametersCases: [Self] {
         return [history, messages, promotions]
     }
 
-    var serviceName: String {
+    var rootPath: String {
         switch self {
-        case .activation:
-            return "Activation"
-        case .auth:
-            return "Auth"
-        case .billings:
-            return "Billings"
+        case .activation, .auth, .billings, .command, .feedback, .messages, .promotions, .user, .united:
+            return rawValue
         case .catalog:
-            return "Billings"
-        case .command:
-            return "Command"
-        case .feedback:
-            return "Feedback"
+            return "billings"
+        case .help:
+            return "feedback"
         case .history:
-            return "Billings"
-        case .messages:
-            return "Messages"
+            return "billings"
+        case .payment:
+            return "billings"
         case .profile:
-            return "UserProfile"
-        case .promotions:
-            return "Promotions"
-        case .user:
-            return "User"
+            return "userProfile"
+        case .push:
+            return "user"
         }
     }
 
@@ -68,7 +60,7 @@ enum TricolorService: String, CaseIterable {
     }
 
     func fileName(for servicePart: ServicePart) -> String {
-        return servicePart.buildName(for: serviceName) + ".swift"
+        return servicePart.buildName(for: rawValue.capitalizingFirstLetter()) + ".swift"
     }
 
     func getCode(for servicePart: ServicePart) -> String {
@@ -76,7 +68,15 @@ enum TricolorService: String, CaseIterable {
     }
 
     private func filePath(for servicePart: ServicePart) -> String {
-        return Constants.basePath + servicePart.buildName(for: serviceName)
+        return Constants.basePath + servicePart.buildName(for: rawValue.capitalizingFirstLetter())
+    }
+
+}
+
+private extension String {
+
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
     }
 
 }

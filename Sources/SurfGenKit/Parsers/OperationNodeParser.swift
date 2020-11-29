@@ -23,7 +23,7 @@ class OperationNodeParser {
         self.parametersParser = parametersParser
     }
 
-    func parse(operation: ASTNode, forServiceName serviceName: String) throws -> OperationGenerationModel {
+    func parse(operation: ASTNode, rootPath: String) throws -> OperationGenerationModel {
         // get http method
         guard
             let methodNode = operation.subNodes.typeNode,
@@ -65,7 +65,7 @@ class OperationNodeParser {
         if let nameNode = operation.subNodes.nameNode, case let .name(identifier) = nameNode.token {
             name = identifier
         } else {
-            name = path.operationName(forService: serviceName, with: operationMethod.name)
+            name = path.operationName(with: operationMethod.name, rootPath: rootPath)
         }
 
         // get request body

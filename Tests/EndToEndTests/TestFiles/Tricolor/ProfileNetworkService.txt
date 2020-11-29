@@ -1,14 +1,14 @@
 //
-//  UserProfileNetworkService.swift
+//  ProfileNetworkService.swift
 //
 
 import NodeKit
 
-public class UserProfileNetworkService: UserProfileService {
+public class ProfileNetworkService: ProfileService {
 
     // MARK: - Private Properties
 
-    private var builder: DefaultChain<UserProfileUrlRoute> {
+    private var builder: DefaultChain<ProfileUrlRoute> {
         return DefaultChain()
     }
 

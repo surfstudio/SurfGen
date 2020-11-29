@@ -1,0 +1,23 @@
+//
+//  HelpUrlRoute.swift
+//
+
+import NodeKit
+
+enum HelpUrlRoute {
+    case faq
+}
+
+// MARK: - UrlRouteProvider
+
+extension HelpUrlRoute: UrlRouteProvider {
+
+    func url() throws -> URL {
+        let base = URL(string: Urls.base)
+        switch self {
+        case .faq:
+            return try base + "/feedback/faq"
+        }
+    }
+
+}

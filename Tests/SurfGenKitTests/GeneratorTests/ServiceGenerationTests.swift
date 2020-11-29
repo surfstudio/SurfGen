@@ -27,7 +27,7 @@ class ServiceGenerationTests: XCTestCase {
         let expectedFileName = TestService.pet.fileName(for: .urlRoute)
 
         // when
-        let generatedService = try serviceGenerator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(),
+        let generatedService = try serviceGenerator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(), withServiceName: TestService.pet.rawValue,
                                                                    environment: environment)
         guard let generatedRoute = generatedService[.urlRoute] else {
             XCTFail("Route was not generated")
@@ -49,7 +49,7 @@ class ServiceGenerationTests: XCTestCase {
         let expectedFileName = TestService.pet.fileName(for: .protocol)
 
         // when
-        let generatedService = try ServiceGenerator.defaultGenerator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(),
+        let generatedService = try ServiceGenerator.defaultGenerator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(), withServiceName: TestService.pet.rawValue,
                                                                                   environment: environment)
 
         guard let generatedProtocol = generatedService[.protocol] else {
@@ -73,6 +73,7 @@ class ServiceGenerationTests: XCTestCase {
 
         // when
         let generatedService = try ServiceGenerator.defaultGenerator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(),
+                                                                                  withServiceName: TestService.pet.rawValue,
                                                                                   environment: environment)
         guard let generatedImplementation = generatedService[.service] else {
             XCTFail("Service was not generated")

@@ -22,10 +22,15 @@ class ParametersNodeParser {
                 throw SurfGenError(nested: GeneratorError.incorrectNodeToken("Parameter node has incorrect token"),
                                    message: Constants.errorMessage)
             }
-            guard case let .type(name: type) = parameterNode.subNodes.typeNode?.token else {
+            guard case var .type(name: type) = parameterNode.subNodes.typeNode?.token else {
                 throw SurfGenError(nested: GeneratorError.incorrectNodeToken("Parameter node has incorrect type"),
                                    message: Constants.errorMessage)
             }
+
+            if case let .type(name: objectType) = parameterNode.subNodes.typeNode?.subNodes.typeNode?.token {
+                type = ModelType.entity.form(name: objectType)
+            }
+
             guard
                 case let .location(locationString) = parameterNode.subNodes.locationNode?.token,
                 let location = ParameterLocation(rawValue: locationString)

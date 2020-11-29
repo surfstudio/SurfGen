@@ -30,12 +30,14 @@ public class ServiceGenerator {
         return .init(declNodeParser: declNodeParser, operationNodeParser: operationNodeParser)
     }
 
-    func generateCode(for declNode: ASTNode, environment: Environment) throws -> ServiceGeneratedModel {
+    func generateCode(for declNode: ASTNode,
+                      withServiceName serviceName: String,
+                      environment: Environment) throws -> ServiceGeneratedModel {
         let declModel = try wrap(declNodeParser.getInfo(from: declNode),
                                  with: Constants.errorMessage)
         let operations = try wrap(declModel.operations
                                     .map { try operationNodeParser.parse(operation: $0,
-                                                                         forServiceName: declModel.name) }
+                                                                         rootPath: declModel.name) }
                                     .flatMap { OperationSplitter().splitMultipleBodyOptions(operation: $0) }
                                     .sorted { $0.signature < $1.signature },
                                   with: Constants.errorMessage)
@@ -52,7 +54,7 @@ public class ServiceGenerator {
             .map { CodingKey(name: $0.snakeCaseToCamelCase(), serverName: $0) }
             .sorted { $0.name < $1.name }
 
-        let serviceModel = ServiceGenerationModel(name: declModel.name,
+        let serviceModel = ServiceGenerationModel(name: serviceName.capitalizingFirstLetter(),
                                                   keys: keys,
                                                   paths: paths,
                                                   operations: operations)

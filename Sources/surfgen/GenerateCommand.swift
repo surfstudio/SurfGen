@@ -80,6 +80,7 @@ final class GenerateCommand: Command {
                          destinations: destinations)
         case .service(let serviceName):
             let generatedModel = tryToGenerate(serviceName: serviceName,
+                                               rootPath: serviceName,
                                                spec: params.spec,
                                                rootGenerator: rootGenerator,
                                                isDescriptionsEnabled: configManager.isDescriptionsEnabled)
@@ -148,15 +149,16 @@ final class GenerateCommand: Command {
     }
     
     func tryToGenerate(serviceName: String,
+                       rootPath: String,
                        spec: String,
                        rootGenerator: RootGenerator,
                        isDescriptionsEnabled: Bool,
                        serviceGenerator: ServiceGenerator = ServiceGenerator.defaultGenerator) -> ServiceGeneratedModel {
         do {
             let parser = try YamlToGASTParser(string: spec)
-            let service = try parser.parseToGAST(forService: serviceName)
+            let service = try parser.parseToGAST(forServiceRootPath: rootPath)
             rootGenerator.configureServiceGenerator(serviceGenerator)
-            return try rootGenerator.generateService(from: service, generateDescriptions: isDescriptionsEnabled)
+            return try rootGenerator.generateService(name: serviceName, from: service, generateDescriptions: isDescriptionsEnabled)
         } catch {
             exitWithError(error.localizedDescription)
         }

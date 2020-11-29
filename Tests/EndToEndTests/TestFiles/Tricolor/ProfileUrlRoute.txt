@@ -1,10 +1,10 @@
 //
-//  UserProfileUrlRoute.swift
+//  ProfileUrlRoute.swift
 //
 
 import NodeKit
 
-enum UserProfileUrlRoute {
+enum ProfileUrlRoute {
     case profileChangeAlias
     case profileChangePassword
     case profileCreditInfo
@@ -14,7 +14,7 @@ enum UserProfileUrlRoute {
 
 // MARK: - UrlRouteProvider
 
-extension UserProfileUrlRoute: UrlRouteProvider {
+extension ProfileUrlRoute: UrlRouteProvider {
 
     func url() throws -> URL {
         let base = URL(string: Urls.base)

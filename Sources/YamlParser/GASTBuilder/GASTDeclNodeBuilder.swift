@@ -20,8 +20,8 @@ final class GASTDeclNodeBuilder {
         return model.isEnum ? try buildEnumDecl(for: model) : try buildObjectDecl(for: model)
     }
 
-    func buildDeclNode(forService serviceName: String, with operations: [Operation]) throws -> ASTNode {
-        let nameNode = Node(token: .name(value: serviceName), [])
+    func buildDeclNode(forRootPath rootPath: String, with operations: [Operation]) throws -> ASTNode {
+        let nameNode = Node(token: .name(value: rootPath), [])
         let contentNode = try GASTContentNodeBuilder().buildServiceContentSubnodes(with: operations)
         return Node(token: .decl, [nameNode, contentNode])
     }

@@ -1,10 +1,10 @@
 //
-//  UserProfileService.swift
+//  ProfileService.swift
 //
 
 import NodeKit
 
-public protocol UserProfileService {
+public protocol ProfileService {
 
     /// Получение информации о кредите
     func getCreditInfo() -> Observer<CreditInformationEntity>

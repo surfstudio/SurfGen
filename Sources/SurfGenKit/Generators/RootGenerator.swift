@@ -47,7 +47,7 @@ public final class RootGenerator {
         return model
     }
 
-    public func generateService(from node: ASTNode, generateDescriptions: Bool = true) throws -> ServiceGeneratedModel {
+    public func generateService(name: String, from node: ASTNode, generateDescriptions: Bool = true) throws -> ServiceGeneratedModel {
         guard let generator = serviceGenerator else {
             fatalError("serviceGenerator not provided")
         }
@@ -63,7 +63,7 @@ public final class RootGenerator {
             _ = node.filterAllDescriptions()
         }
 
-        return try generator.generateCode(for: declNode, environment: environment)
+        return try generator.generateCode(for: declNode, withServiceName: name, environment: environment)
     }
 
     private func generate(for type: ModelType, to model: inout ModelGeneratedModel, from nodes: [ASTNode]) throws {

@@ -23,9 +23,7 @@ class TricolorEndToEndTests: XCTestCase {
     /// Checks if generated services for Tricolor API are equal to expected ones
     func testFullTricolorApiGeneratedServicesMatchExpected() throws {
         for service in TricolorService.passingGenerationCases {
-            if service == .catalog {
-                try testFullServiceGeneration(for: service)
-            }
+            try testFullServiceGeneration(for: service)
         }
     }
 
@@ -37,7 +35,7 @@ class TricolorEndToEndTests: XCTestCase {
         let parser = try YamlToGASTParser(string: spec)
 
         // then
-        assertThrow(try parser.parseToGAST(forService: service.serviceName),
+        assertThrow(try parser.parseToGAST(forServiceRootPath: service.rootPath),
                     throws: GASTBuilderError.invalidPath(""))
     }
 
@@ -49,7 +47,7 @@ class TricolorEndToEndTests: XCTestCase {
             let parser = try YamlToGASTParser(string: spec)
 
             // then
-            assertThrow(try parser.parseToGAST(forService: service.serviceName),
+            assertThrow(try parser.parseToGAST(forServiceRootPath: service.rootPath),
                         throws: GASTBuilderError.invalidParameter(""))
         }
     }
@@ -60,12 +58,11 @@ class TricolorEndToEndTests: XCTestCase {
         let parser = try YamlToGASTParser(string: spec)
 
         //when
-        let gastTree = try parser.parseToGAST(forService: service.serviceName)
-        let generatedService = try rootGenerator.generateService(from: gastTree)
+        let gastTree = try parser.parseToGAST(forServiceRootPath: service.rootPath)
+        let generatedService = try rootGenerator.generateService(name: service.rawValue, from: gastTree)
 
         // then
         for servicePart in generatedService {
-            print(servicePart.value.code)
             XCTAssertEqual(servicePart.value.fileName,
                            service.fileName(for: servicePart.key),
                            "File name is not equal to expected one. Resulted value:\n\(servicePart.value.fileName)")
