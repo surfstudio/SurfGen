@@ -35,7 +35,7 @@ public class PetNetworkService: PetService {
 
     func postPetPetId(petId: String, pet: PetEntity) -> Observer<Void> {
         return builder
-            .route(.post, .petPetId)
+            .route(.post, .petPetId(petId: petId))
             .build()
             .process(pet)
         }

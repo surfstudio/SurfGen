@@ -35,7 +35,9 @@ public class {{ name }}NetworkService: {{ name }}Service {
         #}return builder{% if operation.hasQueryParameters %}
             .set(query: [{% for parameter in operation.queryParameters %}{#
             #}Keys.{{ parameter.name }}: {{ parameter.name }}{% if not forloop.last %}, {% endif %}{% endfor %}]){% endif %}
-            .route(.{{ operation.httpMethod }}, .{{ operation.path.name }}){% if operation.requestBody.hasFormEncoding %}
+            .route(.{{ operation.httpMethod }}, .{{ operation.path.name }}{#
+            #}{% if operation.path.hasParameters %}({% for parameter in operation.path.parameters %}{{ parameter }}: {{ parameter }}{#
+            #}{% if not forloop.last %}, {% endif %}{% endfor %}){% endif %}){% if operation.requestBody.hasFormEncoding %}
             .encode(as: .formUrl){% endif %}
             .build()
             .process({% if operation.requestBody.isModel %}{{ operation.requestBody.modelName }}{% endif %}{#

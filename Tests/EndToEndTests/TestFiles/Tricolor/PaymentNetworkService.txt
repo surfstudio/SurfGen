@@ -16,7 +16,7 @@ public class PaymentNetworkService: PaymentService {
 
     func deletePaymentCardsId(id: String) -> Observer<Void> {
         return builder
-            .route(.delete, .paymentCardsId)
+            .route(.delete, .paymentCardsId(id: id))
             .build()
             .process()
         }

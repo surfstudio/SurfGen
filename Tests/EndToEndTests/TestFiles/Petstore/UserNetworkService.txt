@@ -39,7 +39,7 @@ public class UserNetworkService: UserService {
 
     func deleteUser(username: String) -> Observer<Void> {
         return builder
-            .route(.delete, .userUsername)
+            .route(.delete, .userUsername(username: username))
             .build()
             .process()
         }
@@ -47,7 +47,7 @@ public class UserNetworkService: UserService {
 
     func getUserByName(username: String) -> Observer<UserEntity> {
         return builder
-            .route(.get, .userUsername)
+            .route(.get, .userUsername(username: username))
             .build()
             .process()
         }
@@ -72,7 +72,7 @@ public class UserNetworkService: UserService {
 
     func updateUser(username: String, user: UserEntity) -> Observer<Void> {
         return builder
-            .route(.put, .userUsername)
+            .route(.put, .userUsername(username: username))
             .build()
             .process(user)
         }
