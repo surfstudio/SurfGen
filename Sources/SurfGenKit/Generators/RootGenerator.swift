@@ -12,6 +12,12 @@ import Foundation
 
 public final class RootGenerator {
 
+    // MARK: - Public properties
+
+    public var warningsLog: String {
+        return WarningCollector.shared.reportLog
+    }
+
     // MARK: - Private Properties
 
     private let environment: Environment

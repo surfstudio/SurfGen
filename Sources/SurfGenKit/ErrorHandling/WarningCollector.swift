@@ -33,7 +33,7 @@ class WarningCollector {
     static let shared = WarningCollector()
 
     var reportLog: String {
-        return "Generation finished with warnings:\n\n" + warnings
+        return isEmpty ? "" : "Generation finished with warnings:\n\n" + warnings
             .map { $0.description }
             .joined(separator: "\n\n")
     }
