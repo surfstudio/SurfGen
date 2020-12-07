@@ -35,12 +35,12 @@ final class GASTContentNodeBuilder {
     }
 
     private func buildSubnodes(for object: ObjectSchema) throws -> [ASTNode] {
-        let builder = GASTFieldNodeBuilder()
+        let builder = GASTTypeNodeBuilder()
         var fieldNodes = [ASTNode]()
         for property in object.properties {
             var fieldSubNodes = [
                 Node(token: .name(value: property.name), []),
-                try wrap(builder.buildFieldType(for: property.schema),
+                try wrap(builder.buildTypeNode(for: property.schema),
                          with: "Could not build object content subnodes")
             ]
             if let description = property.schema.metadata.description {

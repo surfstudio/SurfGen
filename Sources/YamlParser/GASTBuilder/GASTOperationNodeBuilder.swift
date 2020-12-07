@@ -37,9 +37,10 @@ final class GASTOperationNodeBuilder {
         }
 
         // Request parameters
-        if !operation.parameters.isEmpty {
-            subNodes.append(Node(token: .parameters, operation.parameters.map {
-                GASTParameterNodeBuilder().buildNode(for: $0.value)
+        let suitableParameters = operation.parameters.filter { $0.value.location.needsRecording }
+        if !suitableParameters.isEmpty {
+            subNodes.append(Node(token: .parameters, try suitableParameters.map {
+                try GASTParameterNodeBuilder().buildNode(for: $0.value)
             }))
         }
 
@@ -48,8 +49,6 @@ final class GASTOperationNodeBuilder {
             let mediaContent = try wrap(GASTMediaContentNodeBuilder().buildMediaContentNode(with: responseContent),
                                         with: "Could not parse response body for operation")
             subNodes.append(Node(token: .responseBody, [mediaContent]))
-        } else {
-            subNodes.append(Node(token: .responseBody, []))
         }
         
         return Node(token: .operation, subNodes)

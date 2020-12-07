@@ -1,0 +1,49 @@
+//
+//  UserNetworkService.swift
+//
+
+import NodeKit
+
+public class UserNetworkService: UserService {
+    
+    // MARK: - Private Properties
+
+    private var builder: DefaultChain<UserUrlRoute> {
+        return DefaultChain()
+    }
+
+    // MARK: - Public Methods
+
+    func getInfo() -> Observer<UserInfoEntity> {
+        return builder
+            .route(.get, .info)
+            .build()
+            .process()
+        }
+    }
+
+    func getIsPersonified() -> Observer<IsPersonifiedEntity> {
+        return builder
+            .route(.get, .isPersonified)
+            .build()
+            .process()
+        }
+    }
+
+    func postFindId(findIdRequest: FindIdRequestEntity) -> Observer<OtpAndInfoEntity> {
+        return builder
+            .route(.post, .findId)
+            .build()
+            .process(findIdRequest)
+        }
+    }
+
+    func postResetPassword(resetPasswordRequest: ResetPasswordRequestEntity) -> Observer<InfoMessageEntity> {
+        return builder
+            .route(.post, .resetPassword)
+            .build()
+            .process(resetPasswordRequest)
+        }
+    }
+
+}

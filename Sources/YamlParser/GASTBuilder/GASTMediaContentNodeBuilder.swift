@@ -30,7 +30,7 @@ final class GASTMediaContentNodeBuilder {
                 }
                 return Node(token: .field(isOptional: !property.required), [
                     Node(token: .name(value: property.name), []),
-                    Node(token: .type(name: propertyType), [])
+                    try GASTTypeNodeBuilder().buildTypeNode(for: property.schema)
                 ])
             })
         case .array(let array):

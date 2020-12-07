@@ -1,0 +1,21 @@
+//
+//  StoreService.swift
+//
+
+import NodeKit
+
+public protocol StoreService {
+
+    /// Delete purchase order by ID
+    func deleteOrder(orderId: String) -> Observer<Void>
+
+    /// Returns pet inventories by status
+    func getInventory() -> Observer</* response with undefined model name */>
+
+    /// Find purchase order by ID
+    func getOrderById(orderId: String) -> Observer<OrderEntity>
+
+    /// Place an order for a pet
+    func placeOrder(order: OrderEntity) -> Observer<OrderEntity>
+
+}

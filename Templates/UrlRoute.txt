@@ -1,0 +1,25 @@
+//
+//  {{ name }}.swift
+//
+
+import NodeKit
+
+enum {{ name }} {
+{% for path in paths %}    case {{ path.name }}{% if path.hasParameters %}({% for parameter in path.parameters %}{{ parameter }}: String{% if not forloop.last %}, {% endif %}{% endfor %}){% endif %}{% if not forloop.last %}
+{% endif %}{% endfor %}
+}
+
+// MARK: - UrlRouteProvider
+
+extension {{ name }}: UrlRouteProvider {
+
+    func url() throws -> URL {
+        let base = URL(string: Urls.base)
+        switch self {
+        {% for path in paths %}case .{{ path.name }}{% if path.hasParameters %}({% for parameter in path.parameters %}let {{ parameter }}{% if not forloop.last %}, {% endif %}{% endfor %}){% endif %}:
+            return try base + "{{ path.path }}"{% if not forloop.last %}
+        {% endif %}{% endfor %}
+        }
+    }
+
+}

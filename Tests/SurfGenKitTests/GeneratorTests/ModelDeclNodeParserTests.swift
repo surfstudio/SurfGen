@@ -1,5 +1,5 @@
 //
-//  DeclNodeParser.swift
+//  ModelDeclNodeParserTests.swift
 //  ModelsCodeGenerationTests
 //
 //  Created by Mikhail Monakov on 04/12/2019.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import SurfGenKit
 
-class DeclNodeParserTests: XCTestCase {
+class ModelDeclNodeParserTests: XCTestCase {
 
     func testNameNodeError() {
         let declNode = Node(token: .decl,
@@ -18,7 +18,7 @@ class DeclNodeParserTests: XCTestCase {
                                 Node(token: .content, [ formFieldNode(isOptional: false, name: "region", typeName: "String") ])
                             ])
         
-        assertThrow(try DeclNodeParser().getInfo(from: declNode), throws: GeneratorError.nodeConfiguration(""))
+        assertThrow(try ModelDeclNodeParser().getInfo(from: declNode), throws: GeneratorError.nodeConfiguration(""))
     }
 
     func testContentNodeError() {
@@ -28,7 +28,7 @@ class DeclNodeParserTests: XCTestCase {
                                 formFieldNode(isOptional: false, name: "region", typeName: "String")
                             ])
         
-        assertThrow(try DeclNodeParser().getInfo(from: declNode), throws: GeneratorError.nodeConfiguration(""))
+        assertThrow(try ModelDeclNodeParser().getInfo(from: declNode), throws: GeneratorError.nodeConfiguration(""))
     }
 
 }

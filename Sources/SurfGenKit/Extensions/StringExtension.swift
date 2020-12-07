@@ -8,6 +8,10 @@
 
 extension String {
 
+    func asArray() -> String {
+        return "[\(self)]"
+    }
+
     func formOptional(_ isOptional: Bool) -> String {
         return self + isOptional.asOptionalSign
     }
@@ -26,6 +30,51 @@ extension String {
 
     var withSwiftExt: String {
         return self + ".swift"
+    }
+
+    func operationName(forService serviceName: String, with method: String) -> String {
+            guard self.pathPartsCount > 1 else {
+                return method + self
+                .replacingOccurrences(of: "[{}]", with: "", options: .regularExpression)
+                .pathToCamelCase()
+                .capitalizingFirstLetter()
+            }
+            return method + self
+                .replacingOccurrences(of: "[{}]", with: "", options: .regularExpression)
+                .split(separator: "/")
+                .map { String($0) }
+                .reduce("", { $0 + $1.capitalizingFirstLetter() })
+                .snakeCaseToCamelCase()
+                .capitalizingFirstLetter()
+                .replacingOccurrences(of: serviceName, with: "")
+        }
+
+    var pathName: String {
+        guard self.pathPartsCount > 1 else {
+            return self
+                .replacingOccurrences(of: "[{}]", with: "", options: .regularExpression)
+                .pathToCamelCase()
+        }
+        return self
+            .replacingOccurrences(of: "[{}]", with: "", options: .regularExpression)
+            .split(separator: "/")
+            .map { String($0) }
+            .removingFirst()
+            .reduce("", { $0 + $1.capitalizingFirstLetter() })
+            .snakeCaseToCamelCase()
+    }
+
+    func pathToCamelCase() -> String {
+        return self.split(whereSeparator: { $0 == "/" || $0 == "_" })
+            .map { String($0) }
+            .reduce("", { $0 + $1.capitalizingFirstLetter() })
+            .lowercaseFirstLetter()
+    }
+
+    func pathWithSwiftParameters() -> String {
+        return self
+            .replacingOccurrences(of: "{", with: "\\(")
+            .replacingOccurrences(of: "}", with: ")")
     }
 
     func snakeCaseToCamelCase() -> String {
@@ -51,6 +100,14 @@ extension String {
         default:
             return 0
         }
+    }
+
+    private var pathPartsCount: Int {
+        return self
+            .split(separator: "/")
+            .map { String($0) }
+            .filter { !$0.contains("{") }
+            .count
     }
 
 }

@@ -8,12 +8,12 @@
 
 import Stencil
 
-final class EntryGenerator: ModelGeneratable {
+final class EntryGenerator: CodeGenerator {
 
-    func generateCode(declNode: ASTNode, environment: Environment) throws -> FileModel {
+    func generateCode(for declNode: ASTNode, environment: Environment) throws -> FileModel {
 
         let propertyGenerator = PropertyGenerator()
-        let declModel = try DeclNodeParser().getInfo(from: declNode)
+        let declModel = try ModelDeclNodeParser().getInfo(from: declNode)
         
         let properties = try declModel.fields
             .map { try propertyGenerator.generateCode(for: $0, type: .entry) }

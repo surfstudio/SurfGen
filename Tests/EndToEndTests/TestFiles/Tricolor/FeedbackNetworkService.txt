@@ -1,0 +1,41 @@
+//
+//  FeedbackNetworkService.swift
+//
+
+import NodeKit
+
+public class FeedbackNetworkService: FeedbackService {
+    
+    // MARK: - Private Properties
+
+    private var builder: DefaultChain<FeedbackUrlRoute> {
+        return DefaultChain()
+    }
+
+    // MARK: - Public Methods
+
+    func postAttachments(multipartModel: MultipartModel) -> Observer<AttachmentEntity> {
+        return builder
+            .route(.post, .attachments)
+            .build()
+            .process(multipartModel)
+        }
+    }
+
+    func postReport(report: ReportEntity) -> Observer<InfoMessageEntity> {
+        return builder
+            .route(.post, .report)
+            .build()
+            .process(report)
+        }
+    }
+
+    func postReportAddAccounts(reportAddAccounts: ReportAddAccountsEntity) -> Observer<InfoMessageEntity> {
+        return builder
+            .route(.post, .reportAddAccounts)
+            .build()
+            .process(reportAddAccounts)
+        }
+    }
+
+}

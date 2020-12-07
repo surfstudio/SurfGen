@@ -24,7 +24,7 @@ class GASTParameterNodeBuilderTests: XCTestCase {
     }
 
     /// Checks if parameter nodes for operation `updatePetWithForm` are built as expected
-    func testUpdatePetParameterNodesMatchExpected() {
+    func testUpdatePetParameterNodesMatchExpected() throws {
         // given
         guard let updatePet = operations.first(where: { $0.identifier == "updatePetWithForm" }) else {
             XCTFail("Couldn't find operation for test")
@@ -33,7 +33,7 @@ class GASTParameterNodeBuilderTests: XCTestCase {
 
         // when
         for parameter in updatePet.parameters {
-            let node = GASTParameterNodeBuilder().buildNode(for: parameter.value)
+            let node = try GASTParameterNodeBuilder().buildNode(for: parameter.value)
 
             // then
             guard case let .name(name) = node.subNodes[0].token else {
@@ -42,11 +42,29 @@ class GASTParameterNodeBuilderTests: XCTestCase {
             }
             XCTAssert(parameter.value.name == name, "Generated name token is not of correct type")
 
-            guard case let .type(location) = node.subNodes[1].token else {
+            guard case let .type(type) = node.subNodes[1].token else {
                 XCTFail("Built type node with incorrect token")
                 return
             }
-            XCTAssert(parameter.value.location.rawValue == location, "Generated type token is not of correct type")
+            XCTAssert(correctTypeForParameter(name: name) == type, "Generated type token is not of correct type")
+
+            guard case let .location(location) = node.subNodes[2].token else {
+                XCTFail("Built location node with incorrect token")
+                return
+            }
+            XCTAssert(parameter.value.location.rawValue == location, "Generated location token is not of correct type")
+        }
+    }
+
+    func correctTypeForParameter(name: String) -> String {
+        switch name {
+        case "petId":
+            return "Int"
+        case "name", "status":
+            return "String"
+        default:
+            XCTFail("Couldn't check type for parameter with name: \(name)")
+            return ""
         }
     }
 

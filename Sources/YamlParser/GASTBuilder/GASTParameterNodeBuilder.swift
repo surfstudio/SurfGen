@@ -10,10 +10,26 @@ import SurfGenKit
 
 final class GASTParameterNodeBuilder {
     
-    func buildNode(for parameter: Parameter) -> ASTNode {
-        let type = Node(token: .type(name: parameter.location.rawValue), [])
+    func buildNode(for parameter: Parameter) throws -> ASTNode {
+        let location = Node(token: .location(type: parameter.location.rawValue), [])
         let name = Node(token: .name(value: parameter.name), [])
-        return Node(token: .parameter(isOptional: !parameter.required), [name, type])
+        guard case let .schema(typeSchema) = parameter.type else {
+            throw GASTBuilderError.undefinedTypeForField(parameter.name)
+        }
+        let type = try GASTTypeNodeBuilder().buildTypeNode(for: typeSchema.schema)
+        return Node(token: .parameter(isOptional: !parameter.required), [name, type, location])
     }
 
+}
+
+extension ParameterLocation {
+    
+    var needsRecording: Bool {
+        switch self {
+        case .path, .query:
+            return true
+        default:
+            return false
+        }
+    }
 }

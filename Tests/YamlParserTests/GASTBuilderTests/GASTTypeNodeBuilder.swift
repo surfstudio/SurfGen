@@ -1,5 +1,5 @@
 //
-//  GASTFieldNodeBuilder.swift
+//  GASTTypeNodeBuilder.swift
 //  SurfGen
 //
 //  Created by Mikhail Monakov on 13/03/2020.
@@ -35,8 +35,8 @@ class GASTFieldNodeBuilderTests: XCTestCase {
         }
 
         do {
-            let canceledPropertyNode = try GASTFieldNodeBuilder().buildFieldType(for: canceledProperty)
-            let namePropertyNode = try GASTFieldNodeBuilder().buildFieldType(for: nameProperty)
+            let canceledPropertyNode = try GASTTypeNodeBuilder().buildTypeNode(for: canceledProperty)
+            let namePropertyNode = try GASTTypeNodeBuilder().buildTypeNode(for: nameProperty)
 
             guard
                 case let .type(cancelType) = canceledPropertyNode.token,
@@ -73,7 +73,7 @@ class GASTFieldNodeBuilderTests: XCTestCase {
         }
 
         do {
-            let builtNode = try GASTFieldNodeBuilder().buildFieldType(for: recipientSchema)
+            let builtNode = try GASTTypeNodeBuilder().buildTypeNode(for: recipientSchema)
 
             guard case let .type(typeName) = builtNode.token else {
                 XCTFail("built node with incorrect token")
@@ -112,7 +112,7 @@ class GASTFieldNodeBuilderTests: XCTestCase {
             XCTFail("Error while loading model")
             return
         }
-        assertThrow(try GASTFieldNodeBuilder().buildFieldType(for: shop.value), throws: GASTBuilderError.undefinedTypeForField(""))
+        assertThrow(try GASTTypeNodeBuilder().buildTypeNode(for: shop.value), throws: GASTBuilderError.undefinedTypeForField(""))
 
     }
 

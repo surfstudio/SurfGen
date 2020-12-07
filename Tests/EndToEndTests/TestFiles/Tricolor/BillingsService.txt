@@ -1,0 +1,27 @@
+//
+//  BillingsService.swift
+//
+
+import NodeKit
+
+public protocol BillingsService {
+
+    /// Информация о балансе
+    func getBalance() -> Observer<BalanceInfoEntity>
+
+    /// Запрашиваем корзину услуг
+    func getBasket(smartCardOrAgreement: String) -> Observer<[BasketItemEntity]>
+
+    /// Запрос контактных данных пользователя
+    func getContactInfo() -> Observer<UserContactInfoEntity>
+
+    /// Доступна ли оплата для пользователя
+    func getIsPaymentAvailable(smartCardOrAgreement: String) -> Observer<IsPaymentAvailableResponseEntity>
+
+    /// Оплачиваем корзину
+    func postPayment(smartCardOrAgreement: String, paymentDetailsRequest: PaymentDetailsRequestEntity) -> Observer<PaymentDetailsResponseEntity>
+
+    /// Запрашиваем доступные платежные системы и информацию о комиссиях
+    func postPaymentsInfo(paymentsInfoRequest: PaymentsInfoRequestEntity) -> Observer<[PaymentTypeItemEntity]>
+
+}

@@ -1,0 +1,21 @@
+//
+//  UserService.swift
+//
+
+import NodeKit
+
+public protocol UserService {
+
+    /// Запрашиваем информацию о пользователе
+    func getInfo() -> Observer<UserInfoEntity>
+
+    /// Получем информацию о персонификации
+    func getIsPersonified() -> Observer<IsPersonifiedEntity>
+
+    /// Напоминает пользователю его ID по СМС.
+    func postFindId(findIdRequest: FindIdRequestEntity) -> Observer<OtpAndInfoEntity>
+
+    /// Метод восстановления пароля. Используется на этапе авторизации.
+    func postResetPassword(resetPasswordRequest: ResetPasswordRequestEntity) -> Observer<InfoMessageEntity>
+
+}

@@ -1,0 +1,76 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+  contact:
+    name: Starkina Maria
+    email: starkina@surfstudio.ru
+
+servers:
+  - url: https://mobile-dev.tricolor.tv/mobile-api-new/v1
+    description: Dev-сервер. 
+  - url:  https://mobile-rel.tricolor.tv/mobile-api-new/v1
+    description: Stage-сервер
+     
+paths:
+  /billings/paymentCards:
+    get:
+      summary: Возвращает список привязанных карт пользователя 
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: "models.yaml#/components/schemas/PaymentCards"
+        default:
+          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+    post:
+      summary: Добавление новой карты
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema:
+              $ref: "models.yaml#/components/schemas/AddCardRequest"
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                  $ref: "models.yaml#/components/schemas/3dSecResponse"       
+        default:
+          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+
+  /billings/setAutopayment:
+    post:
+      summary: Включение и отключение автоплатежа
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema:
+              $ref: "models.yaml#/components/schemas/SetAutopaymentRequest"
+      responses:
+        "204":
+          description: "Успех"        
+        default:
+          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+
+  /billings/paymentCards/{id}:
+    delete:
+      summary: Удаление карты
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string     
+      responses:
+        "204":
+          description: "Успех"        
+        default:
+          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
