@@ -15,7 +15,7 @@ final class PathFinder {
     ///   - serviceName: to look for
     /// - Returns: filteres paths matching service name
     func findMatchingPaths(from paths: [Path], for rootPath: String) -> [Path] {
-        return paths.filter { $0.path.pathToCamelCase().hasPrefix(rootPath.lowercaseFirstLetter()) }
+        return paths.filter { $0.path.pathToCamelCase().hasPrefix(rootPath.pathToCamelCase()) }
     }
 
 }
