@@ -13,6 +13,8 @@ import Stencil
 /// Tests for generating full service code from prepared GAST tree
 class ServiceGenerationTests: XCTestCase {
 
+    let serviceGenerator = ServiceGenerator.defaultGenerator
+
     var environment: Environment {
         let path = Path(#file) + "../../../../Templates"
         let loader = FileSystemLoader(paths: [path])
@@ -25,8 +27,12 @@ class ServiceGenerationTests: XCTestCase {
         let expectedFileName = TestService.pet.fileName(for: .urlRoute)
 
         // when
-        let generatedRoute = try UrlRouteGenerator().generateCode(for: NodesBuilder.formTestServiceDeclarationNode(),
-                                                              environment: environment)
+        let generatedService = try serviceGenerator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(), withServiceName: TestService.pet.rawValue,
+                                                                   environment: environment)
+        guard let generatedRoute = generatedService[.urlRoute] else {
+            XCTFail("Route was not generated")
+            return
+        }
 
         // then
         XCTAssertEqual(generatedRoute.fileName,
@@ -34,7 +40,7 @@ class ServiceGenerationTests: XCTestCase {
                        "File name is not equal to expected one. Resulted value:\n\(generatedRoute.fileName)")
         XCTAssertEqual(generatedRoute.code,
                        expectedCode,
-                       "Code is not equal to expected one. Resulted value:\n\(generatedRoute.code)")
+                       FileComparator().getDifference(for: generatedRoute.code, expectedFile: expectedCode))
     }
 
     func testGeneratedServiceProtocolMatchesExpected() throws {
@@ -43,9 +49,13 @@ class ServiceGenerationTests: XCTestCase {
         let expectedFileName = TestService.pet.fileName(for: .protocol)
 
         // when
-        let generatedService = try ServiceGenerator().generateCode(for: NodesBuilder.formTestServiceDeclarationNode(),
-                                                                   environment: environment)
-        let generatedProtocol = generatedService.protocol
+        let generatedService = try ServiceGenerator.defaultGenerator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(), withServiceName: TestService.pet.rawValue,
+                                                                                  environment: environment)
+
+        guard let generatedProtocol = generatedService[.protocol] else {
+            XCTFail("Protocol was not generated")
+            return
+        }
 
         // then
         XCTAssertEqual(generatedProtocol.fileName,
@@ -53,7 +63,7 @@ class ServiceGenerationTests: XCTestCase {
                        "File name is not equal to expected one. Resulted value:\n\(generatedProtocol.fileName)")
         XCTAssertEqual(generatedProtocol.code,
                        expectedCode,
-                       "Code is not equal to expected one. Resulted value:\n\(generatedProtocol.code)")
+                       FileComparator().getDifference(for: generatedProtocol.code, expectedFile: expectedCode))
     }
 
     func testGeneratedServiceImplementationMatchesExpected() throws {
@@ -62,9 +72,13 @@ class ServiceGenerationTests: XCTestCase {
         let expectedFileName = TestService.pet.fileName(for: .service)
 
         // when
-        let generatedService = try ServiceGenerator().generateCode(for: NodesBuilder.formTestServiceDeclarationNode(),
-                                                                   environment: environment)
-        let generatedImplementation = generatedService.service
+        let generatedService = try ServiceGenerator.defaultGenerator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(),
+                                                                                  withServiceName: TestService.pet.rawValue,
+                                                                                  environment: environment)
+        guard let generatedImplementation = generatedService[.service] else {
+            XCTFail("Service was not generated")
+            return
+        }
 
         // then
         XCTAssertEqual(generatedImplementation.fileName,
@@ -72,7 +86,7 @@ class ServiceGenerationTests: XCTestCase {
                        "File name is not equal to expected one. Resulted value:\n\(generatedImplementation.fileName)")
         XCTAssertEqual(generatedImplementation.code,
                        expectedCode,
-                       "Code is not equal to expected one. Resulted value:\n\(generatedImplementation.code)")
+                       FileComparator().getDifference(for: generatedImplementation.code, expectedFile: expectedCode))
     }
 
 }

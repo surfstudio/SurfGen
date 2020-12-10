@@ -1,0 +1,21 @@
+//
+//  PaymentService.swift
+//
+
+import NodeKit
+
+public protocol PaymentService {
+
+    /// Удаление карты
+    func deletePaymentCardsId(id: String) -> Observer<Void>
+
+    /// Возвращает список привязанных карт пользователя
+    func getPaymentCards() -> Observer<[PaymentCardsEntity]>
+
+    /// Добавление новой карты
+    func postPaymentCards(addCardRequest: AddCardRequestEntity) -> Observer<3dSecResponseEntity>
+
+    /// Включение и отключение автоплатежа
+    func postSetAutopayment(setAutopaymentRequest: SetAutopaymentRequestEntity) -> Observer<Void>
+
+}

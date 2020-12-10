@@ -5,7 +5,7 @@
 import NodeKit
 
 public class StoreNetworkService: StoreService {
-    
+
     // MARK: - Private Properties
 
     private var builder: DefaultChain<StoreUrlRoute> {
@@ -16,7 +16,7 @@ public class StoreNetworkService: StoreService {
 
     func deleteOrder(orderId: String) -> Observer<Void> {
         return builder
-            .route(.delete, .orderOrderId)
+            .route(.delete, .orderOrderId(orderId: orderId))
             .build()
             .process()
         }
@@ -32,7 +32,7 @@ public class StoreNetworkService: StoreService {
 
     func getOrderById(orderId: String) -> Observer<OrderEntity> {
         return builder
-            .route(.get, .orderOrderId)
+            .route(.get, .orderOrderId(orderId: orderId))
             .build()
             .process()
         }

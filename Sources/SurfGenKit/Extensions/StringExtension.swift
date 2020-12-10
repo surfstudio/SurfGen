@@ -32,21 +32,24 @@ extension String {
         return self + ".swift"
     }
 
-    func operationName(forService serviceName: String, with method: String) -> String {
-            guard self.pathPartsCount > 1 else {
-                return method + self
-                .replacingOccurrences(of: "[{}]", with: "", options: .regularExpression)
-                .pathToCamelCase()
-                .capitalizingFirstLetter()
-            }
+    func operationName(with method: String, rootPath: String) -> String {
+        guard self.pathPartsCount > 1 else {
             return method + self
-                .replacingOccurrences(of: "[{}]", with: "", options: .regularExpression)
-                .split(separator: "/")
-                .map { String($0) }
-                .reduce("", { $0 + $1.capitalizingFirstLetter() })
-                .snakeCaseToCamelCase()
-                .capitalizingFirstLetter()
-                .replacingOccurrences(of: serviceName, with: "")
+            .replacingOccurrences(of: "[{}]", with: "", options: .regularExpression)
+            .pathToCamelCase()
+            .capitalizingFirstLetter()
+        }
+
+        let camelRootPath = rootPath.pathToCamelCase().capitalizingFirstLetter()
+    
+        return method + self
+            .replacingOccurrences(of: "[{}]", with: "", options: .regularExpression)
+            .split(separator: "/")
+            .map { String($0) }
+            .reduce("", { $0 + $1.capitalizingFirstLetter() })
+            .snakeCaseToCamelCase()
+            .capitalizingFirstLetter()
+            .replacingOccurrences(of: camelRootPath, with: "")
         }
 
     var pathName: String {

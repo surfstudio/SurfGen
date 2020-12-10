@@ -26,14 +26,6 @@ final class ConfigManager {
 
     // MARK: - Properties
 
-    var generationPathes: [ModelType: String] {
-        return [
-            .entity: model.entitiesPath,
-            .entry: model.entriesPath,
-            .enum: model.enumPath
-        ]
-    }
-
     var tempatePath: Path {
         return Path(model.tempatesPath)
     }
@@ -78,6 +70,36 @@ final class ConfigManager {
 
     // MARK: - Internal methods
 
+    func getModelGenerationPaths() throws -> [ModelType: String] {
+        guard
+            let entitiesPath = model.entitiesPath,
+            let entriesPath = model.entriesPath,
+            let enumPath = model.enumPath
+        else {
+            throw ConfigManagerError.incorrectYamlFile
+        }
+        return [
+            .entity: entitiesPath,
+            .entry: entriesPath,
+            .enum: enumPath
+        ]
+    }
+
+    func getServiceGenerationPaths(for serviceName: String) throws -> [ServicePart: String] {
+        guard
+            let endpointsPath = model.endpointsPath,
+            let servicesPath = model.servicesPath
+        else {
+            throw ConfigManagerError.incorrectYamlFile
+        }
+        let fullServicePath = "\(servicesPath)/\(serviceName.capitalizingFirstLetter())"
+        return [
+            .urlRoute: endpointsPath,
+            .protocol: fullServicePath,
+            .service: fullServicePath
+        ]
+    }
+
     func getBlackList() throws -> [String] {
         guard let blackList = model.blackList else {
             return []
@@ -86,8 +108,11 @@ final class ConfigManager {
         return blackListFile.split(separator: "\n").map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
     }
 
-    func getGenerationTypes() throws -> [ModelType] {
-        return try model.generationTypes.map {
+    func getModelTypes() throws -> [ModelType] {
+        guard let specifiedTypes = model.modelTypes else {
+            throw ConfigManagerError.incorrectYamlFile
+        }
+        return try specifiedTypes.map {
             switch GeneratedModelType(rawValue: $0) {
             case .nodeKitEntry?:
                 return .entry

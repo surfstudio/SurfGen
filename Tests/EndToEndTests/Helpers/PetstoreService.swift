@@ -13,7 +13,7 @@ enum PetstoreService: String, CaseIterable {
     case user = "User"
     
     private enum Constants {
-        static let basePath = "TestFiles/"
+        static let basePath = "TestFiles/Petstore/"
     }
 
     func fileName(for servicePart: ServicePart) -> String {

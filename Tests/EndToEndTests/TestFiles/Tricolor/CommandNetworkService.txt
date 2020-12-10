@@ -5,7 +5,7 @@
 import NodeKit
 
 public class CommandNetworkService: CommandService {
-    
+
     // MARK: - Private Properties
 
     private var builder: DefaultChain<CommandUrlRoute> {

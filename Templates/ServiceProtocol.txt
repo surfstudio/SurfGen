@@ -10,10 +10,10 @@ public protocol {{ name }}Service {
     {% endif %}func {{ operation.name }}({% for parameter in operation.pathParameters %}{#
     #}{{ parameter.name }}: String{% if not forloop.last or operation.hasQueryParameters or operation.hasBody %}, {% endif %}{% endfor %}{#
     #}{% for parameter in operation.queryParameters %}{{ parameter.name }}: {{ parameter.type }}{% if not forloop.last or operation.hasBody %}, {% endif %}{% endfor %}{#
-    #}{% if operation.hasBody %}{% if operation.hasUnsupportedEncoding %}/* body with unsupported encoding */{% endif %}{#
-    #}{% if operation.isBodyModel %}{{ operation.bodyModelName }}: {{ operation.bodyModelType }}{% endif %}{#
-    #}{% if operation.isBodyArray %}{{ operation.bodyModelName }}: [{{ operation.bodyModelType }}]{% endif %}{#
-    #}{% if operation.isBodyDictionary %}{% for parameter in operation.bodyParameters %}{{ parameter.name }}: {{ parameter.type }}{% if not forloop.last %}, {% endif %}{#
+    #}{% if operation.hasBody %}{% if operation.requestBody.hasUnsupportedEncoding %}/* body with unsupported encoding */{% endif %}{#
+    #}{% if operation.requestBody.isModel %}{{ operation.requestBody.modelName }}: {{ operation.requestBody.modelType }}{% endif %}{#
+    #}{% if operation.requestBody.isArray %}{{ operation.requestBody.modelName }}: [{{ operation.requestBody.modelType }}]{% endif %}{#
+    #}{% if operation.requestBody.isDictionary %}{% for parameter in operation.requestBody.parameters %}{{ parameter.name }}: {{ parameter.type }}{% if not forloop.last %}, {% endif %}{#
     #}{% endfor %}{% endif %}{% endif %}){#
     #} -> Observer<{% if operation.hasUndefinedResponseBody %}/* response with undefined model name */{#
     #}{% else %}{{ operation.responseModel }}{% endif %}>

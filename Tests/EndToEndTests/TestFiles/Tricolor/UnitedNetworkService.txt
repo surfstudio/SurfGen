@@ -1,0 +1,114 @@
+//
+//  UnitedNetworkService.swift
+//
+
+import NodeKit
+
+public class UnitedNetworkService: UnitedService {
+
+    // MARK: - Constants
+
+    private enum Keys {
+        static let disconnectAccountRequest = "DisconnectAccountRequest"
+        static let smartCardOrAgreement = "smartCardOrAgreement"
+    }
+
+    // MARK: - Private Properties
+
+    private var builder: DefaultChain<UnitedUrlRoute> {
+        return DefaultChain()
+    }
+
+    // MARK: - Public Methods
+
+    func deleteAccount(disconnectAccountRequest: DisconnectAccountRequestEntity) -> Observer<InfoMessageEntity> {
+        return builder
+            .set(query: [Keys.disconnectAccountRequest: disconnectAccountRequest])
+            .route(.delete, .account)
+            .build()
+            .process()
+        }
+    }
+
+    func getAccounts() -> Observer<[UnitedItemEntity]> {
+        return builder
+            .route(.get, .accounts)
+            .build()
+            .process()
+        }
+    }
+
+    func getAccountsForTransfer() -> Observer<[AccountForTransferEntity]> {
+        return builder
+            .route(.get, .accountsForTransfer)
+            .build()
+            .process()
+        }
+    }
+
+    func getInfo(smartCardOrAgreement: String) -> Observer<TricolorIdInfoEntity> {
+        return builder
+            .set(query: [Keys.smartCardOrAgreement: smartCardOrAgreement])
+            .route(.get, .info)
+            .build()
+            .process()
+        }
+    }
+
+    func getIsAccountUnionAvailable() -> Observer<InfoMessageEntity> {
+        return builder
+            .route(.get, .isAccountUnionAvailable)
+            .build()
+            .process()
+        }
+    }
+
+    func getReasons() -> Observer<[DisconnectReasonEntity]> {
+        return builder
+            .route(.get, .reasons)
+            .build()
+            .process()
+        }
+    }
+
+    func getVouchersForTransfer() -> Observer<[VouchersForTransferEntity]> {
+        return builder
+            .route(.get, .vouchersForTransfer)
+            .build()
+            .process()
+        }
+    }
+
+    func postAccount(addAccountRequest: AddAccountRequestEntity) -> Observer</* response with undefined model name */> {
+        return builder
+            .route(.post, .account)
+            .build()
+            .process(addAccountRequest)
+        }
+    }
+
+    func postChangeAccount(changeAccountRequest: ChangeAccountRequestEntity) -> Observer<AuthResponseEntity> {
+        return builder
+            .route(.post, .changeAccount)
+            .build()
+            .process(changeAccountRequest)
+        }
+    }
+
+    func postTransfer(transferRequest: TransferRequestEntity) -> Observer<InfoMessageEntity> {
+        return builder
+            .route(.post, .transfer)
+            .build()
+            .process(transferRequest)
+        }
+    }
+
+    func postTransfer(transferServiceRequest: TransferServiceRequestEntity) -> Observer<InfoMessageEntity> {
+        return builder
+            .route(.post, .transfer)
+            .build()
+            .process(transferServiceRequest)
+        }
+    }
+
+}

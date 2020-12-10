@@ -92,7 +92,16 @@ public extension PBXGroup {
     func group(for components: [String]) -> PBXGroup? {
         var iteratorGroup: PBXGroup? = self
         for component in components {
-            iteratorGroup = iteratorGroup?.children.first(where: { $0.path == component }) as? PBXGroup
+            let subgroup = iteratorGroup?.children.first(where: { $0.path == component }) as? PBXGroup
+            if subgroup == nil {
+                do {
+                    iteratorGroup = try iteratorGroup?.addGroup(named: component).first
+                } catch {
+                    return nil
+                }
+            } else {
+                iteratorGroup = subgroup
+            }
         }
         return iteratorGroup
     }

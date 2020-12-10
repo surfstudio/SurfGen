@@ -8,11 +8,14 @@
 import PathKit
 
 struct ConfigModel: Decodable {
-    let entitiesPath: String
-    let entriesPath: String
-    let enumPath: String
+    let entitiesPath: String?
+    let entriesPath: String?
+    let enumPath: String?
 
-    let generationTypes: [String]
+    let endpointsPath: String?
+    let servicesPath: String?
+
+    let modelTypes: [String]?
     let generateDescriptions: Bool?
     let tempatesPath: String
     let blackList: String?
@@ -28,11 +31,14 @@ struct ConfigModel: Decodable {
         case entriesPath = "entries_path"
         case enumPath = "enums_path"
 
+        case endpointsPath = "endpoints_path"
+        case servicesPath = "services_path"
+
         case projectPath = "project_path"
         case mainGroup = "project_main_group"
         case targets = "targets"
 
-        case generationTypes = "generation_types"
+        case modelTypes = "generation_types"
         case generateDescriptions = "generate_descriptions"
         case tempatesPath = "templates_path"
         case blackList = "black_list_path"

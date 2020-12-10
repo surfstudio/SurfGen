@@ -16,14 +16,17 @@ class OperationNodeParserTests: XCTestCase {
         static let testServiceName = "Pet"
     }
 
+    private let operationNodeParser = OperationNodeParser(mediaContentParser: MediaContentNodeParser(),
+                                                          parametersParser: ParametersNodeParser())
+
     func testPostOperationMethodParsingMatchesExpected() throws {
         // given
         let operation = NodesBuilder.formPostPetByIdOperationNode()
         let expectedMethod = "post"
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
-                                                                 forServiceName: Constants.testServiceName)
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
+                                                               rootPath: Constants.testServiceName)
         
         // then
         XCTAssertEqual(generatedOperation.httpMethod, expectedMethod)
@@ -35,8 +38,8 @@ class OperationNodeParserTests: XCTestCase {
         let expectedMethod = "get"
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
-                                                                 forServiceName: Constants.testServiceName)
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
+                                                               rootPath: Constants.testServiceName)
         
         // then
         XCTAssertEqual(generatedOperation.httpMethod, expectedMethod)
@@ -48,8 +51,8 @@ class OperationNodeParserTests: XCTestCase {
         let expectedName = "postPetPetId"
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
-                                                                 forServiceName: Constants.testServiceName)
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
+                                                               rootPath: Constants.testServiceName)
         
         // then
         XCTAssertEqual(generatedOperation.name, expectedName)
@@ -61,8 +64,8 @@ class OperationNodeParserTests: XCTestCase {
         let expectedDescription = "Finds Pets by status"
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
-                                                                 forServiceName: Constants.testServiceName)
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
+                                                               rootPath: Constants.testServiceName)
         
         // then
         XCTAssertEqual(generatedOperation.description, expectedDescription)
@@ -78,7 +81,7 @@ class OperationNodeParserTests: XCTestCase {
         let expectedPathParameters = ["petId"]
         
         // when
-        let generatedPathModel = try OperationNodeParser().parsePath(from: operation)
+        let generatedPathModel = try operationNodeParser.parse(operation: operation, rootPath: "Pet").path
         
         // then
         XCTAssertEqual(generatedPathModel.name, expectedPathName)
@@ -97,7 +100,7 @@ class OperationNodeParserTests: XCTestCase {
         let expectedPathParameters = [String]()
         
         // when
-        let generatedPathModel = try OperationNodeParser().parsePath(from: operation)
+        let generatedPathModel = try operationNodeParser.parse(operation: operation, rootPath: "Pet").path
         
         // then
         XCTAssertEqual(generatedPathModel.name, expectedPathName)
@@ -117,8 +120,8 @@ class OperationNodeParserTests: XCTestCase {
                                                            location: .query)]
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
-                                                                 forServiceName: Constants.testServiceName)
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
+                                                               rootPath: Constants.testServiceName)
         
         // then
         XCTAssertEqual(generatedOperation.queryParameters, expectedParameters)
@@ -139,18 +142,19 @@ class OperationNodeParserTests: XCTestCase {
         
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
-                                                                 forServiceName: Constants.testServiceName)
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
+                                                               rootPath: Constants.testServiceName)
+        let requestBody = generatedOperation.requestBody
         
         // then
         XCTAssertEqual(generatedOperation.hasBody, expectedHasBody)
-        XCTAssertEqual(generatedOperation.hasFormEncoding, expectedHasFormEncoding)
-        XCTAssertEqual(generatedOperation.hasUnsupportedEncoding, expectedHasUnsupportedEncoding)
-        XCTAssertEqual(generatedOperation.isBodyModel, expectedisBodyModel)
-        XCTAssertEqual(generatedOperation.isBodyArray, expectedIsBodyArray)
-        XCTAssertEqual(generatedOperation.bodyModelName, expectedBodyModelName)
-        XCTAssertEqual(generatedOperation.bodyModelType, expectedBodyModelType)
-        XCTAssertEqual(generatedOperation.isBodyDictionary, expectedIsBodyDictionary)
+        XCTAssertEqual(requestBody?.hasFormEncoding, expectedHasFormEncoding)
+        XCTAssertEqual(requestBody?.hasUnsupportedEncoding, expectedHasUnsupportedEncoding)
+        XCTAssertEqual(requestBody?.isModel, expectedisBodyModel)
+        XCTAssertEqual(requestBody?.isArray, expectedIsBodyArray)
+        XCTAssertEqual(requestBody?.modelName, expectedBodyModelName)
+        XCTAssertEqual(requestBody?.modelType, expectedBodyModelType)
+        XCTAssertEqual(requestBody?.isDictionary, expectedIsBodyDictionary)
     }
 
     func testOperationDictionaryRequestBodyParsingMatchesExpected() throws {
@@ -183,17 +187,38 @@ class OperationNodeParserTests: XCTestCase {
         
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
-                                                                 forServiceName: Constants.testServiceName)
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
+                                                               rootPath: Constants.testServiceName)
+        let requestBody = generatedOperation.requestBody
         
         // then
         XCTAssertEqual(generatedOperation.hasBody, expectedHasBody)
-        XCTAssertEqual(generatedOperation.hasFormEncoding, expectedHasFormEncoding)
-        XCTAssertEqual(generatedOperation.hasUnsupportedEncoding, expectedHasUnsupportedEncoding)
-        XCTAssertEqual(generatedOperation.isBodyModel, expectedisBodyModel)
-        XCTAssertEqual(generatedOperation.isBodyArray, expectedIsBodyArray)
-        XCTAssertEqual(generatedOperation.isBodyDictionary, expectedIsBodyDictionary)
-        XCTAssertEqual(generatedOperation.bodyParameters, expectedBodyParameters)
+        XCTAssertEqual(requestBody?.hasFormEncoding, expectedHasFormEncoding)
+        XCTAssertEqual(requestBody?.hasUnsupportedEncoding, expectedHasUnsupportedEncoding)
+        XCTAssertEqual(requestBody?.isModel, expectedisBodyModel)
+        XCTAssertEqual(requestBody?.isArray, expectedIsBodyArray)
+        XCTAssertEqual(requestBody?.isDictionary, expectedIsBodyDictionary)
+        XCTAssertEqual(requestBody?.parameters, expectedBodyParameters)
+    }
+
+    /// Checks if `OperationSplitter` correctly splits operation with `oneOf` body into separate operations
+    func testOperationWithMultipleRequestOptionsParsingMatchesExpected() throws {
+        // given
+        let operation = NodesBuilder.formPostDifferentPetsOperationNode()
+
+        let expectedRequestBodyModels = ["DogEntity", "CatEntity", "ParrotEntity"]
+
+        // when
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
+                                                               rootPath: Constants.testServiceName)
+        let splittedOperations = OperationSplitter().splitMultipleBodyOptions(operation: generatedOperation)
+
+        // then
+        for (index, splittedOperation) in splittedOperations.enumerated() {
+            XCTAssert(splittedOperation.hasBody)
+            XCTAssert(splittedOperation.requestBody?.isModel == true)
+            XCTAssertEqual(splittedOperation.requestBody?.modelType, expectedRequestBodyModels[index])
+        }
     }
 
     func testOperationModelResponseBodyParsingMatchesExpected() throws {
@@ -205,15 +230,15 @@ class OperationNodeParserTests: XCTestCase {
         
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
-                                                                 forServiceName: Constants.testServiceName)
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
+                                                               rootPath: Constants.testServiceName)
         
         // then
         XCTAssertEqual(generatedOperation.hasUndefinedResponseBody, expectedHasUndefinedRedponseBody)
         XCTAssertEqual(generatedOperation.responseModel, expectedResponseModel)
     }
 
-    func testOperationArrauResponseBodyParsingMatchesExpected() throws {
+    func testOperationArrayResponseBodyParsingMatchesExpected() throws {
         // given
         let operation = NodesBuilder.formFindPetByStatusOperationNode()
 
@@ -222,8 +247,8 @@ class OperationNodeParserTests: XCTestCase {
         
         
         // when
-        let generatedOperation = try OperationNodeParser().parse(operation: operation,
-                                                                 forServiceName: Constants.testServiceName)
+        let generatedOperation = try operationNodeParser.parse(operation: operation,
+                                                               rootPath: Constants.testServiceName)
         
         // then
         XCTAssertEqual(generatedOperation.hasUndefinedResponseBody, expectedHasUndefinedRedponseBody)

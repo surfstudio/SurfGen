@@ -1,0 +1,49 @@
+//
+//  PaymentNetworkService.swift
+//
+
+import NodeKit
+
+public class PaymentNetworkService: PaymentService {
+
+    // MARK: - Private Properties
+
+    private var builder: DefaultChain<PaymentUrlRoute> {
+        return DefaultChain()
+    }
+
+    // MARK: - Public Methods
+
+    func deletePaymentCardsId(id: String) -> Observer<Void> {
+        return builder
+            .route(.delete, .paymentCardsId(id: id))
+            .build()
+            .process()
+        }
+    }
+
+    func getPaymentCards() -> Observer<[PaymentCardsEntity]> {
+        return builder
+            .route(.get, .paymentCards)
+            .build()
+            .process()
+        }
+    }
+
+    func postPaymentCards(addCardRequest: AddCardRequestEntity) -> Observer<3dSecResponseEntity> {
+        return builder
+            .route(.post, .paymentCards)
+            .build()
+            .process(addCardRequest)
+        }
+    }
+
+    func postSetAutopayment(setAutopaymentRequest: SetAutopaymentRequestEntity) -> Observer<Void> {
+        return builder
+            .route(.post, .setAutopayment)
+            .build()
+            .process(setAutopaymentRequest)
+        }
+    }
+
+}

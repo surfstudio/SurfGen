@@ -5,7 +5,7 @@
 import NodeKit
 
 public class UserNetworkService: UserService {
-    
+
     // MARK: - Private Properties
 
     private var builder: DefaultChain<UserUrlRoute> {

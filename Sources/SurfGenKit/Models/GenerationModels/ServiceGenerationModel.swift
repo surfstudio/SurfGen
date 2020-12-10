@@ -15,21 +15,15 @@ struct ServiceGenerationModel {
     let name: String
     let hasKeys: Bool
     let keys: [CodingKey]
+    let paths: [PathGenerationModel]
     let operations: [OperationGenerationModel]
 
-    init(name: String, keys: [CodingKey], operations: [OperationGenerationModel]) {
+    init(name: String, keys: [CodingKey], paths: [PathGenerationModel], operations: [OperationGenerationModel]) {
         self.name = name
         self.hasKeys = !keys.isEmpty
         self.keys = keys
+        self.paths = paths
         self.operations = operations
-    }
-
-    var protocolName: String {
-        return name + "Service"
-    }
-
-    var serviceName: String {
-        return name + "NetworkService"
     }
     
 }

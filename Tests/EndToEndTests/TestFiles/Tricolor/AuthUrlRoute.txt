@@ -1,0 +1,23 @@
+//
+//  AuthUrlRoute.swift
+//
+
+import NodeKit
+
+enum AuthUrlRoute {
+    case auth
+}
+
+// MARK: - UrlRouteProvider
+
+extension AuthUrlRoute: UrlRouteProvider {
+
+    func url() throws -> URL {
+        let base = URL(string: Urls.base)
+        switch self {
+        case .auth:
+            return try base + "/auth"
+        }
+    }
+
+}

@@ -92,7 +92,7 @@ class GASTDeclNodeBuilderTests: XCTestCase {
     // Checks if built decl node for service has correct token, name and content subnodes
     func testServiceDeclNodeMatchesExpected() throws {
         // when
-        let node = try declNodeBuilder.buildDeclNode(forService: "Pet", with: operations)
+        let node = try declNodeBuilder.buildDeclNode(forRootPath: "Pet", with: operations)
 
         //then
         

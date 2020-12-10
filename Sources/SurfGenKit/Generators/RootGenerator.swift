@@ -12,9 +12,16 @@ import Foundation
 
 public final class RootGenerator {
 
+    // MARK: - Public properties
+
+    public var warningsLog: String {
+        return WarningCollector.shared.reportLog
+    }
+
     // MARK: - Private Properties
 
     private let environment: Environment
+    private var serviceGenerator: ServiceGenerator?
     
     // MARK: - Initialization
 
@@ -28,9 +35,14 @@ public final class RootGenerator {
         environment = Environment(loader: loader)
     }
 
+    public func configureServiceGenerator(_ generator: ServiceGenerator) {
+        serviceGenerator = generator
+    }
+
     public func generateModel(from node: ASTNode, types: [ModelType], generateDescriptions: Bool = true) throws -> ModelGeneratedModel {
         guard case .root = node.token else {
-            throw GeneratorError.incorrectNodeToken("Root generator coundn't parse input node as node with root token")
+            throw SurfGenError(nested: GeneratorError.incorrectNodeToken("Root generator coundn't parse input node as node with root token"),
+                               message: "Could not generate model")
         }
 
         let root = generateDescriptions ? node : node.filterAllDescriptions()
@@ -41,24 +53,23 @@ public final class RootGenerator {
         return model
     }
 
-    public func generateService(from node: ASTNode, generateDescriptions: Bool = true) throws -> ServiceGeneratedModel {
+    public func generateService(name: String, from node: ASTNode, generateDescriptions: Bool = true) throws -> ServiceGeneratedModel {
+        guard let generator = serviceGenerator else {
+            fatalError("serviceGenerator not provided")
+        }
         guard
             case .root = node.token,
             let declNode = node.subNodes.declNode
         else {
-            throw GeneratorError.incorrectNodeToken("Root generator coundn't parse input node as service root node")
+            throw SurfGenError(nested: GeneratorError.incorrectNodeToken("Root generator coundn't parse input node as service root node"),
+                               message: "Could not generate service")
         }
 
         if !generateDescriptions {
             _ = node.filterAllDescriptions()
         }
 
-        var serviceModel = ServiceGeneratedModel()
-        serviceModel[.urlRoute] = try UrlRouteGenerator().generateCode(for: declNode, environment: environment)
-        let serviceFiles = try ServiceGenerator().generateCode(for: declNode, environment: environment)
-        serviceModel[.protocol] = serviceFiles.protocol
-        serviceModel[.service] = serviceFiles.service
-        return serviceModel
+        return try generator.generateCode(for: declNode, withServiceName: name, environment: environment)
     }
 
     private func generate(for type: ModelType, to model: inout ModelGeneratedModel, from nodes: [ASTNode]) throws {

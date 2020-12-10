@@ -31,8 +31,8 @@ public final class GASTBuilder {
         return Node(token: .root, decls)
     }
     
-    func build(service serviceName: String, with operations: [Operation]) throws -> ASTNode {
-        let decl = try wrap(declarationNodeBuilder.buildDeclNode(forService: serviceName, with: operations),
+    func buildService(withRootPath rootPath: String, with operations: [Operation]) throws -> ASTNode {
+        let decl = try wrap(declarationNodeBuilder.buildDeclNode(forRootPath: rootPath, with: operations),
                             with: "Could not build declaration for service")
         return Node(token: .root, [decl])
     }

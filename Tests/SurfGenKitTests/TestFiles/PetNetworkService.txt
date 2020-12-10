@@ -5,7 +5,7 @@
 import NodeKit
 
 public class PetNetworkService: PetService {
-    
+
     // MARK: - Constants
 
     private enum Keys {
@@ -14,7 +14,7 @@ public class PetNetworkService: PetService {
         static let testDoubleValue = "testDoubleValue"
         static let testIntValue = "testIntValue"
     }
-    
+
     // MARK: - Private Properties
 
     private var builder: DefaultChain<PetUrlRoute> {
@@ -35,7 +35,7 @@ public class PetNetworkService: PetService {
 
     func postPetPetId(petId: String, pet: PetEntity) -> Observer<Void> {
         return builder
-            .route(.post, .petPetId)
+            .route(.post, .petPetId(petId: petId))
             .build()
             .process(pet)
         }

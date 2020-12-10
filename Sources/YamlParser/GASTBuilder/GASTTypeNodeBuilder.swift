@@ -39,7 +39,7 @@ There is not enum name so we can not genenerate and track all such cases in mode
 
 final class GASTTypeNodeBuilder {
 
-    func buildTypeNode(for schema: Schema) throws -> ASTNode {
+    func buildTypeNode(for schema: Schema, referenceSafe: Bool = false) throws -> ASTNode {
 
         // case schema type is plain: Int, String, Double, Bool
         if let typeName = schema.type.typeName {
@@ -48,7 +48,8 @@ final class GASTTypeNodeBuilder {
 
         // case schema type is a reference to object/enum
         if let ref = schema.type.reference {
-            return Node(token: .type(name: ref.component.isEnum ? ASTConstants.enum : "object"), [Node(token: .type(name: ref.name), [])])
+            return Node(token: .type(name: !referenceSafe && ref.component.isEnum ? ASTConstants.enum : ASTConstants.object),
+                        [Node(token: .type(name: ref.name), [])])
         }
 
         // case schema type is an array of any type

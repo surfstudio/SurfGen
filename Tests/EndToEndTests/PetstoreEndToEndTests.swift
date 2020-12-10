@@ -13,11 +13,13 @@ import PathKit
 
 class PetstoreEndToEndTests: XCTestCase {
 
-    let spec = FileReader().readFile("TestFiles/petstore.yaml")
+    private let spec = FileReader().readFile("TestFiles/Petstore/petstore.yaml")
 
-    lazy var rootGenerator: RootGenerator = {
+    private lazy var rootGenerator: RootGenerator = {
         let templatesPath = Path(#file) + "../../../Templates"
-        return RootGenerator(tempatesPath: templatesPath)
+        let rootGenerator = RootGenerator(tempatesPath: templatesPath)
+        rootGenerator.configureServiceGenerator(ServiceGenerator.defaultGenerator)
+        return rootGenerator
     }()
 
     /// Checks if generated services for Petstore API are equal to expected ones
@@ -32,8 +34,8 @@ class PetstoreEndToEndTests: XCTestCase {
         let parser = try YamlToGASTParser(string: spec)
 
         //when
-        let gastTree = try parser.parseToGAST(forService: service.rawValue)
-        let generatedService = try rootGenerator.generateService(from: gastTree)
+        let gastTree = try parser.parseToGAST(forServiceRootPath: service.rawValue)
+        let generatedService = try rootGenerator.generateService(name: service.rawValue, from: gastTree)
 
         // then
         for servicePart in generatedService {
@@ -42,7 +44,8 @@ class PetstoreEndToEndTests: XCTestCase {
                            "File name is not equal to expected one. Resulted value:\n\(servicePart.value.fileName)")
             XCTAssertEqual(servicePart.value.code,
                            service.getCode(for: servicePart.key),
-                           "Code is not equal to expected one. Resulted value:\n\(servicePart.value.code)")
+                           FileComparator().getDifference(for: service.getCode(for: servicePart.key),
+                                                          expectedFile: servicePart.value.code))
         }
     }
 

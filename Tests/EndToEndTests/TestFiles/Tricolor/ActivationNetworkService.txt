@@ -5,13 +5,13 @@
 import NodeKit
 
 public class ActivationNetworkService: ActivationService {
-    
+
     // MARK: - Constants
 
     private enum Keys {
         static let secretCode = "secretCode"
     }
-    
+
     // MARK: - Private Properties
 
     private var builder: DefaultChain<ActivationUrlRoute> {

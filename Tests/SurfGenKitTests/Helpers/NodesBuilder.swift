@@ -203,6 +203,21 @@ final class NodesBuilder {
         )
     }
 
+    static func formMultipleOptionsContentNode() -> ASTNode {
+        return Node(token: .mediaContent,
+                    [
+                        Node(token: .encoding(type: "application/json"), []),
+                        Node(token: .type(name: "group"),
+                             [
+                                Node(token: .type(name: "Dog"), []),
+                                Node(token: .type(name: "Cat"), []),
+                                Node(token: .type(name: "Parrot"), [])
+                             ]
+                        )
+                    ]
+        )
+    }
+
     // MARK: - Request/response body nodes
 
     static func formRequestBodyNode(with content: ASTNode) -> ASTNode {
@@ -265,6 +280,21 @@ final class NodesBuilder {
                         Node(token: .responseBody,
                              [
                                 formJsonEncodedArrayContentNode()
+                             ]
+                        )
+                    ]
+        )
+    }
+
+    static func formPostDifferentPetsOperationNode() -> ASTNode {
+        return Node(token: .operation,
+                    [
+                        Node(token: .type(name: "post"), []),
+                        Node(token: .path(value: "/pet/differentPets"), []),
+                        Node(token: .description("Posts any kind of a pet"), []),
+                        Node(token: .requestBody(isOptional: false),
+                             [
+                                formMultipleOptionsContentNode()
                              ]
                         )
                     ]

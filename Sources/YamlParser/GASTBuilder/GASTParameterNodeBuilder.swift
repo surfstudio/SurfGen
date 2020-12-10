@@ -16,7 +16,7 @@ final class GASTParameterNodeBuilder {
         guard case let .schema(typeSchema) = parameter.type else {
             throw GASTBuilderError.undefinedTypeForField(parameter.name)
         }
-        let type = try GASTTypeNodeBuilder().buildTypeNode(for: typeSchema.schema)
+        let type = try GASTTypeNodeBuilder().buildTypeNode(for: typeSchema.schema, referenceSafe: true)
         return Node(token: .parameter(isOptional: !parameter.required), [name, type, location])
     }
 

@@ -13,7 +13,8 @@ final class EntryGenerator: CodeGenerator {
     func generateCode(for declNode: ASTNode, environment: Environment) throws -> FileModel {
 
         let propertyGenerator = PropertyGenerator()
-        let declModel = try ModelDeclNodeParser().getInfo(from: declNode)
+        let declModel = try wrap(ModelDeclNodeParser().getInfo(from: declNode),
+                                 with: "Could not generate entry code")
         
         let properties = try declModel.fields
             .map { try propertyGenerator.generateCode(for: $0, type: .entry) }

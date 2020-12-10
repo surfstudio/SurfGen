@@ -5,7 +5,7 @@
 //  Created by Dmitry Demyanov on 30.10.2020.
 //
 
-public enum ServicePart: CaseIterable {
+public enum ServicePart: String, CaseIterable {
     case urlRoute
     case `protocol`
     case service

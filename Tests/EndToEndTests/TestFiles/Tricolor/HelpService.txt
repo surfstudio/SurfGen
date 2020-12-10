@@ -1,0 +1,12 @@
+//
+//  HelpService.swift
+//
+
+import NodeKit
+
+public protocol HelpService {
+
+    /// Вопросы и ответы
+    func getFaq() -> Observer<[FaqItemEntity]>
+
+}

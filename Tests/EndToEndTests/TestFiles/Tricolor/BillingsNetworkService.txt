@@ -5,13 +5,13 @@
 import NodeKit
 
 public class BillingsNetworkService: BillingsService {
-    
+
     // MARK: - Constants
 
     private enum Keys {
         static let smartCardOrAgreement = "smartCardOrAgreement"
     }
-    
+
     // MARK: - Private Properties
 
     private var builder: DefaultChain<BillingsUrlRoute> {
