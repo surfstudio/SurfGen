@@ -26,9 +26,7 @@ import Yams
 /// If you want to working in parallel, you should create different instances of this class
 ///
 /// **NOTICE**
-/// Doesn't process array.
-/// It means that if there is a `$ref` inside array (on any depth) it won't proccess (and even read) it
-/// So it means that reference like that won't be extracted
+/// May be tricky with refs which were inserted in an array
 public class ReferenceExtractor {
     let rootSpecPath: URL
     let fileProvider: FileProvider
@@ -86,6 +84,8 @@ extension ReferenceExtractor {
 
         for (key, value) in spec {
             switch value {
+            case let arr as [[String: Any]]:
+                try arr.forEach { try collectAllRefs(in: $0, file: file) }
             case let sp as [String: Any]:
                 try self.collectAllRefs(in: sp, file: file)
             case let str as String:

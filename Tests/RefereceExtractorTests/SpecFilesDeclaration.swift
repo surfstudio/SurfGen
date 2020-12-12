@@ -86,4 +86,12 @@ struct SpecFilesDeclaration {
                   $ref: "models2.yaml#/components/schemas/CatalogItem"
 
 """.data(using: .utf8)!
+
+    static var withArrayWithRefs = """
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "models.yaml#/components/schemas/AuthRequest"
+                - $ref: "models.yaml#/components/schemas/SilentAuthRequest"
+""".data(using: .utf8)!
 }
