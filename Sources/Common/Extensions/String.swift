@@ -8,7 +8,7 @@
 import Foundation
 
 extension String {
-    func tabShifted() -> String {
+    public func tabShifted() -> String {
         return self.replacingOccurrences(of: "\n", with: "\n\t")
     }
 }
