@@ -7,6 +7,7 @@ let package = Package(
     name: "SurfGen",
     products: [
         .executable(name: "surfgen", targets: ["surfgen"]),
+        .executable(name: "PipelineRunnerCLI", targets: ["PipelinesCLI"]),
         .library(
             name: "SurfGenKit",
             targets: ["SurfGenKit"]),
@@ -15,12 +16,24 @@ let package = Package(
             targets: ["YamlParser"]
         ),
         .library(
+            name: "Pipelines",
+            targets: ["Pipelines"]
+        ),
+        .library(
+            name: "GASTBuilder",
+            targets: ["GASTBuilder"]
+        ),
+        .library(
+            name: "Common",
+            targets: ["Common"]
+        ),
+        .library(
             name: "ReferenceExtractor",
             targets: ["ReferenceExtractor"]
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/dmitryd20/SwagGen", .branch("external_reference_support")),
+        .package(url: "https://github.com/LastSprint/SwagGen", .revision("4fd5a299db0ba733e5cd6fa4e421b40248657cb6")),
         .package(url: "https://github.com/kylef/PathKit", from: "0.9.0"),
         .package(url: "https://github.com/stencilproject/Stencil", from: "0.13.1"),
         .package(url: "https://github.com/jakeheis/SwiftCLI", from: "5.3.3"),
@@ -43,7 +56,8 @@ let package = Package(
         .target(
             name: "ReferenceExtractor",
             dependencies: [
-                "Yams"
+                "Yams",
+                "Common"
             ]
         ),
         .target(
@@ -59,6 +73,35 @@ let package = Package(
                 "Swagger"
             ]
         ),
+        .target(
+            name: "Pipelines",
+            dependencies: [
+                "ReferenceExtractor",
+                "Common",
+                "GASTBuilder"
+            ],
+            exclude: ["main.swift"]
+        ),
+        .target(
+            name: "GASTBuilder",
+            dependencies: [
+                "Yams",
+                "Swagger",
+                "Common"
+            ]
+        ),
+        .target(
+            name: "Common",
+            dependencies: []
+        ),
+        .target(
+            name: "PipelinesCLI",
+            dependencies: [
+                "Pipelines"
+            ],
+            path: "Sources/Pipelines",
+            sources: ["main.swift"]
+        ),
         .testTarget(
             name: "SurfGenKitTests",
             dependencies: ["SurfGenKit"]
@@ -73,7 +116,7 @@ let package = Package(
         ),
         .testTarget(
             name: "RefereceExtractorTests",
-            dependencies: ["ReferenceExtractor"]
+            dependencies: ["ReferenceExtractor", "Common"]
         )
     ]
 )

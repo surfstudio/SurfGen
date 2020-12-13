@@ -7,6 +7,7 @@
 
 import Foundation
 import ReferenceExtractor
+import Common
 
 class FileProviderStub: FileProvider {
 

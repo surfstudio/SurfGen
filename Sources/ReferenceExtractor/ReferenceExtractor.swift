@@ -7,6 +7,7 @@
 
 import Foundation
 import Yams
+import Common
 
 /// This class extracts all references (`$ref` tag) from specific OpenAPI specification file recursively
 ///
@@ -53,6 +54,9 @@ public class ReferenceExtractor {
 
 extension ReferenceExtractor {
 
+    /// **WARNING**
+    /// Doesn't return link on `rootSpecPath`
+    /// If you need it you shoul do it by yourself
     public func extract() throws -> [String] {
         let spec = try self.loadSpec(path: self.rootSpecPath.absoluteString)
         try collectAllRefs(in: spec, file: self.rootSpecPath.absoluteString)
@@ -62,13 +66,8 @@ extension ReferenceExtractor {
     }
 
     func loadSpec(path: String) throws -> [String: Any] {
-        guard let content = try self.fileProvider.readFile(at: path) else {
-            throw CustomError(message: "file at path \(path) can't be readed. We read and got 0 bytes")
-        }
 
-        guard let str = String(data: content, encoding: .utf8) else {
-            throw CustomError(message: "file at path \(path) perhaps isn't a text or it is in wrong encoding. We couldn't convert it in an utf8 string")
-        }
+        let str = try self.fileProvider.readTextFile(at: path)
 
         guard
             let parsed = try Yams.load(yaml: str),

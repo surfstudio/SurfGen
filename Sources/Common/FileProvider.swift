@@ -22,3 +22,18 @@ extension FileManager: FileProvider {
         return self.isReadableFile(atPath: path)
     }
 }
+
+
+extension FileProvider {
+    public func readTextFile(at path: String) throws -> String {
+        guard let content = try self.readFile(at: path) else {
+            throw CustomError(message: "file at path \(path) can't be readed. We read and got 0 bytes")
+        }
+
+        guard let str = String(data: content, encoding: .utf8) else {
+            throw CustomError(message: "file at path \(path) perhaps isn't a text or it is in wrong encoding. We couldn't convert it in an utf8 string")
+        }
+
+        return str
+    }
+}
