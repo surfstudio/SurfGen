@@ -9,6 +9,11 @@ import Foundation
 import Yams
 import Common
 
+public struct Dependency {
+    let pathToCurrentFile: String
+    var dependecies: [String: String]
+}
+
 /// This class extracts all references (`$ref` tag) from specific OpenAPI specification file recursively
 ///
 /// For example:
@@ -35,6 +40,8 @@ public class ReferenceExtractor {
     // this field will be fulfilled by extract process
     var readStack: [String]
 
+    var dependencies: [Dependency]
+
     /// Initializer
     ///
     /// - Parameters:
@@ -43,8 +50,19 @@ public class ReferenceExtractor {
     /// - Throws:
     ///    - CustomError: In case when file at `pathToSpec` isn't readable
     public init(pathToSpec: URL, fileProvider: FileProvider) throws {
-        self.rootSpecPath = pathToSpec
+
+        let normalizedPath = try pathToSpec.absoluteString.normalized()
+
+        guard let url = URL(string: normalizedPath) else {
+            throw CustomError(message: "We couldn't create an URI after make rootPath \(pathToSpec) normalized: \(normalizedPath)")
+        }
+
+        self.rootSpecPath = url
+
         self.fileProvider = fileProvider
+
+        self.dependencies = []
+
         guard fileProvider.isReadableFile(at: pathToSpec.absoluteString) else {
             throw CustomError(message: "file at path \(pathToSpec) isn't readable")
         }
@@ -57,12 +75,19 @@ extension ReferenceExtractor {
     /// **WARNING**
     /// Doesn't return link on `rootSpecPath`
     /// If you need it you shoul do it by yourself
-    public func extract() throws -> [String] {
+    public func extract() throws -> (uniqRefs: [String], dependecies: [Dependency]) {
         let spec = try self.loadSpec(path: self.rootSpecPath.absoluteString)
-        try collectAllRefs(in: spec, file: self.rootSpecPath.absoluteString)
+
+        var root = Dependency(pathToCurrentFile: self.rootSpecPath.absoluteString, dependecies: [:])
+
+        try collectAllRefs(in: spec, file: self.rootSpecPath.absoluteString, currentDependency: &root)
+
+        self.dependencies.append(root)
+
         var copy = self.readStack
         copy.removeAll(where: { $0 == self.rootSpecPath.absoluteString })
-        return copy
+
+        return (copy, self.dependencies)
     }
 
     func loadSpec(path: String) throws -> [String: Any] {
@@ -79,14 +104,14 @@ extension ReferenceExtractor {
         return spec
     }
 
-    func collectAllRefs(in spec: [String: Any], file: String) throws {
+    func collectAllRefs(in spec: [String: Any], file: String, currentDependency: inout Dependency) throws {
 
         for (key, value) in spec {
             switch value {
             case let arr as [[String: Any]]:
-                try arr.forEach { try collectAllRefs(in: $0, file: file) }
+                try arr.forEach { try collectAllRefs(in: $0, file: file, currentDependency: &currentDependency) }
             case let sp as [String: Any]:
-                try self.collectAllRefs(in: sp, file: file)
+                try self.collectAllRefs(in: sp, file: file, currentDependency: &currentDependency)
             case let str as String:
                 guard key == "$ref" else {
                     continue
@@ -97,7 +122,8 @@ extension ReferenceExtractor {
                 guard !splited.filePath.isEmpty else {
                     continue
                 }
-                try readOther(filePath: splited.filePath, fromFile: file)
+
+                try readOther(filePath: splited.filePath, fromFile: file, currentDependency: &currentDependency, refString: str)
             default:
                 continue
             }
@@ -105,12 +131,15 @@ extension ReferenceExtractor {
     }
 
 
-    func readOther(filePath: String, fromFile: String) throws {
+    func readOther(filePath: String, fromFile: String, currentDependency: inout Dependency, refString: String) throws {
         var rootUrl = self.rootSpecPath
 
         rootUrl.deleteLastPathComponent()
 
-        let resultedUrlToFileToParse = rootUrl.absoluteString.appending(filePath)
+        let resultedUrlToFileToParse = try rootUrl.absoluteString.appending(filePath).normalized()
+
+        currentDependency.dependecies[refString] = resultedUrlToFileToParse
+
 
         // if we already read this file we won't read it again
         if self.readStack.contains(resultedUrlToFileToParse) {
@@ -131,7 +160,11 @@ extension ReferenceExtractor {
 
         let res = try self.loadSpec(path: resultedUrlToFileToParse)
 
-        return try collectAllRefs(in: res, file: filePath)
+        var newDependency = Dependency(pathToCurrentFile: resultedUrlToFileToParse, dependecies: [:])
+
+        try collectAllRefs(in: res, file: filePath, currentDependency: &newDependency)
+
+        self.dependencies.append(newDependency)
     }
 }
 

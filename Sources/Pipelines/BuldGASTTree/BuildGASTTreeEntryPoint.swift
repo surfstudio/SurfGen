@@ -45,7 +45,7 @@ extension BuildGASTTreeEntryPoint: PipelineEntryPoint {
 
         let extractor = try self.refExtractorProvider(input.pathToSpec)
 
-        var links = try extractor.extract()
+        var links = try extractor.extract().uniqRefs
         links.append(input.pathToSpec.absoluteString)
         print(links)
 
