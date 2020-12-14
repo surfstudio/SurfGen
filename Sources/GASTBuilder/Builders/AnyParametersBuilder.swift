@@ -15,6 +15,12 @@ public protocol ParametersBuilder {
 
 public struct AnyParametersBuilder: ParametersBuilder {
 
+    private let schemaBuilder: SchemaBuilder
+
+    public init(schemaBuilder: SchemaBuilder) {
+        self.schemaBuilder = schemaBuilder
+    }
+
     public func build(parameters: [ComponentObject<Parameter>]) throws -> [ParameterNode] {
 
         return try parameters.map { parameter -> ParameterNode in
@@ -41,7 +47,13 @@ extension AnyParametersBuilder {
         case .content:
             throw CustomError(message: "We don't support `content` parameter's type")
         case .schema(let schema):
-            return .init(schema: try ParametersSchemaBuilder().build(schema: schema))
+            let schemas = try self.schemaBuilder.build(schemas: [.init(name: "", value: schema.schema)])
+
+            guard schemas.count == 1 else {
+                throw CustomError(message: "After parsing parameter's schema we got \(schemas.count) modles. But awaiting only 1. Please create an issue and attach your swagger specification")
+            }
+
+            return .init(schema: schemas[0])
         }
     }
 }

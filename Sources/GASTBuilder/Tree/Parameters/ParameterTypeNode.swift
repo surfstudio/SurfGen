@@ -8,5 +8,5 @@
 import Foundation
 
 public struct ParameterTypeNode {
-    public let schema: ParameterSchemaNode
+    public let schema: SchemaObjectNode
 }

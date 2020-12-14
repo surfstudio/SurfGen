@@ -29,23 +29,36 @@ public struct AnySchemaBuilder: SchemaBuilder {
 
     func process(schema: ComponentObject<Schema>) throws -> SchemaObjectNode {
         switch schema.value.type {
-        case .reference, .array, .group, .boolean, .any:
+        case .any:
+            // TODO: It's about aliases. we need to implement it. except .any
             throw CustomError(message: "Now we can't process this type on this level of depth. You can create an Issue or add your vote to existed one")
         case .object(let obj):
             let model = try self.build(object: obj, meta: schema.value.metadata, name: schema.name)
             return .init(next: .object(model))
         case .string:
             return try self.processString(schema: schema)
-        case .number, .integer:
-            throw CustomError(message: "Now we can't process this type on this level of depth. You can create an Issue or add your vote to existed one")
+        case .array:
+            throw CustomError.notInplemented()
+        case .reference:
+            throw CustomError.notInplemented()
+        case .group:
+            throw CustomError.notInplemented()
+        case .number:
+            return .init(next: .simple(.number))
+        case .integer:
+            return .init(next: .simple(.integer))
+        case .boolean:
+            return .init(next: .simple(.boolean))
         }
     }
 
     func processString(schema: ComponentObject<Schema>) throws -> SchemaObjectNode {
-        guard
-            let cases = schema.value.metadata.enumValues,
-            let stringCases = cases as? [String]
-        else {
+
+        guard let enumValues = schema.value.metadata.enumValues else {
+            return .init(next: .simple(.string))
+        }
+
+        guard let stringCases = enumValues as? [String] else {
             throw CustomError(message: "We couldn't parse it as enum (where were no one string case). Now we can't process this type on this level of depth. You can create an Issue or add your vote to existed one")
         }
 
