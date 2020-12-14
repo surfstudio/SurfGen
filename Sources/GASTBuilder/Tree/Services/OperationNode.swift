@@ -11,5 +11,5 @@ public struct OperationNode {
     public let method: String
     public let description: String?
     public let summary: String?
-    public let parameters: [ParameterNode]
+    public let parameters: [Referenced<ParameterNode>]
 }

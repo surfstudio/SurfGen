@@ -8,16 +8,22 @@
 import Foundation
 
 public struct CustomError: LocalizedError {
-    var message: String
-    var line: Int
-    var function: String
-    var column: Int
+    let message: String
+    let line: Int
+    let function: String
+    let column: Int
+    let file: String
 
-    public init(message: String, line: Int = #line, function: String = #function, column: Int = #column) {
+    public init(message: String,
+                line: Int = #line,
+                function: String = #function,
+                column: Int = #column,
+                file: String = #file) {
         self.message = message
         self.line = line
         self.function = function
         self.column = column
+        self.file = file
     }
 
     public var errorDescription: String? {
@@ -32,6 +38,8 @@ public struct CustomError: LocalizedError {
         msg += "line: \(self.line)"
         msg += "\n\t"
         msg += "Column: \(self.column)"
+        msg += "\n\t"
+        msg += "File: \(self.file)"
         return msg
     }
 }
@@ -39,7 +47,8 @@ public struct CustomError: LocalizedError {
 extension CustomError {
     public static func notInplemented(line: Int = #line,
                                       function: String = #function,
-                                      column: Int = #column) -> CustomError {
-        return CustomError(message: "NOT IMPLEMENTED!!!", line: line, function: function, column: column)
+                                      column: Int = #column,
+                                      file: String = #file) -> CustomError {
+        return CustomError(message: "NOT IMPLEMENTED!!!", line: line, function: function, column: column, file: file)
     }
 }

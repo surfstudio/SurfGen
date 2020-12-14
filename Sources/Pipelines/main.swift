@@ -15,4 +15,9 @@ let rootPath = URL(string: "/Users/lastsprint/repo/iOS/prod/tricolor-swagger/cat
 
 let pipeline = BuldGASTTreeFactory.build()
 
-try pipeline.run(with: .init(pathToSpec: rootPath))
+do {
+    try pipeline.run(with: .init(pathToSpec: rootPath))
+} catch {
+    print(error.localizedDescription)
+}
+

@@ -55,3 +55,28 @@ extension ParameterLocation {
         }
     }
 }
+
+extension SchemaType {
+    var shortDescription: String {
+        switch self {
+        case .reference(let ref):
+            return "$ref: \(ref.rawValue)"
+        case .object:
+            return "object"
+        case .array:
+            return "array"
+        case .group:
+            return "group"
+        case .boolean:
+            return "group"
+        case .string:
+            return "string"
+        case .number:
+            return "number"
+        case .integer:
+            return "integer"
+        case .any:
+            return "any"
+        }
+    }
+}

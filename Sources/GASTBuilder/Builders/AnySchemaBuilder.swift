@@ -15,12 +15,14 @@ public protocol SchemaBuilder {
 
 public struct AnySchemaBuilder: SchemaBuilder {
 
+    public init() { }
+
     public func build(schemas: [ComponentObject<Schema>]) throws -> [SchemaObjectNode] {
         var result = [SchemaObjectNode]()
         for schema in schemas {
 
             let model = try wrap(self.process(schema: schema),
-                                 message: "In the schema \(schema.name) where value type is \(schema.value.type)")
+                                 message: "In the schema \(schema.name) where value type is \(schema.value.type.shortDescription)")
 
             result.append(model)
         }

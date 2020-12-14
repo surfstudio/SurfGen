@@ -19,13 +19,16 @@ public struct AnyGASTBuilder: GASTBuilder {
     let fileProvider: FileProvider
     let schemaBuilder: SchemaBuilder
     let parameterBuilder: ParametersBuilder
+    let serviceBuilder: ServiceBuilder
 
     public init(fileProvider: FileProvider,
                 schemaBuilder: SchemaBuilder,
-                parameterBuilder: ParametersBuilder) {
+                parameterBuilder: ParametersBuilder,
+                serviceBuilder: ServiceBuilder) {
         self.fileProvider = fileProvider
         self.schemaBuilder = schemaBuilder
         self.parameterBuilder = parameterBuilder
+        self.serviceBuilder = serviceBuilder
     }
 
     public func build(filePath: String) throws -> RootNode {
@@ -40,6 +43,9 @@ public struct AnyGASTBuilder: GASTBuilder {
         let parameters = try wrap(self.parameterBuilder.build(parameters: spec.components.parameters),
                                   message: "While parsing parameters for specification at path: \(filePath)")
 
-        return .init(schemas: schemas, parameters: parameters)
+        let services = try wrap(self.serviceBuilder.build(paths: spec.paths),
+                                message: "While parsing services for specification at path: \(filePath)")
+
+        return .init(schemas: schemas, parameters: parameters, services: services)
     }
 }
