@@ -42,3 +42,16 @@ extension Schema {
         }
     }
 }
+
+extension ParameterLocation {
+    func convert() throws -> ParameterNode.Location {
+        switch self {
+        case .query:
+            return .query
+        case .path:
+            return .path
+        case .cookie, .header:
+            throw CustomError(message: "We only support parameters whics is located in `query` and `path`")
+        }
+    }
+}
