@@ -8,11 +8,11 @@
 import Foundation
 
 public struct RootNode {
-    var components: [SchemaObjectNode]
+    var schemas: [SchemaObjectNode]
 }
 
 extension RootNode: StringView {
     public var view: String {
-        return "Root:\n\tComponents:\n\t\t\(components.view)"
+        return "Root:\n\tComponents:\n\t\t\(schemas.view)"
     }
 }
