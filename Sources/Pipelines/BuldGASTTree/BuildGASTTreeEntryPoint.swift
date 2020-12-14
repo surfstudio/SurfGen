@@ -45,12 +45,11 @@ extension BuildGASTTreeEntryPoint: PipelineEntryPoint {
 
         let extractor = try self.refExtractorProvider(input.pathToSpec)
 
-        var links = try extractor.extract().uniqRefs
+        var (links, dependencies) = try extractor.extract()
         links.append(input.pathToSpec.absoluteString)
-        print(links)
 
         // Second stage - Build GAST tree for each file
 
-        try self.next.run(with: links)
+        try self.next.run(with: .init(links: links, dependencies: dependencies))
     }
 }
