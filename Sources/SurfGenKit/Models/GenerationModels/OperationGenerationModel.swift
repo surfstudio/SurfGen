@@ -32,7 +32,6 @@ public struct OperationGenerationModel {
     
     private enum Constants {
         static let multipartModel = "MultipartModel"
-        static let emptyResponse = "Void"
     }
 
     let name: String
@@ -49,6 +48,7 @@ public struct OperationGenerationModel {
     var requestBody: RequestBodyGenerationModel?
 
     private(set) var hasUndefinedResponseBody = false
+    private(set) var hasResponseModel = false
     private(set) var responseModel: String?
     
     init(name: String,
@@ -58,7 +58,7 @@ public struct OperationGenerationModel {
          pathParameters: [ParameterGenerationModel],
          queryParameters: [ParameterGenerationModel],
          requestBody: RequestBodyGenerationModel.BodyType?,
-         responseBody: ResponseBody?) {
+         responseBody: ResponseBody) {
         self.name = name
         self.hasDescription = description != nil
         self.description = description
@@ -73,13 +73,12 @@ public struct OperationGenerationModel {
 
         switch responseBody {
         case .model(let modelName):
-            self.responseModel = ModelType.entity.form(name: modelName)
+            self.hasResponseModel = true
+            self.responseModel = modelName
         case .arrayOf(let modelName):
-            self.responseModel = ModelType.entity.form(name: modelName).asArray()
+            self.responseModel = modelName
         case .unsupportedObject:
             self.hasUndefinedResponseBody = true
-        case .none:
-            self.responseModel = Constants.emptyResponse
         }
     }
 

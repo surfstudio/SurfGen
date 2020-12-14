@@ -13,6 +13,7 @@ public struct PropertyGenerationModel: Equatable {
     let fromInit: String
     let toDTOInit: String
     let isPlain: Bool // indicates that type is standard (Int, Bool) or its array of standard type
+    let isOptional: Bool
     let description: String?
 
     init(entryName: String,
@@ -21,6 +22,7 @@ public struct PropertyGenerationModel: Equatable {
          fromInit: String,
          toDTOInit: String,
          isPlain: Bool,
+         isOptional: Bool,
          description: String?) {
         self.entryName = entryName
         self.entityName = entityName
@@ -28,6 +30,7 @@ public struct PropertyGenerationModel: Equatable {
         self.fromInit = fromInit
         self.toDTOInit = toDTOInit
         self.isPlain = isPlain
+        self.isOptional = isOptional
         self.description = description
     }
 

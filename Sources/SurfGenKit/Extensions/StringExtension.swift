@@ -8,12 +8,15 @@
 
 extension String {
 
-    func asArray() -> String {
-        return "[\(self)]"
+    func asArray(platform: Platform) -> String {
+        return platform.arrayLiteral.start + self + platform.arrayLiteral.end
     }
 
-    func formOptional(_ isOptional: Bool) -> String {
-        return self + isOptional.asOptionalSign
+    func plainType(for platform: Platform) -> String? {
+        guard let plainType = PlainType(rawValue: self) else {
+            return nil
+        }
+        return platform.plainType(type: plainType)
     }
 
     func capitalizingFirstLetter() -> String {
@@ -28,8 +31,8 @@ extension String {
         self = self.capitalizingFirstLetter()
     }
 
-    var withSwiftExt: String {
-        return self + ".swift"
+    func withFileExtension(_ ext: String) -> String {
+        return "\(self).\(ext)"
     }
 
     func operationName(with method: String, rootPath: String) -> String {
@@ -74,10 +77,10 @@ extension String {
             .lowercaseFirstLetter()
     }
 
-    func pathWithSwiftParameters() -> String {
+    func pathWithParameterInterpolation(platform: Platform) -> String {
         return self
-            .replacingOccurrences(of: "{", with: "\\(")
-            .replacingOccurrences(of: "}", with: ")")
+            .replacingOccurrences(of: "{", with: platform.stringInterpolation.start)
+            .replacingOccurrences(of: "}", with: platform.stringInterpolation.end)
     }
 
     func snakeCaseToCamelCase() -> String {

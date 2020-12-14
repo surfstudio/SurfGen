@@ -59,9 +59,9 @@ class GASTParameterNodeBuilderTests: XCTestCase {
     func correctTypeForParameter(name: String) -> String {
         switch name {
         case "petId":
-            return "Int"
+            return "integer"
         case "name", "status":
-            return "String"
+            return "string"
         default:
             XCTFail("Couldn't check type for parameter with name: \(name)")
             return ""

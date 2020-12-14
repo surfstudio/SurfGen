@@ -13,10 +13,10 @@ import Stencil
 /// Tests for generating full service code from prepared GAST tree
 class ServiceGenerationTests: XCTestCase {
 
-    let serviceGenerator = ServiceGenerator.defaultGenerator
+    let serviceGenerator = ServiceGenerator.defaultGenerator(for: .swift)
 
     var environment: Environment {
-        let path = Path(#file) + "../../../../Templates"
+        let path = Path(#file) + "../../../../Templates/Swift"
         let loader = FileSystemLoader(paths: [path])
         return Environment(loader: loader)
     }
@@ -47,10 +47,12 @@ class ServiceGenerationTests: XCTestCase {
         // given
         let expectedCode = TestService.pet.getCode(for: .protocol)
         let expectedFileName = TestService.pet.fileName(for: .protocol)
+        let generator = ServiceGenerator.defaultGenerator(for: .swift)
 
         // when
-        let generatedService = try ServiceGenerator.defaultGenerator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(), withServiceName: TestService.pet.rawValue,
-                                                                                  environment: environment)
+        let generatedService = try generator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(),
+                                                          withServiceName: TestService.pet.rawValue,
+                                                          environment: environment)
 
         guard let generatedProtocol = generatedService[.protocol] else {
             XCTFail("Protocol was not generated")
@@ -70,11 +72,12 @@ class ServiceGenerationTests: XCTestCase {
         // given
         let expectedCode = TestService.pet.getCode(for: .service)
         let expectedFileName = TestService.pet.fileName(for: .service)
+        let generator = ServiceGenerator.defaultGenerator(for: .swift)
 
         // when
-        let generatedService = try ServiceGenerator.defaultGenerator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(),
-                                                                                  withServiceName: TestService.pet.rawValue,
-                                                                                  environment: environment)
+        let generatedService = try generator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(),
+                                                          withServiceName: TestService.pet.rawValue,
+                                                          environment: environment)
         guard let generatedImplementation = generatedService[.service] else {
             XCTFail("Service was not generated")
             return

@@ -26,8 +26,8 @@ final class ConfigManager {
 
     // MARK: - Properties
 
-    var tempatePath: Path {
-        return Path(model.tempatesPath)
+    var templatePath: Path {
+        return Path(model.templatesPath)
     }
 
     var projectPath: Path? {
@@ -69,6 +69,13 @@ final class ConfigManager {
     }
 
     // MARK: - Internal methods
+
+    func getPlatform() throws -> Platform {
+        guard let platform = Platform(rawValue: model.platform) else {
+            throw ConfigManagerError.incorrectYamlFile
+        }
+        return platform
+    }
 
     func getModelGenerationPaths() throws -> [ModelType: String] {
         guard

@@ -45,8 +45,8 @@ class GASTFieldNodeBuilderTests: XCTestCase {
                     return
             }
 
-            XCTAssert("String" == nameType, "generated token is not of correct type")
-            XCTAssert("Bool" == cancelType, "generated token is not of correct type")
+            XCTAssert("string" == nameType, "generated token is not of correct type")
+            XCTAssert("boolean" == cancelType, "generated token is not of correct type")
             XCTAssert(canceledPropertyNode.subNodes.isEmpty, "generated subnodes is not equal to expected ones")
             XCTAssert(namePropertyNode.subNodes.isEmpty, "generated subnodes is not equal to expected ones")
         } catch {

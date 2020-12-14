@@ -16,8 +16,9 @@ class OperationNodeParserTests: XCTestCase {
         static let testServiceName = "Pet"
     }
 
-    private let operationNodeParser = OperationNodeParser(mediaContentParser: MediaContentNodeParser(),
-                                                          parametersParser: ParametersNodeParser())
+    private let operationNodeParser = OperationNodeParser(mediaContentParser: MediaContentNodeParser(platform: .swift),
+                                                          parametersParser: ParametersNodeParser(platform: .swift),
+                                                          platform: .swift)
 
     func testPostOperationMethodParsingMatchesExpected() throws {
         // given

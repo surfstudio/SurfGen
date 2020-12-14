@@ -21,21 +21,24 @@ public final class RootGenerator {
     // MARK: - Private Properties
 
     private let environment: Environment
+    private var platform: Platform
     private var serviceGenerator: ServiceGenerator?
     
     // MARK: - Initialization
 
-    public init() {
+    public init(platform: Platform) {
         let bundle = Bundle(for: type(of: self))
         environment = Environment(loader: FileSystemLoader(bundle: [Bundle(path: bundle.bundlePath + "/Resources/Templates.bundle") ?? bundle]))
+        self.platform = platform
     }
 
-    public init(tempatesPath: Path) {
+    public init(tempatesPath: Path, platform: Platform) {
         let loader = FileSystemLoader(paths: [tempatesPath])
         environment = Environment(loader: loader)
+        self.platform = platform
     }
 
-    public func configureServiceGenerator(_ generator: ServiceGenerator) {
+    public func setServiceGenerator(_ generator: ServiceGenerator) {
         serviceGenerator = generator
     }
 
@@ -73,7 +76,7 @@ public final class RootGenerator {
     }
 
     private func generate(for type: ModelType, to model: inout ModelGeneratedModel, from nodes: [ASTNode]) throws {
-        let generator = type.generator
+        let generator = type.generator(for: platform)
         model[type] = try nodes.map { try generator.generateCode(for: $0, environment: environment) }
     }
 
@@ -81,14 +84,14 @@ public final class RootGenerator {
 
 private extension ModelType {
 
-    var generator: CodeGenerator {
+    func generator(for platform: Platform) -> CodeGenerator {
         switch self {
         case .entry:
-            return EntryGenerator()
+            return EntryGenerator(platform: platform)
         case .entity:
-            return EntityGenerator()
+            return EntityGenerator(platform: platform)
         case .enum:
-            return EnumGenerator()
+            return EnumGenerator(platform: platform)
         }
     }
 

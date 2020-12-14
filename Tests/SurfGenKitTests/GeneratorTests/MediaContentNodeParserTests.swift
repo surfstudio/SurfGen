@@ -13,14 +13,15 @@ import XCTest
 class MediaContentNodeParserTests: XCTestCase {
 
     private let operationName = "testOperation"
+    private let parser = MediaContentNodeParser(platform: .swift)
 
     func testJsonEncodedModelRequestBodyParsing() throws {
         // given
         let requestContentNode = NodesBuilder.formRequestBodyNode(with: NodesBuilder.formJsonEncodedModelContentNode())
-        let expectedRequestBody = RequestBodyGenerationModel.BodyType.model(.json, "Pet")
+        let expectedRequestBody = RequestBodyGenerationModel.BodyType.model(.json, "pet", "PetEntity")
         
         // when
-        let realRequestBody = try MediaContentNodeParser().parseRequestBody(node: requestContentNode, forOperationName: operationName)
+        let realRequestBody = try parser.parseRequestBody(node: requestContentNode, forOperationName: operationName)
         
         // then
         XCTAssertEqual(realRequestBody, expectedRequestBody)
@@ -29,10 +30,10 @@ class MediaContentNodeParserTests: XCTestCase {
     func testJsonEncodedArrayRequestBodyParsing() throws {
         // given
         let requestContentNode = NodesBuilder.formRequestBodyNode(with: NodesBuilder.formJsonEncodedArrayContentNode())
-        let expectedRequestBody = RequestBodyGenerationModel.BodyType.array(.json, "Pet")
+        let expectedRequestBody = RequestBodyGenerationModel.BodyType.array(.json, "pet", "PetEntity")
         
         // when
-        let realRequestBody = try MediaContentNodeParser().parseRequestBody(node: requestContentNode, forOperationName: operationName)
+        let realRequestBody = try parser.parseRequestBody(node: requestContentNode, forOperationName: operationName)
         
         // then
         XCTAssertEqual(realRequestBody, expectedRequestBody)
@@ -50,7 +51,7 @@ class MediaContentNodeParserTests: XCTestCase {
         )
         
         // when
-        let realRequestBody = try MediaContentNodeParser().parseRequestBody(node: requestContentNode, forOperationName: operationName)
+        let realRequestBody = try parser.parseRequestBody(node: requestContentNode, forOperationName: operationName)
         
         // then
         XCTAssertEqual(realRequestBody, expectedRequestBody)
@@ -62,7 +63,7 @@ class MediaContentNodeParserTests: XCTestCase {
         let expectedRequestBody = RequestBodyGenerationModel.BodyType.multipartModel
         
         // when
-        let realRequestBody = try MediaContentNodeParser().parseRequestBody(node: requestContentNode, forOperationName: operationName)
+        let realRequestBody = try parser.parseRequestBody(node: requestContentNode, forOperationName: operationName)
         
         // then
         XCTAssertEqual(realRequestBody, expectedRequestBody)
@@ -74,7 +75,7 @@ class MediaContentNodeParserTests: XCTestCase {
         let expectedRequestBody = RequestBodyGenerationModel.BodyType.unsupportedEncoding("testEncoding")
         
         // when
-        let realRequestBody = try MediaContentNodeParser().parseRequestBody(node: requestContentNode, forOperationName: operationName)
+        let realRequestBody = try parser.parseRequestBody(node: requestContentNode, forOperationName: operationName)
         
         // then
         XCTAssertEqual(realRequestBody, expectedRequestBody)
@@ -83,10 +84,11 @@ class MediaContentNodeParserTests: XCTestCase {
     func testModelResponseBodyParsing() throws {
         // given
         let responseContentNode = NodesBuilder.formResponseBodyNode(with: NodesBuilder.formJsonEncodedModelContentNode())
-        let expectedResponseBody = ResponseBody.model("Pet")
+        let expectedResponseBody = ResponseBody.model("PetEntity")
         
         // when
-        let realResponseBody = try MediaContentNodeParser().parseResponseBody(node: responseContentNode, forOperationName: operationName)
+        let realResponseBody = try parser.parseResponseBody(node: responseContentNode,
+                                                            forOperationName: operationName)
         
         // then
         XCTAssertEqual(realResponseBody, expectedResponseBody)
@@ -95,10 +97,11 @@ class MediaContentNodeParserTests: XCTestCase {
     func testArrayResponseBodyParsing() throws {
         // given
         let responseContentNode = NodesBuilder.formResponseBodyNode(with: NodesBuilder.formJsonEncodedArrayContentNode())
-        let expectedResponseBody = ResponseBody.arrayOf("Pet")
+        let expectedResponseBody = ResponseBody.arrayOf("[PetEntity]")
         
         // when
-        let realResponseBody = try MediaContentNodeParser().parseResponseBody(node: responseContentNode, forOperationName: operationName)
+        let realResponseBody = try parser.parseResponseBody(node: responseContentNode,
+                                                            forOperationName: operationName)
         
         // then
         XCTAssertEqual(realResponseBody, expectedResponseBody)
@@ -110,7 +113,7 @@ class MediaContentNodeParserTests: XCTestCase {
         let expectedResponseBody = ResponseBody.unsupportedObject
         
         // when
-        let realResponseBody = try MediaContentNodeParser().parseResponseBody(node: responseContentNode, forOperationName: operationName)
+        let realResponseBody = try parser.parseResponseBody(node: responseContentNode, forOperationName: operationName)
         
         // then
         XCTAssertEqual(realResponseBody, expectedResponseBody)

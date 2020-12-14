@@ -14,9 +14,9 @@ import PathKit
 class TricolorEndToEndTests: XCTestCase {
 
     private lazy var rootGenerator: RootGenerator = {
-        let templatesPath = Path(#file) + "../../../Templates"
-        let rootGenerator = RootGenerator(tempatesPath: templatesPath)
-        rootGenerator.configureServiceGenerator(ServiceGenerator.defaultGenerator)
+        let templatesPath = Path(#file) + "../../../Templates/Swift"
+        let rootGenerator = RootGenerator(tempatesPath: templatesPath, platform: .swift)
+        rootGenerator.setServiceGenerator(ServiceGenerator.defaultGenerator(for: .swift))
         return rootGenerator
     }()
 

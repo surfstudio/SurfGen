@@ -9,6 +9,12 @@ import Stencil
 
 final class EnumGenerator: CodeGenerator {
 
+    private let platform: Platform
+
+    init(platform: Platform) {
+        self.platform = platform
+    }
+
     func generateCode(for declNode: ASTNode, environment: Environment) throws -> FileModel {
         let declModel = try wrap(ModelDeclNodeParser().getInfo(from: declNode),
                                  with: "Could not generate num code")
@@ -17,7 +23,7 @@ final class EnumGenerator: CodeGenerator {
             throw SurfGenError(nested: GeneratorError.nodeConfiguration("decl node does not contain type"),
                                message: "Could not parse decl node")
         }
-        let type = try wrap(TypeNodeParser().detectType(for: typeNode),
+        let type = try wrap(TypeNodeParser(platform: platform).detectType(for: typeNode),
                             with: "Could not generate num code")
 
         let cases: [String] = declModel.fields.compactMap {
@@ -32,7 +38,8 @@ final class EnumGenerator: CodeGenerator {
                                             description: declModel.description ?? "")
         let code = try environment.renderTemplate(.enum(enumModel))
 
-        return .init(fileName: declModel.name.withSwiftExt, code: code.trimmingCharacters(in: .whitespacesAndNewlines))
+        return .init(fileName: declModel.name.withFileExtension(platform.fileExtension),
+                     code: code.trimmingCharacters(in: .whitespacesAndNewlines))
     }
 
 }

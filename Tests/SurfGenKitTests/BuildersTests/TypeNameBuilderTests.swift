@@ -11,34 +11,36 @@ import XCTest
 
 class TypeNameBuilderTests: XCTestCase {
 
+    private let typeNameBuilder = TypeNameBuilder(platform: .swift)
+
     func testPlainType() {
-        let resultString = TypeNameBuilder().buildString(for: .plain("Int"), isOptional: true, modelType: .entity)
-        XCTAssert(resultString == "Int?")
+        let resultString = typeNameBuilder.buildString(for: .plain("Int"), modelType: .entity)
+        XCTAssert(resultString == "Int")
     }
     
     func testObjectTypeForEntity() {
-        let resultString = TypeNameBuilder().buildString(for: .object("Profile"), isOptional: true, modelType: .entity)
-        XCTAssert(resultString == "ProfileEntity?")
+        let resultString = typeNameBuilder.buildString(for: .object("Profile"), modelType: .entity)
+        XCTAssert(resultString == "ProfileEntity")
     }
 
     func testObjectTypeForEntry() {
-        let resultString = TypeNameBuilder().buildString(for: .object("Profile"), isOptional: false, modelType: .entry)
+        let resultString = typeNameBuilder.buildString(for: .object("Profile"), modelType: .entry)
         XCTAssert(resultString == "ProfileEntry")
     }
     
     func testArrayOfPlainType() {
-        let resultString = TypeNameBuilder().buildString(for: .array(.plain("String")), isOptional: true, modelType: .entity)
-        XCTAssert(resultString == "[String]?")
+        let resultString = typeNameBuilder.buildString(for: .array(.plain("String")), modelType: .entity)
+        XCTAssert(resultString == "[String]")
     }
     
     func testArrayOfObjectsTypeForEntityType() {
-        let resultString = TypeNameBuilder().buildString(for: .array(.object("MetaInfo")), isOptional: true, modelType: .entity)
-        XCTAssert(resultString == "[MetaInfoEntity]?")
+        let resultString = typeNameBuilder.buildString(for: .array(.object("MetaInfo")), modelType: .entity)
+        XCTAssert(resultString == "[MetaInfoEntity]")
     }
     
     func testArrayOfObjectsTypeForEntryType() {
-        let resultString = TypeNameBuilder().buildString(for: .array(.object("MetaInfo")), isOptional: true, modelType: .entry)
-        XCTAssert(resultString == "[MetaInfoEntry]?")
+        let resultString = typeNameBuilder.buildString(for: .array(.object("MetaInfo")), modelType: .entry)
+        XCTAssert(resultString == "[MetaInfoEntry]")
     }
 
 }

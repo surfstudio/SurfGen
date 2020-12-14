@@ -19,11 +19,11 @@ final class NodesBuilder {
                         Node(token: .type(name: "object"), []),
                         Node(token: .content,
                              [
-                                formFieldNode(isOptional: false, name: "region", typeName: "String"),
-                                formFieldNode(isOptional: false, name: "city", typeName: "String"),
-                                formFieldNode(isOptional: false, name: "address", typeName: "String"),
-                                formFieldNode(isOptional: true, name: "floor", typeName: "String"),
-                                formFieldNode(isOptional: true, name: "sector", typeName: "String"),
+                                formFieldNode(isOptional: false, name: "region", typeName: "string"),
+                                formFieldNode(isOptional: false, name: "city", typeName: "string"),
+                                formFieldNode(isOptional: false, name: "address", typeName: "string"),
+                                formFieldNode(isOptional: true, name: "floor", typeName: "string"),
+                                formFieldNode(isOptional: true, name: "sector", typeName: "string"),
                                 formFieldNode(isOptional: false,
                                               name: "geo_pos",
                                               typeName: "object",
@@ -42,14 +42,14 @@ final class NodesBuilder {
                                 Node(token: .description("Главная модель магазина"), []),
                                 Node(token: .content,
                                      [
-                                        formFieldNode(isOptional: false, name: "id", typeName: "String"),
-                                        formFieldNode(isOptional: false, name: "name", typeName: "String", description: "Название магазина"),
-                                        formFieldNode(isOptional: false, name: "phone", typeName: "String"),
+                                        formFieldNode(isOptional: false, name: "id", typeName: "string"),
+                                        formFieldNode(isOptional: false, name: "name", typeName: "string", description: "Название магазина"),
+                                        formFieldNode(isOptional: false, name: "phone", typeName: "string"),
                                         formFieldNode(isOptional: false,
                                                       name: "location",
                                                       typeName: "object",
                                                       typeSubNodes: [Node(token: .type(name: "ShopLocation"), [])]),
-                                        formFieldNode(isOptional: true, name: "working_hours", typeName: "String", description: "Время работы магазина. Может содержать строку в формате \"10.00-22.00\", если время работы магазина не зависит от дня недели. Либо строку формата \"пт-сб 10.00-23.00\" в противном случае.")
+                                        formFieldNode(isOptional: true, name: "working_hours", typeName: "string", description: "Время работы магазина. Может содержать строку в формате \"10.00-22.00\", если время работы магазина не зависит от дня недели. Либо строку формата \"пт-сб 10.00-23.00\" в противном случае.")
                                      ]
                                 )
                             ]
@@ -68,8 +68,8 @@ final class NodesBuilder {
                                               typeName: "array",
                                               typeSubNodes: [Node(token: .type(name: "object"),
                                                                   [Node(token: .type(name: "Child"), [])])]),
-                                formFieldNode(isOptional: false, name: "age", typeName: "Int"),
-                                formFieldNode(isOptional: true, name: "additional_info", typeName: "String")
+                                formFieldNode(isOptional: false, name: "age", typeName: "integer"),
+                                formFieldNode(isOptional: true, name: "additional_info", typeName: "string")
                             ]
                         )
                     ]
@@ -85,13 +85,13 @@ final class NodesBuilder {
                              [
                                 formFieldNode(isOptional: false,
                                               name: "contactToken",
-                                              typeName: "String"),
+                                              typeName: "string"),
                                 formFieldNode(isOptional: true,
                                               name: "id",
-                                              typeName: "String"),
+                                              typeName: "string"),
                                 formFieldNode(isOptional: false,
                                               name: "value",
-                                              typeName: "Int")
+                                              typeName: "integer")
                             ]
                         )
             ]
@@ -102,7 +102,7 @@ final class NodesBuilder {
         return Node(token: .decl,
                     [
                         Node(token: .name(value: "DeliveryType"), []),
-                        Node(token: .type(name: ASTConstants.enum), [Node(token: .type(name: "String"), [])]),
+                        Node(token: .type(name: ASTConstants.enum), [Node(token: .type(name: "string"), [])]),
                         Node(token: .description("Тип оплаты\n* 0 - Оплата при получении\n* 1 - Оплата картой онлайн\n* 2 - Оплата Google Pay / Apple Pay"), []),
                         Node(token: .content,
                              [
@@ -119,7 +119,7 @@ final class NodesBuilder {
         return Node(token: .decl,
                     [
                         Node(token: .name(value: "OrderCancelReason"), []),
-                        Node(token: .type(name: ASTConstants.enum), [Node(token: .type(name: "Int"), [])]),
+                        Node(token: .type(name: ASTConstants.enum), [Node(token: .type(name: "integer"), [])]),
                         Node(token: .content,
                              [
                                 Node(token: .value("0"), []),
@@ -164,19 +164,19 @@ final class NodesBuilder {
                                Node(token: .field(isOptional: false),
                                     [
                                        Node(token: .name(value: "testIntValue"), []),
-                                       Node(token: .type(name: "Int"), [])
+                                       Node(token: .type(name: "integer"), [])
                                     ]
                                ),
                                Node(token: .field(isOptional: false),
                                     [
                                        Node(token: .name(value: "testDoubleValue"), []),
-                                       Node(token: .type(name: "Double"), [])
+                                       Node(token: .type(name: "number"), [])
                                     ]
                                ),
                                Node(token: .field(isOptional: false),
                                     [
                                        Node(token: .name(value: "testBoolValue"), []),
-                                       Node(token: .type(name: "Bool"), [])
+                                       Node(token: .type(name: "boolean"), [])
                                     ]
                                )
                             ]
@@ -245,7 +245,7 @@ final class NodesBuilder {
                                 Node(token: .parameter(isOptional: false),
                                      [
                                         Node(token: .name(value: "petId"), []),
-                                        Node(token: .type(name: "String"), []),
+                                        Node(token: .type(name: "string"), []),
                                         Node(token: .location(type: "path"), [])
                                      ]
                                 )
@@ -271,7 +271,7 @@ final class NodesBuilder {
                                 Node(token: .parameter(isOptional: false),
                                      [
                                         Node(token: .name(value: "status"), []),
-                                        Node(token: .type(name: "String"), []),
+                                        Node(token: .type(name: "string"), []),
                                         Node(token: .location(type: "query"), [])
                                      ]
                                 )

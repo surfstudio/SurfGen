@@ -27,9 +27,11 @@ class ServiceFileGenerator {
     }
 
     func generateService(_ serviceName: String, rootPath: String) throws {
+        let generator = try ServiceGenerator.defaultGenerator(for: configManager.getPlatform())
         let generatedService = tryToGenerate(serviceName: serviceName,
                                              rootPath: rootPath,
-                                             isDescriptionsEnabled: configManager.isDescriptionsEnabled)
+                                             isDescriptionsEnabled: configManager.isDescriptionsEnabled,
+                                             serviceGenerator: generator)
         logger.print(rootGenerator.warningsLog.yellow + "\n")
         let destinations = try configManager.getServiceGenerationPaths(for: serviceName)
 
@@ -50,13 +52,13 @@ class ServiceFileGenerator {
     }
 
     private func tryToGenerate(serviceName: String,
-                       rootPath: String,
-                       isDescriptionsEnabled: Bool,
-                       serviceGenerator: ServiceGenerator = ServiceGenerator.defaultGenerator) -> ServiceGeneratedModel {
+                               rootPath: String,
+                               isDescriptionsEnabled: Bool,
+                               serviceGenerator: ServiceGenerator) -> ServiceGeneratedModel {
         do {
             let parser = try YamlToGASTParser(string: spec)
             let service = try parser.parseToGAST(forServiceRootPath: rootPath)
-            rootGenerator.configureServiceGenerator(serviceGenerator)
+            rootGenerator.setServiceGenerator(serviceGenerator)
             return try rootGenerator.generateService(name: serviceName, from: service, generateDescriptions: isDescriptionsEnabled)
         } catch {
             logger.exitWithError(error.localizedDescription)

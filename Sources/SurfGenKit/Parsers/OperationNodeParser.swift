@@ -18,9 +18,12 @@ class OperationNodeParser {
     private let mediaContentParser: MediaContentNodeParser
     private let parametersParser: ParametersNodeParser
 
-    init(mediaContentParser: MediaContentNodeParser, parametersParser: ParametersNodeParser) {
+    private let platform: Platform
+
+    init(mediaContentParser: MediaContentNodeParser, parametersParser: ParametersNodeParser, platform: Platform) {
         self.mediaContentParser = mediaContentParser
         self.parametersParser = parametersParser
+        self.platform = platform
     }
 
     func parse(operation: ASTNode, rootPath: String) throws -> OperationGenerationModel {
@@ -57,7 +60,7 @@ class OperationNodeParser {
                                message: ErrorMessages.errorMessage())
         }
         let pathModel = PathGenerationModel(name: path.pathName,
-                                            path: path.pathWithSwiftParameters(),
+                                            path: path.pathWithParameterInterpolation(platform: platform),
                                             parameters: parameters.filter { $0.location == .path }.map { $0.name })
 
         // get name
