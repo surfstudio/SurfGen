@@ -14,7 +14,7 @@ class {{ name }}Repository {
   #}{% if operation.requestBody.isArray %}List<{{ operation.requestBody.modelType }}Entry> {{ operation.requestBody.modelName }}{% endif %}{#
   #}{% if operation.requestBody.isDictionary %}{% for parameter in operation.requestBody.parameters %}{{ parameter.type }} {{ parameter.name }}{% if not forloop.last %}, {% endif %}{#
   #}{% endfor %}{% endif %}{% endif %}) async {
-  	final response = await _http.{{ operation.httpMethod }}<Object>(
+  	final response = await _http.{{ operation.httpMethod }}<Map<String, Object>>(
   		{{ name }}Urls.{{ operation.path.name }}{% if operation.path.hasParameters %}{#
   		#}({% for parameter in operation.path.parameters %}{{ parameter }}{% if not forloop.last %}, {% endif %}{% endfor %}){% endif%},{#
   		#}{% if operation.hasQueryParameters %}
@@ -30,6 +30,6 @@ class {{ name }}Repository {
   		}{% endif %},{% endif %}{% if operation.requestBody.hasFormEncoding %}
   		contentType: Headers.formUrlEncodedContentType,{% endif %}
   	);{% if operation.hasResponseModel %}
-  	return {{ operation.responseModel }}.fromJson(response.body).transform());{% endif %}
+  	return {{ operation.responseModel }}.fromJson(response.body);{% endif %}
 	}
 {% endfor %}}

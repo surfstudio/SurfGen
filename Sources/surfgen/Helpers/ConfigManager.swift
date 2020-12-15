@@ -72,7 +72,8 @@ final class ConfigManager {
 
     func getPlatform() throws -> Platform {
         guard let platform = Platform(rawValue: model.platform) else {
-            throw ConfigManagerError.incorrectYamlFile
+            throw SurfGenError(nested: ConfigManagerError.incorrectYamlFile,
+                               message: "Could not get platform")
         }
         return platform
     }
@@ -83,7 +84,8 @@ final class ConfigManager {
             let entriesPath = model.entriesPath,
             let enumPath = model.enumPath
         else {
-            throw ConfigManagerError.incorrectYamlFile
+            throw SurfGenError(nested: ConfigManagerError.incorrectYamlFile,
+                               message: "Could not get model generation paths")
         }
         return [
             .entity: entitiesPath,
@@ -97,7 +99,8 @@ final class ConfigManager {
             let endpointsPath = model.endpointsPath,
             let servicesPath = model.servicesPath
         else {
-            throw ConfigManagerError.incorrectYamlFile
+            throw SurfGenError(nested: ConfigManagerError.incorrectYamlFile,
+                               message: "Could not get service generation paths")
         }
         let fullServicePath = "\(servicesPath)/\(serviceName.capitalizingFirstLetter())"
         return [
@@ -117,7 +120,8 @@ final class ConfigManager {
 
     func getModelTypes() throws -> [ModelType] {
         guard let specifiedTypes = model.modelTypes else {
-            throw ConfigManagerError.incorrectYamlFile
+            throw SurfGenError(nested: ConfigManagerError.incorrectYamlFile,
+                               message: "Could not get model types to generate")
         }
         return try specifiedTypes.map {
             switch GeneratedModelType(rawValue: $0) {
@@ -128,7 +132,8 @@ final class ConfigManager {
             case .enum?:
                 return .enum
             case .none:
-                throw ConfigManagerError.incorrectGenerationType
+                throw SurfGenError(nested: ConfigManagerError.incorrectGenerationType,
+                                   message: "Model type was not recognized")
             }
         }
     }
