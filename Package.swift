@@ -13,6 +13,10 @@ let package = Package(
         .library(
             name: "YamlParser",
             targets: ["YamlParser"]
+        ),
+        .library(
+            name: "ReferenceExtractor",
+            targets: ["ReferenceExtractor"]
         )
     ],
     dependencies: [
@@ -33,6 +37,12 @@ let package = Package(
                 "YamlParser",
                 "XcodeProj",
                 "Rainbow",
+                "Yams"
+            ]
+        ),
+        .target(
+            name: "ReferenceExtractor",
+            dependencies: [
                 "Yams"
             ]
         ),
@@ -60,6 +70,10 @@ let package = Package(
         .testTarget(
             name: "EndToEndTests",
             dependencies: ["YamlParser", "SurfGenKit"]
+        ),
+        .testTarget(
+            name: "RefereceExtractorTests",
+            dependencies: ["ReferenceExtractor"]
         )
     ]
 )
