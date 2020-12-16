@@ -12,7 +12,7 @@ public struct SchemaObjectNode {
     public enum Possibility {
         case object(SchemaModelNode)
         case `enum`(SchemaEnumNode)
-        case simple(String)
+        case simple(PrimitiveType)
     }
 
     public var next: Possibility

@@ -9,13 +9,14 @@ import Foundation
 
 public struct ParameterNode {
 
-    public enum UsageType {
+    public enum Location {
         case query
         case path
     }
 
-    let name: String
-    let usageType: UsageType
-    let description: String
-    let type: SchemaObjectNode
+    public let name: String
+    public let location: Location
+    public let description: String?
+    public let type: ParameterTypeNode
+    public let isRequired: Bool
 }

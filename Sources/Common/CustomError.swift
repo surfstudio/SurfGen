@@ -35,3 +35,11 @@ public struct CustomError: LocalizedError {
         return msg
     }
 }
+
+extension CustomError {
+    public static func notInplemented(line: Int = #line,
+                                      function: String = #function,
+                                      column: Int = #column) -> CustomError {
+        return CustomError(message: "NOT IMPLEMENTED!!!", line: line, function: function, column: column)
+    }
+}
