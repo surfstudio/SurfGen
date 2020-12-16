@@ -16,7 +16,7 @@ public enum ModelType {
         case .entity:
             return platform.entitySuffix
         case .entry:
-            return "Entry"
+            return platform.entrySuffix
         case .enum:
             return ""
         }

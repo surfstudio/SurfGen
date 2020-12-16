@@ -44,6 +44,15 @@ public enum Platform: String {
         }
     }
 
+    var entrySuffix: String {
+        switch self {
+        case .dart:
+            return ""
+        case .swift:
+            return "Entry"
+        }
+    }
+
     var arrayLiteral: (start: String, end: String) {
         switch self {
         case .dart:

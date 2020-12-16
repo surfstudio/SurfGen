@@ -8,7 +8,7 @@
 
 enum Template {
     case nodeKitEntity(entityName: String, entryName: String, properties: [PropertyGenerationModel], description: String)
-    case nodeKitEntry(className: String, properties: [PropertyGenerationModel])
+    case nodeKitEntry(className: String, properties: [PropertyGenerationModel], description: String)
     case `enum`(EnumGenerationModel)
     case urlRoute(ServiceGenerationModel)
     case serviceProtocol(ServiceGenerationModel)
@@ -40,19 +40,20 @@ enum Template {
                 "enumType": enumModel.enumType,
                 "cases": enumModel.cases
             ]
-        case .nodeKitEntry(let className, let properties):
+        case .nodeKitEntry(let className, let properties, let description):
             return [
+                "description": description,
                 "className": className,
-                "properties": properties
+                "properties": properties,
+                "isPlain": properties.allSatisfy { $0.isPlain }
             ]
         case .nodeKitEntity(let entityName, let entryName, let properties, let description):
             return [
                 "description": description,
                 "entityName": entityName,
                 "entryName": entryName,
-                "codeOpenBracket": "{",
                 "properties": properties,
-                "isPlain": properties.first { !$0.isPlain } == nil
+                "isPlain": properties.allSatisfy { $0.isPlain }
             ]
         case .urlRoute(let serviceModel),
              .serviceProtocol(let serviceModel),
