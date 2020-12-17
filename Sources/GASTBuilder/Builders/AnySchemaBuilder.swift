@@ -67,7 +67,8 @@ public struct AnySchemaBuilder: SchemaBuilder {
 
         let model = SchemaEnumNode(
             type: "string",
-            cases: stringCases
+            cases: stringCases,
+            name: schema.name
         )
 
         return.init(next: .enum(model))

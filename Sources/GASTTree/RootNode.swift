@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Common
 
 public struct RootNode {
     public var schemas: [SchemaObjectNode]
@@ -16,6 +17,77 @@ public struct RootNode {
         self.schemas = schemas
         self.parameters = parameters
         self.services = services
+    }
+}
+
+extension RootNode {
+    /// Awaits `#/components/schemas|parameters/ModelName`
+    public func resolve<T>(reference: String) throws -> T {
+        let splited = reference.split(separator: "/")
+
+        if splited.count != 4 {
+            throw CustomError(
+                message: "Reference for resolving should contains 4 components splited by `/` but \(reference) contains \(splited.count)"
+            )
+        }
+
+        if splited[1] != "components" {
+            throw CustomError(
+                message: "Reference for resolving should contains `components` as second components of path. But \(reference) doesn't"
+            )
+        }
+
+        switch splited[2] {
+        case "schemas":
+            let res = try self.resolveSchema(name: String(splited[3]))
+
+            guard let found = res else {
+                throw CustomError(message: "\(splited[3]) not found in this tree")
+            }
+
+            guard let casted = found as? T else {
+                throw CustomError(message: "Couldn't cast \(found) to \(T.self)")
+            }
+
+            return casted
+        case "parameters":
+            let res = try self.resolveParameter(name: String(splited[3]))
+
+            guard let found = res else {
+                throw CustomError(message: "\(splited[3]) not found in this tree")
+            }
+
+            guard let casted = found as? T else {
+                throw CustomError(message: "Couldn't cast \(found) to \(T.self)")
+            }
+
+            return casted
+        default:
+            throw CustomError(
+                message: "Reference for resolving should contains `sahemas` or `parameters` as thrid components of path. But \(reference) doesn't"
+            )
+        }
+    }
+
+    func resolveSchema(name: String) throws -> Any? {
+        return try self.schemas.first { schema -> Bool in
+            switch schema.next {
+            case .object(let val):
+                return val.name == name
+            case .enum(let val):
+                return val.name == name
+            case .simple:
+                throw CustomError(message: "\(name) is simple. Now reference which is referenced to simple type is unsupported")
+            case .reference:
+                throw CustomError(message: "\(name) is refrence. Now reference which is referenced to another reference is unsupported")
+            }
+        }
+    }
+
+    func resolveParameter(name: String) throws -> Any? {
+        return self.parameters.first(where: { param -> Bool in
+            return param.name == name
+        })
     }
 }
 

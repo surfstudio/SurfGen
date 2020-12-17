@@ -18,7 +18,9 @@ public struct TreeParserStage {
     public func run(input: [String: RootNode]) throws {
         let parser = TreeParser()
 
-        print(try wrap(parser.parse(tree: input), message: "While parsing GAST to generation models"))
+        let res = try wrap(parser.parse(tree: input), message: "While parsing GAST to generation models")
+
+        print(res)
     }
 }
 

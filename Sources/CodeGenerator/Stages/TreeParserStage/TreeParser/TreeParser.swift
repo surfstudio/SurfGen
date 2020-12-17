@@ -34,7 +34,7 @@ public struct TreeParser {
 
         let mapper = { (service: PathNode) throws -> ServiceModel in
             return try wrap(
-                self.parse(service: service, other: other),
+                self.parse(service: service, current: node, other: other),
                 message: "While parsing service at path \(service.path)"
             )
         }
@@ -44,11 +44,11 @@ public struct TreeParser {
         return services
     }
 
-    func parse(service: PathNode, other: [String: RootNode]) throws -> ServiceModel {
+    func parse(service: PathNode, current: RootNode, other: [String: RootNode]) throws -> ServiceModel {
 
         let mapper = { (operation: OperationNode) throws -> OperationModel in
             return try wrap(
-                self.parse(operation: operation, other: other),
+                self.parse(operation: operation, current: current, other: other),
                 message: "While parsing operation \(operation.method)"
             )
         }
@@ -58,14 +58,22 @@ public struct TreeParser {
         return .init(path: service.path, operations: operations)
     }
 
-    func parse(operation: OperationNode, other: [String: RootNode]) throws -> OperationModel {
+    func parse(operation: OperationNode, current: RootNode, other: [String: RootNode]) throws -> OperationModel {
 
         let params = try operation.parameters.map { parameter -> Reference<ParameterModel, ParameterModel> in
             switch parameter {
             case .entity(let paramNode):
                 return .notReference(try self.parse(parameter: paramNode, other: other))
             case .ref(let ref):
-                throw CustomError.notInplemented()
+                let res = ref.split(separator: "#")
+
+                if res.count == 2 {
+                    throw CustomError.notInplemented()
+                }
+
+                let resolved: ParameterNode = try current.resolve(reference: String(ref))
+
+                return .reference(try self.parse(parameter: resolved, other: other))
             }
         }
 
