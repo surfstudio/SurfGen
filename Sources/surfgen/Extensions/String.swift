@@ -11,4 +11,8 @@ extension String {
         return prefix(1).capitalized + dropFirst()
     }
 
+    func filePathInserting(name: String) -> String {
+        return self.replacingOccurrences(of: "\\{.*?\\}", with: name, options: .regularExpression)
+    }
+
 }

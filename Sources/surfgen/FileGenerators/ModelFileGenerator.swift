@@ -28,10 +28,10 @@ class ModelFileGenerator {
 
     func generateModels(_ modelNames: [String]) throws {
         let blackList = try configManager.getBlackList()
-        let modelTypes = try configManager.getModelTypes()
+        let destinations = try configManager.getModelGenerationPaths()
         logger.printListWithHeader("Black list contains next models:".yellow, list: blackList)
         let generatedModel = tryToGenerate(modelNames: modelNames,
-                                           types: modelTypes,
+                                           types: Array(destinations.keys),
                                            blackList: blackList,
                                            isDescriptionsEnabled: configManager.isDescriptionsEnabled)
 
@@ -39,8 +39,6 @@ class ModelFileGenerator {
 
         let files = generatedModel.map { $0.value.map { $0.fileName } }.flatMap { $0 }
         logger.printListWithHeader("Surfgen found next dependencies for provided model: ".green, list: files)
-
-        let destinations = try configManager.getModelGenerationPaths()
 
         // Check for project parameter
         guard let projectPath = configManager.projectPath, let mainGroupName = configManager.mainGroup else {
@@ -61,9 +59,9 @@ class ModelFileGenerator {
     }
 
     private func tryToGenerate(modelNames: [String],
-                       types: [ModelType],
-                       blackList: [String],
-                       isDescriptionsEnabled: Bool) -> ModelGeneratedModel {
+                               types: [ModelType],
+                               blackList: [String],
+                               isDescriptionsEnabled: Bool) -> ModelGeneratedModel {
         do {
             let parser = try YamlToGASTParser(string: spec)
             var generatedModels: ModelGeneratedModel = [:]

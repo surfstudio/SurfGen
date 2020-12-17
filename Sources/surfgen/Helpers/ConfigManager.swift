@@ -16,14 +16,6 @@ enum ConfigManagerError: Error {
 
 final class ConfigManager {
 
-    // MARK: - Nested types
-
-    private enum GeneratedModelType: String {
-        case nodeKitEntry
-        case nodeKitEntity
-        case `enum`
-    }
-
     // MARK: - Properties
 
     var templatePath: Path {
@@ -79,35 +71,19 @@ final class ConfigManager {
     }
 
     func getModelGenerationPaths() throws -> [ModelType: String] {
-        guard
-            let entitiesPath = model.entitiesPath,
-            let entriesPath = model.entriesPath,
-            let enumPath = model.enumPath
-        else {
-            throw SurfGenError(nested: ConfigManagerError.incorrectYamlFile,
-                               message: "Could not get model generation paths")
-        }
         return [
-            .entity: entitiesPath,
-            .entry: entriesPath,
-            .enum: enumPath
-        ]
+            .entity: model.entitiesPath,
+            .entry: model.entriesPath,
+            .enum: model.enumPath
+        ].compactMapValues { $0 }
     }
 
     func getServiceGenerationPaths(for serviceName: String) throws -> [ServicePart: String] {
-        guard
-            let endpointsPath = model.endpointsPath,
-            let servicesPath = model.servicesPath
-        else {
-            throw SurfGenError(nested: ConfigManagerError.incorrectYamlFile,
-                               message: "Could not get service generation paths")
-        }
-        let fullServicePath = "\(servicesPath)/\(serviceName.capitalizingFirstLetter())"
         return [
-            .urlRoute: endpointsPath,
-            .protocol: fullServicePath,
-            .service: fullServicePath
-        ]
+            .urlRoute: model.endpointsPath,
+            .protocol: model.serviceProtocolsPath?.filePathInserting(name: serviceName.capitalizingFirstLetter()),
+            .service: model.servicesPath?.filePathInserting(name: serviceName.capitalizingFirstLetter())
+        ].compactMapValues { $0 }
     }
 
     func getBlackList() throws -> [String] {
@@ -116,26 +92,6 @@ final class ConfigManager {
         }
         let blackListFile: String = try Path(blackList).read()
         return blackListFile.split(separator: "\n").map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
-    }
-
-    func getModelTypes() throws -> [ModelType] {
-        guard let specifiedTypes = model.modelTypes else {
-            throw SurfGenError(nested: ConfigManagerError.incorrectYamlFile,
-                               message: "Could not get model types to generate")
-        }
-        return try specifiedTypes.map {
-            switch GeneratedModelType(rawValue: $0) {
-            case .nodeKitEntry?:
-                return .entry
-            case .nodeKitEntity?:
-                return .entity
-            case .enum?:
-                return .enum
-            case .none:
-                throw SurfGenError(nested: ConfigManagerError.incorrectGenerationType,
-                                   message: "Model type was not recognized")
-            }
-        }
     }
 
 }

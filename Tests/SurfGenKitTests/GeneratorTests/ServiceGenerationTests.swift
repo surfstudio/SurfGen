@@ -27,8 +27,10 @@ class ServiceGenerationTests: XCTestCase {
         let expectedFileName = TestService.pet.fileName(for: .urlRoute)
 
         // when
-        let generatedService = try serviceGenerator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(), withServiceName: TestService.pet.rawValue,
-                                                                   environment: environment)
+        let generatedService = try serviceGenerator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(),
+                                                                 withServiceName: TestService.pet.rawValue,
+                                                                 parts: ServicePart.allCases,
+                                                                 environment: environment)
         guard let generatedRoute = generatedService[.urlRoute] else {
             XCTFail("Route was not generated")
             return
@@ -52,6 +54,7 @@ class ServiceGenerationTests: XCTestCase {
         // when
         let generatedService = try generator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(),
                                                           withServiceName: TestService.pet.rawValue,
+                                                          parts: ServicePart.allCases,
                                                           environment: environment)
 
         guard let generatedProtocol = generatedService[.protocol] else {
@@ -77,6 +80,7 @@ class ServiceGenerationTests: XCTestCase {
         // when
         let generatedService = try generator.generateCode(for: NodesBuilder.formTestServiceDeclarationNode(),
                                                           withServiceName: TestService.pet.rawValue,
+                                                          parts: ServicePart.allCases,
                                                           environment: environment)
         guard let generatedImplementation = generatedService[.service] else {
             XCTFail("Service was not generated")

@@ -6,7 +6,7 @@
 //  Copyright © 2019 Surf. All rights reserved.
 //
 
-public enum ModelType {
+public enum ModelType: String {
     case entity
     case entry
     case `enum`

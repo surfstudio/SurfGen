@@ -16,8 +16,8 @@ struct ConfigModel: Decodable {
 
     let endpointsPath: String?
     let servicesPath: String?
+    let serviceProtocolsPath: String?
 
-    let modelTypes: [String]?
     let generateDescriptions: Bool?
     let templatesPath: String
     let blackList: String?
@@ -30,18 +30,19 @@ struct ConfigModel: Decodable {
 
     enum CodingKeys: String, CodingKey {
         case platform = "platform"
+
         case entitiesPath = "entities_path"
         case entriesPath = "entries_path"
         case enumPath = "enums_path"
 
         case endpointsPath = "endpoints_path"
         case servicesPath = "services_path"
+        case serviceProtocolsPath = "protocols_path"
 
         case projectPath = "project_path"
         case mainGroup = "project_main_group"
         case targets = "targets"
 
-        case modelTypes = "generation_types"
         case generateDescriptions = "generate_descriptions"
         case templatesPath = "templates_path"
         case blackList = "black_list_path"

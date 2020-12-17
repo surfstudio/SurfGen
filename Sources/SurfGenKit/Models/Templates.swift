@@ -17,11 +17,11 @@ enum Template {
     var fileName: String {
         switch self {
         case .nodeKitEntity:
-            return "EntityDTOConvertable.txt"
+            return "Entity.txt"
         case .nodeKitEntry:
-            return "EntryCodable.txt"
+            return "Entry.txt"
         case .enum:
-            return "CodableEnum.txt"
+            return "Enum.txt"
         case .urlRoute:
             return "UrlRoute.txt"
         case .serviceProtocol:
