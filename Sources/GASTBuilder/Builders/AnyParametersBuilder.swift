@@ -8,6 +8,7 @@
 import Foundation
 import Common
 import Swagger
+import GASTTree
 
 public protocol ParametersBuilder {
     func build(parameters: [ComponentObject<Parameter>]) throws -> [ParameterNode]
@@ -47,6 +48,7 @@ extension AnyParametersBuilder {
         case .content:
             throw CustomError(message: "We don't support `content` parameter's type")
         case .schema(let schema):
+
             let schemas = try self.schemaBuilder.build(schemas: [.init(name: "", value: schema.schema)])
 
             guard schemas.count == 1 else {

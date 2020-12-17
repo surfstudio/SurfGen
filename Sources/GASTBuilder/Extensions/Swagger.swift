@@ -8,6 +8,7 @@
 import Foundation
 import Swagger
 import Common
+import GASTTree
 
 extension Schema {
     func extractType() throws -> PropertyNode.PossibleType {

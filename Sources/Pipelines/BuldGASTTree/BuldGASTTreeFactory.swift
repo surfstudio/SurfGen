@@ -29,7 +29,8 @@ public struct BuldGASTTreeFactory {
                     fileProvider: FileManager.default,
                     schemaBuilder: schemaBuilder,
                     parameterBuilder: parameterBuilder,
-                    serviceBuilder: serviceBuilder))
+                    serviceBuilder: serviceBuilder),
+                next: .init())
         )
     }
 }

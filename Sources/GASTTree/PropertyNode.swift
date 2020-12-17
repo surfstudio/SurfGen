@@ -19,6 +19,18 @@ public struct PropertyNode {
     public let description: String?
     public let example: Any?
     public let nullable: Bool
+
+    public init(name: String,
+                type: PossibleType,
+                description: String?,
+                example: Any?,
+                nullable: Bool) {
+        self.name = name
+        self.type = type
+        self.description = description
+        self.example = example
+        self.nullable = nullable
+    }
 }
 
 extension PropertyNode.PossibleType: StringView {

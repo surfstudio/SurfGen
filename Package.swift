@@ -6,30 +6,50 @@ import PackageDescription
 let package = Package(
     name: "SurfGen",
     products: [
+
+        // MARK: - Executable
+
         .executable(name: "surfgen", targets: ["surfgen"]),
         .executable(name: "PipelineRunnerCLI", targets: ["PipelinesCLI"]),
+
+        // MARK: - Libs
+
+        // MARK: -- Shared
+
         .library(
-            name: "SurfGenKit",
-            targets: ["SurfGenKit"]),
-        .library(
-            name: "YamlParser",
-            targets: ["YamlParser"]
-        ),
-        .library(
-            name: "Pipelines",
-            targets: ["Pipelines"]
-        ),
-        .library(
-            name: "GASTBuilder",
-            targets: ["GASTBuilder"]
+            name: "GASTTree",
+            targets: ["GASTTree"]
         ),
         .library(
             name: "Common",
             targets: ["Common"]
         ),
         .library(
+            name: "Pipelines",
+            targets: ["Pipelines"]
+        ),
+        .library(
+            name: "SurfGenKit",
+            targets: ["SurfGenKit"]
+        ),
+
+        // MARK: -- Specific
+
+        .library(
+            name: "YamlParser",
+            targets: ["YamlParser"]
+        ),
+        .library(
             name: "ReferenceExtractor",
             targets: ["ReferenceExtractor"]
+        ),
+        .library(
+            name: "GASTBuilder",
+            targets: ["GASTBuilder"]
+        ),
+        .library(
+            name: "CodeGenerator",
+            targets: ["CodeGenerator"]
         )
     ],
     dependencies: [
@@ -78,7 +98,9 @@ let package = Package(
             dependencies: [
                 "ReferenceExtractor",
                 "Common",
-                "GASTBuilder"
+                "GASTBuilder",
+                "GASTTree",
+                "CodeGenerator"
             ],
             exclude: ["main.swift"]
         ),
@@ -87,12 +109,21 @@ let package = Package(
             dependencies: [
                 "Yams",
                 "Swagger",
-                "Common"
+                "Common",
+                "GASTTree"
             ]
         ),
         .target(
             name: "Common",
             dependencies: []
+        ),
+        .target(
+            name: "GASTTree",
+            dependencies: ["Swagger"]
+        ),
+        .target(
+            name: "CodeGenerator",
+            dependencies: ["GASTTree", "Common"]
         ),
         .target(
             name: "PipelinesCLI",

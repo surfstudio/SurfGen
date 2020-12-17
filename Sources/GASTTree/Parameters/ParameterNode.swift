@@ -19,4 +19,16 @@ public struct ParameterNode {
     public let description: String?
     public let type: ParameterTypeNode
     public let isRequired: Bool
+
+    public init(name: String,
+                location: Location,
+                description: String?,
+                type: ParameterTypeNode,
+                isRequired: Bool) {
+        self.name = name
+        self.location = location
+        self.description = description
+        self.type = type
+        self.isRequired = isRequired
+    }
 }

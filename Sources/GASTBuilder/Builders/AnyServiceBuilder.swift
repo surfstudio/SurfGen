@@ -8,6 +8,7 @@
 import Foundation
 import Common
 import Swagger
+import GASTTree
 
 public protocol ServiceBuilder {
     func build(paths: [Path]) throws -> [PathNode]

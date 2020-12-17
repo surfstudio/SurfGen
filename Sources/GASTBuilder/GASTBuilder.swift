@@ -9,6 +9,7 @@ import Foundation
 import Yams
 import Swagger
 import Common
+import GASTTree
 
 public protocol GASTBuilder {
     func build(filePath: String) throws -> RootNode

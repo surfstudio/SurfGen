@@ -10,6 +10,11 @@ import Foundation
 public struct SchemaEnumNode {
     public let type: String
     public let cases: [String]
+
+    public init(type: String, cases: [String]) {
+        self.type = type
+        self.cases = cases
+    }
 }
 
 extension SchemaEnumNode: StringView {

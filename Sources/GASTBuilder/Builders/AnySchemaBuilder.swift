@@ -8,6 +8,7 @@
 import Foundation
 import Swagger
 import Common
+import GASTTree
 
 public protocol SchemaBuilder {
     func build(schemas: [ComponentObject<Schema>]) throws -> [SchemaObjectNode]
@@ -41,8 +42,8 @@ public struct AnySchemaBuilder: SchemaBuilder {
             return try self.processString(schema: schema)
         case .array:
             throw CustomError.notInplemented()
-        case .reference:
-            throw CustomError.notInplemented()
+        case .reference(let ref):
+            return .init(next: .reference(ref.rawValue))
         case .group:
             throw CustomError.notInplemented()
         case .number:

@@ -9,6 +9,10 @@ import Foundation
 
 public struct ArrayTypeNode {
     public let itemsType: Referenced<String>
+
+    public init(itemsType: Referenced<String>) {
+        self.itemsType = itemsType
+    }
 }
 
 extension ArrayTypeNode: StringView {
