@@ -68,7 +68,7 @@ extension SchemaType {
         case .group:
             return "group"
         case .boolean:
-            return "group"
+            return "boolean"
         case .string:
             return "string"
         case .number:
