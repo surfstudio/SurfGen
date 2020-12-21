@@ -7,8 +7,8 @@
 
 import Foundation
 
-public struct SchemaModel {
+public struct SchemaObjectModel {
     public let name: String
     public let properties: [PropertyModel]
-    public let description: String
+    public let description: String?
 }

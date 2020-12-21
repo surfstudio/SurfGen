@@ -30,7 +30,7 @@ public struct BuldGASTTreeFactory {
                     schemaBuilder: schemaBuilder,
                     parameterBuilder: parameterBuilder,
                     serviceBuilder: serviceBuilder),
-                next: .init())
+                next: .init(parserStage: .init()))
         )
     }
 }

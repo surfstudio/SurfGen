@@ -33,13 +33,13 @@ extension Schema {
         case .reference(let ref):
             return .simple(.ref(ref.rawValue))
         case .boolean:
-            return .simple(.entity("boolean"))
+            return .simple(.entity(.boolean))
         case .string:
-            return .simple(.entity("string"))
+            return .simple(.entity(.string))
         case .number:
-            return .simple(.entity("number"))
+            return .simple(.entity(.number))
         case .integer:
-            return .simple(.entity("integer"))
+            return .simple(.entity(.integer))
         }
     }
 }

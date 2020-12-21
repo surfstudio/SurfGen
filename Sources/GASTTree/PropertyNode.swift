@@ -11,7 +11,7 @@ public struct PropertyNode {
 
     public enum PossibleType {
         case array(ArrayTypeNode)
-        case simple(Referenced<String>)
+        case simple(Referenced<PrimitiveType>)
     }
 
     public let name: String
@@ -39,7 +39,7 @@ extension PropertyNode.PossibleType: StringView {
         case .array(let arr):
             return arr.view
         case .simple(let mod):
-            return mod.view
+            return "\(mod)"
         }
     }
 }

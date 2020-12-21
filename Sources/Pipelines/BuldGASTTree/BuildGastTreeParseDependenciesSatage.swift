@@ -8,28 +8,30 @@
 import Foundation
 import GASTBuilder
 import Common
-import ReferenceExtractor
 import GASTTree
-
-public struct LinkWithDependencies {
-    public let links: [String]
-    public let dependencies: [Dependency]
-}
+import CodeGenerator
 
 public struct BuildGastTreeParseDependenciesSatage: PipelineEntryPoint {
 
     let builder: GASTBuilder
     let next: InitCodeGenerationStage
 
-    public func run(with input: LinkWithDependencies) throws {
-        var trees = [String: RootNode]()
+    public init(builder: GASTBuilder, next: InitCodeGenerationStage) {
+        self.builder = builder
+        self.next = next
+    }
 
-        try input.links.forEach { path in
-            let root = try wrap(self.builder.build(filePath: path),
+    public func run(with input: [Dependency]) throws {
+
+        var arr = [DependencyWithTree]()
+
+        try input.forEach { dependency in
+            let root = try wrap(self.builder.build(filePath: dependency.pathToCurrentFile),
                                 message: "Error occured in stage `Build GAST for dependencies`")
-            trees[path] = root
+            let dep = DependencyWithTree(dependency: dependency, tree: root)
+            arr.append(dep)
         }
 
-        try self.next.run(with: trees)
+        try self.next.run(with: arr)
     }
 }

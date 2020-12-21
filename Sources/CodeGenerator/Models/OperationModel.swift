@@ -13,6 +13,6 @@ public struct OperationModel {
     public let httpMethod: String
     public let description: String?
     public let parameters: [Reference<ParameterModel, ParameterModel>]?
-    public let responseModel: SchemaModel?
-    public let requestModel: SchemaModel?
+    public let responseModel: SchemaObjectModel?
+    public let requestModel: SchemaObjectModel?
 }

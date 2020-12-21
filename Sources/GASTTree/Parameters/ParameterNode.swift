@@ -32,3 +32,9 @@ public struct ParameterNode {
         self.isRequired = isRequired
     }
 }
+
+extension ParameterNode: StringView {
+    public var view: String {
+        return "name: \(self.name)\nlocation:\(location)\ndescription:\(description)\n"
+    }
+}

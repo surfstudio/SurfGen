@@ -8,9 +8,17 @@
 import Foundation
 import CodeGenerator
 import GASTTree
+import Common
 
-struct InitCodeGenerationStage: PipelineEntryPoint {
-    func run(with input: [String : RootNode]) throws {
-        try TreeParserStage().run(input: input)
+public struct InitCodeGenerationStage: PipelineEntryPoint {
+
+    public var next: TreeParserStage
+
+    public init(parserStage: TreeParserStage) {
+        self.next = parserStage
+    }
+
+    public func run(with input: [DependencyWithTree]) throws {
+        try wrap(self.next.run(input: input), message: "In `Init Code Generation Stage`")
     }
 }

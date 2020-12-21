@@ -6,9 +6,17 @@
 //
 
 import Foundation
+import GASTTree
 
 public struct PropertyModel {
+
+    public indirect enum PossibleType {
+        case primitive(PrimitiveType)
+        case reference(SchemaType)
+        case array(PossibleType)
+    }
+
     public let name: String
-    public let description: String
-    public let type: TypeModel
+    public let description: String?
+    public let type: PossibleType
 }

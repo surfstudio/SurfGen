@@ -17,34 +17,36 @@ import Common
 
 public struct TreeParser {
 
-    public func parse(tree: [String: RootNode]) throws -> [[ServiceModel]] {
-        let mapper = { (key: String, value: RootNode) throws -> [ServiceModel] in
+    let parametersParser = ParametersTreeParser()
+
+    public func parse(trees: [DependencyWithTree]) throws -> [[ServiceModel]] {
+        let mapper = { (tree: DependencyWithTree) throws -> [ServiceModel] in
             return try wrap(
-                self.parse(node: value, file: key, other: tree),
-                message: "While parsing tree from file \(key)"
+                self.parse(tree: tree, other: trees),
+                message: "While parsing tree from file \(tree.dependency.pathToCurrentFile)"
             )
         }
 
-        let res = try tree.map(mapper)
+        let res = try trees.map(mapper)
 
         return res
     }
 
-    func parse(node: RootNode, file: String, other: [String: RootNode]) throws -> [ServiceModel] {
+    func parse(tree: DependencyWithTree, other: [DependencyWithTree]) throws -> [ServiceModel] {
 
         let mapper = { (service: PathNode) throws -> ServiceModel in
             return try wrap(
-                self.parse(service: service, current: node, other: other),
+                self.parse(service: service, current: tree, other: other),
                 message: "While parsing service at path \(service.path)"
             )
         }
 
-        let services = try node.services.map(mapper)
+        let services = try tree.tree.services.map(mapper)
 
         return services
     }
 
-    func parse(service: PathNode, current: RootNode, other: [String: RootNode]) throws -> ServiceModel {
+    func parse(service: PathNode, current: DependencyWithTree, other: [DependencyWithTree]) throws -> ServiceModel {
 
         let mapper = { (operation: OperationNode) throws -> OperationModel in
             return try wrap(
@@ -58,23 +60,13 @@ public struct TreeParser {
         return .init(path: service.path, operations: operations)
     }
 
-    func parse(operation: OperationNode, current: RootNode, other: [String: RootNode]) throws -> OperationModel {
+    func parse(operation: OperationNode, current: DependencyWithTree, other: [DependencyWithTree]) throws -> OperationModel {
 
         let params = try operation.parameters.map { parameter -> Reference<ParameterModel, ParameterModel> in
-            switch parameter {
-            case .entity(let paramNode):
-                return .notReference(try self.parse(parameter: paramNode, other: other))
-            case .ref(let ref):
-                let res = ref.split(separator: "#")
-
-                if res.count == 2 {
-                    throw CustomError.notInplemented()
-                }
-
-                let resolved: ParameterNode = try current.resolve(reference: String(ref))
-
-                return .reference(try self.parse(parameter: resolved, other: other))
-            }
+            
+            return try wrap(
+                self.parametersParser.parse(parameter: parameter, current: current, other: other),
+                message: "While parsing parameter \(parameter.view)")
         }
 
         return .init(
@@ -84,34 +76,5 @@ public struct TreeParser {
             responseModel: nil,
             requestModel: nil
         )
-    }
-
-    func parse(parameter: ParameterNode, other: [String: RootNode]) throws -> ParameterModel {
-
-        let type = try wrap(
-            self.parse(schema: parameter.type.schema, other: other),
-            message: "While parsing parameter \(parameter.name)"
-        )
-
-        return .init(
-            name: parameter.name,
-            location: parameter.location,
-            type: type,
-            description: parameter.description,
-            isRequired: parameter.isRequired
-        )
-    }
-
-    func parse(schema: SchemaObjectNode, other: [String: RootNode]) throws -> TypeModel {
-        switch schema.next {
-        case .object(let obj):
-            throw CustomError.notInplemented()
-        case .enum(let `enum`):
-            throw CustomError.notInplemented()
-        case .simple(let primitive):
-            return .primitive(primitive.rawValue)
-        case .reference(let ref):
-            throw CustomError.notInplemented()
-        }
     }
 }
