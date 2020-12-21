@@ -9,7 +9,7 @@ import Foundation
 import GASTTree
 
 public struct SchemaEnumModel {
-    let name: String
-    let cases: [String]
-    let type: PrimitiveType
+    public let name: String
+    public let cases: [String]
+    public let type: PrimitiveType
 }

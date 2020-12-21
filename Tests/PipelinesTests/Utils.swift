@@ -90,4 +90,13 @@ extension ParameterModel.PossibleType {
             throw CustomError(message: "The parameter's type is reference \(ref)")
         }
     }
+
+    func notPrimitiveType() throws -> SchemaType {
+        switch self {
+        case .primitive(let val):
+            throw CustomError(message: "The parameter's type is primitive: \(val)")
+        case .reference(let val):
+            return val
+        }
+    }
 }
