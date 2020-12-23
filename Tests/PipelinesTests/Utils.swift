@@ -71,11 +71,20 @@ extension Reference where RefType == ParameterModel, NotRefType == ParameterMode
         }
     }
 
-    var type: ParameterModel.PossibleType {
+    func type() throws -> ParameterModel.PossibleType {
         switch self {
-        case .reference(let val):
-            return val.type
         case .notReference(let val):
+            return val.type
+        case .reference:
+            throw CustomError.init(message: "It's reference not a primitive")
+        }
+    }
+
+    func refType() throws -> ParameterModel.PossibleType {
+        switch self {
+        case .notReference:
+            throw CustomError.init(message: "It's primitive not a reference")
+        case .reference(let val):
             return val.type
         }
     }
