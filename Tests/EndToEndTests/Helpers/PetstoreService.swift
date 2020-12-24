@@ -17,7 +17,7 @@ enum PetstoreService: String, CaseIterable {
     }
 
     func fileName(for servicePart: ServicePart) -> String {
-        return servicePart.buildName(for: rawValue) + ".swift"
+        return servicePart.buildName(for: rawValue, platform: .swift) + ".swift"
     }
 
     func getCode(for servicePart: ServicePart) -> String {
@@ -25,7 +25,7 @@ enum PetstoreService: String, CaseIterable {
     }
 
     private func filePath(for servicePart: ServicePart) -> String {
-        return Constants.basePath + servicePart.buildName(for: rawValue)
+        return Constants.basePath + servicePart.buildName(for: rawValue, platform: .swift)
     }
 
 }

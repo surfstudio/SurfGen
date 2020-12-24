@@ -37,7 +37,7 @@ class PetstoreEndToEndTests: XCTestCase {
         let gastTree = try parser.parseToGAST(forServiceRootPath: service.rawValue)
         let generatedService = try rootGenerator.generateService(name: service.rawValue,
                                                                  from: gastTree,
-                                                                 parts: ServicePart.allCases)
+                                                                 parts: Platform.swift.serviceParts)
 
         // then
         for servicePart in generatedService {

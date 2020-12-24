@@ -1,0 +1,14 @@
+{% if description %}/**
+ * {{ description }}
+ */
+{% endif %}enum class {{ enumName }}(val value: {{ enumType }}) {
+	{% for case in cases %}{{ case.name }}({{ case.value }}){% if not forloop.last %},
+	{% endif %}{% endfor %}
+	{% for case in cases %}
+	{% if case.name != nil %}fun is{{ case.camelCaseName }}(): Boolean = this == {{ case.name }}{% endif %}{% endfor %}
+
+	companion object {
+		fun getBy(value: {{ enumType }}) =
+			values().find { it.value.equals(value) }
+	}
+}

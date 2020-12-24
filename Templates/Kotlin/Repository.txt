@@ -1,0 +1,46 @@
+
+import io.reactivex.Completable
+import io.reactivex.Single
+import ru.surfstudio.android.network.transform
+import ru.surfstudio.android.network.transformCollection
+import javax.inject.Inject
+
+@PerApplication
+class {{ name }}Repository @Inject consctructor(
+	private val {{ name|lowercase }}Api: {{ name }}Api 
+) {
+	{% for operation in operations %}
+	{% if operation.hasDescription %}/**
+	 * {{ operation.description }}
+	 */
+	{% endif %}fun {{ operation.name }}({% for parameter in operation.pathParameters %}
+    	{{ parameter.name }}: String{#
+    	#}{% if not forloop.last or operation.hasQueryParameters or operation.hasBody %},{% else %}
+    {% endif %}{% endfor %}{#
+    	#}{% for parameter in operation.queryParameters %}
+    	{{ parameter.name }}: {{ parameter.type }}{% if not forloop.last or operation.hasBody %},{% else %}
+    {% endif %}{% endfor %}{#
+    	#}{% if operation.requestBody.isModel %}
+    	{{ operation.requestBody.modelName }}: {{ operation.requestBody.modelType }}
+    {% endif %}{#
+    	#}{% if operation.requestBody.isArray %}
+    	{{ operation.requestBody.modelName }}: List<{{ operation.requestBody.modelType }}>
+    {% endif %}{#
+    	#}{% for parameter in operation.requestBody.parameters %}{{ parameter.name }}: {{ parameter.type }}{% if not forloop.last %},{% else %}
+    {% endif %}{% endfor %}{#
+    #}): Single</* Domain Model Name */> =
+    	{{ name|lowercase }}Api.{{ operation.name }}({% for parameter in operation.pathParameters %}
+	    	{{ parameter.name }} = {{ parameter.name }}{#
+	    	#}{% if not forloop.last or operation.hasQueryParameters or operation.hasBody %},{% else %}
+	    {% endif %}{% endfor %}{#
+	    	#}{% for parameter in operation.queryParameters %}
+	    	{{ parameter.name }} = {{ parameter.name }}{% if not forloop.last or operation.hasBody %},{% else %}
+	    {% endif %}{% endfor %}{#
+	    	#}{% if operation.requestBody.isModel or operation.requestBody.isArray %}
+	    	{{ operation.requestBody.modelName }} = {{ operation.requestBody.modelName }}
+	    {% endif %}{#
+	    	#}{% for parameter in operation.requestBody.parameters %}{{ parameter.name }} = {{ parameter.name }}{% if not forloop.last %},{% else %}5
+	    {% endif %}{% endfor %}{#
+	    #}).transform{% if operation.responseBody.isArray %}Collection{% endif %}()
+	{% endfor %}
+}

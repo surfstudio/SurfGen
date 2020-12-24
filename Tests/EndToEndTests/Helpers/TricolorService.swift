@@ -60,7 +60,7 @@ enum TricolorService: String, CaseIterable {
     }
 
     func fileName(for servicePart: ServicePart) -> String {
-        return servicePart.buildName(for: rawValue.capitalizingFirstLetter()) + ".swift"
+        return servicePart.buildName(for: rawValue.capitalizingFirstLetter(), platform: .swift) + ".swift"
     }
 
     func getCode(for servicePart: ServicePart) -> String {
@@ -68,7 +68,8 @@ enum TricolorService: String, CaseIterable {
     }
 
     private func filePath(for servicePart: ServicePart) -> String {
-        return Constants.basePath + servicePart.buildName(for: rawValue.capitalizingFirstLetter())
+        return Constants.basePath + servicePart.buildName(for: rawValue.capitalizingFirstLetter(),
+                                                          platform: .swift)
     }
 
 }

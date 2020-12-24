@@ -17,6 +17,9 @@ struct ConfigModel: Decodable {
     let endpointsPath: String?
     let servicesPath: String?
     let serviceProtocolsPath: String?
+    let modulePath: String?
+    let apiInterfacePath: String?
+    let repositoryPath: String?
 
     let generateDescriptions: Bool?
     let templatesPath: String
@@ -38,6 +41,9 @@ struct ConfigModel: Decodable {
         case endpointsPath = "endpoints_path"
         case servicesPath = "services_path"
         case serviceProtocolsPath = "protocols_path"
+        case modulePath = "module_decalarations_path"
+        case apiInterfacePath = "api_interfaces_path"
+        case repositoryPath = "repositories_path"
 
         case projectPath = "project_path"
         case mainGroup = "project_main_group"

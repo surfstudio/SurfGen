@@ -1,0 +1,5 @@
+
+object {{ name }} {
+	{% for path in paths %}const val {{ path.constName }} = "$WEB_API_URL{{ path.path }}"{% if not forloop.last %}
+	{% endif %}{% endfor %}
+}

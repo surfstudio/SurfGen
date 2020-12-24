@@ -10,8 +10,8 @@ import Stencil
 
 extension Environment {
 
-    func renderTemplate(_ template: Template) throws -> String {
-        return try renderTemplate(name: template.fileName, context: template.context)
+    func renderTemplate(_ template: Template, from fileName: String) throws -> String {
+        return try renderTemplate(name: fileName, context: template.context)
     }
 
 }

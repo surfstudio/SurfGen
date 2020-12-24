@@ -227,7 +227,7 @@ class OperationNodeParserTests: XCTestCase {
         let operation = NodesBuilder.formPostPetByIdOperationNode()
 
         let expectedHasUndefinedRedponseBody = false
-        let expectedResponseModel = "Void"
+        let expectedResponseIsEmpty = true
         
         
         // when
@@ -235,8 +235,8 @@ class OperationNodeParserTests: XCTestCase {
                                                                rootPath: Constants.testServiceName)
         
         // then
-        XCTAssertEqual(generatedOperation.hasUndefinedResponseBody, expectedHasUndefinedRedponseBody)
-        XCTAssertEqual(generatedOperation.responseModel, expectedResponseModel)
+        XCTAssertEqual(generatedOperation.responseBody.isUndefined, expectedHasUndefinedRedponseBody)
+        XCTAssertEqual(generatedOperation.responseBody.isEmpty, expectedResponseIsEmpty)
     }
 
     func testOperationArrayResponseBodyParsingMatchesExpected() throws {
@@ -252,8 +252,8 @@ class OperationNodeParserTests: XCTestCase {
                                                                rootPath: Constants.testServiceName)
         
         // then
-        XCTAssertEqual(generatedOperation.hasUndefinedResponseBody, expectedHasUndefinedRedponseBody)
-        XCTAssertEqual(generatedOperation.responseModel, expectedResponseModel)
+        XCTAssertEqual(generatedOperation.responseBody.isUndefined, expectedHasUndefinedRedponseBody)
+        XCTAssertEqual(generatedOperation.responseBody.model, expectedResponseModel)
     }
 
 }

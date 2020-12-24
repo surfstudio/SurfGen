@@ -60,6 +60,7 @@ class OperationNodeParser {
                                message: ErrorMessages.errorMessage())
         }
         let pathModel = PathGenerationModel(name: path.pathName,
+                                            constName: path.pathConst,
                                             path: path.pathWithParameterInterpolation(platform: platform),
                                             parameters: parameters.filter { $0.location == .path }.map { $0.name })
 

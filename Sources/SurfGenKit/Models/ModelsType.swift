@@ -26,4 +26,15 @@ public enum ModelType: String {
         return "\(value)\(getName(for: platform))"
     }
 
+    var templateName: String {
+        switch self {
+        case .entry:
+            return "Entry.txt"
+        case .entity:
+            return "Entity.txt"
+        case .enum:
+            return "Enum.txt"
+        }
+    }
+
 }

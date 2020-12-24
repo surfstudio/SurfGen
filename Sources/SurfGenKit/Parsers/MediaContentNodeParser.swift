@@ -54,7 +54,7 @@ class MediaContentNodeParser {
 
     func parseResponseBody(node: ASTNode?, forOperationName operationName: String) throws -> ResponseBody {
         guard let responseBodyNode = node else {
-            return .model(platform.voidType)
+            return .empty
         }
         guard
             let mediaContentNode = responseBodyNode.subNodes.first,

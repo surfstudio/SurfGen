@@ -80,9 +80,12 @@ final class ConfigManager {
 
     func getServiceGenerationPaths(for serviceName: String) throws -> [ServicePart: String] {
         return [
-            .urlRoute: model.endpointsPath,
-            .protocol: model.serviceProtocolsPath?.filePathInserting(name: serviceName.capitalizingFirstLetter()),
-            .service: model.servicesPath?.filePathInserting(name: serviceName.capitalizingFirstLetter())
+            .urlRoute: model.endpointsPath?.filePathInserting(name: serviceName.capitalizingFirstLetter()),
+            .protocol: model.servicesPath?.filePathInserting(name: serviceName.capitalizingFirstLetter()),
+            .service: model.servicesPath?.filePathInserting(name: serviceName.capitalizingFirstLetter()),
+            .apiInterface: model.apiInterfacePath?.filePathInserting(name: serviceName.capitalizingFirstLetter()),
+            .moduleDeclaration: model.modulePath?.filePathInserting(name: serviceName.capitalizingFirstLetter()),
+            .repository: model.repositoryPath?.filePathInserting(name: serviceName.capitalizingFirstLetter())
         ].compactMapValues { $0 }
     }
 

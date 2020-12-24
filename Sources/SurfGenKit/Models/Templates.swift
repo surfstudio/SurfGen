@@ -7,29 +7,10 @@
 //
 
 enum Template {
-    case nodeKitEntity(entityName: String, entryName: String, properties: [PropertyGenerationModel], description: String)
-    case nodeKitEntry(className: String, properties: [PropertyGenerationModel], description: String)
+    case entity(entityName: String, entryName: String, properties: [PropertyGenerationModel], description: String)
+    case entry(className: String, properties: [PropertyGenerationModel], description: String)
     case `enum`(EnumGenerationModel)
-    case urlRoute(ServiceGenerationModel)
-    case serviceProtocol(ServiceGenerationModel)
     case service(ServiceGenerationModel)
-
-    var fileName: String {
-        switch self {
-        case .nodeKitEntity:
-            return "Entity.txt"
-        case .nodeKitEntry:
-            return "Entry.txt"
-        case .enum:
-            return "Enum.txt"
-        case .urlRoute:
-            return "UrlRoute.txt"
-        case .serviceProtocol:
-            return "ServiceProtocol.txt"
-        case .service:
-            return "Service.txt"
-        }
-    }
 
     var context: [String: Any] {
         switch self {
@@ -40,14 +21,14 @@ enum Template {
                 "enumType": enumModel.enumType,
                 "cases": enumModel.cases
             ]
-        case .nodeKitEntry(let className, let properties, let description):
+        case .entry(let className, let properties, let description):
             return [
                 "description": description,
                 "className": className,
                 "properties": properties,
                 "isPlain": properties.allSatisfy { $0.isPlain }
             ]
-        case .nodeKitEntity(let entityName, let entryName, let properties, let description):
+        case .entity(let entityName, let entryName, let properties, let description):
             return [
                 "description": description,
                 "entityName": entityName,
@@ -55,9 +36,7 @@ enum Template {
                 "properties": properties,
                 "isPlain": properties.allSatisfy { $0.isPlain }
             ]
-        case .urlRoute(let serviceModel),
-             .serviceProtocol(let serviceModel),
-             .service(let serviceModel):
+        case .service(let serviceModel):
             return [
                 "name": serviceModel.name,
                 "hasKeys": serviceModel.hasKeys,

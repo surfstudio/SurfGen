@@ -75,8 +75,7 @@ final class TypeNodeParser {
                 return .object(subName)
             case ASTConstants.enum:
                 guard let type = PlainType.init(rawValue: subName) else {
-                    throw SurfGenError(nested: GeneratorError.nodeConfiguration("plain type name is not recognized"),
-                                       message: Constants.errorMessage)
+                    return .enum(subName)
                 }
                 return .enum(platform.plainType(type: type))
             default:

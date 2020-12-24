@@ -1,0 +1,14 @@
+import com.google.gson.annotations.SerializedName
+
+{% if description %}/**
+ * {{ description }}
+ */
+{% endif %}data class {{ className }}(
+ 	{% for property in properties %}
+ 	{% if property.description != nil %}/**
+ 	* {{ property.description }}
+ 	*/
+ 	{% endif %}@SerializedName("{{ property.entryName }}")
+ 	val {{ property.entityName }}: {{ property.type }}{% if property.isOptional %}?{% endif %}{% if not forloop.last %},
+ 	{% endif %}{% endfor %}
+ )

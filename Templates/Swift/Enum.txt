@@ -3,6 +3,6 @@
 */
 {% endif %}
 public enum {{ enumName }}: {{ enumType }}, Codable {
-    {% for caseValue in cases %}case <#caseValue#> = {{ caseValue }}{% if forloop.last %}
+    {% for case in cases %}case <#caseValue#> = {{ case.value }}{% if forloop.last %}
 }{% endif %}
     {% endfor %}

@@ -5,8 +5,8 @@ class {{ name }}Repository {
 	final Http _http;
 {% for operation in operations %}
 	{% if operation.hasDescription %}/// {{ operation.description }}
-	{% endif %}Future<{% if operation.hasUndefinedResponseBody %}/* response with undefined model name */{% else %}{#
-	#}{{ operation.responseModel }}{% endif %}> {{ operation.name }}({% for parameter in operation.pathParameters %}{#
+	{% endif %}Future<{% if operation.responseBody.isUndefined %}/* response with undefined model name */{% else %}{#
+	#}{{ operation.responseBody.model }}{% endif %}> {{ operation.name }}({% for parameter in operation.pathParameters %}{#
   #}String {{ parameter.name }}{% if not forloop.last or operation.hasQueryParameters or operation.hasBody %}, {% endif %}{% endfor %}{#
   #}{% for parameter in operation.queryParameters %}{{ parameter.type }} {{ parameter.name }}{% if not forloop.last or operation.hasBody %}, {% endif %}{% endfor %}{#
   #}{% if operation.hasBody %}{% if operation.requestBody.hasUnsupportedEncoding %}/* body with unsupported encoding */{% endif %}{#
@@ -29,7 +29,7 @@ class {{ name }}Repository {
   			{% endif %}{% endfor %}
   		}{% endif %},{% endif %}{% if operation.requestBody.hasFormEncoding %}
   		contentType: Headers.formUrlEncodedContentType,{% endif %}
-  	);{% if operation.hasResponseModel %}
-  	return {{ operation.responseModel }}.fromJson(response.body);{% endif %}
+  	);{% if not operation.responseBody.isEmpty %}
+  	return {{ operation.responseBody.model }}.fromJson(response.body);{% endif %}
 	}
 {% endfor %}}

@@ -23,14 +23,16 @@ final class EntityGenerator: CodeGenerator {
                                  with: "Could not generate code for entity")
 
         let properties = try declModel.fields
-            .map { try propertyGenerator.generateCode(for: $0, type: .entity) }
+            .map { try wrap(propertyGenerator.generateCode(for: $0, type: .entity),
+                            with: "Could not generate model \(declModel.name)") }
             .sorted { $0.entityName.propertyPriorityIndex > $1.entityName.propertyPriorityIndex }
         let className = ModelType.entity.form(name: declModel.name, for: platform)
 
-        let code = try environment.renderTemplate(.nodeKitEntity(entityName: className,
+        let code = try environment.renderTemplate(.entity(entityName: className,
                                                                  entryName: ModelType.entry.form(name: declModel.name, for: platform),
                                                                  properties: properties,
-                                                                 description: declNode.description ?? ""))
+                                                                 description: declNode.description ?? ""),
+                                                  from: ModelType.entity.templateName)
 
         return .init(fileName: className.capitalizingFirstLetter().withFileExtension(platform.fileExtension),
                      code: code)

@@ -23,14 +23,16 @@ final class EntryGenerator: CodeGenerator {
                                  with: "Could not generate entry code")
         
         let properties = try declModel.fields
-            .map { try propertyGenerator.generateCode(for: $0, type: .entry) }
+            .map { try wrap(propertyGenerator.generateCode(for: $0, type: .entry),
+                            with: "Could not generate model \(declModel.name)") }
             .sorted { $0.entryName.propertyPriorityIndex > $1.entryName.propertyPriorityIndex }
 
         let className = ModelType.entry.form(name: declModel.name, for: platform)
 
-        let code = try environment.renderTemplate(.nodeKitEntry(className: className,
+        let code = try environment.renderTemplate(.entry(className: className,
                                                                 properties: properties,
-                                                                description: declNode.description ?? ""))
+                                                                description: declNode.description ?? ""),
+                                                  from: ModelType.entry.templateName)
 
         return .init(fileName: className.capitalizingFirstLetter().withFileExtension(platform.fileExtension),
                      code: code)

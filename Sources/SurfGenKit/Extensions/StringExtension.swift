@@ -53,7 +53,23 @@ extension String {
             .snakeCaseToCamelCase()
             .capitalizingFirstLetter()
             .replacingOccurrences(of: camelRootPath, with: "")
+    }
+
+    var pathConst: String {
+        guard self.pathPartsCount > 1 else {
+            return self
+                .replacingOccurrences(of: "(?<!^)(?=[A-Z])", with: "_", options: .regularExpression)
+                .uppercased()
         }
+        return self
+            .replacingOccurrences(of: "[{}]", with: "", options: .regularExpression)
+            .split(separator: "/")
+            .map { String($0) }
+            .removingFirst()
+            .joined(separator: "_")
+            .replacingOccurrences(of: "(?<!^)(?=[A-Z])", with: "_", options: .regularExpression)
+            .uppercased()
+    }
 
     var pathName: String {
         guard self.pathPartsCount > 1 else {

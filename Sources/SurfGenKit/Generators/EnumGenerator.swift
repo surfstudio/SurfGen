@@ -26,17 +26,24 @@ final class EnumGenerator: CodeGenerator {
         let type = try wrap(TypeNodeParser(platform: platform).detectType(for: typeNode),
                             with: "Could not generate num code")
 
-        let cases: [String] = declModel.fields.compactMap {
-            if case let .value(value) = $0.token {
-                return type.enumType == "String" ? "\"\(value)\"" : value
+        let cases: [EnumCase] = declModel.fields.compactMap {
+            guard case let .value(value) = $0.token else {
+                return nil
             }
-            return nil
+            if type.enumType == platform.plainType(type: .string) {
+                return EnumCase(name: platform.constant(name: value),
+                                camelCaseName: value.snakeCaseToCamelCase().capitalizingFirstLetter(),
+                                value: "\"\(value)\"")
+            } else {
+                return EnumCase(name: nil, camelCaseName: nil, value: value)
+            }
         }
         let enumModel = EnumGenerationModel(enumName: declModel.name,
                                             enumType: type.enumType ?? "",
                                             cases: cases,
                                             description: declModel.description ?? "")
-        let code = try environment.renderTemplate(.enum(enumModel))
+        let code = try environment.renderTemplate(.enum(enumModel),
+                                                  from: ModelType.enum.templateName)
 
         return .init(fileName: declModel.name.withFileExtension(platform.fileExtension),
                      code: code.trimmingCharacters(in: .whitespacesAndNewlines))

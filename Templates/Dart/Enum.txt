@@ -1,5 +1,5 @@
 {% if description %}
 /// {{ description }}{% endif %}
 enum {{ enumName }}: {
-{% for caseValue in cases %}	{{ caseValue }}{% if not forloop.last %},{% endif %}
+{% for case in cases %}	{% if case != nil %}{{ case.name }}{% else %}{{ case.value }}{% endif %}{% if not forloop.last %},{% endif %}
 {% endfor %}}

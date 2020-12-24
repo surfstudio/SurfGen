@@ -7,18 +7,26 @@
 
 public enum Platform: String {
     case dart
+    case kotlin
     case swift
 
     var fileExtension: String {
-        return rawValue
+        switch self {
+        case .dart, .swift:
+            return rawValue
+        case .kotlin:
+            return "kt"
+        }
     }
 
-    var voidType: String {
+    var serviceParts: [ServicePart] {
         switch self {
         case .dart:
-            return "void"
+            return [.repository, .urlRoute]
+        case .kotlin:
+            return [.moduleDeclaration, .apiInterface, .repository, .urlRoute]
         case .swift:
-            return "Void"
+            return [.service, .protocol, .urlRoute]
         }
     }
 
@@ -37,7 +45,7 @@ public enum Platform: String {
 
     var entitySuffix: String {
         switch self {
-        case .dart:
+        case .dart, .kotlin:
             return ""
         case .swift:
             return "Entity"
@@ -46,7 +54,7 @@ public enum Platform: String {
 
     var entrySuffix: String {
         switch self {
-        case .dart:
+        case .dart, .kotlin:
             return ""
         case .swift:
             return "Entry"
@@ -55,7 +63,7 @@ public enum Platform: String {
 
     var arrayLiteral: (start: String, end: String) {
         switch self {
-        case .dart:
+        case .dart, .kotlin:
             return ("List<", ">")
         case .swift:
             return ("[", "]")
@@ -66,8 +74,19 @@ public enum Platform: String {
         switch self {
         case .dart:
             return ("$", "")
+        case .kotlin:
+            return ("{", "}")
         case .swift:
             return ("\\(", ")")
+        }
+    }
+
+    func constant(name: String) -> String {
+        switch self {
+        case .dart, .swift:
+            return name.snakeCaseToCamelCase()
+        case .kotlin:
+            return name.uppercased()
         }
     }
 
@@ -75,6 +94,8 @@ public enum Platform: String {
         switch self {
         case .dart:
             return "bool"
+        case .kotlin:
+            return "Boolean"
         case .swift:
             return "Bool"
         }
@@ -84,7 +105,7 @@ public enum Platform: String {
         switch self {
         case .dart:
             return "int"
-        case .swift:
+        case .kotlin, .swift:
             return "Int"
         }
     }
@@ -93,7 +114,7 @@ public enum Platform: String {
         switch self {
         case .dart:
             return "double"
-        case .swift:
+        case .kotlin, .swift:
             return "Double"
         }
     }
@@ -102,7 +123,7 @@ public enum Platform: String {
         switch self {
         case .dart:
             return "String"
-        case .swift:
+        case .kotlin, .swift:
             return "String"
         }
     }

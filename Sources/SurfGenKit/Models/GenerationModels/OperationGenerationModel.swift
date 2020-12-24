@@ -22,12 +22,6 @@ enum HttpMethod: String {
     }
 }
 
-enum ResponseBody: Equatable {
-    case model(String)
-    case arrayOf(String)
-    case unsupportedObject
-}
-
 public struct OperationGenerationModel {
     
     private enum Constants {
@@ -46,10 +40,7 @@ public struct OperationGenerationModel {
 
     let hasBody: Bool
     var requestBody: RequestBodyGenerationModel?
-
-    private(set) var hasUndefinedResponseBody = false
-    private(set) var hasResponseModel = false
-    private(set) var responseModel: String?
+    var responseBody: ResponseBodyGenerationModel
     
     init(name: String,
          description: String?,
@@ -70,16 +61,7 @@ public struct OperationGenerationModel {
         self.queryParameters = queryParameters
         self.hasBody = requestBody != nil
         self.requestBody = RequestBodyGenerationModel(type: requestBody)
-
-        switch responseBody {
-        case .model(let modelName):
-            self.hasResponseModel = true
-            self.responseModel = modelName
-        case .arrayOf(let modelName):
-            self.responseModel = modelName
-        case .unsupportedObject:
-            self.hasUndefinedResponseBody = true
-        }
+        self.responseBody = ResponseBodyGenerationModel(response: responseBody)
     }
 
 }
