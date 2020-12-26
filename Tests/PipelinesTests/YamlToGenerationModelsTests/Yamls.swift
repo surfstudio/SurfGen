@@ -20,12 +20,12 @@ extension ParametersTests {
           parameters:
             - name: id2
               required: true
-              in: path
+              in: query
               schema:
                 type: integer
             - name: id3
               required: true
-              in: path
+              in: query
               schema:
                 type: string
           responses:
@@ -49,9 +49,9 @@ extension ParametersTests {
           parameters:
             - name: id
               required: true
-              in: path
+              in: query
               schema:
-                $ref:"#/components/schemas/ServiceStatus"
+                $ref: "#/components/schemas/ServiceStatus"
           responses:
             "200":
               description: "Все ок"
@@ -80,9 +80,9 @@ extension ParametersTests {
           parameters:
             - name: id
               required: true
-              in: path
+              in: query
               schema:
-                $ref:"#/components/schemas/ServiceStatus"
+                $ref: "#/components/schemas/ServiceStatus"
           responses:
             "200":
               description: "Все ок"
@@ -112,9 +112,9 @@ extension ParametersTests {
           parameters:
             - name: id
               required: true
-              in: path
+              in: query
               schema:
-                $ref:"#/components/schemas/ServiceStatus"
+                $ref: "#/components/schemas/ServiceStatus"
           responses:
             "200":
               description: "Все ок"
@@ -141,9 +141,9 @@ extension ParametersTests {
           parameters:
             - name: id
               required: true
-              in: path
+              in: query
               schema:
-                $ref:"models.yaml#/components/schemas/ServiceStatus"
+                $ref: "models.yaml#/components/schemas/ServiceStatus"
           responses:
             "200":
               description: "Все ок"
@@ -171,9 +171,9 @@ extension ParametersTests {
           parameters:
             - name: id
               required: true
-              in: path
+              in: query
               schema:
-                $ref:"models.yaml#/components/schemas/CycledA"
+                $ref: "models.yaml#/components/schemas/CycledA"
           responses:
             "200":
               description: "Все ок"
@@ -202,9 +202,9 @@ extension ParametersTests {
             Param:
               name: id
               required: true
-              in: path
+              in: query
               schema:
-                $ref:"#/components/schemas/ServiceStatus"
+                $ref: "#/components/schemas/ServiceStatus"
 
         schemas:
             ServiceStatus:

@@ -49,6 +49,11 @@ extension AnyParametersBuilder {
             throw CustomError(message: "We don't support `content` parameter's type")
         case .schema(let schema):
 
+
+            // TODO: - Remove it
+            // because this method provides possiblity to parse parameters types as any schema
+            // or add tests for this class for each type of parameter's type
+
             let schemas = try self.schemaBuilder.build(schemas: [.init(name: "", value: schema.schema)])
 
             guard schemas.count == 1 else {

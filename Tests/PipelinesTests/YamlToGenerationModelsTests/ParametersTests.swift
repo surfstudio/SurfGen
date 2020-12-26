@@ -11,6 +11,11 @@ import CodeGenerator
 
 @testable import Pipelines
 
+/// WARNING!!!
+///
+/// If you specialize url like `/path/to/method` and then in parameters you will describe parameter which is located in pacth
+/// Then your parameter won't be recongnized!!!
+
 /// This test contains cases for cheking that all scenarious which are conected to parsing parameters works
 ///
 /// Cases:
@@ -200,7 +205,7 @@ final class ParametersTests: XCTestCase {
 
         guard
             let param = paramType,
-            case SchemaType.primitive = param
+            case SchemaType.alias = param
         else {
             XCTFail("Type \(paramType) is not enum")
             return
@@ -249,7 +254,7 @@ final class ParametersTests: XCTestCase {
 
         guard
             let param = paramType,
-            case SchemaType.primitive = param
+            case SchemaType.alias = param
         else {
             XCTFail("Type \(paramType) is not enum")
             return
@@ -298,7 +303,7 @@ final class ParametersTests: XCTestCase {
 
         guard
             let param = paramType,
-            case SchemaType.primitive = param
+            case SchemaType.alias = param
         else {
             XCTFail("Type \(paramType) is not enum")
             return

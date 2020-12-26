@@ -76,8 +76,8 @@ extension RootNode {
                 return val.name == name
             case .enum(let val):
                 return val.name == name
-            case .simple:
-                throw CustomError(message: "\(name) is simple. Now reference which is referenced to simple type is unsupported")
+            case .simple(let val):
+                return val.name == name
             case .reference:
                 throw CustomError(message: "\(name) is refrence. Now reference which is referenced to another reference is unsupported")
             }

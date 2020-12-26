@@ -41,7 +41,9 @@ public struct ParametersTreeParser {
         case .enum(let val):
             throw CustomError(message: "Parameters's type must not contains `enum` definition, but it contains \(val)")
         case .simple(let primitive):
-            return .primitive(primitive)
+            // TODO: - At this place we ignore definition of alias inside parameter
+            // so idk if we need it.
+            return .primitive(primitive.type)
         case .reference(let ref):
             return .reference(try Resolver().resolveSchema(ref: ref, node: current, other: other))
         }
@@ -66,7 +68,7 @@ class Resolver {
             }
             return .enum(.init(name: val.name, cases: val.cases, type: type))
         case .simple(let val):
-            return .primitive(val)
+            return .alias(.init(name: val.name, type: val.type))
         case .object(let val):
             return try self.resolveObject(val: val, node: node, other: other)
         case .reference(let ref):

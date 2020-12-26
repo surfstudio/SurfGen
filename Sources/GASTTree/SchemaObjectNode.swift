@@ -12,7 +12,7 @@ public struct SchemaObjectNode {
     public indirect enum Possibility {
         case object(SchemaModelNode)
         case `enum`(SchemaEnumNode)
-        case simple(PrimitiveType)
+        case simple(PrimitiveTypeAliasNode)
         case reference(String)
     }
 

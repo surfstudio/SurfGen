@@ -25,7 +25,7 @@ public enum SchemaType {
     /// And `UserID` is just an alias on `String` type
     ///
     /// In Swift it would look like `typealias UserID = String`
-    case primitive(PrimitiveType)
+    case alias(PrimitiveTypeAliasModel)
     /// It's an entity with `PrimitiveType` but it has property `enum`
     case `enum`(SchemaEnumModel)
     /// Entity which `type` property is `object`

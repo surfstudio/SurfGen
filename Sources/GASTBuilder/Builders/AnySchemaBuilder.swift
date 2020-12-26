@@ -47,18 +47,18 @@ public struct AnySchemaBuilder: SchemaBuilder {
         case .group:
             throw CustomError.notInplemented()
         case .number:
-            return .init(next: .simple(.number))
+            return .init(next: .simple(.init(name: schema.name, type: .number)))
         case .integer:
-            return .init(next: .simple(.integer))
+            return .init(next: .simple(.init(name: schema.name, type: .integer)))
         case .boolean:
-            return .init(next: .simple(.boolean))
+            return .init(next: .simple(.init(name: schema.name, type: .boolean)))
         }
     }
 
     func processString(schema: ComponentObject<Schema>) throws -> SchemaObjectNode {
 
         guard let enumValues = schema.value.metadata.enumValues else {
-            return .init(next: .simple(.string))
+            return .init(next: .simple(.init(name: schema.name, type: .string)))
         }
 
         guard let stringCases = enumValues as? [String] else {
