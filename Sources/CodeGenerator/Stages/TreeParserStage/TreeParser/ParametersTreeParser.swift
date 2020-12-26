@@ -15,7 +15,7 @@ public struct ParametersTreeParser {
         case .entity(let paramNode):
             return .notReference(try self.parse(parameter: paramNode, current: current, other: other))
         case .ref(let ref):
-            throw CustomError.notInplemented()
+            return .reference(try Resolver().resolveParameter(ref: ref, node: current, other: other))
 //            return .reference(try Resolver().resolveSchema(ref: ref, node: current, other: other))
         }
     }
@@ -27,7 +27,8 @@ public struct ParametersTreeParser {
             message: "While parsing parameter \(parameter.name)"
         )
 
-        return .init(name: parameter.name,
+        return .init(componentName: parameter.componentName,
+                     name: parameter.name,
                      location: parameter.location,
                      type: type,
                      description: parameter.description,
@@ -51,6 +52,39 @@ public struct ParametersTreeParser {
 }
 
 class Resolver {
+
+    func resolveParameter(ref: String, node: DependencyWithTree, other: [DependencyWithTree]) throws -> ParameterModel {
+
+        let res = ref.split(separator: "#")
+
+        if res.count == 2 {
+            let dep = try self.resolveRefToAnotherFile(ref: ref, node: node, other: other)
+            return try self.resolveParameter(ref: "#\(res[1])", node: dep, other: other)
+        }
+
+        let resolved: ParameterNode = try node.tree.resolve(reference: String(ref))
+
+        switch resolved.type.schema.next {
+        case .object:
+            throw CustomError(message: "Parameter \(resolved.name) from file '\(node.dependency.pathToCurrentFile) contains object definition in type. This is unsupported.")
+        case .enum:
+            throw CustomError(message: "Parameter \(resolved.name) from file '\(node.dependency.pathToCurrentFile) contains enum definition in type. This is unsupported.")
+        case .simple(let simple):
+            return .init(componentName: resolved.componentName,
+                         name: resolved.name,
+                         location: resolved.location,
+                         type: .primitive(simple.type),
+                         description: resolved.description,
+                         isRequired: resolved.isRequired)
+        case .reference(let newRef):
+            return .init(componentName: resolved.componentName,
+                         name: resolved.name,
+                         location: resolved.location,
+                         type: .reference(try resolveSchema(ref: newRef, node: node, other: other)),
+                         description: resolved.description,
+                         isRequired: resolved.isRequired)
+        }
+    }
 
     func resolveSchema(ref: String, node: DependencyWithTree, other: [DependencyWithTree]) throws -> SchemaType {
         let res = ref.split(separator: "#")
@@ -84,7 +118,7 @@ class Resolver {
             throw CustomError(message: "Reference whics was used in resolving dependency in another file")
         }
 
-        return try self.resolveSchema(ref: String(splited[1]), node: dep, other: other)
+        return try self.resolveSchema(ref: "#\(splited[1])", node: dep, other: other)
     }
 
     private func resolveRefToAnotherFile(ref: String, node: DependencyWithTree, other: [DependencyWithTree]) throws -> DependencyWithTree {

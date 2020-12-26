@@ -41,7 +41,8 @@ extension AnyServiceBuilder {
                     return .ref(ref.rawValue)
                 case .value(let val):
                     let params = try wrap(
-                        self.parameterBuilder.build(parameters: [.init(name: val.name, value: val)]),
+                        // TODO: - think about how to fix emty string
+                        self.parameterBuilder.build(parameters: [.init(name: "", value: val)]),
                         message: "While parsing operation's parameter \(val.name)")
 
                     guard params.count == 1 else {

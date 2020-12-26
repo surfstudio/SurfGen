@@ -86,7 +86,7 @@ extension RootNode {
 
     func resolveParameter(name: String) throws -> Any? {
         return self.parameters.first(where: { param -> Bool in
-            return param.name == name
+            return param.componentName == name
         })
     }
 }

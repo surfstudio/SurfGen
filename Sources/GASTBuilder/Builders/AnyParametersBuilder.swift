@@ -32,11 +32,13 @@ public struct AnyParametersBuilder: ParametersBuilder {
             let type = try wrap(self.parse(type: parameter.value.type),
                                 message: "While parsing parameter \(parameter.name)")
 
-            return ParameterNode(name: parameter.name,
-                                 location: loc,
-                                 description: parameter.value.description,
-                                 type: type,
-                                 isRequired: parameter.value.required)
+            return ParameterNode(
+                componentName: parameter.name,
+                name: parameter.value.name,
+                location: loc,
+                description: parameter.value.description,
+                type: type,
+                isRequired: parameter.value.required)
         }
     }
 }

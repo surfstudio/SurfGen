@@ -14,17 +14,20 @@ public struct ParameterNode {
         case path
     }
 
+    public let componentName: String?
     public let name: String
     public let location: Location
     public let description: String?
     public let type: ParameterTypeNode
     public let isRequired: Bool
 
-    public init(name: String,
+    public init(componentName: String?,
+                name: String,
                 location: Location,
                 description: String?,
                 type: ParameterTypeNode,
                 isRequired: Bool) {
+        self.componentName = componentName
         self.name = name
         self.location = location
         self.description = description

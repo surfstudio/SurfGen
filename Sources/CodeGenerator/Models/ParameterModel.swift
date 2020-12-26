@@ -15,6 +15,8 @@ public struct ParameterModel {
         case reference(SchemaType)
     }
 
+    // this name is set when the parameter was declared in `components`
+    public let componentName: String?
     public let name: String
     public let location: ParameterNode.Location
     public let type: PossibleType

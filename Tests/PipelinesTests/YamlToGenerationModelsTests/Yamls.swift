@@ -151,11 +151,6 @@ extension ParametersTests {
                 application/json:
                   schema:
                     type: string
-    components:
-        schemas:
-            ServiceStatus:
-              type: string
-              description: Статус услуги
 """.data(using: .utf8)!
 
     /// Contains service `messages` with one operation `get`
@@ -215,14 +210,12 @@ extension ParametersTests {
               type: object
               properties:
                 cycle:
-                  type:
                     $ref: "#/components/schemas/CycledB"
 
             CycledB:
               type: object
               properties:
                 cycle:
-                  type:
                     $ref: "#/components/schemas/CycledA"
 """.data(using: .utf8)!
 
@@ -236,7 +229,7 @@ extension ParametersTests {
         get:
           summary: Список сообщений пользователя. Тут приходят полные сообщения (вместе с детальным представлением)
           parameters:
-            $ref: "models.yaml#/components/parameters/Param"
+            - $ref: "models.yaml#/components/parameters/Param"
           responses:
             "200":
               description: "Все ок"

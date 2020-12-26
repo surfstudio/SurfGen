@@ -199,7 +199,6 @@ final class ParametersTests: XCTestCase {
 
         XCTAssertEqual(params.count, 1)
 
-        // не видит параметр
         let firstParam = params.first(where: { $0.name == "id" })
         let paramType = try firstParam?.type().notPrimitiveType()
 
@@ -230,7 +229,7 @@ final class ParametersTests: XCTestCase {
         var result = [[ServiceModel]]()
 
         factory.resultClosure = { (val: [[ServiceModel]]) throws -> Void in
-            result = val
+            result = val.filter { $0.count != 0 }
         }
 
         let pipeline = factory.build()
@@ -248,7 +247,6 @@ final class ParametersTests: XCTestCase {
 
         XCTAssertEqual(params.count, 1)
 
-        // не видит параметр
         let firstParam = params.first(where: { $0.name == "id" })
         let paramType = try firstParam?.type().notPrimitiveType()
 
@@ -297,7 +295,6 @@ final class ParametersTests: XCTestCase {
 
         XCTAssertEqual(params.count, 1)
 
-        // не видит параметр
         let firstParam = params.first(where: { $0.name == "id" })
         let paramType = try firstParam?.type().notPrimitiveType()
 
@@ -330,7 +327,7 @@ final class ParametersTests: XCTestCase {
         var result = [[ServiceModel]]()
 
         factory.resultClosure = { (val: [[ServiceModel]]) throws -> Void in
-            result = val
+            result = val.filter { $0.count != 0 }
         }
 
         let pipeline = factory.build()
@@ -348,7 +345,6 @@ final class ParametersTests: XCTestCase {
 
         XCTAssertEqual(params.count, 1)
 
-        // не видит параметр
         let firstParam = params.first(where: { $0.name == "id" })
         let paramType = try firstParam?.refType()
 
