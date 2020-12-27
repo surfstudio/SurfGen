@@ -201,7 +201,7 @@ final class ServiceUseCasesTests: XCTestCase {
             pathToModels: ServiceUseCasesTestsYamls.components
         ]
 
-        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build()
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build(allowAllTypesOfSchema: true)
 
         // Act - Assert
 

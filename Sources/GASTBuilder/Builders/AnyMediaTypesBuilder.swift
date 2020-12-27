@@ -17,6 +17,9 @@ public protocol MediaTypesBuilder {
 public struct AnyMediaTypesBuilder: MediaTypesBuilder {
 
     public let schemaBuilder: SchemaBuilder
+    /// If set to `true` disable errors for cases when MediaType schema cotains definition of object/enum/alias e.t.c
+    /// If set to `false` throws error for any case except reference
+    /// By default set to `false`
     public let allowAllTypesOfSchema: Bool
 
     public init(schemaBuilder: SchemaBuilder, allowAllTypesOfSchema: Bool = false) {
@@ -35,11 +38,11 @@ public struct AnyMediaTypesBuilder: MediaTypesBuilder {
             }
 
             switch schema[0].next {
-            case .object:
+            case .object where allowAllTypesOfSchema:
                 throw CustomError(message: "MediaType shouldn't contains object definition. Only refs supported")
-            case .enum:
+            case .enum where allowAllTypesOfSchema:
                 throw CustomError(message: "MediaType shouldn't contains object definition. Only refs supported")
-            case .simple:
+            case .simple where allowAllTypesOfSchema:
                 throw CustomError(message: "MediaType shouldn't contains object definition. Only refs supported")
             case .reference:
                 break

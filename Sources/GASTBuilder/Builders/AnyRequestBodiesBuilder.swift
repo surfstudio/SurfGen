@@ -10,11 +10,15 @@ import GASTTree
 import Swagger
 import Common
 
+public protocol RequestBodyBuilder {
+    func build(requestBody: RequestBody) throws -> RequestBodyNode
+}
+
 public protocol RequestBodiesBuilder {
     func build(requestBodies: [ComponentObject<RequestBody>]) throws -> [ComponentRequestBodyNode]
 }
 
-public struct AnyRequestBodiesBuilder: RequestBodiesBuilder {
+public struct AnyRequestBodiesBuilder: RequestBodiesBuilder, RequestBodyBuilder {
 
     public let mediaTypesBuilder: MediaTypesBuilder
 
@@ -32,7 +36,7 @@ public struct AnyRequestBodiesBuilder: RequestBodiesBuilder {
         }
     }
 
-    func build(requestBody: RequestBody) throws -> RequestBodyNode {
+    public func build(requestBody: RequestBody) throws -> RequestBodyNode {
         let content = try wrap(
             self.mediaTypesBuilder.buildMediaItems(items: requestBody.content.mediaItems),
             message: "While build media types")

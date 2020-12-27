@@ -18,10 +18,17 @@ public struct AnyServiceBuilder: ServiceBuilder {
 
     let parameterBuilder: ParametersBuilder
     let schemaBuilder: SchemaBuilder
+    let requestBodyBuilder: RequestBodyBuilder
+    let responseBuilder: ResponseBuilder
 
-    public init(parameterBuilder: ParametersBuilder, schemaBuilder: SchemaBuilder) {
+    public init(parameterBuilder: ParametersBuilder,
+                schemaBuilder: SchemaBuilder,
+                requestBodyBuilder: RequestBodyBuilder,
+                responseBuilder: ResponseBuilder) {
         self.parameterBuilder = parameterBuilder
         self.schemaBuilder = schemaBuilder
+        self.requestBodyBuilder = requestBodyBuilder
+        self.responseBuilder = responseBuilder
     }
 
     public func build(paths: [Path]) throws -> [PathNode] {
@@ -82,13 +89,14 @@ extension AnyServiceBuilder {
         case .reference(let ref):
             return .ref(ref.rawValue)
         case .value(let val):
-            let content = try self.buildMediaItems(items: val.content.mediaItems)
-            return .entity(.init(description: val.description, content: content, isRequired: val.required))
+            let node = try self.requestBodyBuilder.build(requestBody: val)
+            return .entity(node)
         }
     }
 
     func buildOperationResponses(responses: [OperationResponse]) throws -> [OperationNode.ResponseBody] {
         return try responses.map { response -> OperationNode.ResponseBody in
+
             let builtResponse = try self.buildResponse(response: response.response)
             let key = { () -> String in
                 guard let statusCode = response.statusCode else {
@@ -105,11 +113,7 @@ extension AnyServiceBuilder {
         case .reference(let ref):
             return .ref(ref.rawValue)
         case .value(let val):
-            guard let rawContent = val.content else {
-                throw CustomError(message: "SurfGen doesn't support responeses without content")
-            }
-            let content = try self.buildMediaItems(items: rawContent.mediaItems)
-            return .entity(.init(description: val.description, content: content))
+            return .entity(try self.responseBuilder.build(response: val))
         }
     }
 

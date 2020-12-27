@@ -10,11 +10,15 @@ import GASTTree
 import Swagger
 import Common
 
+public protocol ResponseBuilder {
+    func build(response: Response) throws -> ResponseNode
+}
+
 public protocol ResponsesBuilder {
     func build(responses: [ComponentObject<Response>]) throws -> [ComponentResponseNode]
 }
 
-public struct AnyResponsesBuilder: ResponsesBuilder {
+public struct AnyResponsesBuilder: ResponsesBuilder, ResponseBuilder {
 
     public let mediaTypesBuilder: MediaTypesBuilder
 
@@ -32,12 +36,11 @@ public struct AnyResponsesBuilder: ResponsesBuilder {
         }
     }
 
-    func build(response: Response) throws -> ResponseNode {
+    public func build(response: Response) throws -> ResponseNode {
 
         guard let responseContent = response.content else {
             throw CustomError(message: "SurfGen doesn't support response body without content")
         }
-
 
         let content = try wrap(
             self.mediaTypesBuilder.buildMediaItems(items: responseContent.mediaItems),

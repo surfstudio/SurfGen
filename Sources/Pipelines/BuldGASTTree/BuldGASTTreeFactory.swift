@@ -21,10 +21,17 @@ public struct BuldGASTTreeFactory {
     public static func build() -> BuildGASTTreeEntryPoint {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
-        let serviceBuilder = AnyServiceBuilder(parameterBuilder: parameterBuilder, schemaBuilder: schemaBuilder)
         let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder)
         let responsesBuilder = AnyResponsesBuilder(mediaTypesBuilder: mediaTypesBuilder)
         let requestBodiesBuilder = AnyRequestBodiesBuilder(mediaTypesBuilder: mediaTypesBuilder)
+
+        let serviceBuilder = AnyServiceBuilder(
+            parameterBuilder: parameterBuilder,
+            schemaBuilder: schemaBuilder,
+            requestBodyBuilder: requestBodiesBuilder,
+            responseBuilder: responsesBuilder
+        )
+
         return .init(
             refExtractorProvider: self.provider(str:),
             next: .init(
