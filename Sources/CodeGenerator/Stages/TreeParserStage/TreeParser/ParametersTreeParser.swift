@@ -53,9 +53,31 @@ public struct ParametersTreeParser {
 
 class Resolver {
 
+    struct Ref {
+        let pathToFile: String
+        let refValue: String
+    }
+
+    var refStack = [Ref]()
+
     func resolveParameter(ref: String, node: DependencyWithTree, other: [DependencyWithTree]) throws -> ParameterModel {
 
         let res = ref.split(separator: "#")
+
+        let intRef = Ref(pathToFile: node.dependency.pathToCurrentFile, refValue: ref)
+
+        let fromStack = refStack
+            .filter { $0.pathToFile == node.dependency.pathToCurrentFile }
+            .first { $0.refValue == ref }
+
+        guard fromStack == nil else {
+
+            let stack = self.refStack.reduce("", { $0 + "--> \($1.pathToFile) : \($1.refValue)" })
+
+            throw CustomError(message: "There is a reference cycle which is found for reference \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(stack)")
+        }
+
+        self.refStack.append(intRef)
 
         if res.count == 2 {
             let dep = try self.resolveRefToAnotherFile(ref: ref, node: node, other: other)
@@ -87,6 +109,22 @@ class Resolver {
     }
 
     func resolveSchema(ref: String, node: DependencyWithTree, other: [DependencyWithTree]) throws -> SchemaType {
+
+        let intRef = Ref(pathToFile: node.dependency.pathToCurrentFile, refValue: ref)
+
+        let fromStack = refStack
+            .filter { $0.pathToFile == node.dependency.pathToCurrentFile }
+            .first { $0.refValue == ref }
+
+        guard fromStack == nil else {
+
+            let stack = self.refStack.reduce("", { $0 + "--> \($1.pathToFile) : \($1.refValue) " })
+
+            throw CustomError(message: "There is a reference cycle which is found for reference \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(stack)")
+        }
+
+        self.refStack.append(intRef)
+
         let res = ref.split(separator: "#")
 
         if res.count == 2 {

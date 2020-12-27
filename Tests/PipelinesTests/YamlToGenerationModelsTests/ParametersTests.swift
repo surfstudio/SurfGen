@@ -282,28 +282,10 @@ final class ParametersTests: XCTestCase {
 
         let pipeline = factory.build()
 
-        // Act
+        // Act-Assert
 
-        try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!))
-
-        // Assert
-
-        guard let params = result[0][0].operations[0].parameters else {
-            XCTFail("Can't extract params from \(result)")
-            return
-        }
-
-        XCTAssertEqual(params.count, 1)
-
-        let firstParam = params.first(where: { $0.name == "id" })
-        let paramType = try firstParam?.type().notPrimitiveType()
-
-        guard
-            let param = paramType,
-            case SchemaType.alias = param
-        else {
-            XCTFail("Type \(paramType) is not enum")
-            return
+        XCTAssertThrowsError(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!))) { (err) in
+            print(err.localizedDescription)
         }
     }
 
