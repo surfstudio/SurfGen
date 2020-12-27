@@ -213,7 +213,7 @@ enum ServiceUseCasesTestsYamls {
               content:
                 application/json:
                   schema:
-                    $ref: "models.yaml#/components/schemas/CycledB"
+                    $ref: "models.yaml#/components/schemas/ServiceStatus"
             "200":
                 content:
                     application/json:

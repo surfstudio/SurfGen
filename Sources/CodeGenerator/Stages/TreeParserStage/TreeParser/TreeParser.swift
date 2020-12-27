@@ -17,7 +17,17 @@ import Common
 
 public struct TreeParser {
 
-    let parametersParser = ParametersTreeParser()
+    let parametersParser: ParametersTreeParser
+    let requestBodyParser: RequestBodyParser
+    let responsesParser: ResponseBodyParser
+
+    public init(parametersParser: ParametersTreeParser,
+                requestBodyParser: RequestBodyParser,
+                responsesParser: ResponseBodyParser) {
+        self.parametersParser = parametersParser
+        self.requestBodyParser = requestBodyParser
+        self.responsesParser = responsesParser
+    }
 
     public func parse(trees: [DependencyWithTree]) throws -> [[ServiceModel]] {
         let mapper = { (tree: DependencyWithTree) throws -> [ServiceModel] in
@@ -69,12 +79,27 @@ public struct TreeParser {
                 message: "While parsing parameter \(parameter.view)")
         }
 
+        let requestBody = try { () throws -> Reference<RequestModel, RequestModel>? in
+            guard let body = operation.requestBody else {
+                return nil
+            }
+            return try wrap(
+                self.requestBodyParser.parse(requestBody: body, current: current, other: other),
+                message: "While parsing requestBody"
+            )
+        }()
+
+        let responses = try wrap(
+            self.responsesParser.build(responses: operation.responses, current: current, other: other),
+            message: "While parsing responses"
+        )
+
         return .init(
             httpMethod: operation.method,
             description: operation.description,
             parameters: params,
-            responseModel: nil,
-            requestModel: nil
+            responses: responses,
+            requestModel: requestBody
         )
     }
 }

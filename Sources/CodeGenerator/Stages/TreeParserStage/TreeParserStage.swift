@@ -11,15 +11,18 @@ import Common
 
 public struct TreeParserStage {
 
+
+    public let parser: TreeParser
+
     var next: (([[ServiceModel]]) throws -> Void)?
 
-    public init(next: (([[ServiceModel]]) throws -> Void)? = nil) {
+    public init(next: (([[ServiceModel]]) throws -> Void)? = nil, parser: TreeParser) {
         self.next = next
+        self.parser = parser
     }
 
     public func run(input: [DependencyWithTree]) throws {
-        let parser = TreeParser()
-        let res = try wrap(parser.parse(trees: input), message: "While parsing GAST to generation models")
+        let res = try wrap(self.parser.parse(trees: input), message: "While parsing GAST to generation models")
         try self.next?(res)
     }
 }

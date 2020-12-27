@@ -47,7 +47,8 @@ public struct StubGASTTreeFactory {
     public func build(enableDisclarationChecking: Bool = false) -> BuildGASTTreeEntryPoint {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
-        let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder, enableDisclarationChecking: enableDisclarationChecking)
+        let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder,
+                                                     enableDisclarationChecking: enableDisclarationChecking)
         let responsesBuilder = AnyResponsesBuilder(mediaTypesBuilder: mediaTypesBuilder)
         let requestBodiesBuilder = AnyRequestBodiesBuilder(mediaTypesBuilder: mediaTypesBuilder)
 
@@ -57,6 +58,8 @@ public struct StubGASTTreeFactory {
             requestBodyBuilder: requestBodiesBuilder,
             responseBuilder: responsesBuilder
         )
+
+        let parser = self.buildParser(enableDisclarationChecking: enableDisclarationChecking)
 
         return .init(
             refExtractorProvider: self.provider(str:),
@@ -68,8 +71,22 @@ public struct StubGASTTreeFactory {
                     serviceBuilder: serviceBuilder,
                     responsesBuilder: responsesBuilder,
                     requestBodiesBuilder: requestBodiesBuilder),
-                next: InitCodeGenerationStage(parserStage: .init(next: resultClosure)).erase())
+                next: InitCodeGenerationStage(parserStage: .init(next: resultClosure, parser: parser)).erase())
         )
+    }
+
+    func buildParser(enableDisclarationChecking: Bool = false) -> TreeParser {
+
+        let mediaTypeParser: MediaTypeParser = enableDisclarationChecking ?
+            AnyMediaTypeParser() :
+            AnyMediaTypeParserStub()
+
+        let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser)
+        let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser)
+
+        return .init(parametersParser: .init(),
+                     requestBodyParser: requestBodyParser,
+                     responsesParser: responsesParser)
     }
 }
 
