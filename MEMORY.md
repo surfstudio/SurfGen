@@ -44,3 +44,9 @@ idk if we should do cmth with it
 ----
 
 TreeParser returns arrays caount the same as dependencies count. It looks like a big fall in logic
+
+---
+
+Doesn't support response headers
+
+---

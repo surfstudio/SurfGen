@@ -22,7 +22,8 @@ var testTargets: [Target] = [
     ),
     .testTarget(
         name: "PipelinesTests",
-        dependencies: ["Pipelines", "CodeGenerator", "Common", "ReferenceExtractor", "GASTBuilder"])
+        dependencies: ["Pipelines", "CodeGenerator", "Common", "ReferenceExtractor", "GASTBuilder"]
+    ),
 ]
 
 var dependencies: [PackageDescription.Package.Dependency] = [
@@ -144,7 +145,7 @@ let package = Package(
         ),
         .target(
             name: "GASTTree",
-            dependencies: ["Swagger"]
+            dependencies: ["Swagger", "Common"]
         ),
         .target(
             name: "CodeGenerator",

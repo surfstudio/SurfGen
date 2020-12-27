@@ -14,9 +14,9 @@ import CodeGenerator
 public struct BuildGastTreeParseDependenciesSatage: PipelineEntryPoint {
 
     let builder: GASTBuilder
-    let next: InitCodeGenerationStage
+    let next: AnyPipelineEntryPoint<[DependencyWithTree]>
 
-    public init(builder: GASTBuilder, next: InitCodeGenerationStage) {
+    public init(builder: GASTBuilder, next: AnyPipelineEntryPoint<[DependencyWithTree]>) {
         self.builder = builder
         self.next = next
     }

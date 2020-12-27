@@ -35,6 +35,13 @@ extension ParametersTests {
                 application/json:
                   schema:
                     type: string
+            default:
+                description: "Все ок"
+                content:
+                    application/json:
+                        schema:
+                            type: integer
+
 """.data(using: .utf8)!
 
     /// Contains service `messages` with one operation `get`

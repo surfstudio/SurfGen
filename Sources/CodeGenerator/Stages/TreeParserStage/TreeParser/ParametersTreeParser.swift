@@ -16,7 +16,6 @@ public struct ParametersTreeParser {
             return .notReference(try self.parse(parameter: paramNode, current: current, other: other))
         case .ref(let ref):
             return .reference(try Resolver().resolveParameter(ref: ref, node: current, other: other))
-//            return .reference(try Resolver().resolveSchema(ref: ref, node: current, other: other))
         }
     }
 
@@ -136,7 +135,7 @@ class Resolver {
         switch resolved.next {
         case .enum(let val):
             guard let type = PrimitiveType(rawValue: val.type) else {
-                throw CustomError(message: "Enum \(val.name) caints type which is not primitive -- \(val.type)")
+                throw CustomError(message: "Enum \(val.name) contains type which is not primitive -- \(val.type)")
             }
             return .enum(.init(name: val.name, cases: val.cases, type: type))
         case .simple(let val):

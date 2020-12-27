@@ -47,7 +47,7 @@ public struct StubGASTTreeFactory {
     public func build() -> BuildGASTTreeEntryPoint {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
-        let serviceBuilder = AnyServiceBuilder(parameterBuilder: parameterBuilder)
+        let serviceBuilder = AnyServiceBuilder(parameterBuilder: parameterBuilder, schemaBuilder: schemaBuilder)
         return .init(
             refExtractorProvider: self.provider(str:),
             next: .init(
@@ -56,7 +56,7 @@ public struct StubGASTTreeFactory {
                     schemaBuilder: schemaBuilder,
                     parameterBuilder: parameterBuilder,
                     serviceBuilder: serviceBuilder),
-                next: .init(parserStage: .init(next: resultClosure)))
+                next: InitCodeGenerationStage(parserStage: .init(next: resultClosure)).erase())
         )
     }
 }
