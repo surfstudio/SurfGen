@@ -9,6 +9,12 @@ import Foundation
 import GASTTree
 import Common
 
+/// This class can resolve references
+/// It can resolve local references and references to another files
+/// It can determine referece cycles and throw error with call stack
+///
+/// **WARNING**
+/// **ISN'T THREAD SAFE**
 public class Resolver {
 
     struct Ref {
@@ -119,7 +125,7 @@ public class Resolver {
         return try self.resolveSchema(ref: "#\(splited[1])", node: dep, other: other)
     }
 
-    private func resolveRefToAnotherFile(ref: String, node: DependencyWithTree, other: [DependencyWithTree]) throws -> DependencyWithTree {
+    public func resolveRefToAnotherFile(ref: String, node: DependencyWithTree, other: [DependencyWithTree]) throws -> DependencyWithTree {
         guard let pathToDependencyFile = node.dependency.dependecies[ref] else {
             throw CustomError(message: "Can't find dependency with ref \(ref) in \(node.dependency.pathToCurrentFile)")
         }

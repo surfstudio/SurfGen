@@ -34,7 +34,11 @@ public struct RequestBodyParser {
         // requestBody:
         //   $ref: "#/components/requestBodies"
         case .ref(let ref):
-            throw CustomError.notInplemented()
+            let parsed = try wrap(
+                self.parse(ref: ref, current: current, other: other),
+                message: "While resolving \(ref) from file \(current.dependency.pathToCurrentFile)"
+            )
+            return .reference(parsed)
         }
     }
 
@@ -52,6 +56,27 @@ public struct RequestBodyParser {
             content: content,
             isRequired: bodyNode.isRequired
         )
+    }
+
+    func parse(ref: String, current: DependencyWithTree, other: [DependencyWithTree]) throws -> RequestModel {
+        let splited = ref.split(separator: "#")
+
+        var dependency = current
+        var refToResolve = ref
+
+        if splited.count == 2 {
+            // it means that this is a ref to another file
+            dependency = try Resolver().resolveRefToAnotherFile(ref: ref, node: current, other: other)
+            refToResolve = "#\(splited[1])"
+        }
+
+        // there is can not be reference cycle between requestBodies
+
+        let resolved: ComponentRequestBodyNode = try dependency.tree.resolve(reference: refToResolve)
+
+        return try wrap(
+            self.parse(bodyNode: resolved.value, current: dependency, other: other),
+            message: "While parsing resolved \(resolved.name) which is located in \(dependency.dependency.pathToCurrentFile)")
     }
 }
 

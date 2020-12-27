@@ -71,9 +71,29 @@ extension RootNode {
 
             return casted
         case "responses":
-            throw CustomError.notInplemented()
+            let res = try self.resolveResponses(name: String(splited[3]))
+
+            guard let found = res else {
+                throw CustomError(message: "\(splited[3]) not found in this tree")
+            }
+
+            guard let casted = found as? T else {
+                throw CustomError(message: "Couldn't cast \(found) to \(T.self)")
+            }
+
+            return casted
         case "requestBodies":
-            throw CustomError.notInplemented()
+            let res = try self.resolveRequestBodies(name: String(splited[3]))
+
+            guard let found = res else {
+                throw CustomError(message: "\(splited[3]) not found in this tree")
+            }
+
+            guard let casted = found as? T else {
+                throw CustomError(message: "Couldn't cast \(found) to \(T.self)")
+            }
+
+            return casted
         default:
             throw CustomError(
                 message: "Reference for resolving should contains `sahemas` or `parameters` as thrid components of path. But \(reference) doesn't"
@@ -99,6 +119,18 @@ extension RootNode {
     func resolveParameter(name: String) throws -> Any? {
         return self.parameters.first(where: { param -> Bool in
             return param.componentName == name
+        })
+    }
+
+    func resolveRequestBodies(name: String) throws -> Any? {
+        self.requestBodies.first(where: { reqBody in
+            reqBody.name == name
+        })
+    }
+
+    func resolveResponses(name: String) throws -> Any? {
+        self.responses.first(where: { reqBody in
+            reqBody.name == name
         })
     }
 }
