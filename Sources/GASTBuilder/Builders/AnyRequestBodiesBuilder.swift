@@ -16,9 +16,26 @@ public protocol RequestBodiesBuilder {
 
 public struct AnyRequestBodiesBuilder: RequestBodiesBuilder {
 
-    public init() { }
+    public let mediaTypesBuilder: MediaTypesBuilder
+
+    public init(mediaTypesBuilder: MediaTypesBuilder) {
+        self.mediaTypesBuilder = mediaTypesBuilder
+    }
 
     public func build(requestBodies: [ComponentObject<RequestBody>]) throws -> [ComponentRequestBodyNode] {
-        throw CustomError.notInplemented()
+        return try requestBodies.map { requestBody -> ComponentRequestBodyNode in
+
+            let value = try wrap(self.build(requestBody: requestBody.value),
+                                 message: "While build request body \(requestBody.name)")
+
+            return .init(name: requestBody.name, value: value)
+        }
+    }
+
+    func build(requestBody: RequestBody) throws -> RequestBodyNode {
+        let content = try wrap(
+            self.mediaTypesBuilder.buildMediaItems(items: requestBody.content.mediaItems),
+            message: "While build media types")
+        return .init(description: requestBody.description, content: content, isRequired: requestBody.required)
     }
 }

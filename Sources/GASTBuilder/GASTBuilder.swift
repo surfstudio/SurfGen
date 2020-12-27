@@ -53,7 +53,7 @@ public struct AnyGASTBuilder: GASTBuilder {
         let services = try wrap(self.serviceBuilder.build(paths: spec.paths),
                                 message: "While parsing services for specification at path: \(filePath)")
 
-        let responses = try wrap(self.responsesBuilder.build(respones: spec.components.responses),
+        let responses = try wrap(self.responsesBuilder.build(responses: spec.components.responses),
                                  message: "While parsing responses for specification at path: \(filePath)")
 
         let requestBodies = try wrap(self.requestBodiesBuilder.build(requestBodies:spec.components.requestBodies),

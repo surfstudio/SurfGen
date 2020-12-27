@@ -197,7 +197,7 @@ final class ServiceUseCasesTests: XCTestCase {
         let fileProvider = FileProviderStub()
         fileProvider.isReadableFile = true
         fileProvider.files = [
-            pathToRoot: ServiceUseCasesTestsYamls.requestWithSeveralMediaTypesWillBeParsed,
+            pathToRoot: ServiceUseCasesTestsYamls.requestBodyWithDeclarationInSchemaWontBeParsed,
             pathToModels: ServiceUseCasesTestsYamls.components
         ]
 

@@ -48,8 +48,9 @@ public struct StubGASTTreeFactory {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
         let serviceBuilder = AnyServiceBuilder(parameterBuilder: parameterBuilder, schemaBuilder: schemaBuilder)
-        let responsesBuilder = AnyResponsesBuilder()
-        let requestBodiesBuilder = AnyRequestBodiesBuilder()
+        let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder)
+        let responsesBuilder = AnyResponsesBuilder(mediaTypesBuilder: mediaTypesBuilder)
+        let requestBodiesBuilder = AnyRequestBodiesBuilder(mediaTypesBuilder: mediaTypesBuilder)
         return .init(
             refExtractorProvider: self.provider(str:),
             next: .init(
