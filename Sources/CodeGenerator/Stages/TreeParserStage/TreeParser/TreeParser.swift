@@ -90,7 +90,7 @@ public struct TreeParser {
         }()
 
         let responses = try wrap(
-            self.responsesParser.build(responses: operation.responses, current: current, other: other),
+            self.responsesParser.parse(responses: operation.responses, current: current, other: other),
             message: "While parsing responses"
         )
 
