@@ -147,10 +147,10 @@ enum ServiceUseCasesTestsYamls {
           summary: Список сообщений пользователя. Тут приходят полные сообщения (вместе с детальным представлением)
           requestBody:
             content:
-              "application/json":
+              application/json:
                 schema:
                     $ref: "models.yaml#/components/schemas/ServiceStatus"
-              "application/xml":
+              application/xml:
                 schema:
                     $ref: "models.yaml#/components/schemas/ServiceStatus"
           responses:
@@ -184,6 +184,105 @@ enum ServiceUseCasesTestsYamls {
                     type: string
 """.data(using: .utf8)!
 
+    // testResponseWithRefOnResponseWillBeParsed
+
+    static var responseWithSeveralMediaTypesWillBeParsed = """
+    paths:
+      /messages:
+        get:
+          summary: Список сообщений пользователя. Тут приходят полные сообщения (вместе с детальным представлением)
+          responses:
+            "200":
+                content:
+                    application/json:
+                        schema:
+                            $ref: "models.yaml#/components/schemas/ServiceStatus"
+                    application/xml:
+                        schema:
+                            $ref: "models.yaml#/components/schemas/ServiceStatus"
+""".data(using: .utf8)!
+
+    static var responseWithDefaultContentWillBeParsed = """
+    paths:
+      /messages:
+        get:
+          summary: Список сообщений пользователя. Тут приходят полные сообщения (вместе с детальным представлением)
+          responses:
+            default:
+              description: "Все ок"
+              content:
+                application/json:
+                  schema:
+                    $ref: "models.yaml#/components/schemas/CycledB"
+            "200":
+                content:
+                    application/json:
+                        schema:
+                            $ref: "models.yaml#/components/schemas/ServiceStatus"
+
+""".data(using: .utf8)!
+
+    static var responseWithRefOnResponseWillBeParsed = """
+    paths:
+      /messages:
+        get:
+          summary: Список сообщений пользователя. Тут приходят полные сообщения (вместе с детальным представлением)
+          responses:
+            "200":
+              $ref: "models.yaml#/components/responses/ServiceStatus"
+
+""".data(using: .utf8)!
+
+    static var responseWithRefWillBeParsed = """
+    paths:
+      /messages:
+        get:
+          summary: Список сообщений пользователя. Тут приходят полные сообщения (вместе с детальным представлением)
+          responses:
+            "200":
+                content:
+                    application/json:
+                        schema:
+                            $ref: "models.yaml#/components/schemas/ServiceStatus"
+""".data(using: .utf8)!
+
+
+    static var responseWithDeclarationInSchemaWontBeParsed = """
+    paths:
+      /messages:
+        get:
+          summary: Список сообщений пользователя. Тут приходят полные сообщения (вместе с детальным представлением)
+          responses:
+            "200":
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                prop:
+                                    type: string
+""".data(using: .utf8)!
+
+    static var responseWithoutContentWontBeParsed = """
+    paths:
+      /messages:
+        get:
+          summary: Список сообщений пользователя. Тут приходят полные сообщения (вместе с детальным представлением)
+          responses:
+            "200":
+              description: "Все ок"
+""".data(using: .utf8)!
+
+    static var responseSeparatedResponseWithSchemaDeclarationWontBeParsed = """
+    paths:
+      /messages:
+        get:
+          summary: Список сообщений пользователя. Тут приходят полные сообщения (вместе с детальным представлением)
+          responses:
+            "200":
+              $ref: "models.yaml#/components/responses/Plain"
+""".data(using: .utf8)!
+
     static var components = """
     components:
 
@@ -193,6 +292,23 @@ enum ServiceUseCasesTestsYamls {
                     "application/json":
                         schema:
                             $ref: "models.yaml#/components/schemas/ServiceStatus"
+
+        responses:
+            ServiceStatus:
+                content:
+                    "application/json":
+                        schema:
+                            $ref: "models.yaml#/components/schemas/ServiceStatus"
+
+            Plain:
+                content:
+                    "application/json":
+                        schema:
+                            type: object
+                            properties:
+                                prop:
+                                    type: string
+
         parameters:
             Param:
               name: id

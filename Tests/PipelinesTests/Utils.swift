@@ -44,10 +44,10 @@ public struct StubGASTTreeFactory {
         )
     }
 
-    public func build(allowAllTypesOfSchema: Bool = false) -> BuildGASTTreeEntryPoint {
+    public func build(enableDisclarationChecking: Bool = false) -> BuildGASTTreeEntryPoint {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
-        let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder, allowAllTypesOfSchema: allowAllTypesOfSchema)
+        let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder, enableDisclarationChecking: enableDisclarationChecking)
         let responsesBuilder = AnyResponsesBuilder(mediaTypesBuilder: mediaTypesBuilder)
         let requestBodiesBuilder = AnyRequestBodiesBuilder(mediaTypesBuilder: mediaTypesBuilder)
 

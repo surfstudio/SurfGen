@@ -29,7 +29,8 @@ import XCTest
 ///     - Response with several media types will be parsed
 ///     - Response with `default` content will be parsed
 ///     - Response with declaration in schema won't be parsed
-///     - Response wuthout content won't be parsed
+///     - Response without content won't be parsed
+///     - Separated Response with schema declaration won't be parsed
 final class ServiceUseCasesTests: XCTestCase {
 
     // MARK: - Parameters
@@ -201,7 +202,7 @@ final class ServiceUseCasesTests: XCTestCase {
             pathToModels: ServiceUseCasesTestsYamls.components
         ]
 
-        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build(allowAllTypesOfSchema: true)
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build(enableDisclarationChecking: true)
 
         // Act - Assert
 
@@ -209,4 +210,144 @@ final class ServiceUseCasesTests: XCTestCase {
     }
 
     // MARK: - Responses
+
+    /// Response with ref will be parsed
+    func testResponseWithRefWillBeParsed() throws {
+        // Arrange
+
+        let pathToRoot = "/path/to/services.yaml"
+        let pathToModels = "/path/to/models.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [
+            pathToRoot: ServiceUseCasesTestsYamls.responseWithRefWillBeParsed,
+            pathToModels: ServiceUseCasesTestsYamls.components
+        ]
+
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build()
+
+        // Act - Assert
+
+        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+    }
+
+    /// Ref on Responses will be parsed
+    func testResponseWithRefOnResponseWillBeParsed() throws {
+        // Arrange
+
+        let pathToRoot = "/path/to/services.yaml"
+        let pathToModels = "/path/to/models.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [
+            pathToRoot: ServiceUseCasesTestsYamls.responseWithDeclarationInSchemaWontBeParsed,
+            pathToModels: ServiceUseCasesTestsYamls.components
+        ]
+
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build()
+
+        // Act - Assert
+
+        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+    }
+
+    /// Response with several media types will be parsed
+    func testResponseWithSeveralMediaTypesWillBeParsed() throws {
+        // Arrange
+
+        let pathToRoot = "/path/to/services.yaml"
+        let pathToModels = "/path/to/models.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [
+            pathToRoot: ServiceUseCasesTestsYamls.responseWithSeveralMediaTypesWillBeParsed,
+            pathToModels: ServiceUseCasesTestsYamls.components
+        ]
+
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build()
+
+        // Act - Assert
+
+        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+    }
+
+    /// Response with `default` content will be parsed
+    func testResponseWithDefaultContentWillBeParsed() throws {
+        // Arrange
+
+        let pathToRoot = "/path/to/services.yaml"
+        let pathToModels = "/path/to/models.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [
+            pathToRoot: ServiceUseCasesTestsYamls.responseWithDefaultContentWillBeParsed,
+            pathToModels: ServiceUseCasesTestsYamls.components
+        ]
+
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build()
+
+        // Act - Assert
+
+        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+    }
+
+    /// Response with declaration in schema won't be parsed
+    func testResponseWithDeclarationInSchemaWontBeParsed() throws {
+        // Arrange
+
+        let pathToRoot = "/path/to/services.yaml"
+        let pathToModels = "/path/to/models.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [
+            pathToRoot: ServiceUseCasesTestsYamls.responseWithDeclarationInSchemaWontBeParsed,
+            pathToModels: ServiceUseCasesTestsYamls.components
+        ]
+
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build(enableDisclarationChecking: true)
+
+        // Act - Assert
+
+        XCTAssertThrowsError(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+    }
+
+    /// Response without content won't be parsed
+    func testResponseWithoutContentWontBeParsed() throws {
+        // Arrange
+
+        let pathToRoot = "/path/to/services.yaml"
+        let pathToModels = "/path/to/models.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [
+            pathToRoot: ServiceUseCasesTestsYamls.responseWithoutContentWontBeParsed,
+            pathToModels: ServiceUseCasesTestsYamls.components
+        ]
+
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build()
+
+        // Act - Assert
+
+        XCTAssertThrowsError(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+    }
+
+    /// Separated Response with schema declaration won't be parsed
+    func testResponseSeparatedResponseWithSchemaDeclarationWontBeParsed() throws {
+        // Arrange
+
+        let pathToRoot = "/path/to/services.yaml"
+        let pathToModels = "/path/to/models.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [
+            pathToRoot: ServiceUseCasesTestsYamls.responseSeparatedResponseWithSchemaDeclarationWontBeParsed,
+            pathToModels: ServiceUseCasesTestsYamls.components
+        ]
+
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build(enableDisclarationChecking: true)
+
+        // Act - Assert
+
+        XCTAssertThrowsError(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+    }
 }

@@ -116,18 +116,4 @@ extension AnyServiceBuilder {
             return .entity(try self.responseBuilder.build(response: val))
         }
     }
-
-    func buildMediaItems(items: [String: MediaItem]) throws -> [MediaTypeObjectNode] {
-        return try items.map { key, value -> MediaTypeObjectNode in
-            let schema = try wrap(
-                self.schemaBuilder.build(schemas: [.init(name: "", value: value.schema)]),
-                message: "While build request body")
-
-            guard schema.count == 1 else {
-                throw CustomError(message: "We had sent 1 schema, and then got \(schema.count). It's very strange. Plz contact mainteiners")
-            }
-
-            return MediaTypeObjectNode(typeName: key, schema: schema[0])
-        }
-    }
 }
