@@ -48,6 +48,8 @@ public struct StubGASTTreeFactory {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
         let serviceBuilder = AnyServiceBuilder(parameterBuilder: parameterBuilder, schemaBuilder: schemaBuilder)
+        let responsesBuilder = AnyResponsesBuilder()
+        let requestBodiesBuilder = AnyRequestBodiesBuilder()
         return .init(
             refExtractorProvider: self.provider(str:),
             next: .init(
@@ -55,7 +57,9 @@ public struct StubGASTTreeFactory {
                     fileProvider: fileProvider,
                     schemaBuilder: schemaBuilder,
                     parameterBuilder: parameterBuilder,
-                    serviceBuilder: serviceBuilder),
+                    serviceBuilder: serviceBuilder,
+                    responsesBuilder: responsesBuilder,
+                    requestBodiesBuilder: requestBodiesBuilder),
                 next: InitCodeGenerationStage(parserStage: .init(next: resultClosure)).erase())
         )
     }

@@ -65,6 +65,15 @@
         }
       },
       {
+        "package": "SwagGen",
+        "repositoryURL": "https://github.com/LastSprint/SwagGen",
+        "state": {
+          "branch": null,
+          "revision": "4fd5a299db0ba733e5cd6fa4e421b40248657cb6",
+          "version": null
+        }
+      },
+      {
         "package": "SwiftCLI",
         "repositoryURL": "https://github.com/jakeheis/SwiftCLI",
         "state": {

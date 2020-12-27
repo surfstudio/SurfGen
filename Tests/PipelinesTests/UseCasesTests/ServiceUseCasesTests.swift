@@ -126,5 +126,87 @@ final class ServiceUseCasesTests: XCTestCase {
 
     // MARK: - Requests
 
+    ///     - RequestBody with declaration in schema won't be parsed
+
+    /// RequestBody with ref will be parsed
+    func testRequestWithRefWillBeParsed() {
+        // Arrange
+
+        let pathToRoot = "/path/to/services.yaml"
+        let pathToModels = "/path/to/models.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [
+            pathToRoot: ServiceUseCasesTestsYamls.requestWithRefWillBeParsed,
+            pathToModels: ServiceUseCasesTestsYamls.components
+        ]
+
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build()
+
+        // Act - Assert
+
+        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+    }
+
+    /// Ref on RequestBody will be parsed
+    func testRequestRefOnRequestBodyWillBeParsed() {
+        // Arrange
+
+        let pathToRoot = "/path/to/services.yaml"
+        let pathToModels = "/path/to/models.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [
+            pathToRoot: ServiceUseCasesTestsYamls.requestRefOnRequestBodyWillBeParsed,
+            pathToModels: ServiceUseCasesTestsYamls.components
+        ]
+
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build()
+
+        // Act - Assert
+
+        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+    }
+
+    /// RequestBody with several media types will be parsed
+    func testRequestWithSeveralMediaTypesWillBeParsed() {
+        // Arrange
+
+        let pathToRoot = "/path/to/services.yaml"
+        let pathToModels = "/path/to/models.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [
+            pathToRoot: ServiceUseCasesTestsYamls.requestWithSeveralMediaTypesWillBeParsed,
+            pathToModels: ServiceUseCasesTestsYamls.components
+        ]
+
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build()
+
+        // Act - Assert
+
+        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+    }
+
+    /// RequestBody with declaration in schema won't be parsed
+    func testRequestBodyWithDeclarationInSchemaWontBeParsed() {
+        // Arrange
+
+        let pathToRoot = "/path/to/services.yaml"
+        let pathToModels = "/path/to/models.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [
+            pathToRoot: ServiceUseCasesTestsYamls.requestWithSeveralMediaTypesWillBeParsed,
+            pathToModels: ServiceUseCasesTestsYamls.components
+        ]
+
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build()
+
+        // Act - Assert
+
+        XCTAssertThrowsError(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+    }
+
     // MARK: - Responses
 }

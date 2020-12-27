@@ -11,17 +11,25 @@ import Common
 public struct RootNode {
     public var schemas: [SchemaObjectNode]
     public var parameters: [ParameterNode]
+    public var requestBodies: [ComponentRequestBodyNode]
+    public var responses: [ComponentResponseNode]
     public var services: [PathNode]
 
-    public init(schemas: [SchemaObjectNode], parameters: [ParameterNode], services: [PathNode]) {
+    public init(schemas: [SchemaObjectNode],
+                parameters: [ParameterNode],
+                services: [PathNode],
+                requestBodies: [ComponentRequestBodyNode],
+                responses: [ComponentResponseNode]) {
         self.schemas = schemas
         self.parameters = parameters
         self.services = services
+        self.requestBodies = requestBodies
+        self.responses = responses
     }
 }
 
 extension RootNode {
-    /// Awaits `#/components/schemas|parameters/ModelName`
+    /// Awaits `#/components/schemas|parameters|responses|requestBodies/ModelName`
     public func resolve<T>(reference: String) throws -> T {
         let splited = reference.split(separator: "/")
 
@@ -62,6 +70,10 @@ extension RootNode {
             }
 
             return casted
+        case "responses":
+            throw CustomError.notInplemented()
+        case "requestBodies":
+            throw CustomError.notInplemented()
         default:
             throw CustomError(
                 message: "Reference for resolving should contains `sahemas` or `parameters` as thrid components of path. But \(reference) doesn't"

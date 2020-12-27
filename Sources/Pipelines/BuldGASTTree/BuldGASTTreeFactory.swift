@@ -22,6 +22,8 @@ public struct BuldGASTTreeFactory {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
         let serviceBuilder = AnyServiceBuilder(parameterBuilder: parameterBuilder, schemaBuilder: schemaBuilder)
+        let responsesBuilder = AnyResponsesBuilder()
+        let requestBodiesBuilder = AnyRequestBodiesBuilder()
         return .init(
             refExtractorProvider: self.provider(str:),
             next: .init(
@@ -29,7 +31,9 @@ public struct BuldGASTTreeFactory {
                     fileProvider: FileManager.default,
                     schemaBuilder: schemaBuilder,
                     parameterBuilder: parameterBuilder,
-                    serviceBuilder: serviceBuilder),
+                    serviceBuilder: serviceBuilder,
+                    responsesBuilder: responsesBuilder,
+                    requestBodiesBuilder: requestBodiesBuilder),
                 next: InitCodeGenerationStage(parserStage: .init()).erase())
         )
     }
