@@ -36,11 +36,11 @@ public struct AnyMediaTypeParser: MediaTypeParser {
         // in-place declaration is unsupported
         switch schema.next {
         case .object:
-            throw CustomError(message: "MediaType shouldn't contains object definition. Only refs supported")
+            throw CustomError(message: "MediaType shouldn't contains object definition. Only refs (and arr with refs) supported")
         case .enum:
-            throw CustomError(message: "MediaType shouldn't contains enum definition. Only refs supported")
+            throw CustomError(message: "MediaType shouldn't contains enum definition. Only refs (and arr with refs) supported")
         case .simple:
-            throw CustomError(message: "MediaType shouldn't contains alias definition. Only refs supported")
+            throw CustomError(message: "MediaType shouldn't contains alias definition. Only refs (and arr with refs) supported")
         case .reference(let val):
             let schemaType = try wrap(
                 Resolver().resolveSchema(ref: val, node: current, other: other),
@@ -58,6 +58,8 @@ public struct AnyMediaTypeParser: MediaTypeParser {
             case .object(let val):
                 return val
             }
+        case .array(let val):
+            throw CustomError.notInplemented()
         }
     }
 }

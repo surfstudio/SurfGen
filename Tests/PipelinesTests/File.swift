@@ -59,6 +59,8 @@ public struct AnyMediaTypeParserStub: MediaTypeParser {
             case .object(let val):
                 return val
             }
+        case .array(let arr):
+            throw CustomError.notInplemented()
         }
     }
 }

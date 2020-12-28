@@ -52,3 +52,16 @@ Doesn't support response headers
 ---
 
 Schek that ref to RequestBody from another RequestBody leads to error throwing
+
+---
+
+content:
+  application/json:
+    schema:
+      type: array
+      items:
+        $ref: "../billings/models.yaml#/components/schemas/Tariffs"
+        
+Isn't supported, but if array is decalared in components then it will work ok
+
+---

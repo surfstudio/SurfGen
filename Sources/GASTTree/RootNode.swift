@@ -110,6 +110,8 @@ extension RootNode {
                 return val.name == name
             case .simple(let val):
                 return val.name == name
+            case .array(let val):
+                return val.name == name
             case .reference:
                 throw CustomError(message: "\(name) is refrence. Now reference which is referenced to another reference is unsupported")
             }

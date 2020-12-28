@@ -20,3 +20,65 @@ public struct PropertyModel {
     public let description: String?
     public let type: PossibleType
 }
+
+
+extension PropertyModel.PossibleType: Encodable {
+
+    enum Keys: String, CodingKey {
+        case type = "type"
+        case value = "value"
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: Keys.self)
+
+        switch self {
+        case .primitive(let primitive):
+            try container.encode(primitive.rawValue, forKey: .value)
+        case .reference(let ref):
+            try container.encode(ref, forKey: .value)
+        case .array(let arr):
+            try container.encode(arr, forKey: .value)
+        }
+    }
+
+
+
+}
+
+extension PropertyModel: Encodable {
+
+    enum Keys: String, CodingKey {
+        case type = "type"
+        case value = "value"
+        case name = "name"
+        case description = "description"
+    }
+
+    private var typeAsString: String {
+        switch self.type {
+        case .primitive:
+            return "primitive"
+        case .reference:
+            return "reference"
+        case .array:
+            return "array"
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: Keys.self)
+        try container.encode(self.typeAsString, forKey: .type)
+        try container.encode(self.name, forKey: .name)
+        try container.encode(self.description, forKey: .name)
+
+        switch self.type {
+        case .primitive(let primitive):
+            try container.encode(primitive.rawValue, forKey: .value)
+        case .reference(let ref):
+            try container.encode(ref, forKey: .value)
+        case .array(let arr):
+            try container.encode(arr, forKey: .value)
+        }
+    }
+}

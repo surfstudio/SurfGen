@@ -19,7 +19,7 @@ public struct RequestBodyParser {
 
     public func parse(requestBody: Referenced<RequestBodyNode>,
                       current: DependencyWithTree,
-                      other: [DependencyWithTree]) throws -> Reference<RequestModel, RequestModel> {
+                      other: [DependencyWithTree]) throws -> Reference<RequestModel> {
         switch requestBody {
         // it's when we have declaration of request in operation. like this:
         // requestBody:

@@ -31,3 +31,29 @@ public enum SchemaType {
     /// Entity which `type` property is `object`
     case object(SchemaObjectModel)
 }
+
+extension SchemaType: Encodable {
+
+    enum Keys: String, CodingKey {
+        case type = "type"
+        case value = "value"
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: Keys.self)
+
+        switch self {
+        case .alias(let val):
+            try container.encode("alias", forKey: .type)
+            try container.encode(val, forKey: .value)
+        case .enum(let val):
+            try container.encode("enum", forKey: .type)
+            try container.encode(val, forKey: .value)
+        case .object(let val):
+            try container.encode("object", forKey: .type)
+            try container.encode(val, forKey: .value)
+        }
+    }
+
+
+}

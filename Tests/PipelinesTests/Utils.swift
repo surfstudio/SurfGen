@@ -90,7 +90,7 @@ public struct StubGASTTreeFactory {
     }
 }
 
-extension Reference where RefType == ParameterModel, NotRefType == ParameterModel {
+extension Reference where DataType == ParameterModel {
     var name: String {
         switch self {
         case .reference(let val):

@@ -13,3 +13,5 @@ public struct SchemaEnumModel {
     public let cases: [String]
     public let type: PrimitiveType
 }
+
+extension SchemaEnumModel: Encodable { }

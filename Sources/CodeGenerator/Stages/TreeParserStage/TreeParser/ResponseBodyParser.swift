@@ -17,7 +17,7 @@ public struct ResponseBodyParser {
         self.mediaTypeParser = mediaTypeParser
     }
 
-    public func parse(responses: [OperationNode.ResponseBody], current: DependencyWithTree, other: [DependencyWithTree]) throws -> [Reference<ResponseModel, ResponseModel>] {
+    public func parse(responses: [OperationNode.ResponseBody], current: DependencyWithTree, other: [DependencyWithTree]) throws -> [Reference<ResponseModel>] {
         return try responses.map { response in
             switch response.response {
             case .entity(let val):

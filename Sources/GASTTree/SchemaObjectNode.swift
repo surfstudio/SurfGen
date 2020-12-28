@@ -8,12 +8,20 @@
 import Foundation
 import Common
 
+/// Iat this moment array contains only 1 fild which is value and type at the same time
+/// But later it may be extended with new fields
+public struct SchemaArrayNode {
+    let name: String
+    let type: SchemaObjectNode
+}
+
 public struct SchemaObjectNode {
     public indirect enum Possibility {
         case object(SchemaModelNode)
         case `enum`(SchemaEnumNode)
         case simple(PrimitiveTypeAliasNode)
         case reference(String)
+        case array(SchemaArrayNode)
     }
 
     public var next: Possibility
@@ -33,6 +41,8 @@ extension SchemaObjectNode: StringView {
         case .simple(let simple):
             return "Schema:\n\ttype: Simple\n\tNested:\n\t\t\(simple)"
         case .reference:
+            return "Not Implemented"
+        case .array(_):
             return "Not Implemented"
         }
     }

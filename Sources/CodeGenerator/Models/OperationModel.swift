@@ -19,11 +19,15 @@ public struct DataModel {
     }
 }
 
+extension DataModel: Encodable { }
+
 public struct RequestModel {
     public let description: String?
     public let content: [DataModel]
     public let isRequired: Bool
 }
+
+extension RequestModel: Encodable { }
 
 public struct ResponseModel {
     /// May be statusCode or `default` string
@@ -31,10 +35,15 @@ public struct ResponseModel {
     public let values: [DataModel]
 }
 
+extension ResponseModel: Encodable { }
+
 public struct OperationModel {
     public let httpMethod: String
     public let description: String?
-    public let parameters: [Reference<ParameterModel, ParameterModel>]?
-    public let responses: [Reference<ResponseModel, ResponseModel>]?
-    public let requestModel: Reference<RequestModel, RequestModel>?
+    public let parameters: [Reference<ParameterModel>]?
+    public let responses: [Reference<ResponseModel>]?
+    public let requestModel: Reference<RequestModel>?
 }
+
+extension OperationModel: Encodable { }
+

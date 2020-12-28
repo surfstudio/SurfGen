@@ -10,8 +10,8 @@ import Pipelines
 import ReferenceExtractor
 
 
-//let rootPath = URL(string: "/Users/lastsprint/repo/iOS/prod/tricolor-swagger/auth/api.yaml")!
-let rootPath = URL(string: "/Users/lastsprint/repo/iOS/prod/tricolor-swagger/catalog/kek.yaml")!
+let rootPath = URL(string: "/Users/lastsprint/repo/iOS/prod/tricolor-swagger/catalog/api.yaml")!
+//let rootPath = URL(string: "/Users/lastsprint/repo/iOS/prod/tricolor-swagger/catalog/kek.yaml")!
 
 let pipeline = BuldGASTTreeFactory.build()
 

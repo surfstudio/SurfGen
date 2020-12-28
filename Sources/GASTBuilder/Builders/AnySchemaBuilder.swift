@@ -33,14 +33,13 @@ public struct AnySchemaBuilder: SchemaBuilder {
     func process(schema: ComponentObject<Schema>) throws -> SchemaObjectNode {
         switch schema.value.type {
         case .any:
-            // TODO: It's about aliases. we need to implement it. except .any
             throw CustomError(message: "Now we can't process this type on this level of depth. You can create an Issue or add your vote to existed one")
         case .object(let obj):
             let model = try self.build(object: obj, meta: schema.value.metadata, name: schema.name)
             return .init(next: .object(model))
         case .string:
             return try self.processString(schema: schema)
-        case .array:
+        case .array(let val):
             throw CustomError.notInplemented()
         case .reference(let ref):
             return .init(next: .reference(ref.rawValue))
@@ -75,7 +74,6 @@ public struct AnySchemaBuilder: SchemaBuilder {
     }
 
     func build(object: ObjectSchema, meta: Metadata, name: String) throws -> SchemaModelNode {
-        // TODO: - replace on MediaTypesBuilder
         let properties = try object.properties.map { property -> PropertyNode in
             let type = try wrap(property.schema.extractType(),
                                 message: "In object \(name), in property \(property.name)")

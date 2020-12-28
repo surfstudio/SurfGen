@@ -71,6 +71,8 @@ public class Resolver {
                          type: .reference(try resolveSchema(ref: newRef, node: node, other: other)),
                          description: resolved.description,
                          isRequired: resolved.isRequired)
+        case .array(let arr):
+            throw CustomError.notInplemented()
         }
     }
 
@@ -111,6 +113,8 @@ public class Resolver {
             return try self.resolveObject(val: val, node: node, other: other)
         case .reference(let ref):
             return try resolveSchema(ref: ref, node: node, other: other)
+        case .array(let arr):
+            throw CustomError.notInplemented()
         }
     }
 
