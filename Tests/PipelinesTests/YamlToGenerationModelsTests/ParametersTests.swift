@@ -8,6 +8,7 @@
 import Foundation
 import XCTest
 import CodeGenerator
+import UtilsForTesting
 
 @testable import Pipelines
 

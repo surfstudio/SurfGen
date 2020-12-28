@@ -34,7 +34,7 @@ public struct AnyServiceBuilder: ServiceBuilder {
     public func build(paths: [Path]) throws -> [PathNode] {
         return try paths.map { path in
             let operations = try wrap(self.build(operations: path.operations),
-                                      message: "While parsing Path: \(path)")
+                                      message: "While parsing Path: \(path.path)")
             return PathNode(path: path.path, operations: operations)
         }
     }

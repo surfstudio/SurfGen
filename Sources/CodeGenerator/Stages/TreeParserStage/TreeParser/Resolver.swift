@@ -47,7 +47,9 @@ public class Resolver {
 
         if res.count == 2 {
             let dep = try self.resolveRefToAnotherFile(ref: ref, node: node, other: other)
-            return try self.resolveParameter(ref: "#\(res[1])", node: dep, other: other)
+            let res =  try self.resolveParameter(ref: "#\(res[1])", node: dep, other: other)
+            self.refStack.removeLast()
+            return res
         }
 
         let resolved: ParameterNode = try node.tree.resolve(reference: String(ref))
@@ -58,6 +60,7 @@ public class Resolver {
         case .enum:
             throw CustomError(message: "Parameter \(resolved.name) from file '\(node.dependency.pathToCurrentFile) contains enum definition in type. This is unsupported.")
         case .simple(let simple):
+            self.refStack.removeLast()
             return .init(componentName: resolved.componentName,
                          name: resolved.name,
                          location: resolved.location,
@@ -65,6 +68,7 @@ public class Resolver {
                          description: resolved.description,
                          isRequired: resolved.isRequired)
         case .reference(let newRef):
+            self.refStack.removeLast()
             return .init(componentName: resolved.componentName,
                          name: resolved.name,
                          location: resolved.location,
@@ -96,7 +100,9 @@ public class Resolver {
         let res = ref.split(separator: "#")
 
         if res.count == 2 {
-            return try self.resolveAnotherFile(ref: ref, node: node, other: other)
+            let res = try self.resolveAnotherFile(ref: ref, node: node, other: other)
+            self.refStack.removeLast()
+            return res
         }
 
         let resolved: SchemaObjectNode = try node.tree.resolve(reference: String(ref))
@@ -106,13 +112,19 @@ public class Resolver {
             guard let type = PrimitiveType(rawValue: val.type) else {
                 throw CustomError(message: "Enum \(val.name) contains type which is not primitive -- \(val.type)")
             }
+            self.refStack.removeLast()
             return .enum(.init(name: val.name, cases: val.cases, type: type))
         case .simple(let val):
+            self.refStack.removeLast()
             return .alias(.init(name: val.name, type: val.type))
         case .object(let val):
-            return try self.resolveObject(val: val, node: node, other: other)
+            let res = try self.resolveObject(val: val, node: node, other: other)
+            self.refStack.removeLast()
+            return res
         case .reference(let ref):
-            return try resolveSchema(ref: ref, node: node, other: other)
+            let res = try resolveSchema(ref: ref, node: node, other: other)
+            self.refStack.removeLast()
+            return res
         case .array(let arr):
             throw CustomError.notInplemented()
         }
