@@ -19,6 +19,6 @@ public struct InitCodeGenerationStage: PipelineEntryPoint {
     }
 
     public func run(with input: [DependencyWithTree]) throws {
-        try wrap(self.next.run(input: input), message: "In `Init Code Generation Stage`")
+        try wrap(self.next.run(with: input), message: "In `Init Code Generation Stage`")
     }
 }

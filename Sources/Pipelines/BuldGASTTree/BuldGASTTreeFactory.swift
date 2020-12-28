@@ -43,7 +43,13 @@ public struct BuldGASTTreeFactory {
                     serviceBuilder: serviceBuilder,
                     responsesBuilder: responsesBuilder,
                     requestBodiesBuilder: requestBodiesBuilder),
-                next: InitCodeGenerationStage(parserStage: .init(parser: buildParser())).erase())
+                next: InitCodeGenerationStage(
+                    parserStage: .init(
+                        next: ServiceGenerationStage(templatePathes: []).erase(),
+                        parser: buildParser()
+                    )
+                ).erase()
+            )
         )
     }
 

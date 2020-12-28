@@ -58,7 +58,12 @@ public struct StubGASTTreeFactory {
                     serviceBuilder: serviceBuilder,
                     responsesBuilder: responsesBuilder,
                     requestBodiesBuilder: requestBodiesBuilder),
-                next: InitCodeGenerationStage(parserStage: .init(next: resultClosure, parser: parser)).erase())
+                next: InitCodeGenerationStage(
+                    parserStage: .init(
+                        next: TreeParserStageResultStub(next: resultClosure).erase(),
+                        parser: parser)
+                ).erase()
+            )
         )
     }
 
@@ -74,5 +79,18 @@ public struct StubGASTTreeFactory {
         return .init(parametersParser: .init(),
                      requestBodyParser: requestBodyParser,
                      responsesParser: responsesParser)
+    }
+}
+
+public struct TreeParserStageResultStub: PipelineEntryPoint {
+
+    public var next: (([[ServiceModel]]) throws -> Void)?
+
+    public init(next: (([[ServiceModel]]) throws -> Void)?) {
+        self.next = next
+    }
+
+    public func run(with input: [[ServiceModel]]) throws {
+        try self.next?(input)
     }
 }

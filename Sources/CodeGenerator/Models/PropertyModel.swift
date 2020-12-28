@@ -41,9 +41,6 @@ extension PropertyModel.PossibleType: Encodable {
             try container.encode(arr, forKey: .value)
         }
     }
-
-
-
 }
 
 extension PropertyModel: Encodable {
@@ -70,7 +67,7 @@ extension PropertyModel: Encodable {
         var container = encoder.container(keyedBy: Keys.self)
         try container.encode(self.typeAsString, forKey: .type)
         try container.encode(self.name, forKey: .name)
-        try container.encode(self.description, forKey: .name)
+        try container.encode(self.description, forKey: .description)
 
         switch self.type {
         case .primitive(let primitive):
