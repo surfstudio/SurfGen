@@ -23,7 +23,19 @@ components:
 #     OtpAndInfo:
 #       oneOf:
 #         - $ref: "../common/models.yaml#/components/schemas/OtpRequired"
-#         - $ref: "../common/models.yaml#/components/schemas/InfoMessage"     
+#         - $ref: "../common/models.yaml#/components/schemas/InfoMessage"
+
+    OtpAndInfo:
+      type: object
+      description: Пара ключ-значение
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+      required:
+        - key
+        - value
 
     KeyValuePair:
       type: object

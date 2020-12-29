@@ -85,9 +85,10 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: "../common/models.yaml#/components/schemas/InfoMessage"
-                  - $ref: "../common/models.yaml#/components/schemas/OtpRequired"
+                $ref: "../common/models.yaml#/components/schemas/InfoMessage"
+#                oneOf:
+#                  - $ref: "../common/models.yaml#/components/schemas/InfoMessage"
+#                  - $ref: "../common/models.yaml#/components/schemas/OtpRequired"
         "500":
           description: Вернется в случае, если объединение невозможно
           content:
@@ -157,9 +158,10 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: "models.yaml#/components/schemas/TransferServiceRequest"
-                - $ref: "models.yaml#/components/schemas/TransferRequest"
+                $ref: "models.yaml#/components/schemas/TransferServiceRequest"
+#              oneOf:
+#                - $ref: "models.yaml#/components/schemas/TransferServiceRequest"
+#                - $ref: "models.yaml#/components/schemas/TransferRequest"
       responses:
         "200":
           description: "Все ок"
