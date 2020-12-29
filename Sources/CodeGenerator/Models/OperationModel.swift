@@ -11,9 +11,16 @@ import GASTTree
 /// Data whic is used in `RequestModel` and `ResponseModel`
 public struct DataModel {
 
+    // TODO: - LOOK >>>
+
+    // lokks like that something went wrong
+    // Possible is referencedValue
+    // but we want to parse requestes and responses with array definition
+
     public enum Possible {
         case object(SchemaObjectModel)
         case array(SchemaArrayModel)
+        case group(SchemaGroupModel)
     }
 
     public let mediaType: String
@@ -41,6 +48,9 @@ extension DataModel.Possible: Encodable {
             try container.encode(val, forKey: .value)
         case .array(let val):
             try container.encode("array", forKey: .type)
+            try container.encode(val, forKey: .value)
+        case .group(let val):
+            try container.encode("group", forKey: .type)
             try container.encode(val, forKey: .value)
         }
     }

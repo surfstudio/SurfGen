@@ -108,4 +108,8 @@ Array inside array is unsupported (but it possible if array item's type is objec
 
 ---
 
-Resolver can't resolve references on array object
+Need test group which is referenced to another group
+Group which is referenced to object
+Object wchich i referenced to group
+GroupDefinitionWorksInRequest and response and so on
+

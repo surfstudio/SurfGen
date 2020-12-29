@@ -45,6 +45,7 @@ final class RealDataTests: XCTestCase {
                     do {
                         _ = try BuldGASTTreeFactory.build().run(with: .init(pathToSpec: url))
                     } catch {
+                        print("ERROR for \(url)")
                         print(error.localizedDescription)
                         throw error
                     }

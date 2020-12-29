@@ -47,6 +47,8 @@ public struct ParametersTreeParser {
             throw CustomError(message: "Parameters's type must not contains `object` definition, but it contains \(val)")
         case .enum(let val):
             throw CustomError(message: "Parameters's type must not contains `enum` definition, but it contains \(val)")
+        case .group(let val):
+            throw CustomError(message: "Parameters's type must not contains `group` definition, but it contains \(val)")
         case .simple(let primitive):
             // TODO: - At this place we ignore definition of alias inside parameter
             // so idk if we need it.
@@ -56,8 +58,6 @@ public struct ParametersTreeParser {
         case .array(let val):
             let arr = try self.array.parse(array: val, current: current, other: other)
             return .array(arr)
-        case .group(_):
-            throw CustomError.notInplemented()
         }
     }
 }

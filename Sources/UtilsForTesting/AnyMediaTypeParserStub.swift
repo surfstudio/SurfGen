@@ -19,9 +19,11 @@ import CodeGenerator
 public struct AnyMediaTypeParserStub: MediaTypeParser {
 
     public let arrayParser: ArrayParser
+    public let groupParser: GroupParser
 
-    public init(arrayParser: ArrayParser) {
+    public init(arrayParser: ArrayParser, groupParser: GroupParser) {
         self.arrayParser = arrayParser
+        self.groupParser = groupParser
     }
 
     public func parse(mediaType: MediaTypeObjectNode,
@@ -64,12 +66,15 @@ public struct AnyMediaTypeParserStub: MediaTypeParser {
                 return .object(val)
             case .array(let val):
                 return .array(val)
+            case .group(let val):
+                return .group(val)
             }
         case .array(let val):
             let parsed = try self.arrayParser.parse(array: val, current: current, other: other)
             return .array(parsed)
-        case .group(_):
-            throw CustomError.notInplemented()
+        case .group(let val):
+            let parsed = try self.groupParser.parse(group: val, current: current, other: other)
+            return .group(parsed)
         }
     }
 }

@@ -59,6 +59,8 @@ public class Resolver {
             throw CustomError(message: "Parameter \(resolved.name) from file '\(node.dependency.pathToCurrentFile) contains object definition in type. This is unsupported.")
         case .enum:
             throw CustomError(message: "Parameter \(resolved.name) from file '\(node.dependency.pathToCurrentFile) contains enum definition in type. This is unsupported.")
+        case .group:
+            throw CustomError(message: "Parameter \(resolved.name) from file '\(node.dependency.pathToCurrentFile) contains group definition in type. This is unsupported.")
         case .simple(let simple):
             self.refStack.removeLast()
             return .init(componentName: resolved.componentName,
@@ -76,9 +78,13 @@ public class Resolver {
                          description: resolved.description,
                          isRequired: resolved.isRequired)
         case .array(let arr):
-            throw CustomError.notInplemented()
-        case .group(let group):
-            throw CustomError.notInplemented()
+            self.refStack.removeLast()
+            return .init(componentName: resolved.componentName,
+                         name: resolved.name,
+                         location: resolved.location,
+                         type: .array(try self.resolve(arr: arr, node: node, other: other)),
+                         description: resolved.description,
+                         isRequired: resolved.isRequired)
         }
     }
 
@@ -128,9 +134,9 @@ public class Resolver {
             self.refStack.removeLast()
             return res
         case .array(let arr):
-            throw CustomError.notInplemented()
+            return .array(try self.resolve(arr: arr, node: node, other: other))
         case .group(let val):
-            throw CustomError.notInplemented()
+            return try self.resolve(group: val, node: node, other: other)
         }
     }
 
@@ -188,5 +194,59 @@ public class Resolver {
                                     description: val.description)
 
         return .object(res)
+    }
+
+    private func resolve(group: SchemaGroupNode,
+                         node: DependencyWithTree,
+                         other: [DependencyWithTree]) throws -> SchemaType {
+
+        let refs = try group.references.map { ref throws -> SchemaGroupModel.Possible in
+            let resolved = try self.resolveSchema(ref: ref, node: node, other: other)
+
+                switch resolved {
+                case .alias:
+                    throw CustomError(message: "Group shouldn't contains references on aliases")
+                case .enum:
+                    throw CustomError(message: "Group shouldn't contains references on enums")
+                case .array:
+                    throw CustomError(message: "Group shouldn't contains references on arrays")
+                case .group(let val):
+                    return .group(val)
+                case .object(let val):
+                    return .object(val)
+                }
+        }
+
+        return .group(.init(name: group.name, references: refs, type: group.type))
+    }
+
+    func resolve(arr: SchemaArrayNode,
+                 node: DependencyWithTree,
+                 other: [DependencyWithTree]) throws -> SchemaArrayModel {
+
+
+        let value = try { () -> SchemaArrayModel.Possible in
+            switch arr.type.next {
+
+            case .object:
+                throw CustomError(message: "Array shouldn't contains enum definition")
+            case .enum:
+                throw CustomError(message: "Array shouldn't contains enum definition")
+            case .array:
+                throw CustomError(message: "Array shouldn't contains enum definition")
+            case .group:
+                throw CustomError(message: "Array shouldn't contains enum definition")
+            case .simple(let val):
+                return .primitive(val.type)
+            case .reference(let ref):
+                let resolved = try wrap(
+                    self.resolveSchema(ref: ref, node: node, other: other),
+                    message: "While resolving \(ref) from \(node.dependency.pathToCurrentFile)"
+                )
+                return .reference(resolved)
+            }
+        }()
+
+        return .init(name: arr.name, itemsType: value)
     }
 }

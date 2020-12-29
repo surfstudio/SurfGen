@@ -18,9 +18,11 @@ public protocol MediaTypeParser {
 public struct AnyMediaTypeParser: MediaTypeParser {
 
     public let arrayParser: ArrayParser
+    public let groupParser: AnyGroupParser
 
-    public init(arrayParser: ArrayParser) {
+    public init(arrayParser: ArrayParser, groupParser: AnyGroupParser) {
         self.arrayParser = arrayParser
+        self.groupParser = groupParser
     }
 
     public func parse(mediaType: MediaTypeObjectNode,
@@ -51,7 +53,11 @@ public struct AnyMediaTypeParser: MediaTypeParser {
         case .reference(let val):
             return try self.parse(ref: val, current: current, other: other)
         case .group(let val):
-            throw CustomError.notInplemented()
+            let group = try wrap(
+                self.groupParser.parse(group: val, current: current, other: other),
+                message: "While parsing group \(val.name)"
+            )
+            return .group(group)
         }
     }
 
@@ -73,6 +79,8 @@ public struct AnyMediaTypeParser: MediaTypeParser {
             return .object(val)
         case .array(let val):
             return .array(val)
+        case .group(let val):
+            return .group(val)
         }
     }
 }

@@ -44,6 +44,8 @@ public struct AnyArrayParser: ArrayParser {
             throw CustomError(message: "Array shouldn't contains object definition")
         case .enum:
             throw CustomError(message: "Array shouldn't contains object definition")
+        case .group:
+            throw CustomError(message: "Array shouldn't contains group definition")
         case .simple(let val):
             return .primitive(val.type)
         case .reference(let val):
@@ -55,8 +57,6 @@ public struct AnyArrayParser: ArrayParser {
             return .reference(schemaType)
         case .array:
             throw CustomError(message: "Array shouldn't contains array definition")
-        case .group(let val):
-            throw CustomError.notInplemented()
         }
     }
 }

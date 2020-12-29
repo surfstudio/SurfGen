@@ -49,7 +49,7 @@ public struct AnySchemaBuilder: SchemaBuilder {
                 self.build(group: val, name: schema.name),
                 message: "While parsing gorup \(schema.name)"
             )
-            throw CustomError.notInplemented()
+            return .init(next: .group(node))
         case .number:
             return .init(next: .simple(.init(name: schema.name, type: .number)))
         case .integer:

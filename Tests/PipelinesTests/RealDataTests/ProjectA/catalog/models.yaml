@@ -30,15 +30,15 @@ components:
         name:
           type: string
           example: Единый Ultra HD
-        # status:
-        #   $ref: "models.yaml#/components/schemas/ServiceStatus"
+        status:
+           $ref: "models.yaml#/components/schemas/ServiceStatus"
         tariffInfo:
           $ref: "../billings/models.yaml#/components/schemas/TariffInfo"
           description: Выводится только на главной экране. Заполняется только если тариф активен. 
-        # endDate:
-        #   $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
-        #   description: Дата окончания услуги. Используется для активных услуг. 
-        #   nullable: true
+        endDate:
+           $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+           description: Дата окончания услуги. Используется для активных услуг.
+           nullable: true
         iconUrl:
           type: string
 
@@ -46,10 +46,10 @@ components:
       type: object
       description: Дополнительная информация по активной услуге
       properties:
-        # startDate:
-        #   $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
-        # endDate:
-        #   $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+        startDate:
+           $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+        endDate:
+           $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
         remainingDays:
           type: number
           description: Остаток дней
@@ -76,8 +76,8 @@ components:
         name:
           type: string
           example: Единый Ultra HD
-        # status:
-        #   $ref: "models.yaml#/components/schemas/ServiceStatus"
+        status:
+           $ref: "models.yaml#/components/schemas/ServiceStatus"
         iconUrl:
           type: string
         prolongable:
@@ -86,9 +86,9 @@ components:
         description:
           type: string
           description: Подробнее об услуге
-        # subscriptionInfo:
-        #   $ref: "models.yaml#/components/schemas/SubscriptionInfo"
-        #   description: Дополнительная информация, если услуга активна
+        subscriptionInfo:
+           $ref: "models.yaml#/components/schemas/SubscriptionInfo"
+           description: Дополнительная информация, если услуга активна
 
     SetTariffRequest:
       type: object

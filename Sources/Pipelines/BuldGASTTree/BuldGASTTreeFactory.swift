@@ -56,7 +56,10 @@ public struct BuldGASTTreeFactory {
     static func buildParser() -> TreeParser {
 
         let arrayParser = AnyArrayParser()
-        let mediaTypeParser = AnyMediaTypeParser(arrayParser: arrayParser)
+        let groupParser = AnyGroupParser()
+
+        let mediaTypeParser = AnyMediaTypeParser(arrayParser: arrayParser,
+                                                 groupParser: groupParser)
         let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser)
         let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser)
 

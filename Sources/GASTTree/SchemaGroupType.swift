@@ -7,8 +7,8 @@
 
 import Foundation
 
-public enum SchemaGroupType {
-    case oneOf
-    case allOf
-    case anyOf
+public enum SchemaGroupType: String {
+    case oneOf = "oneOf"
+    case allOf = "allOf"
+    case anyOf = "anyOf"
 }
