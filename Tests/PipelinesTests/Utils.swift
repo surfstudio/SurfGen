@@ -49,6 +49,8 @@ extension ParameterModel.PossibleType {
             return val
         case .reference(let ref):
             throw CustomError(message: "The parameter's type is reference \(ref)")
+        case .array(let val):
+            throw CustomError(message: "The parameter's type is array \(val)")
         }
     }
 
@@ -58,6 +60,8 @@ extension ParameterModel.PossibleType {
             throw CustomError(message: "The parameter's type is primitive: \(val)")
         case .reference(let val):
             return val
+        case .array(let val):
+            throw CustomError(message: "The parameter's type is array \(val)")
         }
     }
 }

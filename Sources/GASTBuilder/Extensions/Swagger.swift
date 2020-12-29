@@ -81,3 +81,16 @@ extension SchemaType {
         }
     }
 }
+
+extension GroupSchema.GroupType {
+    var gast: SchemaGroupType {
+        switch self {
+        case .all:
+            return .allOf
+        case .one:
+            return .oneOf
+        case .any:
+            return .anyOf
+        }
+    }
+}

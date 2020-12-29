@@ -11,7 +11,11 @@ import Common
 
 public struct ParametersTreeParser {
 
-    public init() { }
+    public let array: ArrayParser
+
+    public init(array: ArrayParser) {
+        self.array = array
+    }
 
     public func parse(parameter: Referenced<ParameterNode>, current: DependencyWithTree, other: [DependencyWithTree]) throws -> Reference<ParameterModel> {
         switch parameter {
@@ -49,7 +53,10 @@ public struct ParametersTreeParser {
             return .primitive(primitive.type)
         case .reference(let ref):
             return .reference(try Resolver().resolveSchema(ref: ref, node: current, other: other))
-        case .array(let arr):
+        case .array(let val):
+            let arr = try self.array.parse(array: val, current: current, other: other)
+            return .array(arr)
+        case .group(_):
             throw CustomError.notInplemented()
         }
     }

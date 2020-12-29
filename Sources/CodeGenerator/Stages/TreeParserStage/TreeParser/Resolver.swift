@@ -77,6 +77,8 @@ public class Resolver {
                          isRequired: resolved.isRequired)
         case .array(let arr):
             throw CustomError.notInplemented()
+        case .group(let group):
+            throw CustomError.notInplemented()
         }
     }
 
@@ -126,6 +128,8 @@ public class Resolver {
             self.refStack.removeLast()
             return res
         case .array(let arr):
+            throw CustomError.notInplemented()
+        case .group(let val):
             throw CustomError.notInplemented()
         }
     }

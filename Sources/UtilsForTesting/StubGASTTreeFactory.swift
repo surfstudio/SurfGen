@@ -69,14 +69,16 @@ public struct StubGASTTreeFactory {
 
     func buildParser(enableDisclarationChecking: Bool = false) -> TreeParser {
 
+        let arrayParser = AnyArrayParser()
+
         let mediaTypeParser: MediaTypeParser = enableDisclarationChecking ?
-            AnyMediaTypeParser() :
-            AnyMediaTypeParserStub()
+            AnyMediaTypeParser(arrayParser: arrayParser) :
+            AnyMediaTypeParserStub(arrayParser: arrayParser)
 
         let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser)
         let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser)
 
-        return .init(parametersParser: .init(),
+        return .init(parametersParser: .init(array: arrayParser),
                      requestBodyParser: requestBodyParser,
                      responsesParser: responsesParser)
     }
