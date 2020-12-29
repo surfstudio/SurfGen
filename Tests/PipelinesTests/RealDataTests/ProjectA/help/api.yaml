@@ -1,0 +1,30 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+  contact:
+    name: Starkina Maria
+    email: starkina@surfstudio.ru
+
+servers:
+  - url: https://mobile-dev.tricolor.tv/mobile-api/v1
+    description: Dev-сервер. 
+  - url:  https://mobile-rel.tricolor.tv/mobile-api/v1
+    description: Stage-сервер
+     
+paths:
+  /feedback/faq:
+    get:
+      summary: Вопросы и ответы
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: "models.yaml#/components/schemas/FaqItem"
+        default:
+          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+

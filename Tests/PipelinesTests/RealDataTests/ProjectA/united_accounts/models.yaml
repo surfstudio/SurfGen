@@ -1,0 +1,174 @@
+components:
+  schemas: 
+    TransferType:
+      type: string
+      enum: [resources, voucher]
+      description: Тип перевода -- средства или услуги
+
+    UnitedItem:
+      description: Объединенный аккаунт из списка
+      type: object
+      properties:
+        tricolorID:
+          type: string
+        alias:
+          type: string
+          description: Псевдоним аккаунта
+          nullable: true
+        isBlocked: 
+          type: boolean
+          description: Заблокирован ли аккаунт
+        isCurrentAccount:
+          type: boolean
+          description: Текущий аккаунт или нет (Текущий аккаунт нужно выводить в списке всех аккаунтов первым)
+        
+    ChangeAccountRequest:
+      description: Тело запроса для перелогина в случае выбора одного из объекдиненных аккаунтов
+      type: object
+      properties:
+        newTricolorId:
+          type: string
+          description: ID аккаунта, на который необходимо переключиться
+
+    AddAccountRequest:
+      description: Тело запроса для добавления аккаунта
+      type: object
+      properties:
+        smartCardOrAgreement:
+          type: string
+        code:
+          description: Это СМС-код для подтверждения. Он заполняется когда необходимо подтвердить это действие с помощью СМС кода
+          nullable: true
+          type: string
+      required:
+        - smartCardOrAgreement
+    
+    AddAccountErrorResponse:
+      description: Ответ-ошибка для добавления аккаунта
+      type: object
+      properties:
+        code:
+          description: Код ошибки
+          type: integer
+          nullable: false
+        message:
+          description: Сообщение, которое будет выведено в попапе
+          type: string
+          nullable: false
+    
+    DisconnectReason:
+      description: Причина отсоединения
+      type: object
+      properties:
+        reason:
+          type: string
+        reasonId:
+          type: string
+      required:
+        - reason
+        - reasonId
+
+    DisconnectAccountRequest:
+      description: Тело запроса для отсоединения аккаунта
+      type: object
+      properties:
+        tricolorID:
+          type: string
+        reasonId:
+          type: string
+          description: ID причины отсоединения
+      required:
+        - tricolorID
+        - reasonId
+
+    TricolorIdInfo:
+      description: Информация по аккаунту для объединения
+      type: object
+      properties:
+        smartCardOrAgreement:
+          type: string
+        installationAddress:
+          type: string
+          description: Адрес установки оборудования
+        mobilePhone:
+          type: string
+          example: 9001234567
+        email:
+          type: string
+    
+    TransferRequest:
+      description: Тело запроса для переноса средств или средств с подключением услуги
+      type: object
+      properties:
+        transferType:
+          $ref: "#/components/schemas/TransferType"
+        sum:
+          type: string
+          description: Просто конвертированный в строку Double. В качестве разделителя используется `.` - 123.12.
+        target:
+          type: string
+          description: Триколор ID - назначение
+        tariffId:
+          type: string
+          description: Тариф услуги, если перенос с подключением
+      required:
+        - transferType
+        - sum
+        - target
+
+    TransferServiceRequest:
+      description: Тело запроса для переноса услуг (КО/пин)
+      type: object
+      properties:
+        transferType:
+          $ref: "#/components/schemas/TransferType"
+        target:
+          type: string
+          description: Триколор ID - назначение
+        voucherId:
+          type: string
+      required:
+        - transferType
+        - target
+        - voucherId
+  
+    AccountForTransfer:
+      description: Объединенный аккаунт из списка аккаунтов для переноса. Должен исключать mpeg2 + кражу + текущий
+      type: object
+      properties:
+        tricolorID:
+          type: string
+        alias:
+          type: string
+          description: Псевдоним аккаунта
+          nullable: true
+        balance:
+          type: string
+      required:
+        - tricolorID
+
+    Services:
+      description: Информация по услугам, включенным в ваучер
+      type: object
+      properties:
+        serviceName:
+          type: string
+          description: Название услуги
+        iconUrl:
+          type: string
+        daysCount:
+          type: string
+          description: Количество дней к переносу
+
+    VouchersForTransfer:
+      description: Услуги (КО/пин) для переноса. Для переноса только услуг
+      type: object
+      properties:
+        voucherId:
+          type: string
+          description: ID услуги
+        services:
+          type: array
+          items:
+            $ref: "#/components/schemas/Services"
+          description: Перечень услуг, включенных в ваучер

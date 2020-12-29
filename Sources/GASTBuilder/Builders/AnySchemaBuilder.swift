@@ -40,7 +40,8 @@ public struct AnySchemaBuilder: SchemaBuilder {
         case .string:
             return try self.processString(schema: schema)
         case .array(let val):
-            throw CustomError.notInplemented()
+            let arr = try self.build(array: val, name: schema.name)
+            return .init(next: .array(arr))
         case .reference(let ref):
             return .init(next: .reference(ref.rawValue))
         case .group:
@@ -82,9 +83,22 @@ public struct AnySchemaBuilder: SchemaBuilder {
                                 type: type,
                                 description: property.schema.metadata.description,
                                 example: property.schema.metadata.example,
-                                nullable: property.nullable)
+                                // TODO: - Swagger lib crash if its a ref. Why? No idea.
+//                                nullable: property.nullable)
+                                nullable: true)
         }
 
         return SchemaModelNode(name: name, properties: properties, description: meta.description)
+    }
+
+    func build(array: ArraySchema, name: String) throws -> SchemaArrayNode {
+
+        switch array.items {
+        case .single(let val):
+            let type = try self.process(schema: .init(name: "", value: val))
+            return .init(name: name, type: type)
+        case .multiple:
+            throw CustomError(message: "At this moment SurfGen doesn't support multiple array items")
+        }
     }
 }

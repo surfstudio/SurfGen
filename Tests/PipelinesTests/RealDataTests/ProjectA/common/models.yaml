@@ -1,0 +1,38 @@
+components:
+  schemas:
+
+    InfoMessage:
+      type: object
+      description: Модель, которая хранит какое-то сообщение
+      properties:
+        text: 
+          type: string
+          nullable: false
+    
+    OtpRequired:
+      type: object
+      description: Модель, которая приходит, если нужен ОТП
+      properties:
+        nextOtp: 
+          type: number
+          description: время возможной отправки следующего кода. В секундах
+          example: 60
+      required:
+        - nextOtp
+
+    # OtpAndInfo:
+    #   oneOf:
+    #     - $ref: "../common/models.yaml#/components/schemas/OtpRequired"
+    #     - $ref: "../common/models.yaml#/components/schemas/InfoMessage"     
+
+    KeyValuePair:
+      type: object
+      description: Пара ключ-значение
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+      required:
+        - key
+        - value

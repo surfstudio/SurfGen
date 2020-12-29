@@ -29,7 +29,7 @@ public struct ResponseBodyParser {
             case .ref(let val):
                 let values = try wrap(
                     self.parse(ref: val, current: current, other: other),
-                    message: "While resolving \(val) in \(current.dependency.pathToCurrentFile)"
+                    message: "While resolving \(val) from \(current.dependency.pathToCurrentFile)"
                 )
                 return .reference(.init(key: response.key, values: values))
             }

@@ -1,0 +1,157 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+  contact:
+    name: Кравченков Александр
+    email: kravchenkov@surfstudio.ru
+
+servers:
+  - url: https://mobile-dev.tricolor.tv/mobile-api/v1
+    description: Dev-сервер. 
+  - url:  https://mobile-rel.tricolor.tv/mobile-api/v1
+    description: Stage-сервер
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+
+paths:
+  /resources/captcha:
+    get:
+      summary: Возвращает капчу для ввода. Либо указывает, что капча не нужна. Эдакий антифрод.
+      parameters:
+        - name: type
+          required: true
+          in: query
+          schema:
+            $ref: "models.yaml#/components/schemas/RequestMetaType"
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/Captcha"
+        default:
+          $ref: "../errors.yaml#/components/schemas/ApiErrorResponse"
+          
+  /resources/offer/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Возвращает текст оферты.
+      parameters:
+        - name: id
+          required: false
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                $ref: "../models.yaml#/components/schemas/InfoMessage"
+        default:
+          $ref: "../errors.yaml#/components/schemas/ApiErrorResponse"
+
+  /resources/getAttachment:
+    get:
+      summary: Возвращает attachment по id
+      parameters:
+        - name: id
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: type
+          required: true
+          in: query
+          schema:
+            $ref: "models.yaml#/components/schemas/AttachType"
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/Attachment"
+        default:
+          $ref: "../errors.yaml#/components/schemas/ApiErrorResponse"
+
+  /resources/config:
+    get:
+      summary: Метод конфига
+      description: > 
+        Здесь будет возвращаться конфиг для приложения. 
+        Представляет из себя словарь со вложенными словарями:
+        {"common": "error": {"noNetwork": "text"}}}
+        Полную конфигурацию можно посмотреть $ссылка
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+        default:
+          $ref: "../errors.yaml#/components/schemas/ApiErrorResponse"
+
+  /resources/infoBanner:
+    get:
+      summary: Возвращает информационный баннер или пустоту 
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/InfoBanner"
+        default:
+          $ref: "../errors.yaml#/components/schemas/ApiErrorResponse"
+
+  /resources/accept:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Возвращает текст и ссылки акцепта
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "models.yaml#/components/schemas/AcceptRequestItem" 
+        default:
+          $ref: "../errors.yaml#/components/schemas/ApiErrorResponse"
+    post:
+      security:
+        - bearerAuth: []
+      summary: Принятие акцепта 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "models.yaml#/components/schemas/AcceptRequest" 
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "../models.yaml#/components/schemas/InfoMessage"
+                  - $ref: "../models.yaml#/components/schemas/OtpRequired"
+        default:
+          $ref: "../errors.yaml#/components/schemas/ApiErrorResponse"
+
+

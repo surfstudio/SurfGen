@@ -1,0 +1,211 @@
+components:
+  schemas:
+
+    UnitedInfo:
+      description: Информация по текущему аккаунту
+      type: object
+      properties:
+        alias:
+          type: string
+          description: Псевдоним аккаунта
+          nullable: true
+        isTransferAvailable:
+          type: boolean
+          description: Доступен ли перенос средств для аккаунта. Если isTransferAvailable или isTransferServicesAvailable = true, то рисуем кнопку переноса
+        isTransferVouchersAvailable:
+          type: boolean
+          description: Доступен ли перенос КО и пин. Если isTransferAvailable или isTransferServicesAvailable = true, то рисуем кнопку переноса
+        hasUnitedAccounts:
+          type: boolean
+          description: Если true - показывать иконку переименования 
+
+    RegInfo:
+      type: object
+      properties:
+        passportInfo:
+          $ref: "models.yaml#/components/schemas/Passport"
+        birthDate:
+          $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+        contactAddress:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+          description: Имя
+          nullable: false
+        secondName:
+          type: string
+          description: Фамилия
+          nullable: false
+        thirdName: 
+          type: string
+          description: Отчество
+          nullable: true
+        homePhone:
+          type: string
+        installationAddress:
+          type: string
+          description: Адрес установки приемника
+        mobilePhone:
+          type: string
+        modelId:
+          type: string
+          description: ID модели приемника
+        modelName:
+          type: string
+          description: Модель приемника
+        serialNumber:
+          type: string
+          description: Серийный номер приемника
+
+    Passport:
+      type: object
+      properties:
+        issueDate:
+          description: Дата выдачи
+        issuedBy:
+          type: string
+          description: Выдан
+        number:
+          type: string
+        series:
+          type: string
+        type: 
+          type: string
+          description: Тип документа
+    
+    AllClientInfo:
+      type: object
+      description: Вся информация о пользователе 
+      properties:
+        smartCardId:
+          type: string
+          description: Триколор ID
+          example: 56025502766869
+        agreementDate:
+          $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+          description: Дата договора (регистрации)
+        agreementNumber:
+          type: string
+          description: Номер договора
+        isDownloadAvailable:
+          type: boolean
+          description: Будет ли кнопка скачивания договора
+        agreementState:
+          type: string
+          description: Статус договора
+        data:
+          $ref: "models.yaml#/components/schemas/RegInfo"
+          description: Регистрационная информация
+        dealerId:
+          type: string
+          description: Текущий дилер
+          example: 2381
+        startTariff:
+          type: string
+          description: Стартовый тариф
+          example: Единый Обмен 200
+        deviceId:
+          type: string
+          description: ID устройства
+          example: 5a047b98-9586-4b4b-bac9-38643cada5ee
+        unitedInfo:
+          $ref: "models.yaml#/components/schemas/UnitedInfo"
+
+    UpdateUserInfo:
+      type: object
+      description: Необходимо для обновления контактных данных
+      properties:
+        mobilePhone:
+          type: string
+        email:
+          type: string
+        agree:
+          type: boolean
+          description: Признак согласия на обработку данных  
+        confirmCode:
+          type: string
+          description: Отправляется вторым запросом
+        ignoreNonUniquePhone:
+          type: boolean
+          description: По умолчанию false
+        
+    UpdateUserInfoFromProfile:
+      type: object
+      description: Необходимо для обновления контактных данных
+      properties:
+        mobilePhone:
+          type: string
+        email:
+          type: string
+        agree:
+          type: boolean
+          description: Признак согласия на обработку данных  
+        confirmCode:
+          type: string
+          description: Отправляется вторым запросом
+        ignoreNonUniquePhone:
+          type: boolean
+          description: По умолчанию false
+      required:
+        - mobilePhone
+        - email
+
+    CurrentState:
+      type: string
+      enum: [active, blocked]
+      description: Статус абонента
+
+    CreditInformation:
+      description: Кредитная информация
+      type: object
+      properties:
+        status:
+          $ref: "models.yaml#/components/schemas/CurrentState"
+          description: Статус абонента
+        statusDescription:
+          type: string
+          example: Обслуживание приостановлено из-за просрочки платежа
+        suspenseDate:
+          $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+          description: Приостановка при просрочке
+          nullable: true
+        currentDept:
+          type: string
+          description: Текущая задолженность
+          nullable: true
+        nextPayment:
+          type: string
+          description: Сумма ближайшего платежа
+        allDept:
+          type: string
+          description: Общая задолженность
+        dueDate:
+          $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+          description: Дата следующего платежа
+        creditEndDate:
+          $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+          description: Дата окончания услуги в рассрочку
+
+    ChangePasswordRequest:
+      type: object
+      description: Данные для изменения пароля
+      properties:
+        oldPassword:
+          type: string
+        newPassword:
+          type: string
+      required:
+        - password
+        - newPassword 
+    
+    ChangeAliasRequest:
+      type: object
+      description: Данные для изменения псевдонима
+      properties:
+        newAlias:
+          type: string
+      required:
+        - newAlias
+

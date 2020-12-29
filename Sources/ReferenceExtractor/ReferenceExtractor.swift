@@ -21,6 +21,9 @@ import Common
 ///
 /// `ReferenceExtractor` is proof to reference cycles
 ///
+/// **ATTENTION**
+/// Doesn't exclude local references. SO if ypu have reference which is local (wihtout file path before `#`)
+/// Extractor doesn't return it in result array.
 ///
 /// **WARNING**
 /// Isn't thread-safe!
@@ -108,6 +111,7 @@ extension ReferenceExtractor {
             case let sp as [String: Any]:
                 try self.collectAllRefs(in: sp, file: file, currentDependency: &currentDependency)
             case let str as String:
+
                 guard key == "$ref" else {
                     continue
                 }
@@ -127,14 +131,15 @@ extension ReferenceExtractor {
 
 
     func readOther(filePath: String, fromFile: String, currentDependency: inout Dependency, refString: String) throws {
-        var rootUrl = self.rootSpecPath
+        guard var rootUrl = URL(string: currentDependency.pathToCurrentFile) else {
+            throw CustomError(message: "Couldn't convert \(currentDependency.pathToCurrentFile) to URI")
+        }
 
         rootUrl.deleteLastPathComponent()
 
         let resultedUrlToFileToParse = try rootUrl.absoluteString.appending(filePath).normalized()
 
         currentDependency.dependecies[refString] = resultedUrlToFileToParse
-
 
         // if we already read this file we won't read it again
         if self.readStack.contains(resultedUrlToFileToParse) {

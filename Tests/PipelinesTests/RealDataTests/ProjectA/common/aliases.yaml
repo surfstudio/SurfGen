@@ -1,0 +1,6 @@
+components:
+  schemas:
+
+    ISO8601Date:
+      description: Дата в формате ISO8601 `YYYY-MM-DDThh:mm:ss±hh:mm`
+      type: string

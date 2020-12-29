@@ -1,0 +1,10 @@
+components:
+  schemas:
+
+    InformationChannel:
+      type: string
+      enum: [sms, email]
+      description: > 
+        Канал информирования пользователя о чем-то. 
+        * sms - отправка СМС сообщения
+        * email - отправка E-mail-а

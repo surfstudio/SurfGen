@@ -1,0 +1,139 @@
+components:
+  schemas: 
+
+    ResetPasswordRequest:
+      type: object
+      properties:
+        identity:
+          type: string
+          description: ID/Номер договора
+          nullable: false
+        firstName:
+          type: string
+          description: Имя
+          nullable: false
+        secondName:
+          type: string
+          description: Фамилия
+          nullable: false
+        thirdName: 
+          type: string
+          description: Отчество
+          nullable: true
+        isThirdNameExist:
+          type: boolean
+          description: Если отчество есть - true.
+        informationChannel:
+          $ref: "../common/enums.yaml#/components/schemas/InformationChannel"
+        captcha:
+          $ref: "../common/resources/models.yaml#/components/schemas/CaptchaPayloadInfo"
+
+    FindIdRequest:
+      type: object
+      description: >
+        Это запрос поиска ID по телефону. 
+        Он может быть дополнен списком девайсов и СМС кодом, если это необходимо по флоу работы.
+      properties:
+        phone:
+          type: string
+          nullable: false
+        devices:
+          description: >
+            Тут передается список девайсов только в том случае, 
+            если первая попытка отправки этого запроса была с ошибкой FindIdManyDevicesErrorResponse
+          nullable: true
+          type: array
+          items:
+            $ref: "models.yaml#/components/schemas/IdBoundDevices"
+        code:
+          description: Это СМС код для подтверждения. 
+          nullable: true
+          type: string
+
+    IdBoundDevices:
+      type: object
+      properties:
+        guid:
+          type: string
+          nullable: false
+        maskId:
+          type: string
+          nullable: false
+        model:
+          type: string
+          nullable: false
+
+    FindIdManyDevicesErrorResponse:
+      type: object
+      description: Этот объект - ошибка (500 http-code), которая говорит, что нужно открыть экран выбора девайсов
+      properties:
+        code:
+          description: В этой ошибке код всегда равен 1012
+          type: integer
+          nullable: false
+        message:
+          description: Сообщение, которое будет выведено в выпадающем снеке
+          type: string
+          nullable: false
+        devices:
+          nullable: false
+          type: array
+          items:
+            $ref: "models.yaml#/components/schemas/IdBoundDevices"
+
+    UserInfo:
+      description: Общая информация о пользователе
+      type: object
+      properties:
+        smartCardId:
+          type: string
+          description: ID смарт-карты 
+          example: 56025502766869
+        isPaused:
+          type: boolean
+          description: Приостановлен ли Триколор ID
+        isFinBlock:
+          type: boolean
+          description: Финансовая блокировка
+        userName:
+          $ref: "models.yaml#/components/schemas/UserName"
+        alias:
+          type: string
+          description: Псевдоним аккаунта 
+        hasUnitedAccounts:
+          type: boolean
+          description: Если true - запрашиваем список объединенных аккаунтов
+        lkUnity:
+          type: boolean
+          description: Участвует ли абонент в программе объединения аккаунтов или нет
+      required:
+        - smartCardId
+        - userName
+
+    UserName:
+      description: Имя пользователя
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: Имя
+          nullable: false
+        secondName:
+          type: string
+          description: Фамилия
+          nullable: false
+        thirdName: 
+          type: string
+          description: Отчество
+          nullable: true
+      required:
+      - firstName
+      - surname
+
+    IsPersonified:
+      description: Информация по персонификации
+      type: object
+      properties:
+        isPersonified:
+          type: boolean
+          nullable: false

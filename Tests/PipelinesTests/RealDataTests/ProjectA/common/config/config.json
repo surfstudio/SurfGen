@@ -1,0 +1,885 @@
+{
+    "DisconnectReasons": {
+        "button": "Разъединить",
+        "subtitle": "Укажите причину, по которой хотите разъединить выбранные Личные кабинеты",
+        "title": "Разъединить"
+    },
+    "TabBar": {
+        "Help": {
+            "title": "Помощь"
+        },
+        "Main": {
+            "title": "Главная"
+        },
+        "Catalog": {
+            "title": "Каталог"
+        },
+        "Profile": {
+            "title": "Профиль"
+        }
+    },
+    "AllPromoContainer": {
+        "title": "Акции",
+        "Segment": {
+            "promo": "Все акции",
+            "history": "История подключений"
+        }
+    },
+    "UserAgreement": {
+        "agreement": "Пользовательское соглашение",
+        "rejectButton": "Отклонить",
+        "acceptButton": "Принять"
+    },
+    "AboutRepeatComands": {
+        "error4": "Ошибка 13",
+        "warning": "Воспользоваться данной опцией повторно вы сможете через 24 часа после активации",
+        "error": "",
+        "title": "Повтор команд активации",
+        "error3": "Ошибка 10",
+        "error2": "Ошибка 0",
+        "info": "<p>Доступ к просмотру каналов, транслируемых через интернет и в мобильном приложении «Триколор Кино и ТВ», будет предоставлен в течение 10 минут.</p> <br> Для доступа к просмотру кодированных спутниковых каналов оставьте приемное оборудование включенным, доступ восстановится не позднее чем через 8 часов. Воспользоваться повтором команд активации возможно не чаще 1 раза в 5 дней."
+    },
+    "PaymentTypesBottomSheet": {
+        "commissionInfo": "",
+        "title": "Способ оплаты"
+    },
+    "AccountCell": {
+        "tricolorIdBlocked": "Триколор ID заблокирован",
+        "tricolorId": "Триколор ID"
+    },
+    "CreditPayment": {
+        "sumPlaceholder": "Сумма",
+        "description": "Введите сумму, на которую хотите пополнить Личный счет",
+        "nextAction": "Далее",
+        "tilte": "Пополнить баланс"
+    },
+    "SetPin": {
+        "Subtitle": {
+            "enterNewPin": "Придумайте новый PIN",
+            "enterNewPinAgain": "Введите новый PIN еще раз",
+            "currentPassword": "Введите текущий PIN"
+        },
+        "title": "Изменить PIN",
+        "Success": {
+            "subtitle": "Новый PIN успешно установлен"
+        }
+    },
+    "EnterOldPassword": {
+        "subtitle": "Введите текущий пароль",
+        "title": "Сменить пароль",
+        "currentPassword": "Текущий пароль"
+    },
+    "PromotionDetail": {
+        "applyPromotion": "Оставить заявку",
+        "getBonuses": "Получить бонусы",
+        "Card": {
+            "success": "Бонус подключен!",
+            "Error": {
+                "title": "Не удалось подключить спецпредложение"
+            }
+        }
+    },
+    "Settings": {
+        "ChangePassword": {
+            "title": "Сменить пароль"
+        },
+        "Biometric": {
+            "FaceID": {
+                "error": "Для возможности входа по Face ID установите PIN.",
+                "title": "Вход по Face ID"
+            },
+            "TouchID": {
+                "errorAndroid": "Для возможности входа по отпечатку пальца установите PIN.",
+                "error": "Для возможности входа по Touch ID установите PIN.",
+                "title": "Вход по Touch ID",
+                "titleAndroid": "Вход по отпечатку пальца"
+            }
+        },
+        "SetPin": {
+            "title": "Установить PIN"
+        },
+        "OpenInSettings": {
+            "enableSubtitle": "Чтобы получать актуальную информацию о периодах профилактики вещания и возможных технических работах, включите доступ приложения к уведомлениям в настройках приложения.",
+            "disableSubtitle": "Отключить уведомления можно в настройках приложения."
+        },
+        "ChangePin": {
+            "title": "Сменить PIN"
+        },
+        "PushTUP": {
+            "topButton": "В настройки",
+            "title": "Push уведомления"
+        },
+        "title": "Настройки",
+        "Notifications": {
+            "title": "Разрешить уведомления"
+        },
+        "OpenSettingsLater": {
+            "subtitle": "Вы сможете включить уведомления в любое время в настройках приложения"
+        }
+    },
+    "Messages": {
+        "successDeletion": "Сообщение успешно удалено",
+        "title": "Сообщения от Триколор"
+    },
+    "EnterId": {
+        "placeholder": "Триколор ID",
+        "title": "Оплата без авторизации",
+        "PaymentError": {
+            "subtitle": "Повторите попытку позже.",
+            "title": "В данный момент оплата недоступна"
+        }
+    },
+    "PersonalInfoAgreement": {
+        "title": "Настоящим я выражаю согласие на сбор, хранение и обработку моих персональных данных всеми способами обработки персональных данных (в соответствии с Федеральным законом от 27.07.2006 N 152-ФЗ \"О персональных данных\" и Политикой обработки персональных  данных НАО \"Национальная спутниковая компания\", размещенной на сайте tricolor.tv) с целью ответов на мои обращения, оказания услуг и направления информационной рассылки НАО \"Национальная спутниковая компания\", в том числе с привлечением третьих лиц. Согласен (-а) на получение ответов на обращения, информации в указанных целях, доступными для НАО \"Национальная спутниковая компания\" способами, в том числе путем использования телефонной, факсимальной, подвижной радиотелефонной связи (СМС-сообщений) и электронной почты."
+    },
+    "AddNewAccountConfirmation": {
+        "address": "Адрес установки оборудования",
+        "phone": "Номер телефона",
+        "id": "Триколор ID или номер договора",
+        "email": "Email"
+    },
+    "AppliedPromo": {
+        "State": {
+            "Empty": {
+                "Action": {
+                    "title": "На главную"
+                },
+                "title": "У вас нет активированных бонусов."
+            },
+            "Error": {
+                "Action": {
+                    "title": "Обновить"
+                },
+                "title": "Повторите попытку позже."
+            }
+        }
+    },
+    "Login": {
+        "IdTextField": {
+            "placeholder": "Триколор ID или номер телефона",
+            "idInfoLink": "https://www.tricolor.tv/help/technical-issues/chto-takoe-id/?source=body&section=help-center&option=question-and-answer"
+        },
+        "ForgotIdButton": {
+            "title": "Забыли Триколор ID?"
+        },
+        "PasswordTextField": {
+            "placeholder": "Пароль"
+        },
+        "GetPasswordButton": {
+            "title": "Получить пароль"
+        },
+        "RememberPasswordCheckBox": {
+            "title": "Запомнить пароль"
+        },
+        "title": "Вход",
+        "LoginButton": {
+            "title": "Войти"
+        }
+    },
+    "MyInfo": {
+        "agreement": "Договор",
+        "regData": "Регистрационные данные",
+        "addContactData": "Укажите свои контактные данные.",
+        "downloadAgreement": "Скачать договор",
+        "emptyContact": "Не указан",
+        "error": "Не удалось получить информацию. Повторите попытку позже",
+        "title": "Мои данные",
+        "Cell": {
+            "Title": {
+                "agreementDate": "Дата регистрации",
+                "dealerId": "Текущий дилер",
+                "homePhone": "Домашний телефон",
+                "issuedBy": "Место выдачи документа",
+                "thirdName": "Отчество",
+                "agreementNumber": "Номер договора",
+                "type": "Вид документа",
+                "birthDate": "Дата рождения",
+                "firstName": "Имя",
+                "modelName": "Модель приемника",
+                "mobilePhone": "Мобильный телефон",
+                "agreementState": "Статус договора",
+                "series": "Серия/номер документа",
+                "contactAddress": "Контактный адрес",
+                "installationAddress": "Адрес установки",
+                "issueDate": "Дата выдачи документа",
+                "smartCardId": "Триколор ID",
+                "email": "E-mail",
+                "secondName": "Фамилия"
+            }
+        },
+        "ShareContract": {
+            "title": "Действия",
+            "save": "Сохранить",
+            "share": "Поделиться"
+        },
+        "changeDataLink": "https://surfstudio.ru"
+    },
+    "ChangeContacts": {
+        "notUniquePhone": "Данный телефон уже используется",
+        "Checkbox": {
+            "error": "Для создания обращения требуется согласие на обработку персональных данных.",
+            "title": "Согласен на сбор и обработку персональных данных."
+        },
+        "Error": {
+            "subtitle": "Повторите попытку позже.",
+            "title": "Не удалось изменить данные"
+        },
+        "Otp": {
+            "subtitle": "Введите код из СМС",
+            "title": "Изменить данные"
+        },
+        "title": "Изменить контактные данные"
+    },
+    "Catalog": {
+        "title": "Каталог"
+    },
+    "Common": {
+        "Greeting": {
+            "goodEvening": "Добрый вечер,",
+            "goodNight": "Доброй ночи,",
+            "goodMorning": "Доброе утро,",
+            "goodAfternoon": "Добрый день,"
+        },
+        "PersonalAccount": {
+            "serviceId": "-1"
+        },
+        "Button": {
+            "add": "Добавить",
+            "cancel": "Отмена",
+            "next": "Продолжить",
+            "turnOn": "Включить",
+            "forward": "Далее",
+            "toMain": "На главную",
+            "change": "Изменить",
+            "save": "Далее",
+            "back": "Назад",
+            "pay": "Оплатить",
+            "agree": "Согласиться",
+            "delete": "Удалить",
+            "noEmail": "У меня нет email",
+            "repeatCommands": "Повтор команд активации",
+            "reload": "Обновить",
+            "transfer": "Перенести",
+            "addService": "Подключить",
+            "leave": "Покинуть",
+            "ready": "Готово",
+            "changeTariff": "Изменить тариф",
+            "close": "Закрыть",
+            "send": "Отправить"
+        },
+        "TextFields": {
+            "Placeholder": {
+                "firstname": "Имя",
+                "phone": "Мобильный телефон",
+                "middlename": "Отчество",
+                "email": "E-mail",
+                "lastname": "Фамилия"
+            },
+            "Error": {
+                "wrongFormat": "Неверный формат",
+                "empty": "Поле не заполнено"
+            }
+        },
+        "Dates": {
+            "fromFirstToSecond": "с %@ по %@"
+        },
+        "Error": {
+            "tryLater": "Повторите попытку позже.",
+            "enterPinError": "Не удалось загрузить часть данных. Повторите попытку позже.",
+            "sessionExpired": "Время сессии истекло, авторизуйтесь повторно.",
+            "inactualDataOnScreen": "Не удалось загрузить часть данных. Обновите страницу либо повторите попытку позже.",
+            "undefind": "Повторите попытку позже.",
+            "serviceNotAvalible": "Сервис временно недоступен. Пожалуйста, попробуйте позже."
+        },
+        "Strings": {
+            "tariffCost": "%@ / %@",
+            "shortDaysCount": "%@ дн",
+            "surruondedByArrows": "«%@»"
+        },
+        "Url": {
+            "call": "https://zingaya.com/widget/ab461d8ee590be9889c577c4370ad37a?preferred_region=19&amp;strict_region_route=1&amp;extra=useragent%3AMozilla%2F5.0%20(Windows%20NT%206.1%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F61.0.3163.100%20Safari%2F537.36&amp;referrer=https%3A//www.tricolor.tv/help/",
+            "chat": "https://surfstudio.ru",
+            "idInfo": "https://surfstudio.ru",
+            "cardPaymentWebRedirect": "https://www.tricolor.tv/tpay"
+        },
+        "Selector": {
+            "phone": "Телефон",
+            "email": "E-mail"
+        },
+        "RegExp": {
+            "phone": "^9[0-9]{9}$",
+            "email": "^[A-Z0-9a-z._%+\\-]{1,256}@[A-Za-z0-9.\\-]{1,256}\\.[A-Za-z]{2,64}$"
+        }
+    },
+    "Payment": {
+        "Confirmation": {
+            "Action": {
+                "title": "Оплатить"
+            },
+            "Items": {
+                "cartSumResult": "Итого:",
+                "tricolorId": "Триколор ID",
+                "recieptType": "Способ доставки чека",
+                "bindingCheckbox": "Согласен с <a href=\"https://www.tricolor.tv/upload/files/Oferta_avtoplatezh_21.08.2019_itog.PDF\">условиями привязки карты и совершения автоплатежа</a>",
+                "paymentPurpose": "Назначение платежа",
+                "paymentType": "Способ оплаты"
+            },
+            "title": "Подтверждение",
+            "Tup": {
+                "Error": {
+                    "subtitle": "Повторите попытку позже",
+                    "title": "Повторите попытку позже"
+                }
+            }
+        },
+        "PaymentsIDs": {
+            "bankCard": "sbacq",
+            "Android": {
+                "merchantName": "Триколор",
+                "gateway": "sberbank",
+                "gatewayMerchantId": "tricolor_ApplePay",
+                "isTestEnvironment": "true"
+            }
+        }
+    },
+    "MyService": {
+        "cardInfo": "Дополнительно доступно карт: %@",
+        "daysInfo": "Дней просмотра: %@",
+        "more": "Подробнее о пакете",
+        "SetTariff": {
+            "success": "Тариф успешно изменен.",
+            "error": "Не удалось изменить тариф продления"
+        },
+        "BottomSheet": {
+            "title": "Пакет %@"
+        },
+        "Info": {
+            "currentTariff": "Тариф продления",
+            "endDate": "Действует до",
+            "remainingDays": "Остаток дней"
+        },
+        "Balance": {
+            "notEnoughFunds": "Недостаточно средств для оплаты с баланса",
+            "enoughFunds": "Достаточно средств для оплаты с баланса"
+        }
+    },
+    "Transfer": {
+        "transferToAccount": "Перенести на Триколор ID",
+        "sum": "Сумма переноса",
+        "placeholder": "Введите сумму",
+        "choice": "Выбрать",
+        "fieldError": "Сумма превышает остаток средств на балансе",
+        "title": "Перенос средств"
+    },
+    "ErrorView": {
+        "Messages": {
+            "title": "Что-то пошло не так. Повторите попытку позже"
+        },
+        "MyService": {
+            "title": "Не удалось загрузить услугу. Повторите попытку позже."
+        },
+        "PromotionDetail": {
+            "title": "Повторите попытку позже"
+        },
+        "Catalog": {
+            "title": "Не удалось загрузить предложения. Повторите попытку позже."
+        }
+    },
+    "PushNotification": {
+        "deepLinkUrl": "deepLinkUrl",
+        "gcmMessageIDKey": "gcm.message_id"
+    },
+    "Confirmation": {
+        "Action": {
+            "DeleteItem": {
+                "subtitle": "Удалить услугу <b>%@</b> из списка на оплату?"
+            },
+            "DeleteAll": {
+                "basket": "Удалить все услуги и перейти на экран \"Корзина\"?",
+                "catalog": "Вернуться на экран \"Услуги\"??"
+            },
+            "Close": {
+                "subtitle": "Покинуть экран «Оплата»?"
+            }
+        },
+        "Service": {
+            "tariff": "Тариф",
+            "title": "Услуга"
+        },
+        "title": "Оплата",
+        "Balance": {
+            "currentBalance": "Текущий баланс",
+            "serviceName": "Пополнение баланса",
+            "operation": "Операция"
+        },
+        "Cell": {
+            "Sum": {
+                "placeholder": "Сумма платежа"
+            }
+        },
+        "checkDelivery": "Способ получения чека"
+    },
+    "GetPassword": {
+        "subtitle": "Для получения/восстановления пароля заполните поля ниже.",
+        "destination": "Куда отправить пароль",
+        "checkBox": "Нет отчества",
+        "placeholder": "Триколор ID или номер договора",
+        "title": "Получить пароль"
+    },
+    "EmptyView": {
+        "Messages": {
+            "action": "На главную",
+            "title": "На данный момент у вас нет ни одного сообщения"
+        },
+        "AllPromotions": {
+            "action": "На главную",
+            "title": "В данный момент у вас нет доступных предложений для подключения"
+        }
+    },
+    "AccountsBottomSheet": {
+        "Error": {
+            "NoUnitedAccounts": {
+                "title": "Не найдено объединенных Триколор ID"
+            },
+            "button": "Написать в Службу поддержки"
+        },
+        "accountNotPersonifiedLink": "https://surfstudio.ru",
+        "addAccount": "Добавить Триколор ID",
+        "title": "Выбор Триколор ID",
+        "accountCountForSimpleUnionFlow": "3"
+    },
+    "ChangeAlias": {
+        "alias": "Псевдоним",
+        "info": "Используйте псевдоним для более удобной навигации при наличии нескольких объединенных Триколор ID. Псевдоним не имеет отношения к регистрационной информации."
+    },
+    "EnterNewPassword": {
+        "subtitle": "Введите новый пароль",
+        "Error": {
+            "differentPasswords": "Введенные пароли не совпадают"
+        },
+        "confirmPassword": "Новый пароль еще раз",
+        "newPassword": "Новый пароль",
+        "title": "Сменить пароль"
+    },
+    "Help": {
+        "Call": {
+            "title": "Звонок через интернет",
+            "url": "https://zingaya.com/widget/ab461d8ee590be9889c577c4370ad37a?preferred_region=19&amp;strict_region_route=1&amp;extra=useragent%3AMozilla%2F5.0%20(Windows%20NT%206.1%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F61.0.3163.100%20Safari%2F537.36&amp;referrer=https%3A//www.tricolor.tv/help/"
+        },
+        "Support": {
+            "maxFileSize": "1024",
+            "title": "Создать обращение"
+        },
+        "Faq": {
+            "title": "Вопросы и ответы"
+        },
+        "Chat": {
+            "title": "Чат с поддержкой",
+            "url": "https://www.tricolor.tv/#"
+        },
+        "title": "Помощь"
+    },
+    "ReceiptDelivery": {
+        "Subtitle": {
+            "phone": "Укажите ваш номер телефона",
+            "email": "Укажите ваш email"
+        },
+        "CheckBox": {
+            "phone": "Сохранить данный телефон как актуальный, в том числе для получения рассылок?",
+            "email": "Сохранить данный email как актуальный, в том числе для получения рассылок?"
+        },
+        "title": "Выбор способа доставки чека"
+    },
+    "SumValidator": {
+        "minSum": "1",
+        "emptyError": "Поле должно быть заполнено",
+        "maxSumError": "Максимальный платеж — 14 999 ?",
+        "maxSum": "15000",
+        "minSumError": "Минамальный платеж — 1 ?"
+    },
+    "LinkedCards": {
+        "EmptyState": {
+            "button": "Добавить карту",
+            "title": "У вас нет ни одной привязанной карты. Добавьте карту для того, чтобы оплачивать услуги быстрее и удобнее"
+        },
+        "InfoCard": {
+            "Agreement": {
+                "subtitle": "Согласен с  <a href=\"https://www.tricolor.tv/upload/files/Oferta_avtoplatezh_21.08.2019_itog.PDF\">условиями</a> привязки карты и совершения автоплатежа. Привязка карты и подключение автоплатежа могут занять несколько минут."
+            },
+            "Warning": {
+                "topButton": "Заполнить данные",
+                "subtitle": "Ваши регистрационные данные заполнены не полностью. Для возможности привязывать банковские карты и управлять автоплатежами пройдите процедуру изменения персональных данных.",
+                "title": "Внимание!"
+            },
+            "ChangeAutoPay": {
+                "subtitle": "Сейчас автоплатеж подключен для %@",
+                "title": "Установить автоплатеж для карты %@?",
+                "topButton": "Установить"
+            },
+            "DeleteCard": {
+                "WithAutoPay": {
+                    "title": "Внимание! По данной карте подключен автоплатеж. При удалении карты ранее настроенные автоплатежи производиться не будут. Удалить привязанную карту?"
+                },
+                "WithoutAutoPay": {
+                    "title": "Удалить карту?"
+                }
+            },
+            "SetAutoPay": {
+                "title": "Подключить автоплатеж к карте <b>%@</b>",
+                "topButton": "Подключить"
+            }
+        },
+        "autopay": "Автоплатеж",
+        "addNewCardLink": "https://surfstudio.ru",
+        "ErrorState": {
+            "title": "Не удалось загрузить список привязанных карт. Повторите попытку позже."
+        },
+        "addCardType": "sbacq",
+        "title": "Привязанные карты"
+    },
+    "CreditInfo": {
+        "Status": {
+            "blockedService": "приостановлен",
+            "activeService": "активен"
+        },
+        "currentDept": "Текущая задолженность",
+        "suspendDate": "Приостановка при просрочке",
+        "nextPaymentSum": "Сумма ближайшего платежа",
+        "nextPaymentDate": "Дата следующего платежа",
+        "endDate": "Дата окончания внесения платежей",
+        "payAction": "Пополнить баланс",
+        "allDept": "Общая задолженность",
+        "error": "Не удалось получить информацию по рассрочке. Повторите попытку позже.",
+        "title": "Информация о рассрочке",
+        "infoMessage": "Обслуживание приостановлено из-за просрочки платежа"
+    },
+    "EnablePushTUP": {
+        "subtitle": "Чтобы получать актуальную информацию о специальных предложениях и  возможных технических работах, включите доступ приложения к уведомлениям.",
+        "title": "Push уведомления"
+    },
+    "ActivateCard": {
+        "cost": "Номинал",
+        "secretCode": "Секретный код",
+        "activateButton": "Активировать",
+        "idOrContractNumber": "Триколор ID или номер договора",
+        "title": "Активировать карту",
+        "Success": {
+            "cost": "Баланс вашего Личного счета пополнен на %@",
+            "service": "Статус «%@» вы можете уточнить в разделе «Мои услуги»"
+        }
+    },
+    "Profile": {
+        "exit": "Выход",
+        "settings": "Настройки",
+        "transfer": "Перенос средств между Триколор ID",
+        "myInfo": "Мои данные",
+        "alias": "Добавить псевдоним",
+        "client": "Клиент",
+        "credit": "Информация по рассрочке",
+        "error": "Не удалось загрузить информацию. Повторите попытку позже.",
+        "exitQuestion": "Вы уверены что хотите выйти из кабинета?",
+        "card": "Привязанные карты"
+    },
+    "PinCode": {
+        "FaceID": {
+            "question": "Настроить Face ID для авторизации?"
+        },
+        "confirm": "Использовать",
+        "forgotPin": "Забыли PIN?",
+        "setPin": "Задать PIN",
+        "createPin": "Придумайте 4-х значный код",
+        "enterAgain": "Введите PIN еще раз",
+        "wrongCode": "PIN не совпадает",
+        "enterPin": "Введите PIN",
+        "biometricStateChangedMessage": "Условия входа на вашем телефоне изменены. Пожалуйста, авторизуйтесь по PIN",
+        "skip": "Пропустить",
+        "TouchID": {
+            "question": "Настроить Touch ID для авторизации?",
+            "questionAndroid": "Настроить отпечаток пальца для авторизации?"
+        },
+        "biometricReason": "Для доступа к Триколор"
+    },
+    "ForgotID": {
+        "Phone": {
+            "placeholder": "Номер телефона",
+            "title": "Укажите ваш номер телефона."
+        },
+        "Devices": {
+            "Errors": {
+                "ChooseDevice": {
+                    "title": "Выберите хотя бы одно устройство"
+                }
+            },
+            "Button": {
+                "title": "Получить Триколор ID"
+            },
+            "subtitle": "Триколор ID: ",
+            "title": "Мои устройства"
+        },
+        "title": "Забыл Триколор ID"
+    },
+    "Feedback": {
+        "FeedbackType": {
+            "other": "Другое",
+            "unitedAccounts": "Объединение Личных кабинетов"
+        },
+        "RegExp": {
+            "email": "(\\d|\\w)*@(\\d|\\w)*\\.(\\d|\\w)*"
+        },
+        "Snacks": {
+            "wrongFormat": "Недопустимый формат файла",
+            "notAllFilesLoaded": "Дождитесь загрузки файла",
+            "tooLargeFile": "Размер загружаемого файла не должен превышать 1 МБ"
+        },
+        "BottomSheet": {
+            "Feedback": {
+                "other": "Другое",
+                "merge": "Объединение Личных кабинетов",
+                "title": "Тема обращения"
+            },
+            "Attachment": {
+                "image": "Выбрать из галереи",
+                "file": "Загрузить файл",
+                "title": "Прикрепить файл",
+                "Type": {
+                    "Ios": {
+                        "image": "png,jpg,jpeg,bmp",
+                        "file": "com.adobe.pdf,public.jpeg-2000,public.png,public.jpeg,com.microsoft.bmp,com.microsoft.word.doc,org.openxmlformats.wordprocessingml.document,org.openxmlformats.spreadsheetml.sheet,com.microsoft.excel.xls"
+                    },
+                    "Android": {
+                        "image": "image/jpeg,image/png,image/bmp",
+                        "file": "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain,image/jpeg,image/png,image/bmp"
+                    }
+                }
+            }
+        },
+        "ReportSuccess": {
+            "title": "Обращение создано"
+        },
+        "maxFileSize": "1024",
+        "title": "Создать обращение",
+        "Cells": {
+            "tricolorID": "Триколор ID",
+            "thirdName": "Отчество",
+            "message": "Текст сообщения",
+            "infoWarning": "Внимание! Если адрес электронной почты и телефон будут указаны неверно, специалисты Службы технической поддержки не смогут с вами связаться в случае необходимости",
+            "firstName": "Имя",
+            "createFeedback": "Создать обращение",
+            "loadErrorText": "Ошибка загрузки",
+            "phone": "Мобильный телефон",
+            "CheckBox": {
+                "error": "Мы не можем создать обращение т.к для этого требуется согласие на обработку данных",
+                "title": "Согласен на обработку личных данных"
+            },
+            "addFile": "Прикрепить файл",
+            "email": "E-mail",
+            "myData": "Мои данные",
+            "secondName": "Фамилия"
+        },
+        "TypeCell": {
+            "title": "Тема"
+        }
+    },
+    "AddNewAccount": {
+        "idField": "Триколор ID или номер договора",
+        "success": "Триколор ID добавлен!",
+        "smsSubtitle": "Введите код из СМС, отправленного на номер %@",
+        "Error": {
+            "accountAlreadyAdded": "Данный Триколор ID уже добавлен к обращению",
+            "CannotBeUnitedError": {
+                "title": "Объединение Триколор ID невозможно"
+            },
+            "noAccountsAdded": "Выберите Триколор ID для объединения Личных кабинетов",
+            "accountNotExist": "Триколор ID с указанными данными не существует",
+            "feedbackButton": "Создать обращение"
+        },
+        "title": "Добавить Триколор ID"
+    },
+    "DetailMessage": {
+        "document": "Документ",
+        "title": "Сообщениe",
+        "delete": "Удалить"
+    },
+    "SmsCode": {
+        "ForgotID": {
+            "description": "На ваш номер мобильного телефона отправлен код подтверждения. Введите его в поле ниже."
+        },
+        "Otp": {
+            "repeat": "Отправить код повторно",
+            "repeatAfter": "Отправить код повторно через: %@",
+            "title": "Код подтверждения"
+        }
+    },
+    "TransferConfirm": {
+        "amount": "Сумма переноса",
+        "topUp": "Триколор ID зачисления",
+        "error": "Перенос средств недоступен",
+        "title": "Перенос средств",
+        "withdraw": "Триколор ID списания"
+    },
+    "PaymentHistory": {
+        "States": {
+            "Empty": {
+                "title": "На данный момент вы не совершили ни одной операции"
+            },
+            "Error": {
+                "title": "Повторите попытку позже"
+            }
+        },
+        "title": "История операций",
+        "Cell": {
+            "income": "+ %@ %@",
+            "Subtitles": {
+                "Autopayment": {
+                    "title": "Автоплатеж"
+                }
+            },
+            "Titles": {
+                "Transfer": {
+                    "title": "Перенос денежных средств"
+                },
+                "CardActivation": {
+                    "title": "Активация карты"
+                },
+                "PersonalAccountDeposit": {
+                    "title": "Пополнение Личного счета"
+                },
+                "SpecificCardActivation": {
+                    "title": "Активация карты %@"
+                }
+            },
+            "itemsCount": "%@ %@",
+            "outcome": "- %@ %@"
+        },
+        "Date": {
+            "yesterday": "Вчера, %@",
+            "today": "Сегодня, %@"
+        }
+    },
+    "Error": {
+        "noInternetConnection": "Отсутствует подключение к интернету"
+    },
+    "Tup": {
+        "sms": "Проверьте смс!",
+        "email": "Проверьте почту!"
+    },
+    "CardChoice": {
+        "emptyState": "У вас еще нет привязанных карт",
+        "newCard": "Новая карта",
+        "title": "Выберите карту",
+        "autopayment": "Автоплатеж"
+    },
+    "UnitedAccountsFeedback": {
+        "accountList": "Триколор ID для объединения Личных кабинетов",
+        "contactInfoWarning": "Проверьте корректность введенных данных, чтобы при необходимости мы могли с вами связаться",
+        "Error": {
+            "deviceAlreadyAdded": "Данный Триколор ID уже добавлен к обращению"
+        },
+        "addButton": "Добавить",
+        "ConfirmRemoveAccount": {
+            "subtitle": "Триколор ID %@",
+            "title": "Удалить Триколор ID из обращения?"
+        },
+        "accountsInfoWarning": "Возможно объединение только трёх Личных кабинетов. Для объединения большего числа кабинетов создайте обращение в Службу поддержки."
+    },
+    "Captcha": {
+        "confirmCode": "Код подтверждения",
+        "title": "Введите код с картинки в поле ниже",
+        "notNecessary": "Ввод капчи не нужен"
+    },
+    "ServicesList": {
+        "Errors": {
+            "paymentDisabled": "В данный момент оплата недоступна. Повторите попытку позже",
+            "maxPaymentSum": "Максимальный платеж — 14 999 ?",
+            "minPaymentSum": "Минимальный платеж — 1 ?"
+        },
+        "SumView": {
+            "total": "Итого:"
+        },
+        "TitleCells": {
+            "offers": "Предложения",
+            "balance": "Баланс",
+            "currentBalance": "Текущий баланс!: %@",
+            "myServices": "Мои услуги"
+        },
+        "NotEnoughMoney": {
+            "topButton": "Другой способ оплаты",
+            "bottomButton": {
+                "basket": "К корзине",
+                "catalog": "К каталогу"
+            },
+            "title": "На личном счете недостаточно средств"
+        },
+        "sum": "Сумма платежа",
+        "title": "Оплата",
+        "PaymentServiceCell": {
+            "Service": {
+                "date": "Действует до %@",
+                "title": "Услуга"
+            }
+        },
+        "replenish": "Пополнить баланс"
+    },
+    "Faq": {
+        "title": "Вопросы и ответы"
+    },
+    "RepeatCommandsDetail": {
+        "Loading": {
+            "subtitle": "Пожалуйста, подождите! Отправка команд активации может занять несколько секунд",
+            "title": "Отправка команд"
+        }
+    },
+    "Alert": {
+        "cancel": "Отмена",
+        "no": "Нет",
+        "settings": "Настройки",
+        "yes": "Да",
+        "galeryPermission": "Чтобы установить фотографию, разрешите доступ в настройках",
+        "forgetWarning": "Вы можете войти в приложение, используя ваш Триколор ID и пароль",
+        "skip": "Пропустить",
+        "skipPinWarning": "При каждом входе в приложение потребуется вводить логин и пароль. При желании вы всегда сможете добавить PIN в разделе Настройки.",
+        "doYouWantSkip": "Пропустить установку PIN?",
+        "continue": "Продолжить",
+        "permissionRequired": "Необходим доступ",
+        "close": "Закрыть",
+        "forgetPin": "Забыли PIN?"
+    },
+    "Main": {
+        "Sales": {
+            "all": "См. все",
+            "title": "АКЦИИ"
+        },
+        "MyServices": {
+            "title": "МОИ УСЛУГИ",
+            "Cells": {
+                "AddService": {
+                    "add": "Подлючить пакет"
+                },
+                "MyService": {
+                    "blockedService": "приостановлена",
+                    "endDate": "Действует до %@",
+                    "activeService": "активна",
+                    "inactiveService": "неактивна",
+                    "title": "Услуга"
+                }
+            }
+        },
+        "popover": "Нажмите, чтобы выбрать Триколор ID или добавить новый",
+        "Balance": {
+            "finBlock": "Финансовая блокировка",
+            "paused": "Приостановлен",
+            "activate": "Активировать код",
+            "Id": {
+                "title": "Триколор ID"
+            },
+            "title": "Баланс"
+        }
+    },
+    "Entering": {
+        "onboardingConfig": "test_onboarding_pages",
+        "enterButton": "Войти",
+        "withoutAuthButton": "Оплата без авторизации",
+        "signUpButton": "Стать клиентом",
+        "title": "Мой Триколор"
+    }
+}

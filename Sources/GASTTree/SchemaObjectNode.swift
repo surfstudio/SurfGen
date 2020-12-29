@@ -11,8 +11,13 @@ import Common
 /// Iat this moment array contains only 1 fild which is value and type at the same time
 /// But later it may be extended with new fields
 public struct SchemaArrayNode {
-    let name: String
-    let type: SchemaObjectNode
+    public let name: String
+    public let type: SchemaObjectNode
+
+    public init(name: String, type: SchemaObjectNode) {
+        self.name = name
+        self.type = type
+    }
 }
 
 public struct SchemaObjectNode {

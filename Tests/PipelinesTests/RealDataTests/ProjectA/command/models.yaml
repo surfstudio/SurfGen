@@ -1,0 +1,13 @@
+components:
+  schemas:
+    CheckResult:
+      type: object
+      properties:
+        canRepeatActivation:
+          type: boolean  
+          description: Возможность повтора команд активации (true/false)
+        errorDescription: 
+          type: string
+          description: Текстовое описание причины недоступности. Приходит, если canRepeatActivation=false
+      required:
+        - canRepeatActivation
