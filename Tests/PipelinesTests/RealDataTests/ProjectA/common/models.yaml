@@ -20,10 +20,10 @@ components:
       required:
         - nextOtp
 
-    # OtpAndInfo:
-    #   oneOf:
-    #     - $ref: "../common/models.yaml#/components/schemas/OtpRequired"
-    #     - $ref: "../common/models.yaml#/components/schemas/InfoMessage"     
+#     OtpAndInfo:
+#       oneOf:
+#         - $ref: "../common/models.yaml#/components/schemas/OtpRequired"
+#         - $ref: "../common/models.yaml#/components/schemas/InfoMessage"     
 
     KeyValuePair:
       type: object
