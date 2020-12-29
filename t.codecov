@@ -1,0 +1,9 @@
+ID Name                   # Source Files Coverage           
+-- ---------------------- -------------- ------------------ 
+6  ReferenceExtractor     2              98.15% (159/162)   
+8  GASTTree               19             71.48% (203/284)   
+10 Pipelines              7              97.18% (138/142)   
+11 CodeGenerator          16             91.61% (655/715)   
+13 Common                 5              85.53% (65/76)     
+15 GASTBuilder            8              96.33% (525/545)   
+

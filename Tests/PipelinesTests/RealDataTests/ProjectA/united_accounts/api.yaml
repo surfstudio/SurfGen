@@ -6,12 +6,6 @@ info:
     name: Starkina Maria
     email: starkina@surfstudio.ru
 
-servers:
-  - url: https://mobile-dev.tricolor.tv/mobile-api-new/v1
-    description: Dev-сервер. 
-  - url:  https://mobile-rel.tricolor.tv/mobile-api-new/v1
-    description: Stage-сервер
-
 components:
   securitySchemes:
     bearerAuth:

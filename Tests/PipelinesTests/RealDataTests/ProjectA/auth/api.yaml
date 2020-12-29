@@ -6,12 +6,6 @@ info:
     name: Кравченков Александр
     email: kravchenkov@surfstudio.ru
 
-servers:
-  - url: https://mobile-dev.tricolor.tv/mobile-api/v1
-    description: Dev-сервер. 
-  - url:  https://mobile-rel.tricolor.tv/mobile-api/v1
-    description: Stage-сервер
-
 paths:
 
   /auth:
