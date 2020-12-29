@@ -26,5 +26,5 @@ paths:
                 items: 
                   $ref: "models.yaml#/components/schemas/FaqItem"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
 

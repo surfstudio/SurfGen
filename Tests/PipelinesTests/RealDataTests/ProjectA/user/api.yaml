@@ -37,7 +37,7 @@ paths:
               schema:
                 $ref: "../common/models.yaml#/components/schemas/InfoMessage" 
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
 
   /user/findId:
     post:
@@ -62,7 +62,7 @@ paths:
               schema:
                 $ref: "models.yaml#/components/schemas/FindIdManyDevicesErrorResponse"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
 
   /user/info:
     get:
@@ -77,7 +77,7 @@ paths:
               schema:
                 $ref: "models.yaml#/components/schemas/UserInfo"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
   
   /user/isPersonified:
     get:
@@ -90,4 +90,4 @@ paths:
               schema:
                 $ref: "models.yaml#/components/schemas/IsPersonified"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"

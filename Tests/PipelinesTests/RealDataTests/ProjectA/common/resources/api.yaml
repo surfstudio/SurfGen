@@ -37,7 +37,7 @@ paths:
               schema:
                 $ref: "models.yaml#/components/schemas/Captcha"
         default:
-          $ref: "../errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../errors.yaml#/components/responses/ApiErrorResponse"
           
   /resources/offer/{id}:
     get:
@@ -58,7 +58,7 @@ paths:
               schema:
                 $ref: "../models.yaml#/components/schemas/InfoMessage"
         default:
-          $ref: "../errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../errors.yaml#/components/responses/ApiErrorResponse"
 
   /resources/getAttachment:
     get:
@@ -82,7 +82,7 @@ paths:
               schema:
                 $ref: "models.yaml#/components/schemas/Attachment"
         default:
-          $ref: "../errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../errors.yaml#/components/responses/ApiErrorResponse"
 
   /resources/config:
     get:
@@ -101,7 +101,7 @@ paths:
                 type: object
                 additionalProperties: {}
         default:
-          $ref: "../errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../errors.yaml#/components/responses/ApiErrorResponse"
 
   /resources/infoBanner:
     get:
@@ -114,7 +114,7 @@ paths:
               schema:
                 $ref: "models.yaml#/components/schemas/InfoBanner"
         default:
-          $ref: "../errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../errors.yaml#/components/responses/ApiErrorResponse"
 
   /resources/accept:
     get:
@@ -131,7 +131,7 @@ paths:
                 items:
                   $ref: "models.yaml#/components/schemas/AcceptRequestItem" 
         default:
-          $ref: "../errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../errors.yaml#/components/responses/ApiErrorResponse"
     post:
       security:
         - bearerAuth: []
@@ -152,6 +152,6 @@ paths:
                   - $ref: "../models.yaml#/components/schemas/InfoMessage"
                   - $ref: "../models.yaml#/components/schemas/OtpRequired"
         default:
-          $ref: "../errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../errors.yaml#/components/responses/ApiErrorResponse"
 
 

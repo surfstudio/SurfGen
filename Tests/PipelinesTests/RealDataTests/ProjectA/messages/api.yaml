@@ -34,7 +34,7 @@ paths:
               schema:
                 $ref: "models.yaml#/components/schemas/UnreadMessages"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
 
   /messages:
     get:
@@ -50,7 +50,7 @@ paths:
               schema:
                 $ref: "models.yaml#/components/schemas/MessagesResponse"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
           
   /messages/{id}:
     parameters:
@@ -65,7 +65,7 @@ paths:
         "204":
           description: "Сообщение прочитано"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
     delete:
       summary: Удаляем сообщение
       responses:
@@ -76,4 +76,4 @@ paths:
               schema:
                 $ref: "../common/models.yaml#/components/schemas/InfoMessage"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"

@@ -37,4 +37,4 @@ paths:
               schema:
                 $ref: "models.yaml#/components/schemas/HistoryResponse"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"

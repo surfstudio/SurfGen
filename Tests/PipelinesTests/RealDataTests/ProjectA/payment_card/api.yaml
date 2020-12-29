@@ -26,7 +26,7 @@ paths:
                 items: 
                   $ref: "models.yaml#/components/schemas/PaymentCards"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
     post:
       summary: Добавление новой карты
       requestBody:
@@ -43,7 +43,7 @@ paths:
               schema:
                   $ref: "models.yaml#/components/schemas/3dSecResponse"       
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
 
   /billings/setAutopayment:
     post:
@@ -58,7 +58,7 @@ paths:
         "204":
           description: "Успех"        
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
 
   /billings/paymentCards/{id}:
     delete:
@@ -73,4 +73,4 @@ paths:
         "204":
           description: "Успех"        
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"

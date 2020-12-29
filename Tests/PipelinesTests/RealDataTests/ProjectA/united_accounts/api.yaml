@@ -36,7 +36,7 @@ paths:
                 items:
                   $ref: "models.yaml#/components/schemas/UnitedItem"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
   
   /united/changeAccount:
     post:
@@ -55,7 +55,7 @@ paths:
               schema:
                 $ref: "../auth/models.yaml#/components/schemas/AuthResponse"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
 
   /united/isAccountUnionAvailable:
     get:
@@ -68,7 +68,7 @@ paths:
               schema:
                 $ref: "../common/models.yaml#/components/schemas/InfoMessage"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
 
   /united/account:
     post:
@@ -95,7 +95,7 @@ paths:
               schema:
                 $ref: "models.yaml#/components/schemas/AddAccountErrorResponse"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
     delete:
       summary: Удаление аккаунта
       parameters:
@@ -112,7 +112,7 @@ paths:
               schema:
                 $ref: "../common/models.yaml#/components/schemas/InfoMessage"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
   
   /united/reasons:
     get:
@@ -127,7 +127,7 @@ paths:
                 items:
                   $ref: "models.yaml#/components/schemas/DisconnectReason"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
   
   /united/info:
     get:
@@ -147,7 +147,7 @@ paths:
               schema:
                 $ref: "models.yaml#/components/schemas/TricolorIdInfo"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
   
   /united/transfer:
     post:
@@ -168,7 +168,7 @@ paths:
               schema:
                 $ref: "../common/models.yaml#/components/schemas/InfoMessage"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
     
   /united/accountsForTransfer:
     get:
@@ -183,7 +183,7 @@ paths:
                 items:
                   $ref: "models.yaml#/components/schemas/AccountForTransfer"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
   
   /united/vouchersForTransfer:
     get:
@@ -198,4 +198,4 @@ paths:
                 items:
                   $ref: "models.yaml#/components/schemas/VouchersForTransfer"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"

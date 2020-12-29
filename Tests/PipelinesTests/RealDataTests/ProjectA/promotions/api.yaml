@@ -36,7 +36,7 @@ paths:
                 items:
                   $ref: "models.yaml#/components/schemas/Promotion"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
           
   /banners/{location}:
     parameters:
@@ -57,7 +57,7 @@ paths:
                 items:
                   $ref: "models.yaml#/components/schemas/Banner"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
 
   /promotions/history:
     get:
@@ -73,7 +73,7 @@ paths:
               schema:
                 $ref: "models.yaml#/components/schemas/BonusHistoryResponse"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
 
   /promotions/{id}:  
     parameters:
@@ -110,4 +110,4 @@ paths:
               schema:
                 $ref: "../common/models.yaml#/components/schemas/InfoMessage" 
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"

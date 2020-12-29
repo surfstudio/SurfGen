@@ -34,7 +34,7 @@ paths:
               schema:
                 $ref: "models.yaml#/components/schemas/AllClientInfo"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
 
   /user/profile/updateInfo:
     patch:
@@ -83,7 +83,7 @@ paths:
               schema:
                 $ref: "models.yaml#/components/schemas/CreditInformation"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
 
   /user/profile/changePassword:
     put:
@@ -102,7 +102,7 @@ paths:
               schema:
                 $ref: "../common/models.yaml#/components/schemas/InfoMessage"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
     
   /user/profile/changeAlias:
     put:
@@ -121,4 +121,4 @@ paths:
               schema:
                 $ref: "../common/models.yaml#/components/schemas/InfoMessage"
         default:
-          $ref: "../common/errors.yaml#/components/schemas/ApiErrorResponse"
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
