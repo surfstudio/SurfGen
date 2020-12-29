@@ -36,3 +36,10 @@ components:
       required:
         - key
         - value
+
+    FileModelForMultipart:
+        type: object
+        properties:
+            file:
+                type: string
+                format: binary

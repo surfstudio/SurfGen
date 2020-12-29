@@ -86,3 +86,19 @@ Isn't supported, but if array is decalared in components then it will work ok
         $ref: "../errors.yaml#/components/responses/ApiErrorResponse"
 
 we can't parse it. Because of in-lace definition of additionalProperties. And have no idea how to parse it
+
+---
+
+/feedback/attachments:
+  post:
+    summary: Файлы для обратной связи
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            properties:
+              file:
+                type: string
+                format: binary
+                

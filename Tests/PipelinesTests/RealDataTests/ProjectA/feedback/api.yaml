@@ -59,10 +59,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              properties:
-                file:
-                  type: string
-                  format: binary
+              $ref: "../common/models.yaml#/components/schemas/FileModelForMultipart"
       responses:
         "200":
           description: "Все ок"
