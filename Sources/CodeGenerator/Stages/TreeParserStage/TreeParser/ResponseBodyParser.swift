@@ -19,7 +19,12 @@ public struct ResponseBodyParser {
 
     public func parse(responses: [OperationNode.ResponseBody], current: DependencyWithTree, other: [DependencyWithTree]) throws -> [Reference<ResponseModel>] {
         return try responses.map { response in
-            switch response.response {
+
+            guard let respValue = response.response else {
+                return .notReference(.init(key: response.key, values: []))
+            }
+
+            switch respValue {
             case .entity(let val):
                 let values = try wrap(
                     self.parse(response: val, current: current, other: other),

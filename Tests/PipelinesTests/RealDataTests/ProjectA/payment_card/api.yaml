@@ -71,6 +71,6 @@ paths:
           type: string     
       responses:
         "204":
-          description: "Успех"        
+          description: "Успех"
         default:
           $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
