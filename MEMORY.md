@@ -65,3 +65,24 @@ content:
 Isn't supported, but if array is decalared in components then it will work ok
 
 ---
+
+/resources/config: 
+  get:
+    summary: Метод конфига
+    description: >
+      Здесь будет возвращаться конфиг для приложения.
+      Представляет из себя словарь со вложенными словарями:
+      {"common": "error": {"noNetwork": "text"}}}
+      Полную конфигурацию можно посмотреть $ссылка
+    responses:
+      "200":
+        description: Успех
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: {}
+      default:
+        $ref: "../errors.yaml#/components/responses/ApiErrorResponse"
+
+we can't parse it. Because of in-lace definition of additionalProperties. And have no idea how to parse it

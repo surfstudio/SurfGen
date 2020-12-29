@@ -84,24 +84,24 @@ paths:
         default:
           $ref: "../errors.yaml#/components/responses/ApiErrorResponse"
 
-  /resources/config:
-    get:
-      summary: Метод конфига
-      description: > 
-        Здесь будет возвращаться конфиг для приложения. 
-        Представляет из себя словарь со вложенными словарями:
-        {"common": "error": {"noNetwork": "text"}}}
-        Полную конфигурацию можно посмотреть $ссылка
-      responses:
-        "200":
-          description: Успех
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: {}
-        default:
-          $ref: "../errors.yaml#/components/responses/ApiErrorResponse"
+#  /resources/config: -- cant parse it. and we don;t support additionalProperties: {}
+#    get:
+#      summary: Метод конфига
+#      description: >
+#        Здесь будет возвращаться конфиг для приложения.
+#        Представляет из себя словарь со вложенными словарями:
+#        {"common": "error": {"noNetwork": "text"}}}
+#        Полную конфигурацию можно посмотреть $ссылка
+#      responses:
+#        "200":
+#          description: Успех
+#          content:
+#            application/json:
+#              schema:
+#                type: object
+#                additionalProperties: {}
+#        default:
+#          $ref: "../errors.yaml#/components/responses/ApiErrorResponse"
 
   /resources/infoBanner:
     get:
@@ -148,9 +148,10 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: "../models.yaml#/components/schemas/InfoMessage"
-                  - $ref: "../models.yaml#/components/schemas/OtpRequired"
+                $ref: "../models.yaml#/components/schemas/InfoMessage"
+#                oneOf:
+#                  - $ref: "../models.yaml#/components/schemas/InfoMessage"
+#                  - $ref: "../models.yaml#/components/schemas/OtpRequired"
         default:
           $ref: "../errors.yaml#/components/responses/ApiErrorResponse"
 
