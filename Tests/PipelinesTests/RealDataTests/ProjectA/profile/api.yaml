@@ -51,9 +51,10 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: "../common/models.yaml#/components/schemas/InfoMessage"
-                  - $ref: "../common/models.yaml#/components/schemas/OtpRequired"
+                $ref: "../common/models.yaml#/components/schemas/InfoMessage"
+#                oneOf:
+#                  - $ref: "../common/models.yaml#/components/schemas/InfoMessage"
+#                  - $ref: "../common/models.yaml#/components/schemas/OtpRequired"
     put:
       summary: Изменение данных пользователя из профиля
       requestBody:
@@ -68,9 +69,10 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: "../common/models.yaml#/components/schemas/InfoMessage"
-                  - $ref: "../common/models.yaml#/components/schemas/OtpRequired"
+                $ref: "../common/models.yaml#/components/schemas/InfoMessage"
+#                oneOf:
+#                  - $ref: "../common/models.yaml#/components/schemas/InfoMessage"
+#                  - $ref: "../common/models.yaml#/components/schemas/OtpRequired"
   
   /user/profile/creditInfo:
     get:
