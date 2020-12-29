@@ -33,7 +33,7 @@ components:
         fcmToken:
           type: string
         extMessageId:
-          type: streing
+          type: string
           description: Внутренний идентификатор сообщения
         mobileType:
           $ref: "models.yaml#/components/schemas/MobileType"
