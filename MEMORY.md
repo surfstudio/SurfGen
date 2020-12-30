@@ -102,3 +102,14 @@ we can't parse it. Because of in-lace definition of additionalProperties. And ha
                 type: string
                 format: binary
                 
+---
+
+Array inside array is unsupported (but it possible if array item's type is object whic is array)
+
+---
+
+Need test group which is referenced to another group
+Group which is referenced to object
+Object wchich i referenced to group
+GroupDefinitionWorksInRequest and response and so on
+

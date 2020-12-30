@@ -18,7 +18,13 @@ import CodeGenerator
 /// And this stub drammatically decrease amount of yaml spec lines which we should write
 public struct AnyMediaTypeParserStub: MediaTypeParser {
 
-    public init() { }
+    public let arrayParser: ArrayParser
+    public let groupParser: GroupParser
+
+    public init(arrayParser: ArrayParser, groupParser: GroupParser) {
+        self.arrayParser = arrayParser
+        self.groupParser = groupParser
+    }
 
     public func parse(mediaType: MediaTypeObjectNode,
                       current: DependencyWithTree,
@@ -60,45 +66,15 @@ public struct AnyMediaTypeParserStub: MediaTypeParser {
                 return .object(val)
             case .array(let val):
                 return .array(val)
+            case .group(let val):
+                return .group(val)
             }
         case .array(let val):
-            let parsed = try self.parse(array: val, current: current, other: other)
+            let parsed = try self.arrayParser.parse(array: val, current: current, other: other)
             return .array(parsed)
-        }
-    }
-
-    public func parse(array: SchemaArrayNode,
-                      current: DependencyWithTree,
-                      other: [DependencyWithTree]) throws -> SchemaArrayModel {
-
-        let val = try wrap(
-            self.parseForArray(schema: array.type, current: current, other: other),
-            message: "While parsing array \(array.name)"
-        )
-
-        return .init(name: array.name, itemsType: val)
-    }
-
-    public func parseForArray(schema: SchemaObjectNode,
-                              current: DependencyWithTree,
-                              other: [DependencyWithTree]) throws -> SchemaArrayModel.Possible {
-
-        switch schema.next {
-        case .object:
-            throw CustomError(message: "Array shouldn't contains object definition")
-        case .enum:
-            throw CustomError(message: "Array shouldn't contains object definition")
-        case .simple(let val):
-            return .primitive(val.type)
-        case .reference(let val):
-            let schemaType = try wrap(
-                Resolver().resolveSchema(ref: val, node: current, other: other),
-                message: "While resolving \(val) at file \(current.dependency.pathToCurrentFile)"
-            )
-
-            return .reference(schemaType)
-        case .array:
-            throw CustomError(message: "Array shouldn't contains array definition")
+        case .group(let val):
+            let parsed = try self.groupParser.parse(group: val, current: current, other: other)
+            return .group(parsed)
         }
     }
 }

@@ -16,10 +16,9 @@ paths:
         content:
           application/json:
             schema:
-                $ref: "models.yaml#/components/schemas/AuthRequest"
-#              oneOf:
-#                - $ref: "models.yaml#/components/schemas/AuthRequest"
-#                - $ref: "models.yaml#/components/schemas/SilentAuthRequest"
+              oneOf:
+                - $ref: "models.yaml#/components/schemas/AuthRequest"
+                - $ref: "models.yaml#/components/schemas/SilentAuthRequest"
       responses:
         "200":
           description: "Успех"

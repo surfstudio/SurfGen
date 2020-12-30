@@ -74,7 +74,9 @@ extension ReferenceExtractor {
     /// Doesn't return link on `rootSpecPath`
     /// If you need it you shoul do it by yourself
     public func extract() throws -> (uniqRefs: [String], dependecies: [Dependency]) {
-        let spec = try self.loadSpec(path: self.rootSpecPath.absoluteString)
+        let spec = try wrap(
+            self.loadSpec(path: self.rootSpecPath.absoluteString),
+            message: "While loading spec at \(self.rootSpecPath.absoluteString)")
 
         var root = Dependency(pathToCurrentFile: self.rootSpecPath.absoluteString, dependecies: [:])
 
@@ -158,7 +160,10 @@ extension ReferenceExtractor {
         // and we don't need to read in twice
         self.readStack.append(resultedUrlToFileToParse)
 
-        let res = try self.loadSpec(path: resultedUrlToFileToParse)
+        let res = try wrap(
+            self.loadSpec(path: resultedUrlToFileToParse),
+            message: "While loading spec at \(resultedUrlToFileToParse)"
+        )
 
         var newDependency = Dependency(pathToCurrentFile: resultedUrlToFileToParse, dependecies: [:])
 
