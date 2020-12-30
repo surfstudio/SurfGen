@@ -1,0 +1,25 @@
+{% if description %}
+/// {{ description }}{% endif %}
+class {{ className }} {
+	{{ className }}(
+		{% for property in properties %}this.{{ property.entityName }},{% if not forloop.last %}
+		{% endif %}{% endfor %}
+	);
+
+	factory {{ className }}.fromJson(Map<String, Object> json) {
+		return {{ className }}(
+			{% for property in properties %}{% if property.isPlain %}{#
+			#}{{ property.entityName }}: json.get<{{ property.type }}>('{{ property.entryName }}'),{% else %}{#
+			#}json['{{ property.entryName }}'] == null
+					? null
+					: {{ property.type }}.fromJson(
+							json.get<Map<String, Object>>('{{ property.entryName }}'),
+						), // {{ property.type }}.fromJson{% endif %}
+			{% endfor %}
+		)
+	}{#
+	#}{% for property in properties %}
+	{% if property.description != nil %}
+	/// {{ property.description }}{% endif %}
+	final {{ property.type }} {{ property.entityName }};{% endfor %}
+}

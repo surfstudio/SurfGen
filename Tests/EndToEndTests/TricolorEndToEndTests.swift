@@ -59,7 +59,9 @@ class TricolorEndToEndTests: XCTestCase {
 
         //when
         let gastTree = try parser.parseToGAST(forServiceRootPath: service.rootPath)
-        let generatedService = try rootGenerator.generateService(name: service.rawValue, from: gastTree)
+        let generatedService = try rootGenerator.generateService(name: service.rawValue,
+                                                                 from: gastTree,
+                                                                 parts: ServicePart.allCases)
 
         // then
         for servicePart in generatedService {

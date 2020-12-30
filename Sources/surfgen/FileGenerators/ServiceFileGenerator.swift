@@ -28,12 +28,13 @@ class ServiceFileGenerator {
 
     func generateService(_ serviceName: String, rootPath: String) throws {
         let generator = try ServiceGenerator.defaultGenerator(for: configManager.getPlatform())
+        let destinations = try configManager.getServiceGenerationPaths(for: serviceName)
         let generatedService = tryToGenerate(serviceName: serviceName,
                                              rootPath: rootPath,
+                                             parts: Array(destinations.keys),
                                              isDescriptionsEnabled: configManager.isDescriptionsEnabled,
                                              serviceGenerator: generator)
         logger.print(rootGenerator.warningsLog.yellow + "\n")
-        let destinations = try configManager.getServiceGenerationPaths(for: serviceName)
 
         guard let projectPath = configManager.projectPath, let mainGroupName = configManager.mainGroup else {
             logger.print("No project path or mainGroupName specified\n".yellow)
@@ -53,13 +54,17 @@ class ServiceFileGenerator {
 
     private func tryToGenerate(serviceName: String,
                                rootPath: String,
+                               parts: [ServicePart],
                                isDescriptionsEnabled: Bool,
                                serviceGenerator: ServiceGenerator) -> ServiceGeneratedModel {
         do {
             let parser = try YamlToGASTParser(string: spec)
             let service = try parser.parseToGAST(forServiceRootPath: rootPath)
             rootGenerator.setServiceGenerator(serviceGenerator)
-            return try rootGenerator.generateService(name: serviceName, from: service, generateDescriptions: isDescriptionsEnabled)
+            return try rootGenerator.generateService(name: serviceName,
+                                                     from: service,
+                                                     parts: parts,
+                                                     generateDescriptions: isDescriptionsEnabled)
         } catch {
             logger.exitWithError(error.localizedDescription)
         }

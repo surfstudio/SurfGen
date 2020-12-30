@@ -36,7 +36,19 @@ public class ServiceGenerator {
 
     func generateCode(for declNode: ASTNode,
                       withServiceName serviceName: String,
+                      parts: [ServicePart],
                       environment: Environment) throws -> ServiceGeneratedModel {
+        let serviceModel = try buildServiceModel(for: declNode, withServiceName: serviceName)
+
+        return try parts.reduce(into: ServiceGeneratedModel()) { model, part in
+            let fileName = part.buildName(for: serviceModel.name).withFileExtension(platform.fileExtension)
+            model[part] = FileModel(fileName: fileName,
+                                    code: try environment.renderTemplate(part.template(with: serviceModel)))
+        }
+    }
+
+    private func buildServiceModel(for declNode: ASTNode,
+                                   withServiceName serviceName: String) throws -> ServiceGenerationModel {
         let declModel = try wrap(declNodeParser.getInfo(from: declNode),
                                  with: Constants.errorMessage)
         let operations = try wrap(declModel.operations
@@ -58,26 +70,10 @@ public class ServiceGenerator {
             .map { CodingKey(name: $0.snakeCaseToCamelCase(), serverName: $0) }
             .sorted { $0.name < $1.name }
 
-        let serviceModel = ServiceGenerationModel(name: serviceName.capitalizingFirstLetter(),
-                                                  keys: keys,
-                                                  paths: paths,
-                                                  operations: operations)
-
-        let routeCode = try environment.renderTemplate(.urlRoute(serviceModel))
-        let protocolCode = try environment.renderTemplate(.serviceProtocol(serviceModel))
-        let serviceCode = try environment.renderTemplate(.service(serviceModel))
-
-        return [
-            .urlRoute: FileModel(fileName: ServicePart.urlRoute
-                                    .buildName(for: serviceModel.name).withFileExtension(platform.fileExtension),
-                                 code: routeCode),
-            .protocol: FileModel(fileName: ServicePart.protocol
-                                    .buildName(for: serviceModel.name).withFileExtension(platform.fileExtension),
-                                 code: protocolCode),
-            .service: FileModel(fileName: ServicePart.service
-                                    .buildName(for: serviceModel.name).withFileExtension(platform.fileExtension),
-                                code: serviceCode)
-        ]
+        return ServiceGenerationModel(name: serviceName.capitalizingFirstLetter(),
+                                      keys: keys,
+                                      paths: paths,
+                                      operations: operations)
     }
 
 }
@@ -90,6 +86,21 @@ private extension OperationGenerationModel {
             requestBody?.modelName ?? "",
             requestBody?.parameters?.map { $0.name }.joined() ?? ""
         ].joined(separator: "+")
+    }
+
+}
+
+private extension ServicePart {
+    
+    func template(with model: ServiceGenerationModel) -> Template {
+        switch self {
+        case .urlRoute:
+            return .urlRoute(model)
+        case .protocol:
+            return .serviceProtocol(model)
+        case .service:
+            return .service(model)
+        }
     }
 
 }

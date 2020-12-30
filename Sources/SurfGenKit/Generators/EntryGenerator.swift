@@ -28,7 +28,9 @@ final class EntryGenerator: CodeGenerator {
 
         let className = ModelType.entry.form(name: declModel.name, for: platform)
 
-        let code = try environment.renderTemplate(.nodeKitEntry(className: className, properties: properties))
+        let code = try environment.renderTemplate(.nodeKitEntry(className: className,
+                                                                properties: properties,
+                                                                description: declNode.description ?? ""))
 
         return .init(fileName: className.capitalizingFirstLetter().withFileExtension(platform.fileExtension),
                      code: code)

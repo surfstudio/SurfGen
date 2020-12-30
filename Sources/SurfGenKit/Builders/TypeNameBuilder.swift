@@ -31,11 +31,11 @@ public class TypeNameBuilder {
         case .array(let subType):
             switch subType {
             case .enum(let value):
-                return "[\(value)]"
+                return value.asArray(platform: platform)
             case .plain(let value):
-                return "[\(value)]"
+                return value.asArray(platform: platform)
             case .object(let value):
-                return "[\(modelType.form(name: value, for: platform))]"
+                return (modelType.form(name: value, for: platform)).asArray(platform: platform)
             case .array:
                 return "not supported case"
             }
