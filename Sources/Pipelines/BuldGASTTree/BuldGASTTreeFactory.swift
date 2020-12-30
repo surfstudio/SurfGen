@@ -8,6 +8,7 @@
 import Foundation
 import ReferenceExtractor
 import GASTBuilder
+import CodeGenerator
 
 public struct BuldGASTTreeFactory {
 
@@ -42,7 +43,18 @@ public struct BuldGASTTreeFactory {
                     serviceBuilder: serviceBuilder,
                     responsesBuilder: responsesBuilder,
                     requestBodiesBuilder: requestBodiesBuilder),
-                next: InitCodeGenerationStage(parserStage: .init()).erase())
+                next: InitCodeGenerationStage(parserStage: .init(parser: buildParser())).erase())
         )
+    }
+
+    static func buildParser() -> TreeParser {
+
+        let mediaTypeParser = AnyMediaTypeParser()
+        let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser)
+        let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser)
+
+        return .init(parametersParser: .init(),
+                     requestBodyParser: requestBodyParser,
+                     responsesParser: responsesParser)
     }
 }

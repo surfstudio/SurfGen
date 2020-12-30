@@ -50,3 +50,5 @@ TreeParser returns arrays caount the same as dependencies count. It looks like a
 Doesn't support response headers
 
 ---
+
+Schek that ref to RequestBody from another RequestBody leads to error throwing
