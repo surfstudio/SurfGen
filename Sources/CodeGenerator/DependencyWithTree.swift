@@ -9,6 +9,8 @@ import Foundation
 import GASTTree
 import Common
 
+/// Combines GASTRee and its dependencies
+/// Because if this we can resolve global references form the `tree`
 public struct DependencyWithTree {
     public let dependency: Dependency
     public let tree: RootNode
