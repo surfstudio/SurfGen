@@ -9,4 +9,8 @@ import Foundation
 
 public struct ParameterTypeNode {
     public let schema: SchemaObjectNode
+
+    public init(schema: SchemaObjectNode) {
+        self.schema = schema
+    }
 }

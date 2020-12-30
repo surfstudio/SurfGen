@@ -9,11 +9,6 @@ import Foundation
 import Yams
 import Common
 
-public struct Dependency {
-    let pathToCurrentFile: String
-    var dependecies: [String: String]
-}
-
 /// This class extracts all references (`$ref` tag) from specific OpenAPI specification file recursively
 ///
 /// For example:

@@ -17,4 +17,8 @@ public struct ParameterSchemaNode {
     }
 
     public var next: Possibility
+
+    public init(next: Possibility) {
+        self.next = next
+    }
 }

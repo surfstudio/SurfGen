@@ -9,13 +9,18 @@ import Foundation
 import Common
 
 public struct SchemaObjectNode {
-    public enum Possibility {
+    public indirect enum Possibility {
         case object(SchemaModelNode)
         case `enum`(SchemaEnumNode)
-        case simple(PrimitiveType)
+        case simple(PrimitiveTypeAliasNode)
+        case reference(String)
     }
 
     public var next: Possibility
+
+    public init(next: Possibility) {
+        self.next = next
+    }
 }
 
 extension SchemaObjectNode: StringView {
@@ -27,6 +32,8 @@ extension SchemaObjectNode: StringView {
             return "Schema:\n\ttype: Enum\n\tNested:\n\t\t\(`enum`.view.tabShifted())"
         case .simple(let simple):
             return "Schema:\n\ttype: Simple\n\tNested:\n\t\t\(simple)"
+        case .reference:
+            return "Not Implemented"
         }
     }
 

@@ -8,6 +8,7 @@
 import Foundation
 import Swagger
 import Common
+import GASTTree
 
 public protocol SchemaBuilder {
     func build(schemas: [ComponentObject<Schema>]) throws -> [SchemaObjectNode]
@@ -41,23 +42,23 @@ public struct AnySchemaBuilder: SchemaBuilder {
             return try self.processString(schema: schema)
         case .array:
             throw CustomError.notInplemented()
-        case .reference:
-            throw CustomError.notInplemented()
+        case .reference(let ref):
+            return .init(next: .reference(ref.rawValue))
         case .group:
             throw CustomError.notInplemented()
         case .number:
-            return .init(next: .simple(.number))
+            return .init(next: .simple(.init(name: schema.name, type: .number)))
         case .integer:
-            return .init(next: .simple(.integer))
+            return .init(next: .simple(.init(name: schema.name, type: .integer)))
         case .boolean:
-            return .init(next: .simple(.boolean))
+            return .init(next: .simple(.init(name: schema.name, type: .boolean)))
         }
     }
 
     func processString(schema: ComponentObject<Schema>) throws -> SchemaObjectNode {
 
         guard let enumValues = schema.value.metadata.enumValues else {
-            return .init(next: .simple(.string))
+            return .init(next: .simple(.init(name: schema.name, type: .string)))
         }
 
         guard let stringCases = enumValues as? [String] else {
@@ -66,7 +67,8 @@ public struct AnySchemaBuilder: SchemaBuilder {
 
         let model = SchemaEnumNode(
             type: "string",
-            cases: stringCases
+            cases: stringCases,
+            name: schema.name
         )
 
         return.init(next: .enum(model))

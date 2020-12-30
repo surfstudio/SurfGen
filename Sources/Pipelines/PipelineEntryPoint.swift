@@ -18,16 +18,22 @@ public protocol PipelineEntryPoint {
     func run(with input: Input) throws
 }
 
+extension PipelineEntryPoint {
+    public func erase() -> AnyPipelineEntryPoint<Input> {
+        return .init(nested: self)
+    }
+}
+
 /// Just a Box for any specific type of PipelineEntryPoint
-struct AnyPipelineEntryPoint<Input>: PipelineEntryPoint {
+public struct AnyPipelineEntryPoint<Input>: PipelineEntryPoint {
 
     private let nested: _PipelineEntryPointBox<Input>
 
-    init<Nested: PipelineEntryPoint>(nested: Nested) where Nested.Input == Input{
+    public init<Nested: PipelineEntryPoint>(nested: Nested) where Nested.Input == Input{
         self.nested = _PipelineEntryPoint(nested: nested)
     }
 
-    func run(with input: Input) throws {
+    public func run(with input: Input) throws {
         try self.nested.run(with: input)
     }
 }

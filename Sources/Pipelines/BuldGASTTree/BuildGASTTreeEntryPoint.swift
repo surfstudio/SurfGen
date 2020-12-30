@@ -50,6 +50,6 @@ extension BuildGASTTreeEntryPoint: PipelineEntryPoint {
 
         // Second stage - Build GAST tree for each file
 
-        try self.next.run(with: .init(links: links, dependencies: dependencies))
+        try self.next.run(with: dependencies)
     }
 }

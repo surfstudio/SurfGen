@@ -8,11 +8,15 @@
 import Foundation
 
 public struct ArrayTypeNode {
-    public let itemsType: Referenced<String>
+    public let itemsType: Referenced<PrimitiveType>
+
+    public init(itemsType: Referenced<PrimitiveType>) {
+        self.itemsType = itemsType
+    }
 }
 
 extension ArrayTypeNode: StringView {
     public var view: String {
-        return "Array:\n\t\(itemsType.view)"
+        return "Array:\n\t\(itemsType)"
     }
 }

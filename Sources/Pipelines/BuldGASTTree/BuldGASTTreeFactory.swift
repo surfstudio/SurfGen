@@ -21,7 +21,7 @@ public struct BuldGASTTreeFactory {
     public static func build() -> BuildGASTTreeEntryPoint {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
-        let serviceBuilder = AnyServiceBuilder(parameterBuilder: parameterBuilder)
+        let serviceBuilder = AnyServiceBuilder(parameterBuilder: parameterBuilder, schemaBuilder: schemaBuilder)
         return .init(
             refExtractorProvider: self.provider(str:),
             next: .init(
@@ -29,7 +29,8 @@ public struct BuldGASTTreeFactory {
                     fileProvider: FileManager.default,
                     schemaBuilder: schemaBuilder,
                     parameterBuilder: parameterBuilder,
-                    serviceBuilder: serviceBuilder))
+                    serviceBuilder: serviceBuilder),
+                next: InitCodeGenerationStage(parserStage: .init()).erase())
         )
     }
 }

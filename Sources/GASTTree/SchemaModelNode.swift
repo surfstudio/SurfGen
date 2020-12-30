@@ -15,6 +15,14 @@ public struct SchemaModelNode {
     public let name: String
     public let properties: [PropertyNode]
     public let description: String?
+
+    public init(name: String,
+                properties: [PropertyNode],
+                description: String?) {
+        self.name = name
+        self.properties = properties
+        self.description = description
+    }
 }
 
 extension SchemaModelNode: StringView {
