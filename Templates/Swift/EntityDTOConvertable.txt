@@ -9,11 +9,11 @@ public struct {{ entityName }} {
     // MARK: - Public Properties
 
 {% for property in properties %}    {% if property.description %}/// {{ property.description }}
-    {% endif %}public let {{ property.entityName }}: {{ property.type }}
+    {% endif %}public let {{ property.entityName }}: {{ property.type }}{% if property.isOptional %}?{% endif %}
 {% endfor %}
     // MARK: - Initialization
 
-    public init({% for property in properties %}{{property.entityName}}: {{property.type}}{% if not forloop.last %},
+    public init({% for property in properties %}{{property.entityName}}: {{property.type}}{% if property.isOptional %}?{% endif %}{% if not forloop.last %},
                 {% else %}) {{ codeOpenBracket }}{% endif %}{% endfor %}
     {% for property in properties %}    self.{{ property.entityName }} = {{ property.entityName }}
     {% endfor %}}

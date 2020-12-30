@@ -19,7 +19,7 @@ public protocol UserService {
     func getUserByName(username: String) -> Observer<UserEntity>
 
     /// Logs user into the system
-    func loginUser(username: String, password: String) -> Observer<StringEntity>
+    func loginUser(username: String, password: String) -> Observer<String>
 
     /// Logs out current logged in user session
     func logoutUser() -> Observer<Void>

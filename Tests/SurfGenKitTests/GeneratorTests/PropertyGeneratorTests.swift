@@ -10,18 +10,21 @@ import XCTest
 @testable import SurfGenKit
 
 class PropertyGeneratorTests: XCTestCase {
+
+    private let generator = PropertyGenerator(platform: .swift)
     
     func testStandardOptionalFieldCodeGeneration() {
-        let fieldNode = formFieldNode(isOptional: true, name: "login", typeName: "String")
+        let fieldNode = formFieldNode(isOptional: true, name: "login", typeName: "string")
         let expectedModel = PropertyGenerationModel(entryName: "login",
                                                     entityName: "login",
-                                                    typeName: "String?",
+                                                    typeName: "String",
                                                     fromInit: "model.login",
                                                     toDTOInit: "login",
                                                     isPlain: true,
+                                                    isOptional: true,
                                                     description: nil)
         do {
-            let generatedModel = try PropertyGenerator().generateCode(for: fieldNode, type: .entity)
+            let generatedModel = try generator.generateCode(for: fieldNode, type: .entity)
             XCTAssert(expectedModel == generatedModel)
         } catch {
             dump(error)
@@ -36,14 +39,15 @@ class PropertyGeneratorTests: XCTestCase {
                                       typeSubNodes: [Node(token: .type(name: "MetaInfo"), [])])
         let expectedModel = PropertyGenerationModel(entryName: "info",
                                                     entityName: "info",
-                                                    typeName: "MetaInfoEntity?",
+                                                    typeName: "MetaInfoEntity",
                                                     fromInit: ".from(dto: model.info)",
                                                     toDTOInit: "info?.toDTO()",
                                                     isPlain: false,
+                                                    isOptional: true,
                                                     description: nil)
 
         do {
-            let generatedModel = try PropertyGenerator().generateCode(for: fieldNode, type: .entity)
+            let generatedModel = try generator.generateCode(for: fieldNode, type: .entity)
             XCTAssert(expectedModel == generatedModel)
         } catch {
             dump(error)
@@ -56,17 +60,18 @@ class PropertyGeneratorTests: XCTestCase {
         let fieldNode = formFieldNode(isOptional: false,
                                       name: "working_hours",
                                       typeName: "array",
-                                      typeSubNodes: [Node(token: .type(name: "String"), [])])
+                                      typeSubNodes: [Node(token: .type(name: "string"), [])])
         let expectedModel = PropertyGenerationModel(entryName: "working_hours",
                                                     entityName: "workingHours",
                                                     typeName: "[String]",
                                                     fromInit: "model.working_hours",
                                                     toDTOInit: "workingHours",
                                                     isPlain: true,
+                                                    isOptional: false,
                                                     description: nil)
 
         do {
-            let generatedModel = try PropertyGenerator().generateCode(for: fieldNode, type: .entry)
+            let generatedModel = try generator.generateCode(for: fieldNode, type: .entry)
             XCTAssert(expectedModel == generatedModel)
         } catch {
             dump(error)
@@ -82,14 +87,15 @@ class PropertyGeneratorTests: XCTestCase {
                                                           [Node(token: .type(name: "Child"), [])])])
         let expectedModel = PropertyGenerationModel(entryName: "children",
                                                     entityName: "children",
-                                                    typeName: "[ChildEntity]?",
+                                                    typeName: "[ChildEntity]",
                                                     fromInit: ".from(dto: model.children)",
                                                     toDTOInit: "children?.toDTO()",
                                                     isPlain: false,
+                                                    isOptional: true,
                                                     description: nil)
 
         do {
-            let generatedModel = try PropertyGenerator().generateCode(for: fieldNode, type: .entity)
+            let generatedModel = try generator.generateCode(for: fieldNode, type: .entity)
             XCTAssert(expectedModel == generatedModel)
         } catch {
             dump(error)

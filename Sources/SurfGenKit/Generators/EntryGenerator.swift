@@ -10,9 +10,15 @@ import Stencil
 
 final class EntryGenerator: CodeGenerator {
 
+    private let platform: Platform
+
+    init(platform: Platform) {
+        self.platform = platform
+    }
+
     func generateCode(for declNode: ASTNode, environment: Environment) throws -> FileModel {
 
-        let propertyGenerator = PropertyGenerator()
+        let propertyGenerator = PropertyGenerator(platform: platform)
         let declModel = try wrap(ModelDeclNodeParser().getInfo(from: declNode),
                                  with: "Could not generate entry code")
         
@@ -20,11 +26,12 @@ final class EntryGenerator: CodeGenerator {
             .map { try propertyGenerator.generateCode(for: $0, type: .entry) }
             .sorted { $0.entryName.propertyPriorityIndex > $1.entryName.propertyPriorityIndex }
 
-        let className = ModelType.entry.form(name: declModel.name)
+        let className = ModelType.entry.form(name: declModel.name, for: platform)
 
         let code = try environment.renderTemplate(.nodeKitEntry(className: className, properties: properties))
 
-        return .init(fileName: className.capitalizingFirstLetter().withSwiftExt, code: code)
+        return .init(fileName: className.capitalizingFirstLetter().withFileExtension(platform.fileExtension),
+                     code: code)
     }
 
 }

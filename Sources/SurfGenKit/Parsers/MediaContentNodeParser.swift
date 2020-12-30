@@ -13,9 +13,11 @@ class MediaContentNodeParser {
         static let objectErrorMessage = "Could not parse object body"
     }
 
-    let warningCollector: WarningCollector
+    private let platform: Platform
+    private let warningCollector: WarningCollector
 
-    init(warningCollector: WarningCollector = WarningCollector.shared) {
+    init(platform: Platform, warningCollector: WarningCollector = WarningCollector.shared) {
+        self.platform = platform
         self.warningCollector = warningCollector
     }
 
@@ -50,9 +52,9 @@ class MediaContentNodeParser {
         }
     }
 
-    func parseResponseBody(node: ASTNode?, forOperationName operationName: String) throws -> ResponseBody? {
+    func parseResponseBody(node: ASTNode?, forOperationName operationName: String) throws -> ResponseBody {
         guard let responseBodyNode = node else {
-            return nil
+            return .model(platform.voidType)
         }
         guard
             let mediaContentNode = responseBodyNode.subNodes.first,
@@ -75,12 +77,15 @@ class MediaContentNodeParser {
                 throw SurfGenError(nested: GeneratorError.nodeConfiguration("Couldn't get array schema from response body"),
                                    message: Constants.responseErrorMessage)
             }
-            return .arrayOf(arrayModel)
+            let model = arrayModel.plainType(for: platform) ?? ModelType.entity.form(name: arrayModel,
+                                                                                     for: platform)
+            return .arrayOf(model.asArray(platform: platform))
         case ASTConstants.group:
             warningCollector.add(warning: .undefinedModelResponseBody(operationName))
             return .unsupportedObject
         default:
-            return .model(bodyType)
+            return .model(bodyType.plainType(for: platform) ?? ModelType.entity.form(name: bodyType,
+                                                                                     for: platform))
         }
     }
 
@@ -105,11 +110,14 @@ class MediaContentNodeParser {
                 throw SurfGenError(nested: GeneratorError.nodeConfiguration("Couldn't get array schema from request body"),
                                    message: Constants.requestErrorMessage)
             }
-            return .array(encoding, arrayModel)
+            let arrayType = arrayModel.plainType(for: platform) ?? ModelType.entity.form(name: arrayModel,
+                                                                                         for: platform)
+            return .array(encoding, arrayModel.lowercaseFirstLetter(), arrayType)
         case ASTConstants.group:
             return .complex(try bodyNode.subNodes.map { try parseBodyModel(node: $0, withEncoding: encoding) })
         default:
-            return .model(encoding, bodyType)
+            let type = bodyType.plainType(for: platform) ?? ModelType.entity.form(name: bodyType, for: platform)
+            return .model(encoding, bodyType.lowercaseFirstLetter(), type)
         }
     }
 
@@ -131,7 +139,7 @@ class MediaContentNodeParser {
                 throw SurfGenError(nested: GeneratorError.nodeConfiguration("Couldn't parse property object"),
                                    message: Constants.objectErrorMessage)
             }
-            objectProperties[name] = type
+            objectProperties[name] = type.plainType(for: platform) ?? type
         }
 
         return objectProperties

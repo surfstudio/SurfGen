@@ -11,6 +11,12 @@ class ParametersNodeParser {
         static let errorMessage = "Could not parse parameters node"
     }
 
+    private let platform: Platform
+
+    init(platform: Platform) {
+        self.platform = platform
+    }
+
     func parseParameters(node: ASTNode) throws -> [ParameterGenerationModel] {
         guard node.token == .parameters else {
             throw SurfGenError(nested: GeneratorError.incorrectNodeToken("Parameters header node has incorrect token"),
@@ -26,9 +32,13 @@ class ParametersNodeParser {
                 throw SurfGenError(nested: GeneratorError.incorrectNodeToken("Parameter node has incorrect type"),
                                    message: Constants.errorMessage)
             }
+            
+            if let plainType = type.plainType(for: platform) {
+                type = plainType
+            }
 
             if case let .type(name: objectType) = parameterNode.subNodes.typeNode?.subNodes.typeNode?.token {
-                type = ModelType.entity.form(name: objectType)
+                type = ModelType.entity.form(name: objectType, for: platform)
             }
 
             guard

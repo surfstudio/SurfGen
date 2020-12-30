@@ -43,7 +43,8 @@ final class GenerateCommand: Command {
 
         let generationType = getGenerationType()
         let configManager = try ConfigManager(path: Path(configPath))
-        let rootGenerator = RootGenerator(tempatesPath: configManager.tempatePath)
+        let rootGenerator = try RootGenerator(tempatesPath: configManager.templatePath,
+                                              platform: configManager.getPlatform())
         let spec = try getSpec(token: configManager.gitlabToken)
         
         stdout <<< "Generation for \(generationType.description) started..."

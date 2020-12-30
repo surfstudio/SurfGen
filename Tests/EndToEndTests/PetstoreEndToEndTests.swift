@@ -16,9 +16,9 @@ class PetstoreEndToEndTests: XCTestCase {
     private let spec = FileReader().readFile("TestFiles/Petstore/petstore.yaml")
 
     private lazy var rootGenerator: RootGenerator = {
-        let templatesPath = Path(#file) + "../../../Templates"
-        let rootGenerator = RootGenerator(tempatesPath: templatesPath)
-        rootGenerator.configureServiceGenerator(ServiceGenerator.defaultGenerator)
+        let templatesPath = Path(#file) + "../../../Templates/Swift"
+        let rootGenerator = RootGenerator(tempatesPath: templatesPath, platform: .swift)
+        rootGenerator.setServiceGenerator(ServiceGenerator.defaultGenerator(for: .swift))
         return rootGenerator
     }()
 

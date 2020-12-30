@@ -13,13 +13,13 @@ extension SchemaType {
     var typeName: String? {
         switch self {
         case .boolean:
-            return "Bool"
+            return "boolean"
         case .string:
-            return "String"
+            return "string"
         case .number:
-            return "Double"
+            return "number"
         case .integer:
-           return "Int"
+           return "integer"
         default:
             return nil
         }

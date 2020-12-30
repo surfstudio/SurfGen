@@ -16,18 +16,22 @@ public class ServiceGenerator {
     private let declNodeParser: ServiceDeclNodeParser
     private let operationNodeParser: OperationNodeParser
 
-    init(declNodeParser: ServiceDeclNodeParser, operationNodeParser: OperationNodeParser) {
+    private let platform: Platform
+
+    init(declNodeParser: ServiceDeclNodeParser, operationNodeParser: OperationNodeParser, platform: Platform) {
         self.declNodeParser = declNodeParser
         self.operationNodeParser = operationNodeParser
+        self.platform = platform
     }
 
-    public static var defaultGenerator: ServiceGenerator {
+    public static func defaultGenerator(for platform: Platform) -> ServiceGenerator {
         let declNodeParser = ServiceDeclNodeParser()
-        let mediaContentParser = MediaContentNodeParser()
-        let parametersParser = ParametersNodeParser()
+        let mediaContentParser = MediaContentNodeParser(platform: platform)
+        let parametersParser = ParametersNodeParser(platform: platform)
         let operationNodeParser = OperationNodeParser(mediaContentParser: mediaContentParser,
-                                                      parametersParser: parametersParser)
-        return .init(declNodeParser: declNodeParser, operationNodeParser: operationNodeParser)
+                                                      parametersParser: parametersParser,
+                                                      platform: platform)
+        return .init(declNodeParser: declNodeParser, operationNodeParser: operationNodeParser, platform: platform)
     }
 
     func generateCode(for declNode: ASTNode,
@@ -64,11 +68,14 @@ public class ServiceGenerator {
         let serviceCode = try environment.renderTemplate(.service(serviceModel))
 
         return [
-            .urlRoute: FileModel(fileName: ServicePart.urlRoute.buildName(for: serviceModel.name).withSwiftExt,
+            .urlRoute: FileModel(fileName: ServicePart.urlRoute
+                                    .buildName(for: serviceModel.name).withFileExtension(platform.fileExtension),
                                  code: routeCode),
-            .protocol: FileModel(fileName: ServicePart.protocol.buildName(for: serviceModel.name).withSwiftExt,
+            .protocol: FileModel(fileName: ServicePart.protocol
+                                    .buildName(for: serviceModel.name).withFileExtension(platform.fileExtension),
                                  code: protocolCode),
-            .service: FileModel(fileName: ServicePart.service.buildName(for: serviceModel.name).withSwiftExt,
+            .service: FileModel(fileName: ServicePart.service
+                                    .buildName(for: serviceModel.name).withFileExtension(platform.fileExtension),
                                 code: serviceCode)
         ]
     }

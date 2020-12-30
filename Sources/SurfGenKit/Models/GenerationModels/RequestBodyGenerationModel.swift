@@ -14,8 +14,8 @@ struct RequestBodyGenerationModel {
     }
 
     enum BodyType: Equatable {
-        case model(Encoding, String)
-        case array(Encoding, String)
+        case model(Encoding, String, String)
+        case array(Encoding, String, String)
         case dictionary(Encoding, [String: String])
         case multipartModel
         case complex([BodyType])
@@ -40,16 +40,16 @@ struct RequestBodyGenerationModel {
 
     init?(type: BodyType?) {
         switch type {
-        case .model(let encoding, let modelName):
+        case .model(let encoding, let modelName, let modelType):
             self.hasFormEncoding = encoding == .form
             self.isModel = true
-            self.modelName = modelName.lowercaseFirstLetter()
-            self.modelType = ModelType.entity.form(name: modelName)
-        case .array(let encoding, let modelName):
+            self.modelName = modelName
+            self.modelType = modelType
+        case .array(let encoding, let modelName, let modelType):
             self.hasFormEncoding = encoding == .form
             self.isArray = true
-            self.modelName = modelName.lowercaseFirstLetter()
-            self.modelType = ModelType.entity.form(name: modelName)
+            self.modelName = modelName
+            self.modelType = modelType
         case .dictionary(let encoding, let dictionary):
             self.hasFormEncoding = encoding == .form
             self.isDictionary = true

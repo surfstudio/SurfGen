@@ -1,0 +1,8 @@
+class {{ name }}Urls {
+  {{ name }}Urls._();
+
+  {% for path in paths %}static String {{ path.name }}{% if path.hasParameters %}{#
+  #}({% for parameter in path.parameters %}String {{ parameter }}{% if not forloop.last %}, {% endif %}{% endfor %}){#
+  #} =>{% else %} ={% endif %} '{{ path.path }}';{% if not forloop.last %}
+  {% endif %}{% endfor %}
+}

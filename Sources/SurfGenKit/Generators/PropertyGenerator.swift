@@ -12,6 +12,12 @@ public final class PropertyGenerator {
         static let errorMessage = "Could not generate property model"
     }
 
+    private let platform: Platform
+
+    init(platform: Platform) {
+        self.platform = platform
+    }
+
     /**
     Method for creating model for NodeKit's templates
     */
@@ -30,15 +36,16 @@ public final class PropertyGenerator {
                                    message: Constants.errorMessage)
         }
 
-        let nodeType = try wrap(TypeNodeParser().detectType(for: typeNode),
+        let nodeType = try wrap(TypeNodeParser(platform: platform).detectType(for: typeNode),
                                 with: Constants.errorMessage)
 
         return .init(entryName: value,
                      entityName: value.snakeCaseToCamelCase(),
-                     typeName: TypeNameBuilder().buildString(for: nodeType, isOptional: isOptional, modelType: type),
+                     typeName: TypeNameBuilder(platform: platform).buildString(for: nodeType, modelType: type),
                      fromInit: FromDTOBuilder().buildString(for: nodeType, with: value, isOptional: isOptional),
                      toDTOInit: ToDTOBuilder().buildString(for: nodeType, with: value, isOptional: isOptional),
                      isPlain: nodeType.isPlain,
+                     isOptional: isOptional,
                      description: node.description?.replacingOccurrences(of: "\n", with: " "))
     }
 

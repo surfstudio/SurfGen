@@ -8,6 +8,8 @@
 import PathKit
 
 struct ConfigModel: Decodable {
+    let platform: String
+
     let entitiesPath: String?
     let entriesPath: String?
     let enumPath: String?
@@ -17,7 +19,7 @@ struct ConfigModel: Decodable {
 
     let modelTypes: [String]?
     let generateDescriptions: Bool?
-    let tempatesPath: String
+    let templatesPath: String
     let blackList: String?
 
     let projectPath: String?
@@ -27,6 +29,7 @@ struct ConfigModel: Decodable {
     let gitlabToken: String?
 
     enum CodingKeys: String, CodingKey {
+        case platform = "platform"
         case entitiesPath = "entities_path"
         case entriesPath = "entries_path"
         case enumPath = "enums_path"
@@ -40,7 +43,7 @@ struct ConfigModel: Decodable {
 
         case modelTypes = "generation_types"
         case generateDescriptions = "generate_descriptions"
-        case tempatesPath = "templates_path"
+        case templatesPath = "templates_path"
         case blackList = "black_list_path"
 
         case gitlabToken = "gitlab_token"
