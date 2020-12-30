@@ -44,10 +44,20 @@ public struct StubGASTTreeFactory {
         )
     }
 
-    public func build() -> BuildGASTTreeEntryPoint {
+    public func build(enableDisclarationChecking: Bool = false) -> BuildGASTTreeEntryPoint {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
-        let serviceBuilder = AnyServiceBuilder(parameterBuilder: parameterBuilder, schemaBuilder: schemaBuilder)
+        let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder, enableDisclarationChecking: enableDisclarationChecking)
+        let responsesBuilder = AnyResponsesBuilder(mediaTypesBuilder: mediaTypesBuilder)
+        let requestBodiesBuilder = AnyRequestBodiesBuilder(mediaTypesBuilder: mediaTypesBuilder)
+
+        let serviceBuilder = AnyServiceBuilder(
+            parameterBuilder: parameterBuilder,
+            schemaBuilder: schemaBuilder,
+            requestBodyBuilder: requestBodiesBuilder,
+            responseBuilder: responsesBuilder
+        )
+
         return .init(
             refExtractorProvider: self.provider(str:),
             next: .init(
@@ -55,7 +65,9 @@ public struct StubGASTTreeFactory {
                     fileProvider: fileProvider,
                     schemaBuilder: schemaBuilder,
                     parameterBuilder: parameterBuilder,
-                    serviceBuilder: serviceBuilder),
+                    serviceBuilder: serviceBuilder,
+                    responsesBuilder: responsesBuilder,
+                    requestBodiesBuilder: requestBodiesBuilder),
                 next: InitCodeGenerationStage(parserStage: .init(next: resultClosure)).erase())
         )
     }

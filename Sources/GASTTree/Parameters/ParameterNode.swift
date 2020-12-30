@@ -38,6 +38,6 @@ public struct ParameterNode {
 
 extension ParameterNode: StringView {
     public var view: String {
-        return "name: \(self.name)\nlocation:\(location)\ndescription:\(description)\n"
+        return "name: \(self.name)\nlocation:\(location)\ndescription:\(description ?? "nil")\n"
     }
 }

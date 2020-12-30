@@ -21,15 +21,21 @@ public struct AnyGASTBuilder: GASTBuilder {
     let schemaBuilder: SchemaBuilder
     let parameterBuilder: ParametersBuilder
     let serviceBuilder: ServiceBuilder
+    let responsesBuilder: ResponsesBuilder
+    let requestBodiesBuilder: RequestBodiesBuilder
 
     public init(fileProvider: FileProvider,
                 schemaBuilder: SchemaBuilder,
                 parameterBuilder: ParametersBuilder,
-                serviceBuilder: ServiceBuilder) {
+                serviceBuilder: ServiceBuilder,
+                responsesBuilder: ResponsesBuilder,
+                requestBodiesBuilder: RequestBodiesBuilder) {
         self.fileProvider = fileProvider
         self.schemaBuilder = schemaBuilder
         self.parameterBuilder = parameterBuilder
         self.serviceBuilder = serviceBuilder
+        self.responsesBuilder = responsesBuilder
+        self.requestBodiesBuilder = requestBodiesBuilder
     }
 
     public func build(filePath: String) throws -> RootNode {
@@ -47,6 +53,17 @@ public struct AnyGASTBuilder: GASTBuilder {
         let services = try wrap(self.serviceBuilder.build(paths: spec.paths),
                                 message: "While parsing services for specification at path: \(filePath)")
 
-        return .init(schemas: schemas, parameters: parameters, services: services)
+        let responses = try wrap(self.responsesBuilder.build(responses: spec.components.responses),
+                                 message: "While parsing responses for specification at path: \(filePath)")
+
+        let requestBodies = try wrap(self.requestBodiesBuilder.build(requestBodies:spec.components.requestBodies),
+                                 message: "While parsing responses for specification at path: \(filePath)")
+
+        return .init(
+            schemas: schemas,
+            parameters: parameters,
+            services: services,
+            requestBodies: requestBodies,
+            responses: responses)
     }
 }

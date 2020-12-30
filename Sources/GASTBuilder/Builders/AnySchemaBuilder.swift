@@ -75,7 +75,7 @@ public struct AnySchemaBuilder: SchemaBuilder {
     }
 
     func build(object: ObjectSchema, meta: Metadata, name: String) throws -> SchemaModelNode {
-
+        // TODO: - replace on MediaTypesBuilder
         let properties = try object.properties.map { property -> PropertyNode in
             let type = try wrap(property.schema.extractType(),
                                 message: "In object \(name), in property \(property.name)")

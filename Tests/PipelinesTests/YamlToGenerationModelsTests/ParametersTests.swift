@@ -117,7 +117,7 @@ final class ParametersTests: XCTestCase {
             let param = paramType,
             case SchemaType.enum = param
         else {
-            XCTFail("Type \(paramType) is not enum")
+            XCTFail("Type \(paramType.debugDescription) is not enum")
             return
         }
     }
@@ -162,7 +162,7 @@ final class ParametersTests: XCTestCase {
             let param = paramType,
             case SchemaType.object = param
         else {
-            XCTFail("Type \(paramType) is not enum")
+            XCTFail("Type \(paramType.debugDescription) is not enum")
             return
         }
     }
@@ -206,7 +206,7 @@ final class ParametersTests: XCTestCase {
             let param = paramType,
             case SchemaType.alias = param
         else {
-            XCTFail("Type \(paramType) is not enum")
+            XCTFail("Type \(paramType.debugDescription) is not enum")
             return
         }
     }
@@ -254,7 +254,7 @@ final class ParametersTests: XCTestCase {
             let param = paramType,
             case SchemaType.alias = param
         else {
-            XCTFail("Type \(paramType) is not enum")
+            XCTFail("Type \(paramType.debugDescription) is not enum")
             return
         }
     }
@@ -272,15 +272,7 @@ final class ParametersTests: XCTestCase {
             pathToModels: ParametersTests.yamlSeparatedModels
         ]
 
-        var factory = StubGASTTreeFactory(fileProvider: fileProvider)
-
-        var result = [[ServiceModel]]()
-
-        factory.resultClosure = { (val: [[ServiceModel]]) throws -> Void in
-            result = val
-        }
-
-        let pipeline = factory.build()
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build()
 
         // Act-Assert
 

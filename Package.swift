@@ -28,9 +28,9 @@ var testTargets: [Target] = [
 
 var dependencies: [PackageDescription.Package.Dependency] = [
     .package(url: "https://github.com/jpsim/Yams", from: "1.0.0"),
-    .package(path: "/Users/lastsprint/repo/iOS/surf/public/SwagGen"),
-//    .package(url: "https://github.com/LastSprint/SwagGen", .revision("4fd5a299db0ba733e5cd6fa4e421b40248657cb6")),
-    .package(url: "https://github.com/kylef/PathKit", from: "0.9.0"),
+//    .package(path: "/Users/lastsprint/repo/iOS/surf/public/SwagGen"),
+    .package(url: "https://github.com/LastSprint/SwagGen", .revision("4fd5a299db0ba733e5cd6fa4e421b40248657cb6")),
+//    .package(url: "https://github.com/kylef/PathKit", from: "0.9.0"),
     .package(url: "https://github.com/stencilproject/Stencil", from: "0.13.1"),
     .package(url: "https://github.com/jakeheis/SwiftCLI", from: "5.3.3"),
     .package(url: "https://github.com/JohnReeze/XcodeProj", .upToNextMajor(from: "7.8.2")),
