@@ -7,6 +7,7 @@
 
 @testable import ReferenceExtractor
 import XCTest
+import Common
 
 /// Cases:
 ///
