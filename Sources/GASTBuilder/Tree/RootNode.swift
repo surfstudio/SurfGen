@@ -8,8 +8,9 @@
 import Foundation
 
 public struct RootNode {
-    var schemas: [SchemaObjectNode]
-    var parameters: [ParameterNode]
+    public var schemas: [SchemaObjectNode]
+    public var parameters: [ParameterNode]
+    public var services: [PathNode]
 }
 
 extension RootNode: StringView {

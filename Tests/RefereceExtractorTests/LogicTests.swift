@@ -38,7 +38,7 @@ class LogicTests: XCTestCase {
 
         // one because we read root spec
         XCTAssertEqual(fileProvider.readCount, 1)
-        XCTAssertTrue(refs.isEmpty, "\(refs)")
+        XCTAssertTrue(refs.uniqRefs.isEmpty, "\(refs)")
     }
 
     func testForSpecWithLocalRefNoOneFileWillBeReaded() throws {
@@ -60,7 +60,7 @@ class LogicTests: XCTestCase {
 
         // one because we read root spec
         XCTAssertEqual(fileProvider.readCount, 1)
-        XCTAssertTrue(refs.isEmpty, "\(refs)")
+        XCTAssertTrue(refs.uniqRefs.isEmpty, "\(refs)")
     }
 
     func testForSpecWithOneDepthRefOnlyOneFileWillBeReaded() throws {
@@ -83,7 +83,7 @@ class LogicTests: XCTestCase {
 
         // one because we read root spec
         XCTAssertEqual(fileProvider.readCount, 2)
-        XCTAssertEqual(refs.count, 1)
+        XCTAssertEqual(refs.uniqRefs.count, 1)
     }
 
     func testForSpecWithOneDepthSameRefOnlyOneFileWillBeReaded() throws {
@@ -107,7 +107,7 @@ class LogicTests: XCTestCase {
 
         // one because we read root spec
         XCTAssertEqual(fileProvider.readCount, 2)
-        XCTAssertEqual(refs.count, 1)
+        XCTAssertEqual(refs.uniqRefs.count, 1)
     }
 
     func testForSpecWithOneDepthDifferentRefSameFilesCountWillBeReaded() throws {
@@ -131,7 +131,7 @@ class LogicTests: XCTestCase {
 
         // one because we read root spec
         XCTAssertEqual(fileProvider.readCount, 3)
-        XCTAssertEqual(refs.count, 2)
+        XCTAssertEqual(refs.uniqRefs.count, 2)
     }
 
     func testForSpecWithArrayWhichContainsDictWithRefsAllRefsWillBeExtracted() throws {
@@ -154,6 +154,6 @@ class LogicTests: XCTestCase {
 
         // one because we read root spec
         XCTAssertEqual(fileProvider.readCount, 2)
-        XCTAssertEqual(refs.count, 1)
+        XCTAssertEqual(refs.uniqRefs.count, 1)
     }
 }

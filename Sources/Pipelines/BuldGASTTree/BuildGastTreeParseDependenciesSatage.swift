@@ -8,12 +8,18 @@
 import Foundation
 import GASTBuilder
 import Common
+import ReferenceExtractor
+
+public struct LinkWithDependencies {
+    public let links: [String]
+    public let dependencies: [Dependency]
+}
 
 public struct BuildGastTreeParseDependenciesSatage: PipelineEntryPoint {
 
     let builder: GASTBuilder
 
-    public func run(with input: [String]) throws {
+    public func run(with input: LinkWithDependencies) throws {
 
         // there is a problem here
         // we don't now how `input` which is absolute path
@@ -60,7 +66,7 @@ public struct BuildGastTreeParseDependenciesSatage: PipelineEntryPoint {
 
         var trees = [String: RootNode]()
 
-        try input.forEach { path in
+        try input.links.forEach { path in
             let root = try wrap(self.builder.build(filePath: path),
                                 message: "Error occured in stage `Build GAST for dependencies`")
             trees[path] = root
