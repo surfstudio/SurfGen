@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  AnyRequestBodiesBuilder.swift
 //  
 //
 //  Created by Александр Кравченков on 27.12.2020.
@@ -10,14 +10,19 @@ import GASTTree
 import Swagger
 import Common
 
+/// Just an interface for any GAST-RequestBody builder
 public protocol RequestBodyBuilder {
     func build(requestBody: RequestBody) throws -> RequestBodyNode
 }
 
+/// The same as `RequestBodyBuilder` can build bodies which are declared in `components.requestBodies`
 public protocol RequestBodiesBuilder {
     func build(requestBodies: [ComponentObject<RequestBody>]) throws -> [ComponentRequestBodyNode]
 }
 
+/// Default implementation for both `RequestBodyBuilder` and `RequestBodiesBuilder`
+///
+/// _seems lke that it's the only one implementation which isn't contain some restrictions :D_
 public struct AnyRequestBodiesBuilder: RequestBodiesBuilder, RequestBodyBuilder {
 
     public let mediaTypesBuilder: MediaTypesBuilder

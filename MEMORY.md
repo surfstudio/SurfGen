@@ -120,3 +120,11 @@ Write tests on resoving reference cycles betwenn different files when models fro
 ---
 Test hat we can declare arrays and groups in place for request/response bodies
 ---
+
+--- 
+Test building parameters with each possible type
+--
+
+---
+Write tests for parameter with schema declaration in type
+---

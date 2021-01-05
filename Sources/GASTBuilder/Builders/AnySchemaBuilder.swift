@@ -1,5 +1,5 @@
 //
-//  SchemaBuilder.swift
+//  AnySchemaBuilder.swift
 //  
 //
 //  Created by Александр Кравченков on 14.12.2020.
@@ -10,14 +10,62 @@ import Swagger
 import Common
 import GASTTree
 
+/// Just an interface for any GAST-Schema builder
 public protocol SchemaBuilder {
+    /// Build all item which are under `schemas:`
     func build(schemas: [ComponentObject<Schema>]) throws -> [SchemaObjectNode]
 }
 
+/// Default implementation of `schema` builder.
+///
+/// ```YAML
+/// components:
+///     schemas: # <-- Will build all items under this key
+/// ```
+///
+/// - See: https://swagger.io/docs/specification/data-models/
+///
+/// - Bug:
+///     - All `PropertyNode.nullable == true` because of issue in `Swagger` lib.
+///
+/// ## Don't support
+///
+/// ### Group type may be only reference.
+///
+/// For example it's **ok**
+///
+/// ```YAML
+/// oneOf:
+///     - $ref: "..."
+///     - type: integer
+/// ```
+///
+/// but it's **not**
+///
+/// ### Array may by only single-item
+///
+/// ```YAML
+/// type: array
+/// items:
+///     type: integer
+/// ```
+/// **Not multiple**
+///
+/// ```YAML
+/// type: array
+/// items:
+///     type:
+///         - integer
+///         - string
+/// ```
+/// ### PrimitiveType can't be `any`
+///
+/// Isn't supported in any place
 public struct AnySchemaBuilder: SchemaBuilder {
 
     public init() { }
 
+    /// Build all item which are under `schemas:`
     public func build(schemas: [ComponentObject<Schema>]) throws -> [SchemaObjectNode] {
         var result = [SchemaObjectNode]()
         for schema in schemas {
@@ -30,6 +78,7 @@ public struct AnySchemaBuilder: SchemaBuilder {
         return result
     }
 
+    /// Build current `schemas` element
     func process(schema: ComponentObject<Schema>) throws -> SchemaObjectNode {
         switch schema.value.type {
         case .any:
@@ -59,6 +108,8 @@ public struct AnySchemaBuilder: SchemaBuilder {
         }
     }
 
+    /// Handle component whose type is string
+    /// Can create `primitive` or `enum`
     func processString(schema: ComponentObject<Schema>) throws -> SchemaObjectNode {
 
         guard let enumValues = schema.value.metadata.enumValues else {
@@ -66,7 +117,7 @@ public struct AnySchemaBuilder: SchemaBuilder {
         }
 
         guard let stringCases = enumValues as? [String] else {
-            throw CommonError(message: "We couldn't parse it as enum (where were no one string case). Now we can't process this type on this level of depth. You can create an Issue or add your vote to existed one")
+            throw CommonError(message: "We couldn't parse it as enum (where were no one string case)")
         }
 
         let model = SchemaEnumNode(
@@ -87,7 +138,7 @@ public struct AnySchemaBuilder: SchemaBuilder {
                                 type: type,
                                 description: property.schema.metadata.description,
                                 example: property.schema.metadata.example,
-                                // TODO: - Swagger lib crash if its a ref. Why? No idea.
+                                // FIXME: - Swagger lib crash if its a ref. Why? No idea.
 //                                nullable: property.nullable)
                                 nullable: true)
         }
@@ -106,6 +157,8 @@ public struct AnySchemaBuilder: SchemaBuilder {
         }
     }
 
+    /// Build group node and validate group type
+    /// For detail look at header
     func build(group: GroupSchema, name: String) throws -> SchemaGroupNode {
 
         let refs = try group.schemas.map { schema -> String in
@@ -132,5 +185,40 @@ public struct AnySchemaBuilder: SchemaBuilder {
         }
 
         return .init(name: name, references: refs, type: group.type.gast)
+    }
+}
+
+private extension Schema {
+
+    func extractType() throws -> PropertyNode.PossibleType {
+        switch self.type {
+        case .any:
+            throw CommonError(message: "Type is `any`, but we can process only primitive types, arrays and $ref")
+        case .object:
+            throw CommonError(message: "Type is `object`, but we can process only primitive types, arrays and $ref")
+        case .group:
+            throw CommonError(message: "Type is `group`, but we can process only primitive types, arrays and $ref")
+        case .array(let arr):
+            switch arr.items {
+            case .multiple:
+                throw CommonError(message: "Array conains multiple items declaration. So we can't process it now")
+            case .single(let schema):
+                let type = try schema.extractType()
+                guard case .simple(let val) = type else {
+                    throw CommonError(message: "Array conains single item with wrong type \(type). But we can process only primitive types and $ref in this case")
+                }
+                return .array(.init(itemsType: val))
+            }
+        case .reference(let ref):
+            return .simple(.ref(ref.rawValue))
+        case .boolean:
+            return .simple(.entity(.boolean))
+        case .string:
+            return .simple(.entity(.string))
+        case .number:
+            return .simple(.entity(.number))
+        case .integer:
+            return .simple(.entity(.integer))
+        }
     }
 }

@@ -14,7 +14,7 @@
 # Protocols
 
   - [FileProvider](./FileProvider.md):
-    Interface for object which can deal with files in file system
+    Interface for object which is can deal with files in file system
 
 # Global Functions
 

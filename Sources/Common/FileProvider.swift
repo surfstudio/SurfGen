@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Interface for object which can deal with files in file system
+/// Interface for object which is can deal with files in file system
 public protocol FileProvider {
     func isReadableFile(at path: String) -> Bool
     func readFile(at path: String) throws -> Data?
