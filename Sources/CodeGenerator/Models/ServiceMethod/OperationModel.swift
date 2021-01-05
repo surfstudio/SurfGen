@@ -9,13 +9,16 @@ import Foundation
 import GASTTree
 
 /// Describes an API method
+///
 /// Operation it's specific CRUD method.
 ///
 /// For example if we have method with uri: `www.example.com/projects/users`
-/// So this method can be `GET /projects/users` for reading information
-/// Or it may be `POST /projects/users` to create new user for projects
 ///
-/// And each of that (`GET` and `POST`) will be different `OperationModel`
+/// this method can be `GET /projects/users` for reading information
+///
+/// Or it can be `POST /projects/users` to create new user for projectsэто 
+///
+/// And each of those (`GET` and `POST`) will be a different `OperationModel`
 ///
 /// ```YAML
 /// /billings/payment:
@@ -96,6 +99,7 @@ import GASTTree
 /// ```
 public struct OperationModel: Encodable {
     /// http method string representation
+    ///
     /// For example `GET`
     public let httpMethod: String
     /// Description which was proided (or not) in specification

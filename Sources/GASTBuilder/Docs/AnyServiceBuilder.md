@@ -1,11 +1,12 @@
 # AnyServiceBuilder
 
 Default implementation for `ServiceBuilder`
-Builds `path` elements of Open-API spec
 
 ``` swift
 public struct AnyServiceBuilder: ServiceBuilder
 ```
+
+Builds `path` elements of Open-API spec
 
 **WARNING**
 

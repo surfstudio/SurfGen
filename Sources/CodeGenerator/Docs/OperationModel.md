@@ -1,17 +1,20 @@
 # OperationModel
 
 Describes an API method
-Operation it's specific CRUD method.
 
 ``` swift
 public struct OperationModel: Encodable
 ```
 
-For example if we have method with uri: `www.example.com/projects/users`
-So this method can be `GET /projects/users` for reading information
-Or it may be `POST /projects/users` to create new user for projects
+Operation it's specific CRUD method.
 
-And each of that (`GET` and `POST`) will be different `OperationModel`
+For example if we have method with uri: `www.example.com/projects/users`
+
+this method can be `GET /projects/users` for reading information
+
+Or it can be `POST /projects/users` to create new user for projectsэто
+
+And each of those (`GET` and `POST`) will be a different `OperationModel`
 
 ``` YAML
 /billings/payment:
@@ -100,11 +103,12 @@ OperationModel:
 ### `httpMethod`
 
 http method string representation
-For example `GET`
 
 ``` swift
 let httpMethod: String
 ```
+
+For example `GET`
 
 ### `description`
 

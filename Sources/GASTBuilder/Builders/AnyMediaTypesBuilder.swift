@@ -26,7 +26,9 @@ public struct AnyMediaTypesBuilder: MediaTypesBuilder {
 
     public let schemaBuilder: SchemaBuilder
     /// If set to `false` disable errors for cases when MediaType schema cotains definition of object/enum/alias e.t.c
+    ///
     /// If set to `true` throws error for any case except reference
+    /// 
     /// By default set to `true`
     ///
     /// **WARNING**

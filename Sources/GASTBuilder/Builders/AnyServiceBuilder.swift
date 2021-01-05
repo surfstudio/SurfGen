@@ -17,6 +17,7 @@ public protocol ServiceBuilder {
 }
 
 /// Default implementation for `ServiceBuilder`
+/// 
 /// Builds `path` elements of Open-API spec
 ///
 /// **WARNING**

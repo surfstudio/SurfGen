@@ -4,7 +4,6 @@
     Default implementation of MediaTypesBuilder
   - [AnyParametersBuilder](./Docs/AnyParametersBuilder.md):
     Default implementation for `ParametersBuilder`.
-    Can build parameters both from `components.parameters` and from `paths.operations.parameters`
   - [AnyRequestBodiesBuilder](./Docs/AnyRequestBodiesBuilder.md):
     Default implementation for both `RequestBodyBuilder` and `RequestBodiesBuilder`
   - [AnyResponsesBuilder](./Docs/AnyResponsesBuilder.md):
@@ -13,7 +12,6 @@
     Default implementation of `schema` builder.
   - [AnyServiceBuilder](./Docs/AnyServiceBuilder.md):
     Default implementation for `ServiceBuilder`
-    Builds `path` elements of Open-API spec
   - [AnyGASTBuilder](./Docs/AnyGASTBuilder.md):
     Parse `API specification` to `OpenAPI-AST` then build the `GAST` from it.
 

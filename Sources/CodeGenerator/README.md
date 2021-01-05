@@ -34,7 +34,6 @@
     Possibe API entities which can be used in this model
   - [OperationModel](./Docs/OperationModel.md):
     Describes an API method
-    Operation it's specific CRUD method.
   - [RequestModel](./Docs/RequestModel.md):
     Describes `request body` part of API method
   - [ResponseModel](./Docs/ResponseModel.md):

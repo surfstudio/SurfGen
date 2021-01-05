@@ -1,11 +1,12 @@
 # AnyParametersBuilder
 
 Default implementation for `ParametersBuilder`.
-Can build parameters both from `components.parameters` and from `paths.operations.parameters`
 
 ``` swift
 public struct AnyParametersBuilder: ParametersBuilder
 ```
+
+Can build parameters both from `components.parameters` and from `paths.operations.parameters`
 
   - See: https://swagger.io/docs/specification/describing-parameters/
 
