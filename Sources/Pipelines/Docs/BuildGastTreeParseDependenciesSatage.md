@@ -6,7 +6,7 @@ public struct BuildGastTreeParseDependenciesSatage: PipelineEntryPoint
 
 ## Inheritance
 
-[`PipelineEntryPoint`](/PipelineEntryPoint)
+[`PipelineEntryPoint`](./PipelineEntryPoint)
 
 ## Initializers
 

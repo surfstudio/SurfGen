@@ -6,7 +6,7 @@ public enum PossibleType
 
 ## Inheritance
 
-[`StringView`](/StringView)
+[`StringView`](./StringView)
 
 ## Enumeration Cases
 

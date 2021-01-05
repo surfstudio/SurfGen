@@ -6,7 +6,7 @@ public struct InitCodeGenerationStage: PipelineEntryPoint
 
 ## Inheritance
 
-[`PipelineEntryPoint`](/PipelineEntryPoint)
+[`PipelineEntryPoint`](./PipelineEntryPoint)
 
 ## Initializers
 

@@ -6,7 +6,7 @@ public struct AnyParametersBuilder: ParametersBuilder
 
 ## Inheritance
 
-[`ParametersBuilder`](/ParametersBuilder)
+[`ParametersBuilder`](./ParametersBuilder)
 
 ## Initializers
 

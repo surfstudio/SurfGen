@@ -6,7 +6,7 @@ public struct AnyMediaTypesBuilder: MediaTypesBuilder
 
 ## Inheritance
 
-[`MediaTypesBuilder`](/MediaTypesBuilder)
+[`MediaTypesBuilder`](./MediaTypesBuilder)
 
 ## Initializers
 

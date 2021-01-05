@@ -6,7 +6,7 @@ public struct AnyGASTBuilder: GASTBuilder
 
 ## Inheritance
 
-[`GASTBuilder`](/GASTBuilder)
+[`GASTBuilder`](./GASTBuilder)
 
 ## Initializers
 

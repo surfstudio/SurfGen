@@ -6,7 +6,7 @@ public struct AnyGroupParser: GroupParser
 
 ## Inheritance
 
-[`GroupParser`](/GroupParser)
+[`GroupParser`](./Docs/GroupParser)
 
 ## Initializers
 

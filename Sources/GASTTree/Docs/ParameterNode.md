@@ -6,7 +6,7 @@ public struct ParameterNode
 
 ## Inheritance
 
-[`StringView`](/StringView)
+[`StringView`](./StringView)
 
 ## Initializers
 

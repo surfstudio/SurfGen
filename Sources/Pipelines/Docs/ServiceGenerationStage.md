@@ -6,7 +6,7 @@ public struct ServiceGenerationStage: PipelineEntryPoint
 
 ## Inheritance
 
-[`PipelineEntryPoint`](/PipelineEntryPoint)
+[`PipelineEntryPoint`](./PipelineEntryPoint)
 
 ## Initializers
 

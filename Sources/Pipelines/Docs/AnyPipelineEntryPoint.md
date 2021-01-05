@@ -8,7 +8,7 @@ public struct AnyPipelineEntryPoint<Input>: PipelineEntryPoint
 
 ## Inheritance
 
-[`PipelineEntryPoint`](/PipelineEntryPoint)
+[`PipelineEntryPoint`](./PipelineEntryPoint)
 
 ## Initializers
 

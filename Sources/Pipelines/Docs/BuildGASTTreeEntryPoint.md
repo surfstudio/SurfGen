@@ -6,7 +6,7 @@ public struct BuildGASTTreeEntryPoint
 
 ## Inheritance
 
-[`PipelineEntryPoint`](/PipelineEntryPoint)
+[`PipelineEntryPoint`](./PipelineEntryPoint)
 
 ## Nested Type Aliases
 

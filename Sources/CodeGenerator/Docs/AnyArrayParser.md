@@ -6,7 +6,7 @@ public struct AnyArrayParser: ArrayParser
 
 ## Inheritance
 
-[`ArrayParser`](/ArrayParser)
+[`ArrayParser`](./Docs/ArrayParser)
 
 ## Initializers
 

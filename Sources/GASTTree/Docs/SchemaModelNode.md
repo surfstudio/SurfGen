@@ -11,7 +11,7 @@ So in terms of development it may be DTO
 
 ## Inheritance
 
-[`StringView`](/StringView)
+[`StringView`](./StringView)
 
 ## Initializers
 

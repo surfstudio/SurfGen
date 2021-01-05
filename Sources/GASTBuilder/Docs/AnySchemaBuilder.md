@@ -6,7 +6,7 @@ public struct AnySchemaBuilder: SchemaBuilder
 
 ## Inheritance
 
-[`SchemaBuilder`](/SchemaBuilder)
+[`SchemaBuilder`](./SchemaBuilder)
 
 ## Initializers
 

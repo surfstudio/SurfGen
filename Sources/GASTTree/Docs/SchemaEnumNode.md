@@ -6,7 +6,7 @@ public struct SchemaEnumNode
 
 ## Inheritance
 
-[`StringView`](/StringView)
+[`StringView`](./StringView)
 
 ## Initializers
 

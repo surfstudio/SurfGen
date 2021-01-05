@@ -6,7 +6,7 @@ public struct AnyServiceBuilder: ServiceBuilder
 
 ## Inheritance
 
-[`ServiceBuilder`](/ServiceBuilder)
+[`ServiceBuilder`](./ServiceBuilder)
 
 ## Initializers
 

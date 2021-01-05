@@ -6,7 +6,7 @@ public struct PropertyNode
 
 ## Inheritance
 
-[`StringView`](/StringView)
+[`StringView`](./StringView)
 
 ## Initializers
 

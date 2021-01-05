@@ -1,7 +1,7 @@
 <details>
 <summary>Types</summary>
 
-  - [PathNormalizer](/PathNormalizer)
-  - [ReferenceExtractor](/ReferenceExtractor)
+  - [PathNormalizer](./PathNormalizer)
+  - [ReferenceExtractor](./ReferenceExtractor)
 
 </details>

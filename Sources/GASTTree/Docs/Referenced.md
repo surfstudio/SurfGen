@@ -6,7 +6,7 @@ public enum Referenced<Nested>
 
 ## Inheritance
 
-[`StringView`](/StringView)
+[`StringView`](./StringView)
 
 ## Enumeration Cases
 

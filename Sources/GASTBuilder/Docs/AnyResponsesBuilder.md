@@ -6,7 +6,7 @@ public struct AnyResponsesBuilder: ResponsesBuilder, ResponseBuilder
 
 ## Inheritance
 
-[`ResponseBuilder`](/ResponseBuilder), [`ResponsesBuilder`](/ResponsesBuilder)
+[`ResponseBuilder`](./ResponseBuilder), [`ResponsesBuilder`](./ResponsesBuilder)
 
 ## Initializers
 

@@ -6,7 +6,7 @@ public struct AnyMediaTypeParser: MediaTypeParser
 
 ## Inheritance
 
-[`MediaTypeParser`](/MediaTypeParser)
+[`MediaTypeParser`](./Docs/MediaTypeParser)
 
 ## Initializers
 

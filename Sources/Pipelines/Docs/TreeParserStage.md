@@ -6,7 +6,7 @@ public struct TreeParserStage: PipelineEntryPoint
 
 ## Inheritance
 
-[`PipelineEntryPoint`](/PipelineEntryPoint)
+[`PipelineEntryPoint`](./PipelineEntryPoint)
 
 ## Initializers
 

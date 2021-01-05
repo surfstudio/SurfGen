@@ -6,7 +6,7 @@ public struct ArrayTypeNode
 
 ## Inheritance
 
-[`StringView`](/StringView)
+[`StringView`](./StringView)
 
 ## Initializers
 
