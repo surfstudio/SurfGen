@@ -1,3 +1,25 @@
+# adds `.md` extension to references. Because now all file references don't contain file extension. idk why.
+
+add_ext_to_refs(){
+    sed -i '' 's|):|.md):|g' $1
+}
+
+add_docks_path_to_refs(){
+    sed -i '' 's|./|./Docs/|g' $1
+}
+
+fix_refs_in_dir(){
+    for entry in "$1"/*
+    do
+        add_ext_to_refs $entry
+    done
+}
+
+fix_readme_issues(){
+    add_ext_to_refs $1
+    add_docks_path_to_refs $1
+}
+
 rm -rf Sources/Common/Docs
 rm -rf Sources/CodeGenerator/Docs
 # rm -rf Sources/ReferenceExtractor/Docs
@@ -19,10 +41,10 @@ mv Sources/CodeGenerator/Docs/Home.md Sources/CodeGenerator/README.md
 mv Sources/Common/Docs/Home.md Sources/Common/README.md 
 mv Sources/GASTBuilder/Docs/Home.md Sources/GASTBuilder/README.md 
 
-sed -i '' 's|):|.md):|g' Sources/CodeGenerator/README.md
-sed -i '' 's|):|.md):|g' Sources/Common/README.md
-sed -i '' 's|):|.md):|g' Sources/GASTBuilder/README.md
+fix_readme_issues Sources/CodeGenerator/README.md
+fix_readme_issues Sources/Common/README.md
+fix_readme_issues Sources/GASTBuilder/README.md
 
-sed -i '' 's|./|./Docs/|g' Sources/CodeGenerator/README.md
-sed -i '' 's|./|./Docs/|g' Sources/Common/README.md
-sed -i '' 's|./|./Docs/|g' Sources/GASTBuilder/README.md
+fix_refs_in_dir Sources/CodeGenerator/Docs
+fix_refs_in_dir Sources/Common/Docs
+fix_refs_in_dir Sources/GASTBuilder/Docs
