@@ -1,0 +1,178 @@
+components:
+  schemas: 
+    BannersLocation:
+      type: string
+      enum: [main, catalog]
+      description: Месторасположение баннеров -- главный экран или каталог
+
+    PromotionBonus:
+      description: Описание бонусов
+      type: object
+      properties:
+        bonusId:
+          type: string
+          example: 165
+        bonusName:
+          type: string
+
+    PromotionInput:
+      description: Описывает TextField в который нужно будет какие-то данные для акции
+      type: object
+      properties:
+        fieldDescription:
+          type: string
+          example: Номер Выручай-карты
+          nullable: true
+        optional:
+          type: boolean
+          nullable: true
+          description: Если null, то считается false
+        errorText:
+          type: string
+          description: В случае если поле заполнено с ошибкой (не прошло регэксп)
+        regEx:
+          type: string
+          example: \\d{10}
+          nullable: true
+        fieldName: 
+          type: string
+          example: "specialCardNumber"
+      required:
+        - fieldName
+
+    Promotion:
+      description: Акция пользователя
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID акции
+          example: 228
+        name:
+          type: string
+          description: Заголовок акции
+        imageUrl:
+          type: string
+        summary:
+          type: string
+          description: Короткое описание акции. Оно выводится как превью в списке акций
+        fromDate:
+          $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+          description: Дата начала акции
+        toDate:
+          $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+          description: Дата конца акции
+      required:
+        - id
+        - name
+        - imageUrl
+
+    Banner:
+      description: Баннеры пользователя
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID баннера
+          example: 228
+        imageUrl:
+          type: string
+          description: Картинки баннера
+        url:
+          type: string
+          description: Ссылка на внешний ресурс
+      required:
+        - id
+        - imageUrl
+        - url
+    
+    BonusHistoryResponse:
+      properties:
+        history: 
+          type: array
+          items: 
+            $ref: "#/components/schemas/BonusHistoryItem"
+        metaData: 
+          $ref: "../common/resources/models.yaml#/components/schemas/MetaData"
+
+    BonusHistoryItem:
+      description: История активации бонусов
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID истории операции
+        campaignName:
+          type: string
+          description: Заголовок истории (название акции)
+        bonusName:
+          type: string
+          description: Название бонуса
+        operationDate:
+          $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+          description: Дата получения бонуса
+      required:
+        - id
+        - title
+        - bonusName
+        - operationDate
+
+    DetailPromotion:
+      description: Детальная информация по акции пользователя
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID акции
+          example: 228
+        name:
+          type: string
+          description: Заголовок акции
+        description:
+          type: string
+          description: Детальное описание акции
+        imageUrl:
+          type: string
+        tradeInCampaignLink:
+          type: string
+          description: >
+            Идентификатор акции для подачи заявки на акцию.
+          nullable: true
+        textFields:
+          nullable: true
+          description: Массив текстовых полей для ввода. 
+          type: array
+          items:
+            $ref: "models.yaml#/components/schemas/PromotionInput"
+        bonuses:
+          description: >
+            Список бонусов акции.
+          nullable: true
+          type: array
+          items:
+            $ref: "models.yaml#/components/schemas/PromotionBonus"
+        fromDate:
+          $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+          description: Дата начала акции
+        toDate:
+          $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+          description: Дата конца акции
+      required:
+        - id
+      
+    AcceptPromotion:
+      description: >
+        Модель для согласия участия в акции. 
+        Может включать в себя инфомрацию, которую выбрал/ввел пользователь (если акция уже выполнена)
+      type: object
+      properties:
+        bonusId:
+          description: ИД бонуса, который выбрал пользователь
+          type: string
+        userInputs:
+          description: >
+            Словарь (ключ-значение), где ключ - `PromotionInput.fieldName`, 
+            а значение - то что пользователь ввел в текстовое поле
+          type: array
+          items:
+            $ref: "../common/models.yaml#/components/schemas/KeyValuePair"

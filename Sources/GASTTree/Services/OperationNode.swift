@@ -13,9 +13,9 @@ public struct OperationNode {
         /// May be `200` or `default` etc.
         /// Fo more imformation look at https://swagger.io/specification/#responses-object
         public let key: String
-        public let response: Referenced<ResponseNode>
+        public let response: Referenced<ResponseNode>?
 
-        public init(key: String, response: Referenced<ResponseNode>) {
+        public init(key: String, response: Referenced<ResponseNode>?) {
             self.key = key
             self.response = response
         }

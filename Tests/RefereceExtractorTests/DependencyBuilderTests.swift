@@ -206,4 +206,69 @@ class DependencyBuilderTests: XCTestCase {
         XCTAssertEqual(root.dependecies[dep1Ref], depPath)
         XCTAssertEqual(root.dependecies[dep2Ref], depPath)
     }
+
+    func testAFileContainsLocalDependenciesWithRefsOnAnotherFile() throws {
+        // Arrange
+
+        let apiPath = "/project-swagger/catalog/api.yaml"
+        let modelsPath = "/project-swagger/catalog/models.yaml"
+        let commonModelsPath = "/project-swagger/common/models.yaml"
+        let commonAliasesPath = "/project-swagger/common/aliases.yaml"
+        let commonErrorsPath = "/project-swagger/common/errors.yaml"
+        let billingPath = "/project-swagger/billings/models.yaml"
+
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [
+            apiPath: SpecFilesDeclaration.BugWithDoublingDependencies.api,
+            modelsPath: SpecFilesDeclaration.BugWithDoublingDependencies.models,
+            commonModelsPath: SpecFilesDeclaration.BugWithDoublingDependencies.commonModels,
+            commonAliasesPath: SpecFilesDeclaration.BugWithDoublingDependencies.commonAliases,
+            commonErrorsPath: SpecFilesDeclaration.BugWithDoublingDependencies.commonErrors,
+            billingPath: SpecFilesDeclaration.BugWithDoublingDependencies.billingsModels,
+        ]
+
+        let extrator = try ReferenceExtractor(pathToSpec: URL(string: apiPath)!, fileProvider: fileProvider)
+
+        // Act
+
+        let res = try extrator.extract().dependecies
+
+        // Assert
+
+        XCTAssertEqual(res.count, 4, "\(res.map { $0.pathToCurrentFile })")
+
+        let billingDep = res.first(where: { $0.pathToCurrentFile == billingPath })
+
+        let catalogRefs = billingDep!
+            .dependecies.map { $1 }
+            .filter { $0.contains("/catalog")}
+
+        XCTAssertEqual(catalogRefs.count, 0, "\(catalogRefs)")
+
+        // Postmortem
+
+        // The issue was in ReferenceExtractor.readOther
+        // there was the assignment
+        // ```Swift
+        // var rootUrl = self.rootUrl
+        // ```
+        // and then this `rootUrl` was used to make path to yaml file
+        // for example if we start extracting from /project-swagger/catalog/api.yaml
+        // then we cut out last component and got /project-swagger/catalog
+        // and THEN we CONCATE fileName from $ref to /project-swagger/catalog
+        // and if we had `../billings/models.yaml#/components/schemas/TariffInfo`
+        // then we will get `/project-swagger/catalog/models.yaml`
+        // (we concated /project-swagger/catalog (as root) and models.yaml (as filename from ../billings/models.yaml)
+        // so and becaouse of this we had wrong path
+        //
+        // there was 2 way to fix it:
+        // 1 - concate not a filename but filepath (not models.yaml but ../billings/models.yaml)
+        // 2 - resolve file from currentDependency.
+        //
+        // i chose 2 way, because i decedid that is more logical then first (and more safe)
+        // if you get same error (when local dependencies of file /billings/models.yaml have reference on /catalog/models.yaml
+        // perhaps you will need to change decision from 2 to 1.
+        // but it may won't be helpfull :D
+    }
 }

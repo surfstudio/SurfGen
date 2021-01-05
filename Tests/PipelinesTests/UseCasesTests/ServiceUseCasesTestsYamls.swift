@@ -184,7 +184,22 @@ enum ServiceUseCasesTestsYamls {
                     type: string
 """.data(using: .utf8)!
 
-    // testResponseWithRefOnResponseWillBeParsed
+    static var requestBodyWithoutContentWontBeParsed = """
+    paths:
+      /messages:
+        get:
+          summary: Список сообщений пользователя. Тут приходят полные сообщения (вместе с детальным представлением)
+          requestBody:
+                content:
+                    "application/json":
+          responses:
+            "200":
+              description: "Все ок"
+              content:
+                application/json:
+                  schema:
+                    type: string
+""".data(using: .utf8)!
 
     static var responseWithSeveralMediaTypesWillBeParsed = """
     paths:
@@ -263,7 +278,7 @@ enum ServiceUseCasesTestsYamls {
                                     type: string
 """.data(using: .utf8)!
 
-    static var responseWithoutContentWontBeParsed = """
+    static var responseWithoutContentWillBeParsed = """
     paths:
       /messages:
         get:

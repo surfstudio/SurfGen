@@ -19,7 +19,12 @@ public struct ResponseBodyParser {
 
     public func parse(responses: [OperationNode.ResponseBody], current: DependencyWithTree, other: [DependencyWithTree]) throws -> [Reference<ResponseModel>] {
         return try responses.map { response in
-            switch response.response {
+
+            guard let respValue = response.response else {
+                return .notReference(.init(key: response.key, values: []))
+            }
+
+            switch respValue {
             case .entity(let val):
                 let values = try wrap(
                     self.parse(response: val, current: current, other: other),
@@ -29,7 +34,7 @@ public struct ResponseBodyParser {
             case .ref(let val):
                 let values = try wrap(
                     self.parse(ref: val, current: current, other: other),
-                    message: "While resolving \(val) in \(current.dependency.pathToCurrentFile)"
+                    message: "While resolving \(val) from \(current.dependency.pathToCurrentFile)"
                 )
                 return .reference(.init(key: response.key, values: values))
             }

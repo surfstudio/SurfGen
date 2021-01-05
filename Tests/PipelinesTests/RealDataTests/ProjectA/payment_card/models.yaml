@@ -1,0 +1,56 @@
+components:
+  schemas:
+  
+    PaymentCards:
+      type: object
+      properties:
+        paymentSystemIcon:
+          type: string
+        id:
+          type: string
+          example: 955c0 d2d-371c-7b55-8e22-02ba5e18ab97
+        maskedNumber:
+          type: string
+          description: Маскированный номер карты
+          example: 601100**0004
+        expiryDate:
+          type: string
+          description: Срок истечения действия карты в формате YYYY-MM
+          example: 2019-12
+        isAutoPaymentEnabled:
+          type: boolean
+          description: Признак включения автоплатежа по связке
+
+    SetAutopaymentRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id связки
+        isEnabled:
+          type: boolean
+          description: Флаг включения\выключения. Отправляем true для включения, false для отключения
+      required:
+        - id
+
+    AddCardRequest:
+      type: object
+      properties:
+        paymentType: 
+          type: string
+          description: Нужен sbacq
+      required:
+        - paymentType
+
+    3dSecResponse:
+      type: object
+      properties:
+        bankProcessingUrl: 
+          type: string
+          example: https://3dsec.sberbank.ru/payment/merchants/sbersafe/payment_ru.html?mdOrder=685ab6bb-a2a8-78e2-89fa-db1e5e18ab97
+      required:
+        - result
+
+
+
+

@@ -11,8 +11,13 @@ import Common
 /// Iat this moment array contains only 1 fild which is value and type at the same time
 /// But later it may be extended with new fields
 public struct SchemaArrayNode {
-    let name: String
-    let type: SchemaObjectNode
+    public let name: String
+    public let type: SchemaObjectNode
+
+    public init(name: String, type: SchemaObjectNode) {
+        self.name = name
+        self.type = type
+    }
 }
 
 public struct SchemaObjectNode {
@@ -22,6 +27,7 @@ public struct SchemaObjectNode {
         case simple(PrimitiveTypeAliasNode)
         case reference(String)
         case array(SchemaArrayNode)
+        case group(SchemaGroupNode)
     }
 
     public var next: Possibility
@@ -29,22 +35,4 @@ public struct SchemaObjectNode {
     public init(next: Possibility) {
         self.next = next
     }
-}
-
-extension SchemaObjectNode: StringView {
-    public var view: String {
-        switch self.next {
-        case .object(let obj):
-            return "Schema:\n\ttype: Object\n\tNested:\n\t\t\(obj.view.tabShifted())"
-        case .enum(let `enum`):
-            return "Schema:\n\ttype: Enum\n\tNested:\n\t\t\(`enum`.view.tabShifted())"
-        case .simple(let simple):
-            return "Schema:\n\ttype: Simple\n\tNested:\n\t\t\(simple)"
-        case .reference:
-            return "Not Implemented"
-        case .array(_):
-            return "Not Implemented"
-        }
-    }
-
 }

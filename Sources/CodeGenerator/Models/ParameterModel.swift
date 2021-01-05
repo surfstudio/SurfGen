@@ -13,6 +13,7 @@ public struct ParameterModel {
     public enum PossibleType {
         case primitive(PrimitiveType)
         case reference(SchemaType)
+        case array(SchemaArrayModel)
     }
 
     // this name is set when the parameter was declared in `components`
@@ -40,6 +41,9 @@ extension ParameterModel.PossibleType: Encodable {
             try container.encode(val, forKey: .value)
         case .reference(let val):
             try container.encode("reference", forKey: .type)
+            try container.encode(val, forKey: .value)
+        case .array(let val):
+            try container.encode("array", forKey: .type)
             try container.encode(val, forKey: .value)
         }
     }

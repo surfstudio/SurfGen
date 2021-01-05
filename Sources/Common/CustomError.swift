@@ -13,6 +13,7 @@ public struct CustomError: LocalizedError {
     let function: String
     let column: Int
     let file: String
+    let stack: [String]
 
     public init(message: String,
                 line: Int = #line,
@@ -24,6 +25,9 @@ public struct CustomError: LocalizedError {
         self.function = function
         self.column = column
         self.file = file
+        // first 3 elements it's just a main calling
+        // and the last 3 it's this funciton calling
+        self.stack = [String](Thread.callStackSymbols.dropFirst(3).dropFirst(3))
     }
 
     public var errorDescription: String? {
@@ -40,6 +44,8 @@ public struct CustomError: LocalizedError {
         msg += "Column: \(self.column)"
         msg += "\n\t"
         msg += "File: \(self.file)"
+        msg += "\n\t"
+        msg += "Call Stack: \(self.stack.reduce(into: "", { $0 += "\n\t\($1)" }))"
         return msg
     }
 }

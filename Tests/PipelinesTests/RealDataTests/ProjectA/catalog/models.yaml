@@ -1,0 +1,102 @@
+components:
+
+  parameters:
+    limit: 
+      name: limit
+      in: query
+      description: Размер пачки пагинации
+      schema:
+        type: integer
+    offset:
+      name: offset
+      in: query
+      description: Сдвиг пагинации
+      schema:
+        type: integer
+
+
+  schemas:
+    ServiceStatus:
+      type: string
+      enum: [active, inactive, blocked]
+      description: Статус услуги
+
+    CatalogItem:
+      type: object
+      properties:
+        serviceId:
+          type: string
+          example: 121
+        name:
+          type: string
+          example: Единый Ultra HD
+        status:
+           $ref: "models.yaml#/components/schemas/ServiceStatus"
+        tariffInfo:
+          $ref: "../billings/models.yaml#/components/schemas/TariffInfo"
+          description: Выводится только на главной экране. Заполняется только если тариф активен. 
+        endDate:
+           $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+           description: Дата окончания услуги. Используется для активных услуг.
+           nullable: true
+        iconUrl:
+          type: string
+
+    SubscriptionInfo:
+      type: object
+      description: Дополнительная информация по активной услуге
+      properties:
+        startDate:
+           $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+        endDate:
+           $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+        remainingDays:
+          type: number
+          description: Остаток дней
+        currentTariffId:
+          type: string
+          example: OFF1059
+          description: ID тарифа (ID предложения)
+        tariffInfo:
+          $ref: "../billings/models.yaml#/components/schemas/TariffInfo"
+        otherBalance:
+          type: string
+          description: Информация об активированных целевых картах оплаты
+        extraDays:
+          type: string
+          description: Количество дней услуги в очереди
+
+    Service:
+      type: object
+      description: Детальная информация по услуге
+      properties:
+        serviceId:
+          type: string
+          example: 121
+        name:
+          type: string
+          example: Единый Ultra HD
+        status:
+           $ref: "models.yaml#/components/schemas/ServiceStatus"
+        iconUrl:
+          type: string
+        prolongable:
+          type: string
+          description: Признак возможности продления услуги
+        description:
+          type: string
+          description: Подробнее об услуге
+        subscriptionInfo:
+           $ref: "models.yaml#/components/schemas/SubscriptionInfo"
+           description: Дополнительная информация, если услуга активна
+
+    SetTariffRequest:
+      type: object
+      properties:
+        serviceId:
+          type: string
+        tariffId:
+          type: string
+      required:
+        - serviceId
+        - tariffId

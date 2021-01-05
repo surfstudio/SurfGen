@@ -17,7 +17,13 @@ public protocol MediaTypeParser {
 
 public struct AnyMediaTypeParser: MediaTypeParser {
 
-    public init() { }
+    public let arrayParser: ArrayParser
+    public let groupParser: AnyGroupParser
+
+    public init(arrayParser: ArrayParser, groupParser: AnyGroupParser) {
+        self.arrayParser = arrayParser
+        self.groupParser = groupParser
+    }
 
     public func parse(mediaType: MediaTypeObjectNode,
                       current: DependencyWithTree,
@@ -30,7 +36,7 @@ public struct AnyMediaTypeParser: MediaTypeParser {
 
     public func parse(schema: SchemaObjectNode,
                       current: DependencyWithTree,
-                      other: [DependencyWithTree]) throws -> SchemaObjectModel {
+                      other: [DependencyWithTree]) throws -> DataModel.Possible {
         // got media type schema
         // it can be ref or in-place declaration
         // in-place declaration is unsupported
@@ -41,25 +47,40 @@ public struct AnyMediaTypeParser: MediaTypeParser {
             throw CustomError(message: "MediaType shouldn't contains enum definition. Only refs (and arr with refs) supported")
         case .simple:
             throw CustomError(message: "MediaType shouldn't contains alias definition. Only refs (and arr with refs) supported")
-        case .reference(let val):
-            let schemaType = try wrap(
-                Resolver().resolveSchema(ref: val, node: current, other: other),
-                message: "While resolving \(val) at file \(current.dependency.pathToCurrentFile)"
-            )
-
-            // if resolving works then we should  check that response or request contains object
-            // we just don't know what we should deal with plain entites
-
-            switch schemaType {
-            case .alias:
-                throw CustomError(message: "MediaType shouldn't contains ref on alias. Only objects are supported")
-            case .enum:
-                throw CustomError(message: "MediaType shouldn't contains ref on enum. Only objects are supported")
-            case .object(let val):
-                return val
-            }
         case .array(let val):
-            throw CustomError.notInplemented()
+            let parsed = try self.arrayParser.parse(array: val, current: current, other: other)
+            return .array(parsed)
+        case .reference(let val):
+            return try self.parse(ref: val, current: current, other: other)
+        case .group(let val):
+            let group = try wrap(
+                self.groupParser.parse(group: val, current: current, other: other),
+                message: "While parsing group \(val.name)"
+            )
+            return .group(group)
+        }
+    }
+
+    func parse(ref: String, current: DependencyWithTree, other: [DependencyWithTree]) throws -> DataModel.Possible {
+        let schemaType = try wrap(
+            Resolver().resolveSchema(ref: ref, node: current, other: other),
+            message: "While resolving \(ref) at file \(current.dependency.pathToCurrentFile)"
+        )
+
+        // if resolving works then we should  check that response or request contains object
+        // we just don't know what we should deal with plain entites
+
+        switch schemaType {
+        case .alias:
+            throw CustomError(message: "MediaType shouldn't contains ref on alias. Only objects are supported")
+        case .enum:
+            throw CustomError(message: "MediaType shouldn't contains ref on enum. Only objects are supported")
+        case .object(let val):
+            return .object(val)
+        case .array(let val):
+            return .array(val)
+        case .group(let val):
+            return .group(val)
         }
     }
 }

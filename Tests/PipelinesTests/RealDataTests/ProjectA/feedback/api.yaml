@@ -1,0 +1,65 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+  contact:
+    name: Starkina Maria
+    email: starkina@surfstudio.ru
+     
+paths:
+  /feedback/report:
+    post:
+      summary: Этот метод используется для того, чтобы отправить форму на тему "Другое". То есть на любую другую тему кроме объединения аккаунтов
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema:
+              $ref: "models.yaml#/components/schemas/Report"
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "../common/models.yaml#/components/schemas/InfoMessage" 
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
+
+  /feedback/reportAddAccounts:
+    post:
+      summary: Этот метод используется для того, чтобы заполнить форму на объединение аккаунтов
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema:
+              $ref: "models.yaml#/components/schemas/ReportAddAccounts"
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "../common/models.yaml#/components/schemas/InfoMessage" 
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
+
+  /feedback/attachments:
+    post:
+      summary: Файлы для обратной связи
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "../common/models.yaml#/components/schemas/FileModelForMultipart"
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/Attachment"
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
