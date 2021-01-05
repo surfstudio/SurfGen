@@ -1,22 +1,22 @@
 <details>
 <summary>Types</summary>
 
-  - [CommonError](./CommonError)
-  - [Dependency](./Dependency)
-  - [SurfGenError](./SurfGenError)
+  - [CommonError](./Docs/CommonError)
+  - [Dependency](./Docs/Dependency)
+  - [SurfGenError](./Docs/SurfGenError)
 
 </details>
 
 <details>
 <summary>Protocols</summary>
 
-  - [FileProvider](./FileProvider)
+  - [FileProvider](./Docs/FileProvider)
 
 </details>
 
 <details>
 <summary>Global Functions</summary>
 
-  - [wrap(\_:message:)](./wrap\(_:message:\))
+  - [wrap(\_:message:)](./Docs/wrap\(_:message:\))
 
 </details>

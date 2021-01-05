@@ -17,6 +17,8 @@ public protocol MediaTypesBuilder {
 
 /// Default implementation of MediaTypesBuilder
 ///
+/// - See: https://swagger.io/docs/specification/media-types/
+///
 /// ## Don't support
 ///
 /// ### MediaType content must be a `reference`. Other in-place declaration itsn't supported. Because it that case we can't generate model

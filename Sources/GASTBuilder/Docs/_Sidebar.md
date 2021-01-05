@@ -1,27 +1,27 @@
 <details>
 <summary>Types</summary>
 
-  - [AnyGASTBuilder](./AnyGASTBuilder)
-  - [AnyMediaTypesBuilder](./AnyMediaTypesBuilder)
-  - [AnyParametersBuilder](./AnyParametersBuilder)
-  - [AnyRequestBodiesBuilder](./AnyRequestBodiesBuilder)
-  - [AnyResponsesBuilder](./AnyResponsesBuilder)
-  - [AnySchemaBuilder](./AnySchemaBuilder)
-  - [AnyServiceBuilder](./AnyServiceBuilder)
+  - [AnyGASTBuilder](./Docs/AnyGASTBuilder)
+  - [AnyMediaTypesBuilder](./Docs/AnyMediaTypesBuilder)
+  - [AnyParametersBuilder](./Docs/AnyParametersBuilder)
+  - [AnyRequestBodiesBuilder](./Docs/AnyRequestBodiesBuilder)
+  - [AnyResponsesBuilder](./Docs/AnyResponsesBuilder)
+  - [AnySchemaBuilder](./Docs/AnySchemaBuilder)
+  - [AnyServiceBuilder](./Docs/AnyServiceBuilder)
 
 </details>
 
 <details>
 <summary>Protocols</summary>
 
-  - [GASTBuilder](./GASTBuilder)
-  - [MediaTypesBuilder](./MediaTypesBuilder)
-  - [ParametersBuilder](./ParametersBuilder)
-  - [RequestBodiesBuilder](./RequestBodiesBuilder)
-  - [RequestBodyBuilder](./RequestBodyBuilder)
-  - [ResponseBuilder](./ResponseBuilder)
-  - [ResponsesBuilder](./ResponsesBuilder)
-  - [SchemaBuilder](./SchemaBuilder)
-  - [ServiceBuilder](./ServiceBuilder)
+  - [GASTBuilder](./Docs/GASTBuilder)
+  - [MediaTypesBuilder](./Docs/MediaTypesBuilder)
+  - [ParametersBuilder](./Docs/ParametersBuilder)
+  - [RequestBodiesBuilder](./Docs/RequestBodiesBuilder)
+  - [RequestBodyBuilder](./Docs/RequestBodyBuilder)
+  - [ResponseBuilder](./Docs/ResponseBuilder)
+  - [ResponsesBuilder](./Docs/ResponsesBuilder)
+  - [SchemaBuilder](./Docs/SchemaBuilder)
+  - [ServiceBuilder](./Docs/ServiceBuilder)
 
 </details>

@@ -6,13 +6,15 @@ Default implementation of both `ResponseBuilder` and `ResponsesBuilder`
 public struct AnyResponsesBuilder: ResponsesBuilder, ResponseBuilder
 ```
 
+  - See: https://swagger.io/docs/specification/describing-responses/
+
 ## Don't support
 
 ### Response body without content. They are mapped to `nil`
 
 ## Inheritance
 
-[`ResponseBuilder`](./ResponseBuilder), [`ResponsesBuilder`](./ResponsesBuilder)
+[`ResponseBuilder`](./Docs/ResponseBuilder), [`ResponsesBuilder`](./Docs/ResponsesBuilder)
 
 ## Initializers
 

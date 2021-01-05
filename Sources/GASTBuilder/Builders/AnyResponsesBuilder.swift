@@ -22,6 +22,8 @@ public protocol ResponsesBuilder {
 
 /// Default implementation of both `ResponseBuilder` and `ResponsesBuilder`
 ///
+/// - See: https://swagger.io/docs/specification/describing-responses/
+///
 /// ## Don't support
 ///
 /// ### Response body without content. They are mapped to `nil`

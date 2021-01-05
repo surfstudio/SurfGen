@@ -6,11 +6,13 @@ Default implementation for both `RequestBodyBuilder` and `RequestBodiesBuilder`
 public struct AnyRequestBodiesBuilder: RequestBodiesBuilder, RequestBodyBuilder
 ```
 
+  - See: https://swagger.io/docs/specification/describing-request-body/
+
 *seems lke that it's the only one implementation which isn't contain some restrictions :D*
 
 ## Inheritance
 
-[`RequestBodyBuilder`](./RequestBodyBuilder), [`RequestBodiesBuilder`](./RequestBodiesBuilder)
+[`RequestBodyBuilder`](./Docs/RequestBodyBuilder), [`RequestBodiesBuilder`](./Docs/RequestBodiesBuilder)
 
 ## Initializers
 

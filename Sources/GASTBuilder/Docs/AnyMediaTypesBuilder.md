@@ -6,13 +6,15 @@ Default implementation of MediaTypesBuilder
 public struct AnyMediaTypesBuilder: MediaTypesBuilder
 ```
 
+  - See: https://swagger.io/docs/specification/media-types/
+
 ## Don't support
 
 ### MediaType content must be a `reference`. Other in-place declaration itsn't supported. Because it that case we can't generate model
 
 ## Inheritance
 
-[`MediaTypesBuilder`](./MediaTypesBuilder)
+[`MediaTypesBuilder`](./Docs/MediaTypesBuilder)
 
 ## Initializers
 

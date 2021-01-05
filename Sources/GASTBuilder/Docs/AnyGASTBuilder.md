@@ -14,7 +14,7 @@ And then run different builders for different spec's components to make `GAST`
 
 ## Inheritance
 
-[`GASTBuilder`](./GASTBuilder)
+[`GASTBuilder`](./Docs/GASTBuilder)
 
 ## Initializers
 

@@ -18,7 +18,8 @@ public protocol ParametersBuilder {
 
 /// Default implementation for `ParametersBuilder`.
 /// Can build parameters both from `components.parameters` and from `paths.operations.parameters`
-/// 
+///
+/// - See: https://swagger.io/docs/specification/describing-parameters/
 ///
 /// ## Don't support
 ///

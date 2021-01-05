@@ -22,6 +22,8 @@ public protocol RequestBodiesBuilder {
 
 /// Default implementation for both `RequestBodyBuilder` and `RequestBodiesBuilder`
 ///
+/// - See: https://swagger.io/docs/specification/describing-request-body/
+///
 /// _seems lke that it's the only one implementation which isn't contain some restrictions :D_
 public struct AnyRequestBodiesBuilder: RequestBodiesBuilder, RequestBodyBuilder {
 

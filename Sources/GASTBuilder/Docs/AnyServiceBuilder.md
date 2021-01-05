@@ -19,7 +19,7 @@ This struct cuts out response bodies without content. So if response doesn't hav
 
 ## Inheritance
 
-[`ServiceBuilder`](./ServiceBuilder)
+[`ServiceBuilder`](./Docs/ServiceBuilder)
 
 ## Initializers
 

@@ -7,6 +7,8 @@ Can build parameters both from `components.parameters` and from `paths.operation
 public struct AnyParametersBuilder: ParametersBuilder
 ```
 
+  - See: https://swagger.io/docs/specification/describing-parameters/
+
 ## Don't support
 
 ### Content in paramter's type. You cant declare `schema` in parameter's type
@@ -34,7 +36,7 @@ But it's **not**
 
 ## Inheritance
 
-[`ParametersBuilder`](./ParametersBuilder)
+[`ParametersBuilder`](./Docs/ParametersBuilder)
 
 ## Initializers
 
