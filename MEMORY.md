@@ -116,3 +116,7 @@ GroupDefinitionWorksInRequest and response and so on
 
 ---
 Write tests on resoving reference cycles betwenn different files when models from file A referenced models form file B and B -> A
+
+---
+Test hat we can declare arrays and groups in place for request/response bodies
+---

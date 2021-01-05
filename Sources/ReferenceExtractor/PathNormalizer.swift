@@ -39,7 +39,7 @@ public enum PathNormalizer {
         }
 
         if componentsToRemove != 0 {
-            throw CustomError(message: "Error occured while normalizing path \(path)\nThere are more `back steps`(../ <-- this symbol) then path components before it.\nFor example if you have `a/b/../../../` then we don't know what is the path.\nIn common we can assume it as `../` but we considered to don't do it.\nIt might happen because you specify relative path to root specification. Just specify absolute path and it will be fixed.\nIf not - contact us plz")
+            throw CommonError(message: "Error occured while normalizing path \(path)\nThere are more `back steps`(../ <-- this symbol) then path components before it.\nFor example if you have `a/b/../../../` then we don't know what is the path.\nIn common we can assume it as `../` but we considered to don't do it.\nIt might happen because you specify relative path to root specification. Just specify absolute path and it will be fixed.\nIf not - contact us plz")
         }
 
         var result = normalized.reversed().joined(separator: "/")

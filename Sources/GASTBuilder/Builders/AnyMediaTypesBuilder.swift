@@ -34,16 +34,16 @@ public struct AnyMediaTypesBuilder: MediaTypesBuilder {
                 message: "While build body")
 
             guard schema.count == 1 else {
-                throw CustomError(message: "We had sent 1 schema, and then got \(schema.count). It's very strange. Plz contact mainteiners")
+                throw CommonError(message: "We had sent 1 schema, and then got \(schema.count). It's very strange. Plz contact mainteiners")
             }
 
             switch schema[0].next {
             case .object where enableDisclarationChecking:
-                throw CustomError(message: "MediaType shouldn't contains object definition. Only refs supported")
+                throw CommonError(message: "MediaType shouldn't contains object definition. Only refs supported")
             case .enum where enableDisclarationChecking:
-                throw CustomError(message: "MediaType shouldn't contains object definition. Only refs supported")
+                throw CommonError(message: "MediaType shouldn't contains object definition. Only refs supported")
             case .simple where enableDisclarationChecking:
-                throw CustomError(message: "MediaType shouldn't contains object definition. Only refs supported")
+                throw CommonError(message: "MediaType shouldn't contains object definition. Only refs supported")
             case .reference:
                 break
             default:

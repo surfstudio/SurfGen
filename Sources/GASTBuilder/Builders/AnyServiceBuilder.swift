@@ -55,7 +55,7 @@ extension AnyServiceBuilder {
                         message: "While parsing operation's parameter \(val.name)")
 
                     guard params.count == 1 else {
-                        throw CustomError(message: "We had sent 1 parameter, and then got \(params.count). It's very strange. Plz contact mainteiners")
+                        throw CommonError(message: "We had sent 1 parameter, and then got \(params.count). It's very strange. Plz contact mainteiners")
                     }
 
                     return .entity(params[0])

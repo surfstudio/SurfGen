@@ -34,13 +34,13 @@ extension RootNode {
         let splited = reference.split(separator: "/")
 
         if splited.count != 4 {
-            throw CustomError(
+            throw CommonError(
                 message: "Reference for resolving should contains 4 components splited by `/` but \(reference) contains \(splited.count)"
             )
         }
 
         if splited[1] != "components" {
-            throw CustomError(
+            throw CommonError(
                 message: "Reference for resolving should contains `components` as second components of path. But \(reference) doesn't"
             )
         }
@@ -50,11 +50,11 @@ extension RootNode {
             let res = try self.resolveSchema(name: String(splited[3]))
 
             guard let found = res else {
-                throw CustomError(message: "\(splited[3]) not found in this tree")
+                throw CommonError(message: "\(splited[3]) not found in this tree")
             }
 
             guard let casted = found as? T else {
-                throw CustomError(message: "Couldn't cast \(found) to \(T.self)")
+                throw CommonError(message: "Couldn't cast \(found) to \(T.self)")
             }
 
             return casted
@@ -62,11 +62,11 @@ extension RootNode {
             let res = try self.resolveParameter(name: String(splited[3]))
 
             guard let found = res else {
-                throw CustomError(message: "\(splited[3]) not found in this tree")
+                throw CommonError(message: "\(splited[3]) not found in this tree")
             }
 
             guard let casted = found as? T else {
-                throw CustomError(message: "Couldn't cast \(found) to \(T.self)")
+                throw CommonError(message: "Couldn't cast \(found) to \(T.self)")
             }
 
             return casted
@@ -74,11 +74,11 @@ extension RootNode {
             let res = try self.resolveResponses(name: String(splited[3]))
 
             guard let found = res else {
-                throw CustomError(message: "\(splited[3]) not found in this tree")
+                throw CommonError(message: "\(splited[3]) not found in this tree")
             }
 
             guard let casted = found as? T else {
-                throw CustomError(message: "Couldn't cast \(found) to \(T.self)")
+                throw CommonError(message: "Couldn't cast \(found) to \(T.self)")
             }
 
             return casted
@@ -86,16 +86,16 @@ extension RootNode {
             let res = try self.resolveRequestBodies(name: String(splited[3]))
 
             guard let found = res else {
-                throw CustomError(message: "\(splited[3]) not found in this tree")
+                throw CommonError(message: "\(splited[3]) not found in this tree")
             }
 
             guard let casted = found as? T else {
-                throw CustomError(message: "Couldn't cast \(found) to \(T.self)")
+                throw CommonError(message: "Couldn't cast \(found) to \(T.self)")
             }
 
             return casted
         default:
-            throw CustomError(
+            throw CommonError(
                 message: "Reference for resolving should contains `sahemas` or `parameters` as thrid components of path. But \(reference) doesn't"
             )
         }
@@ -113,7 +113,7 @@ extension RootNode {
             case .array(let val):
                 return val.name == name
             case .reference:
-                throw CustomError(message: "\(name) is refrence. Now reference which is referenced to another reference is unsupported")
+                throw CommonError(message: "\(name) is refrence. Now reference which is referenced to another reference is unsupported")
             case .group(let val):
                 return val.name == name
             }

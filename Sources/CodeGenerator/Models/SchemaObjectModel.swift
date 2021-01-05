@@ -20,7 +20,24 @@ import Foundation
 ///                 field1:
 ///                     type: string
 ///```
-public struct SchemaObjectModel {
+///
+/// ## Serialization schema
+///
+/// ```YAML
+/// SchemaObjectModel:
+///     type: object
+///     prperties:
+///         name:
+///             type: string
+///         description:
+///             type: string
+///             nullable: true
+///         properties:
+///             type: array
+///             items:
+///                 $ref: "Property_model.yaml#/components/schemas/PropertyModel"
+/// ```
+public struct SchemaObjectModel: Encodable {
     public let name: String
     public let properties: [PropertyModel]
     public let description: String?
@@ -31,5 +48,3 @@ public struct SchemaObjectModel {
         self.description = description
     }
 }
-
-extension SchemaObjectModel: Encodable { }

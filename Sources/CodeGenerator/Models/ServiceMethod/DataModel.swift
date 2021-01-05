@@ -1,48 +1,36 @@
 //
-//  SchemaGroupModel.swift
+//  DataModel.swift
 //  
 //
-//  Created by Александр Кравченков on 29.12.2020.
+//  Created by Александр Кравченков on 05.01.2021.
 //
 
 import Foundation
 import GASTTree
 
-/// Represents `oneOf`, `allOf` and `anyOf` keywords
+/// Data which is used in `RequestModel` and `ResponseModel`
 ///
-/// Can contains nested groups.
-///
-/// **WARNING**
-///
-/// This implementation can contains only references
-///
-/// _but, seriously, don't design your API like that_
-///
-/// ```YAML
-/// components:
-///     schemas:
-///         MyGroup:
-///             oneOf:
-///                 - $ref: "models.yaml#/components/schemas/AuthRequest"
-///                 - $ref: "models.yaml#/components/schemas/SilentAuthRequest"
-/// ```
+/// Can be:
+/// - `SchemaObjectModel` or `object`
+/// - `SchemaArrayModel` or `array`
+/// - `SchemaGroupModel` or `group`
 ///
 /// ## Serialization schema
 ///
 /// ```YAML
-///
 /// Type:
 ///     type: string
-///     enum: ['object', 'group']
+///     enum: ['object', 'array', 'group']
 ///
-/// SchemaGroupType:
+/// Location:
 ///     type: string
-///     enum: ['oneOf', 'onyOf', 'allOf']
+///     enum: ['query', 'path']
 ///
 /// PossibleType:
 ///     type: object
 ///     properties:
 ///         type:
+///             description: String description of vaue's type
 ///             type:
 ///                 $ref: "#/components/schemas/Type"
 ///         value:
@@ -50,40 +38,45 @@ import GASTTree
 ///                 schema:
 ///                     oneOf:
 ///                         - $ref: "schema_object_model.yaml#/component/schemas/SchemaObjectModel"
+///                         - $ref: "schema_array_model.yaml#/component/schemas/SchemaArrayModel"
 ///                         - $ref: "schema_group_model.yaml#/component/schemas/SchemaGroupModel"
 ///
-/// SchemaGroupModel:
+/// DataModel:
 ///     type: object
-///     prperties:
-///         name:
+///     properties:
+///         mediaType:
 ///             type: string
 ///         type:
 ///             type:
-///                 $ref: "#/components/schemas/SchemaGroupType"
-///         references:
-///             type: array
-///             items:
 ///                 $ref: "#/components/schemas/PossibleType"
 /// ```
-public struct SchemaGroupModel: Encodable {
+public struct DataModel: Encodable {
 
+    /// Possibe API entities which can be used in this model
     public enum PossibleType {
         case object(SchemaObjectModel)
+        case array(SchemaArrayModel)
         case group(SchemaGroupModel)
     }
 
-    public let name: String
-    public let references: [PossibleType]
-    public let type: SchemaGroupType
+    /// Media-Type value
+    ///
+    /// For example:
+    ///
+    /// ```
+    /// application/json
+    /// ```
+    public let mediaType: String
+    public let type: PossibleType
 
-    public init(name: String, references: [PossibleType], type: SchemaGroupType) {
-        self.name = name
-        self.references = references
+    public init(mediaType: String, type: PossibleType) {
+        self.mediaType = mediaType
         self.type = type
     }
 }
 
-extension SchemaGroupModel.PossibleType: Encodable {
+extension DataModel.PossibleType: Encodable {
+
     enum Keys: String, CodingKey {
         case type = "type"
         case value = "value"
@@ -96,11 +89,12 @@ extension SchemaGroupModel.PossibleType: Encodable {
         case .object(let val):
             try container.encode(Constants.objectTypeName, forKey: .type)
             try container.encode(val, forKey: .value)
+        case .array(let val):
+            try container.encode(Constants.arrayTypeName, forKey: .type)
+            try container.encode(val, forKey: .value)
         case .group(let val):
             try container.encode(Constants.groupTypeName, forKey: .type)
             try container.encode(val, forKey: .value)
         }
     }
 }
-
-extension SchemaGroupType: Encodable { }

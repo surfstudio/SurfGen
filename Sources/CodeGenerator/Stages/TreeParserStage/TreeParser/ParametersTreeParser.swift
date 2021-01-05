@@ -44,11 +44,11 @@ public struct ParametersTreeParser {
     private func parse(schema: SchemaObjectNode, current: DependencyWithTree, other: [DependencyWithTree]) throws -> ParameterModel.PossibleType {
         switch schema.next {
         case .object(let val):
-            throw CustomError(message: "Parameters's type must not contains `object` definition, but it contains \(val)")
+            throw CommonError(message: "Parameters's type must not contains `object` definition, but it contains \(val)")
         case .enum(let val):
-            throw CustomError(message: "Parameters's type must not contains `enum` definition, but it contains \(val)")
+            throw CommonError(message: "Parameters's type must not contains `enum` definition, but it contains \(val)")
         case .group(let val):
-            throw CustomError(message: "Parameters's type must not contains `group` definition, but it contains \(val)")
+            throw CommonError(message: "Parameters's type must not contains `group` definition, but it contains \(val)")
         case .simple(let primitive):
             // TODO: - At this place we ignore definition of alias inside parameter
             // so idk if we need it.

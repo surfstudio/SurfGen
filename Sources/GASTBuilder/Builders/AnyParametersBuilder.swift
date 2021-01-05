@@ -48,7 +48,7 @@ extension AnyParametersBuilder {
     private func parse(type: ParameterType) throws -> ParameterTypeNode {
         switch type {
         case .content:
-            throw CustomError(message: "We don't support `content` parameter's type")
+            throw CommonError(message: "We don't support `content` parameter's type")
         case .schema(let schema):
 
 
@@ -59,7 +59,7 @@ extension AnyParametersBuilder {
             let schemas = try self.schemaBuilder.build(schemas: [.init(name: "", value: schema.schema)])
 
             guard schemas.count == 1 else {
-                throw CustomError(message: "After parsing parameter's schema we got \(schemas.count) modles. But awaiting only 1. Please create an issue and attach your swagger specification")
+                throw CommonError(message: "After parsing parameter's schema we got \(schemas.count) modles. But awaiting only 1. Please create an issue and attach your swagger specification")
             }
 
             return .init(schema: schemas[0])

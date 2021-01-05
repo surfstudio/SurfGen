@@ -12,7 +12,7 @@ import Common
 public protocol ArrayParser {
     func parse(schema: SchemaObjectNode,
                current: DependencyWithTree,
-               other: [DependencyWithTree]) throws -> SchemaArrayModel.Possible
+               other: [DependencyWithTree]) throws -> SchemaArrayModel.PossibleType
 
     func parse(array: SchemaArrayNode,
                current: DependencyWithTree,
@@ -37,15 +37,15 @@ public struct AnyArrayParser: ArrayParser {
     
     public func parse(schema: SchemaObjectNode,
                       current: DependencyWithTree,
-                      other: [DependencyWithTree]) throws -> SchemaArrayModel.Possible {
+                      other: [DependencyWithTree]) throws -> SchemaArrayModel.PossibleType {
 
         switch schema.next {
         case .object:
-            throw CustomError(message: "Array shouldn't contains object definition")
+            throw CommonError(message: "Array shouldn't contains object definition")
         case .enum:
-            throw CustomError(message: "Array shouldn't contains object definition")
+            throw CommonError(message: "Array shouldn't contains object definition")
         case .group:
-            throw CustomError(message: "Array shouldn't contains group definition")
+            throw CommonError(message: "Array shouldn't contains group definition")
         case .simple(let val):
             return .primitive(val.type)
         case .reference(let val):
@@ -56,7 +56,7 @@ public struct AnyArrayParser: ArrayParser {
 
             return .reference(schemaType)
         case .array:
-            throw CustomError(message: "Array shouldn't contains array definition")
+            throw CommonError(message: "Array shouldn't contains array definition")
         }
     }
 }

@@ -28,14 +28,14 @@ extension Reference where DataType == ParameterModel {
         case .notReference(let val):
             return val.type
         case .reference:
-            throw CustomError.init(message: "It's reference not a primitive")
+            throw CommonError.init(message: "It's reference not a primitive")
         }
     }
 
     func refType() throws -> ParameterModel.PossibleType {
         switch self {
         case .notReference:
-            throw CustomError.init(message: "It's primitive not a reference")
+            throw CommonError.init(message: "It's primitive not a reference")
         case .reference(let val):
             return val.type
         }
@@ -48,20 +48,20 @@ extension ParameterModel.PossibleType {
         case .primitive(let val):
             return val
         case .reference(let ref):
-            throw CustomError(message: "The parameter's type is reference \(ref)")
+            throw CommonError(message: "The parameter's type is reference \(ref)")
         case .array(let val):
-            throw CustomError(message: "The parameter's type is array \(val)")
+            throw CommonError(message: "The parameter's type is array \(val)")
         }
     }
 
     func notPrimitiveType() throws -> SchemaType {
         switch self {
         case .primitive(let val):
-            throw CustomError(message: "The parameter's type is primitive: \(val)")
+            throw CommonError(message: "The parameter's type is primitive: \(val)")
         case .reference(let val):
             return val
         case .array(let val):
-            throw CustomError(message: "The parameter's type is array \(val)")
+            throw CommonError(message: "The parameter's type is array \(val)")
         }
     }
 }

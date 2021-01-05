@@ -14,19 +14,19 @@ extension Schema {
     func extractType() throws -> PropertyNode.PossibleType {
         switch self.type {
         case .any:
-            throw CustomError(message: "Type is `any`, but we can process only primitive types, arrays and $ref")
+            throw CommonError(message: "Type is `any`, but we can process only primitive types, arrays and $ref")
         case .object:
-            throw CustomError(message: "Type is `object`, but we can process only primitive types, arrays and $ref")
+            throw CommonError(message: "Type is `object`, but we can process only primitive types, arrays and $ref")
         case .group:
-            throw CustomError(message: "Type is `group`, but we can process only primitive types, arrays and $ref")
+            throw CommonError(message: "Type is `group`, but we can process only primitive types, arrays and $ref")
         case .array(let arr):
             switch arr.items {
             case .multiple:
-                throw CustomError(message: "Array conains multiple items declaration. So we can't process it now")
+                throw CommonError(message: "Array conains multiple items declaration. So we can't process it now")
             case .single(let schema):
                 let type = try schema.extractType()
                 guard case .simple(let val) = type else {
-                    throw CustomError(message: "Array conains single item with wrong type \(type). But we can process only primitive types and $ref in this case")
+                    throw CommonError(message: "Array conains single item with wrong type \(type). But we can process only primitive types and $ref in this case")
                 }
                 return .array(.init(itemsType: val))
             }
@@ -52,7 +52,7 @@ extension ParameterLocation {
         case .path:
             return .path
         case .cookie, .header:
-            throw CustomError(message: "We only support parameters whics is located in `query` and `path`")
+            throw CommonError(message: "We only support parameters whics is located in `query` and `path`")
         }
     }
 }

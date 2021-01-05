@@ -39,7 +39,7 @@ public struct AnyResponsesBuilder: ResponsesBuilder, ResponseBuilder {
     public func build(response: Response) throws -> ResponseNode {
 
         guard let responseContent = response.content else {
-            throw CustomError(message: "SurfGen doesn't support response body without content")
+            throw CommonError(message: "SurfGen doesn't support response body without content")
         }
 
         let content = try wrap(

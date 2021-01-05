@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SchemaArrayModel.swift
 //  
 //
 //  Created by Александр Кравченков on 28.12.2020.
@@ -8,26 +8,71 @@
 import Foundation
 import GASTTree
 
-public struct SchemaArrayModel {
+/// Describes array
+///
+/// ```YAML
+///     BasketItem:
+///        type: object
+///        properties:
+///          itemIds:
+///            type: array      # <-- That's our SchemaArrayModel
+///            items:
+///              type: integer
+/// ```
+///
+/// ## Serialization schema
+///
+/// ```YAML
+///
+/// Type:
+///     type: string
+///     enum: ['primitive', 'reference']
+///
+/// PossibleType:
+///     type: object
+///     properties:
+///         type:
+///             description: String description of vaue's type
+///             type:
+///                 $ref: "#/components/schemas/Type"
+///         value:
+///             type:
+///                 schema:
+///                     oneOf:
+///                         - $ref: "primitive_type.yaml#/component/schemas/PrimitiveType"
+///                         - $ref: "schema_type.yaml#/component/schemas/SchemaType"      # <-- `Type.reference`
+///
+/// SchemaArrayModel:
+///     type: object
+///     prperties:
+///         name:
+///             type: string
+///         itemsType:
+///             description: Property's type
+///             type:
+///                 $ref: "#/components/schemas/PossibleType"
+/// ```
+public struct SchemaArrayModel: Encodable {
 
-    public enum Possible {
+    public enum PossibleType {
         case primitive(PrimitiveType)
         case reference(SchemaType)
     }
 
+    /// For arrays decalred in-lace this field will be empty
     public var name: String
-    public var itemsType: Possible
+    public var itemsType: PossibleType
 
-    public init(name: String, itemsType: Possible) {
+    public init(name: String, itemsType: PossibleType) {
         self.name = name
         self.itemsType = itemsType
     }
 }
 
-extension SchemaArrayModel.Possible: Encodable {
+extension SchemaArrayModel.PossibleType: Encodable {
 
     enum Keys: String, CodingKey {
-        case type = "string"
+        case type = "type"
         case value = "value"
     }
 
@@ -36,13 +81,11 @@ extension SchemaArrayModel.Possible: Encodable {
 
         switch self {
         case .primitive(let val):
-            try container.encode("primitive", forKey: .type)
+            try container.encode(Constants.primitiveTypeName, forKey: .type)
             try container.encode(val, forKey: .value)
         case .reference(let val):
-            try container.encode("reference", forKey: .type)
+            try container.encode(Constants.referenceTypeName, forKey: .type)
             try container.encode(val, forKey: .value)
         }
     }
 }
-
-extension SchemaArrayModel: Encodable { }

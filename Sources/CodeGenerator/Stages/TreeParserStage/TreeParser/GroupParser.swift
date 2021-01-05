@@ -32,7 +32,7 @@ public struct AnyGroupParser: GroupParser {
 
     func parse(reference: String,
                current: DependencyWithTree,
-               other: [DependencyWithTree]) throws -> SchemaGroupModel.Possible {
+               other: [DependencyWithTree]) throws -> SchemaGroupModel.PossibleType {
 
         let resolved = try wrap(
             Resolver().resolveSchema(ref: reference, node: current, other: other),
@@ -41,11 +41,11 @@ public struct AnyGroupParser: GroupParser {
 
         switch resolved {
         case .alias:
-            throw CustomError(message: "Group shouldn't contains references on aliases")
+            throw CommonError(message: "Group shouldn't contains references on aliases")
         case .enum:
-            throw CustomError(message: "Group shouldn't contains references on enums")
+            throw CommonError(message: "Group shouldn't contains references on enums")
         case .array:
-            throw CustomError(message: "Group shouldn't contains references on arrays")
+            throw CommonError(message: "Group shouldn't contains references on arrays")
         case .object(let val):
             return .object(val)
         case .group(let val):

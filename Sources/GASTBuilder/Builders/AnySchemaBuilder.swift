@@ -33,7 +33,7 @@ public struct AnySchemaBuilder: SchemaBuilder {
     func process(schema: ComponentObject<Schema>) throws -> SchemaObjectNode {
         switch schema.value.type {
         case .any:
-            throw CustomError(message: "Now we can't process this type on this level of depth. You can create an Issue or add your vote to existed one")
+            throw CommonError(message: "Now we can't process this type on this level of depth. You can create an Issue or add your vote to existed one")
         case .object(let obj):
             let model = try self.build(object: obj, meta: schema.value.metadata, name: schema.name)
             return .init(next: .object(model))
@@ -66,7 +66,7 @@ public struct AnySchemaBuilder: SchemaBuilder {
         }
 
         guard let stringCases = enumValues as? [String] else {
-            throw CustomError(message: "We couldn't parse it as enum (where were no one string case). Now we can't process this type on this level of depth. You can create an Issue or add your vote to existed one")
+            throw CommonError(message: "We couldn't parse it as enum (where were no one string case). Now we can't process this type on this level of depth. You can create an Issue or add your vote to existed one")
         }
 
         let model = SchemaEnumNode(
@@ -102,7 +102,7 @@ public struct AnySchemaBuilder: SchemaBuilder {
             let type = try self.process(schema: .init(name: "", value: val))
             return .init(name: name, type: type)
         case .multiple:
-            throw CustomError(message: "At this moment SurfGen doesn't support multiple array items")
+            throw CommonError(message: "At this moment SurfGen doesn't support multiple array items")
         }
     }
 
@@ -113,21 +113,21 @@ public struct AnySchemaBuilder: SchemaBuilder {
             case .reference(let val):
                 return val.rawValue
             case .object:
-                throw CustomError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and object found")
+                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and object found")
             case .array:
-                throw CustomError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and array found")
+                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and array found")
             case .group:
-                throw CustomError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and group found")
+                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and group found")
             case .boolean:
-                throw CustomError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and boolean found")
+                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and boolean found")
             case .string:
-                throw CustomError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and string found")
+                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and string found")
             case .number:
-                throw CustomError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and number found")
+                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and number found")
             case .integer:
-                throw CustomError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and integer found")
+                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and integer found")
             case .any:
-                throw CustomError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and any found")
+                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and any found")
             }
         }
 
