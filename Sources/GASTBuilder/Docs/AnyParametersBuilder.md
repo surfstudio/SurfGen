@@ -36,7 +36,7 @@ But it's **not**
 
 ## Inheritance
 
-[`ParametersBuilder`](./Docs/ParametersBuilder)
+[`ParametersBuilder`](./ParametersBuilder)
 
 ## Initializers
 

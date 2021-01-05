@@ -53,7 +53,7 @@ Isn't supported in any place
 
 ## Inheritance
 
-[`SchemaBuilder`](./Docs/SchemaBuilder)
+[`SchemaBuilder`](./SchemaBuilder)
 
 ## Initializers
 

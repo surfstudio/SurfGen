@@ -14,7 +14,7 @@ public struct AnyResponsesBuilder: ResponsesBuilder, ResponseBuilder
 
 ## Inheritance
 
-[`ResponseBuilder`](./Docs/ResponseBuilder), [`ResponsesBuilder`](./Docs/ResponsesBuilder)
+[`ResponseBuilder`](./ResponseBuilder), [`ResponsesBuilder`](./ResponsesBuilder)
 
 ## Initializers
 

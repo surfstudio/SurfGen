@@ -12,7 +12,7 @@ public struct AnyRequestBodiesBuilder: RequestBodiesBuilder, RequestBodyBuilder
 
 ## Inheritance
 
-[`RequestBodyBuilder`](./Docs/RequestBodyBuilder), [`RequestBodiesBuilder`](./Docs/RequestBodiesBuilder)
+[`RequestBodyBuilder`](./RequestBodyBuilder), [`RequestBodiesBuilder`](./RequestBodiesBuilder)
 
 ## Initializers
 
