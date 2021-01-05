@@ -21,7 +21,7 @@ public protocol MediaTypesBuilder {
 ///
 /// ## Don't support
 ///
-/// ### MediaType content must be a `reference`. Other in-place declaration itsn't supported. Because it that case we can't generate model
+/// ### MediaType content must be a `reference`. Other in-place declaration itsn't supported. Because in this case we can't generate model
 public struct AnyMediaTypesBuilder: MediaTypesBuilder {
 
     public let schemaBuilder: SchemaBuilder

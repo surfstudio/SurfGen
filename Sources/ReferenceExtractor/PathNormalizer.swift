@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  PathNormalizer.swift
 //  
 //
 //  Created by Александр Кравченков on 14.12.2020.
@@ -8,8 +8,22 @@
 import Foundation
 import Common
 
+/// Namspace for path normalization operations
 public enum PathNormalizer {
 
+    /// Removes any `relativity` from path
+    /// For example:
+    ///
+    /// ```
+    /// dirA/dirB/../dirC
+    /// ```
+    ///
+    /// will normalized to:
+    ///
+    /// ```
+    /// "dirA/dirC"
+    /// ```
+    ///
     /// For details look in `PathNormalizerTests`
     public static func normalize(path: String) throws -> String {
         let url = URL(string: path)
@@ -53,6 +67,9 @@ public enum PathNormalizer {
 }
 
 extension String {
+
+    /// Returns normalized path
+    /// See `PathNormalizer` for details
     public func normalized() throws -> String {
         return try PathNormalizer.normalize(path: self)
     }
