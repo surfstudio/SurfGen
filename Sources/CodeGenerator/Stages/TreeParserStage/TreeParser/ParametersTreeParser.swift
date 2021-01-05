@@ -11,9 +11,13 @@ import Common
 
 public struct ParametersTreeParser {
 
-    public init() { }
+    public let array: ArrayParser
 
-    public func parse(parameter: Referenced<ParameterNode>, current: DependencyWithTree, other: [DependencyWithTree]) throws -> Reference<ParameterModel, ParameterModel> {
+    public init(array: ArrayParser) {
+        self.array = array
+    }
+
+    public func parse(parameter: Referenced<ParameterNode>, current: DependencyWithTree, other: [DependencyWithTree]) throws -> Reference<ParameterModel> {
         switch parameter {
         case .entity(let paramNode):
             return .notReference(try self.parse(parameter: paramNode, current: current, other: other))
@@ -43,12 +47,17 @@ public struct ParametersTreeParser {
             throw CustomError(message: "Parameters's type must not contains `object` definition, but it contains \(val)")
         case .enum(let val):
             throw CustomError(message: "Parameters's type must not contains `enum` definition, but it contains \(val)")
+        case .group(let val):
+            throw CustomError(message: "Parameters's type must not contains `group` definition, but it contains \(val)")
         case .simple(let primitive):
             // TODO: - At this place we ignore definition of alias inside parameter
             // so idk if we need it.
             return .primitive(primitive.type)
         case .reference(let ref):
             return .reference(try Resolver().resolveSchema(ref: ref, node: current, other: other))
+        case .array(let val):
+            let arr = try self.array.parse(array: val, current: current, other: other)
+            return .array(arr)
         }
     }
 }

@@ -11,3 +11,5 @@ public struct ServiceModel {
     public let path: String
     public let operations: [OperationModel]
 }
+
+extension ServiceModel: Encodable { }

@@ -18,3 +18,5 @@ public struct PrimitiveTypeAliasModel {
         self.type = type
     }
 }
+
+extension PrimitiveTypeAliasModel: Encodable { }

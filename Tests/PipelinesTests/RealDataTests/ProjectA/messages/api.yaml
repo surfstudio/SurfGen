@@ -1,0 +1,73 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+  contact:
+    name: Starkina Maria
+    email: starkina@surfstudio.ru
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+
+security:
+  - bearerAuth: []
+
+paths:
+  /messages/unreadMessages:
+    get:
+      summary: Количество непрочитанных сообщений пользователя
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/UnreadMessages"
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
+
+  /messages:
+    get:
+      summary: Список сообщений пользователя. Тут приходят полные сообщения (вместе с детальным представлением)
+      parameters:
+        - $ref: "../common/resources/models.yaml#/components/parameters/limit"
+        - $ref: "../common/resources/models.yaml#/components/parameters/offset"
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/MessagesResponse"
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
+          
+  /messages/{id}:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string     
+    put:
+      summary: Отмечаем сообщение как прочитанное
+      responses:
+        "204":
+          description: "Сообщение прочитано"
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
+    delete:
+      summary: Удаляем сообщение
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "../common/models.yaml#/components/schemas/InfoMessage"
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"

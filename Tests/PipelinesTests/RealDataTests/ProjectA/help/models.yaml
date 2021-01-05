@@ -1,0 +1,28 @@
+components:
+  schemas: 
+    Question:
+      description: Вопросы и ответы
+      type: object
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
+      required:
+        - question
+        - answer
+
+    FaqItem:
+      description: Категория вопросов
+      type: object
+      properties:
+        title:
+          type: string
+          description: Название секции
+        questions:
+          type: array
+          items: 
+            $ref: "models.yaml#/components/schemas/Question"
+      required:
+        - title
+        - questions

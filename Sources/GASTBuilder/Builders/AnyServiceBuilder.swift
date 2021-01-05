@@ -34,7 +34,7 @@ public struct AnyServiceBuilder: ServiceBuilder {
     public func build(paths: [Path]) throws -> [PathNode] {
         return try paths.map { path in
             let operations = try wrap(self.build(operations: path.operations),
-                                      message: "While parsing Path: \(path)")
+                                      message: "While parsing Path: \(path.path)")
             return PathNode(path: path.path, operations: operations)
         }
     }
@@ -108,11 +108,15 @@ extension AnyServiceBuilder {
         }
     }
 
-    func buildResponse(response: PossibleReference<Response>) throws -> Referenced<ResponseNode> {
+    func buildResponse(response: PossibleReference<Response>) throws -> Referenced<ResponseNode>? {
         switch response {
         case .reference(let ref):
             return .ref(ref.rawValue)
         case .value(let val):
+            /// for example, in 204 reasponse content is empty
+            guard val.content != nil else {
+                return nil
+            }
             return .entity(try self.responseBuilder.build(response: val))
         }
     }

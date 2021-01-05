@@ -43,17 +43,27 @@ public struct BuldGASTTreeFactory {
                     serviceBuilder: serviceBuilder,
                     responsesBuilder: responsesBuilder,
                     requestBodiesBuilder: requestBodiesBuilder),
-                next: InitCodeGenerationStage(parserStage: .init(parser: buildParser())).erase())
+                next: InitCodeGenerationStage(
+                    parserStage: .init(
+                        next: ServiceGenerationStage(templatePathes: []).erase(),
+                        parser: buildParser()
+                    )
+                ).erase()
+            )
         )
     }
 
     static func buildParser() -> TreeParser {
 
-        let mediaTypeParser = AnyMediaTypeParser()
+        let arrayParser = AnyArrayParser()
+        let groupParser = AnyGroupParser()
+
+        let mediaTypeParser = AnyMediaTypeParser(arrayParser: arrayParser,
+                                                 groupParser: groupParser)
         let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser)
         let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser)
 
-        return .init(parametersParser: .init(),
+        return .init(parametersParser: .init(array: arrayParser),
                      requestBodyParser: requestBodyParser,
                      responsesParser: responsesParser)
     }

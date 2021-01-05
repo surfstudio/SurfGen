@@ -1,0 +1,42 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+  contact:
+    name: Starkina Maria
+    email: starkina@surfstudio.ru
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+
+security:
+  - bearerAuth: [] 
+
+paths:
+  /command:
+    get:
+      summary: Проверка доступности команд активации
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/CheckResult"
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
+    post:
+      summary: Повтор команд активации
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "../common/models.yaml#/components/schemas/InfoMessage"
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"

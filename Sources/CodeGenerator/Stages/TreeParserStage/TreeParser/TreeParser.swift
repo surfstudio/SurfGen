@@ -72,14 +72,14 @@ public struct TreeParser {
 
     func parse(operation: OperationNode, current: DependencyWithTree, other: [DependencyWithTree]) throws -> OperationModel {
 
-        let params = try operation.parameters.map { parameter -> Reference<ParameterModel, ParameterModel> in
+        let params = try operation.parameters.map { parameter -> Reference<ParameterModel> in
             
             return try wrap(
                 self.parametersParser.parse(parameter: parameter, current: current, other: other),
                 message: "While parsing parameter \(parameter.view)")
         }
 
-        let requestBody = try { () throws -> Reference<RequestModel, RequestModel>? in
+        let requestBody = try { () throws -> Reference<RequestModel>? in
             guard let body = operation.requestBody else {
                 return nil
             }

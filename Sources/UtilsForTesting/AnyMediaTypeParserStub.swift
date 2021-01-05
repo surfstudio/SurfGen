@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Александр Кравченков on 27.12.2020.
 //
@@ -18,7 +18,13 @@ import CodeGenerator
 /// And this stub drammatically decrease amount of yaml spec lines which we should write
 public struct AnyMediaTypeParserStub: MediaTypeParser {
 
-    public init() { }
+    public let arrayParser: ArrayParser
+    public let groupParser: GroupParser
+
+    public init(arrayParser: ArrayParser, groupParser: GroupParser) {
+        self.arrayParser = arrayParser
+        self.groupParser = groupParser
+    }
 
     public func parse(mediaType: MediaTypeObjectNode,
                       current: DependencyWithTree,
@@ -31,17 +37,17 @@ public struct AnyMediaTypeParserStub: MediaTypeParser {
 
     public func parse(schema: SchemaObjectNode,
                       current: DependencyWithTree,
-                      other: [DependencyWithTree]) throws -> SchemaObjectModel {
+                      other: [DependencyWithTree]) throws -> DataModel.Possible {
         // got media type schema
         // it can be ref or in-place declaration
         // in-place declaration is unsupported
         switch schema.next {
         case .object:
-            return SchemaObjectModel(name: "", properties: [], description: nil)
+            return .object(SchemaObjectModel(name: "", properties: [], description: nil))
         case .enum:
-            return SchemaObjectModel(name: "", properties: [], description: nil)
+            return .object(SchemaObjectModel(name: "", properties: [], description: nil))
         case .simple:
-            return SchemaObjectModel(name: "", properties: [], description: nil)
+            return .object(SchemaObjectModel(name: "", properties: [], description: nil))
         case .reference(let val):
             let schemaType = try wrap(
                 Resolver().resolveSchema(ref: val, node: current, other: other),
@@ -53,12 +59,22 @@ public struct AnyMediaTypeParserStub: MediaTypeParser {
 
             switch schemaType {
             case .alias:
-                return SchemaObjectModel(name: "", properties: [], description: nil)
+                return .object(SchemaObjectModel(name: "", properties: [], description: nil))
             case .enum:
-                return SchemaObjectModel(name: "", properties: [], description: nil)
+                return .object(SchemaObjectModel(name: "", properties: [], description: nil))
             case .object(let val):
-                return val
+                return .object(val)
+            case .array(let val):
+                return .array(val)
+            case .group(let val):
+                return .group(val)
             }
+        case .array(let val):
+            let parsed = try self.arrayParser.parse(array: val, current: current, other: other)
+            return .array(parsed)
+        case .group(let val):
+            let parsed = try self.groupParser.parse(group: val, current: current, other: other)
+            return .group(parsed)
         }
     }
 }

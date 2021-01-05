@@ -13,84 +13,7 @@ import GASTTree
 import Pipelines
 import CodeGenerator
 
-class FileProviderStub: FileProvider {
-
-    var isReadableFile: Bool = false
-
-    var files: [String: Data] = [:]
-
-    var readCount = 0
-
-    func isReadableFile(at path: String) -> Bool {
-        return isReadableFile
-    }
-
-    func readFile(at path: String) throws -> Data? {
-        readCount += 1
-        return files[path]
-    }
-}
-
-
-public struct StubGASTTreeFactory {
-
-    var fileProvider: FileProvider
-    var resultClosure: (([[ServiceModel]]) throws -> Void)?
-
-    public func provider(str: URL) throws -> ReferenceExtractor {
-        return try .init(
-            pathToSpec: str,
-            fileProvider: fileProvider
-        )
-    }
-
-    public func build(enableDisclarationChecking: Bool = false) -> BuildGASTTreeEntryPoint {
-        let schemaBuilder = AnySchemaBuilder()
-        let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
-        let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder,
-                                                     enableDisclarationChecking: enableDisclarationChecking)
-        let responsesBuilder = AnyResponsesBuilder(mediaTypesBuilder: mediaTypesBuilder)
-        let requestBodiesBuilder = AnyRequestBodiesBuilder(mediaTypesBuilder: mediaTypesBuilder)
-
-        let serviceBuilder = AnyServiceBuilder(
-            parameterBuilder: parameterBuilder,
-            schemaBuilder: schemaBuilder,
-            requestBodyBuilder: requestBodiesBuilder,
-            responseBuilder: responsesBuilder
-        )
-
-        let parser = self.buildParser(enableDisclarationChecking: enableDisclarationChecking)
-
-        return .init(
-            refExtractorProvider: self.provider(str:),
-            next: .init(
-                builder: AnyGASTBuilder(
-                    fileProvider: fileProvider,
-                    schemaBuilder: schemaBuilder,
-                    parameterBuilder: parameterBuilder,
-                    serviceBuilder: serviceBuilder,
-                    responsesBuilder: responsesBuilder,
-                    requestBodiesBuilder: requestBodiesBuilder),
-                next: InitCodeGenerationStage(parserStage: .init(next: resultClosure, parser: parser)).erase())
-        )
-    }
-
-    func buildParser(enableDisclarationChecking: Bool = false) -> TreeParser {
-
-        let mediaTypeParser: MediaTypeParser = enableDisclarationChecking ?
-            AnyMediaTypeParser() :
-            AnyMediaTypeParserStub()
-
-        let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser)
-        let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser)
-
-        return .init(parametersParser: .init(),
-                     requestBodyParser: requestBodyParser,
-                     responsesParser: responsesParser)
-    }
-}
-
-extension Reference where RefType == ParameterModel, NotRefType == ParameterModel {
+extension Reference where DataType == ParameterModel {
     var name: String {
         switch self {
         case .reference(let val):
@@ -126,6 +49,8 @@ extension ParameterModel.PossibleType {
             return val
         case .reference(let ref):
             throw CustomError(message: "The parameter's type is reference \(ref)")
+        case .array(let val):
+            throw CustomError(message: "The parameter's type is array \(val)")
         }
     }
 
@@ -135,6 +60,8 @@ extension ParameterModel.PossibleType {
             throw CustomError(message: "The parameter's type is primitive: \(val)")
         case .reference(let val):
             return val
+        case .array(let val):
+            throw CustomError(message: "The parameter's type is array \(val)")
         }
     }
 }

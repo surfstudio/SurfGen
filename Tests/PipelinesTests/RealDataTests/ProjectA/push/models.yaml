@@ -1,0 +1,43 @@
+components:
+  schemas: 
+
+    MobileType:
+      type: string
+      enum: [ios, android]
+      description: Тип операционной системы
+
+    PushTokenRequest:
+      description: Данные для установки токена
+      type: object
+      properties:
+        fcmToken:
+          type: string
+        mobileType:
+          $ref: "models.yaml#/components/schemas/MobileType"
+      required:
+        - fcmToken
+
+    PushDeleteTokenRequest:
+      description: Данные для удаления токена
+      type: object
+      properties:
+        fcmToken:
+          type: string
+      required:
+        - fcmToken
+
+    RegisterPushTokenRequest:
+      description: Данные для регистрации откртытия приложения
+      type: object
+      properties:
+        fcmToken:
+          type: string
+        extMessageId:
+          type: string
+          description: Внутренний идентификатор сообщения
+        mobileType:
+          $ref: "models.yaml#/components/schemas/MobileType"
+      required:
+        - fcmToken
+        - extMessageId
+        - mobileType

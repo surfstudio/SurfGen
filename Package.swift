@@ -22,8 +22,12 @@ var testTargets: [Target] = [
     ),
     .testTarget(
         name: "PipelinesTests",
-        dependencies: ["Pipelines", "CodeGenerator", "Common", "ReferenceExtractor", "GASTBuilder"]
+        dependencies: ["Pipelines", "CodeGenerator", "Common", "ReferenceExtractor", "GASTBuilder", "UtilsForTesting"]
     ),
+    .testTarget(
+        name: "CodeGeneratorTests",
+        dependencies: ["Pipelines", "CodeGenerator", "Common", "ReferenceExtractor", "GASTBuilder", "UtilsForTesting"]
+    )
 ]
 
 var dependencies: [PackageDescription.Package.Dependency] = [
@@ -66,6 +70,10 @@ let package = Package(
             name: "SurfGenKit",
             targets: ["SurfGenKit"]
         ),
+        .library(
+            name: "UtilsForTesting",
+            targets: ["UtilsForTesting"]
+        ),
 
         // MARK: -- Specific
 
@@ -88,6 +96,16 @@ let package = Package(
     ],
     dependencies: dependencies,
     targets: [
+        .target(
+            name: "UtilsForTesting",
+            dependencies: [
+                "Pipelines",
+                "CodeGenerator",
+                "Common",
+                "ReferenceExtractor",
+                "GASTBuilder"
+            ]
+        ),
         .target(
             name: "surfgen",
             dependencies: [

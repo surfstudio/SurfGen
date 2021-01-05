@@ -7,6 +7,7 @@
 
 import Foundation
 import ReferenceExtractor
+import Common
 
 // MARK: - Nested Types
 
@@ -43,9 +44,15 @@ extension BuildGASTTreeEntryPoint: PipelineEntryPoint {
     public func run(with input: Config) throws {
         // First stage - we need to extract all dependencies
 
-        let extractor = try self.refExtractorProvider(input.pathToSpec)
+        let extractor = try wrap(
+            self.refExtractorProvider(input.pathToSpec),
+            message: "While configuring"
+        )
 
-        var (links, dependencies) = try extractor.extract()
+        var (links, dependencies) = try wrap(
+            extractor.extract(),
+            message: "While extracting refs for \(input.pathToSpec)"
+        )
         links.append(input.pathToSpec.absoluteString)
 
         // Second stage - Build GAST tree for each file

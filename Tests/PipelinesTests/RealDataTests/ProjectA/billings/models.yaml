@@ -1,0 +1,274 @@
+components:
+  schemas: 
+  
+    MobileType:
+      type: string
+      enum: [ios, android]
+      description: Тип операционной системы
+    
+    PaySystemCodeForMobile:
+      type: string
+      enum: [byPersonalAccount, byCard, byPlatformAcquiring]
+      description: Тип платежной системы для МП
+
+    Tariffs:
+      type: object
+      properties:
+        id:
+          type: string
+          example: OFF1198
+        tariffInfo:
+          $ref: "models.yaml#/components/schemas/TariffInfo"
+        availableForPayment:
+          type: boolean
+          description: Признак возможности выполнения платежей по тарифу
+
+    TariffInfo:
+      type: object
+      properties:
+        cost:
+          type: string
+          description: Стоимость тарифа
+          example: 1200
+          nullable: true
+        duration:
+          type: string
+          description: Длительность тарифа в формате "N дней"
+          example: "360 дней"
+          nullable: true
+        description: 
+          type: string
+          description: Приходит текст "без продления", если cost и duration = null
+
+    BasketItem:
+      description: Элемент корзины 
+      type: object
+      properties:
+        serviceId:
+          type: string
+          description: ID услуги
+        serviceName:
+          type: string
+          description: Название услуги
+        basketItemStatus:
+          type: boolean
+          description: В зависимости от статуса выводим услугу в блок подключенных или не подключенных услуг
+        currentTariffId:
+          type: string
+          description: Текущий тариф, если услуга активна
+          nullable: true
+        availableTariffs:
+          type: array
+          items:
+            $ref: "models.yaml#/components/schemas/Tariffs"
+          description: Все доступные тарифы для услуги
+        endDate:
+          $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+          description: Действует до. Выводится для активных услуг
+        iconUrl:
+          type: string
+      required:
+        - serviceId
+        - serviceName
+        - tariffsInfo
+
+    PaymentsInfoRequest:
+      description: Модель запроса для получения списка платежных систем
+      type: object
+      properties:
+        mobileType:
+          $ref: "models.yaml#/components/schemas/MobileType"
+        isActiveService:
+          type: boolean
+          description: Если в корзине есть хотя бы одна активная или приостановленная услуга, то отправляем true
+
+    ParameterItem:
+      description: Параметры для платежной системы
+      type: object
+      properties: 
+        parameterId:
+          type: string
+          description: Название параметра
+          example: PaymentPhone
+        description:
+          type: string
+          description: Заголовок поля (Плейсхолдер)
+          example: Номер телефона
+        regex:
+          type: string
+          example: ^9[0-9]{9}$
+        notValidText:
+          type: string
+          example: Номер должен содержать 10 цифр и начинаться на 9
+        required:
+          type: boolean
+          description: Обязательность поля
+        template:
+          type: string
+          description: Пример
+          example: +7 ({ddd}) {ddd} - {dd} - {dd}
+          nullable: true
+
+    PaymentTypeItem:
+      description: Вариант платежной системы
+      type: object
+      properties:
+        paySystemCode:
+          type: string
+          description: Код типа платежа
+        paySystemCodeForMobile:
+          $ref: "models.yaml#/components/schemas/PaySystemCodeForMobile"
+          nullable: true
+        description:
+          type: string
+          example: Оплата банковской картой (Visa, MasterCard, МИР)
+          description: Название типа оплаты в списке типов. И ТАК ЖЕ заголовок экрана динамической формы оплаты
+        commission:
+          type: string
+          description: Условия комиссии
+        agreementText:
+          type: string
+          description: Описание соглашения
+          example: Я согласен с <a href=https://www.ruru.ru/storage/offers/OfferNSK.pdf>условиями оказания услуги.</a>
+        agreementTextError:
+          type: string
+          description: Описание, если пользователь не поставит чек-бокс 
+        paymentSystemIconUrl:
+          type: string
+          description: Ссылка на иконку ПС
+        firstScreenInfo:
+          $ref: "models.yaml#/components/schemas/FirstScreenInfo"
+          nullable: true
+        contactPhone:
+          $ref: "models.yaml#/components/schemas/ContactInfo"
+          nullable: true
+        contactEmail:
+          $ref: "models.yaml#/components/schemas/ContactInfo"
+          nullable: true
+    
+    FirstScreenInfo:
+      description: Описание первого шага (экрана)
+      type: object
+      properties:
+        description:
+          type: string
+          description: Подзаголовок экрана. То что выводится ПОД названием (мелким шрифтом)
+          example: Оплата со счета мобильного телефона
+        parameters:
+          type: array
+          items:
+            $ref: "models.yaml#/components/schemas/ParameterItem"
+
+    ContactInfo:
+      description: Информация для чека
+      type: object
+      properties:
+        showContactField:
+          type: boolean
+          description: Отображение поля контакта
+        maskRegex:
+          type: string
+          description: Регулярное выражение
+        defaultValueFrom:
+          type: string
+          description: Откуда подтягивать значение
+          example: PaymentPhone
+
+    ItemForPayment:
+      description: Информация по оплачиваемым услугам
+      type: object
+      properties:
+        serviceId:
+          type: string
+          description: ID услуги
+        tariffId:
+          type: string
+        amount:
+          type: string
+
+    PaymentDetailsRequest:
+      description: Информация по оплате
+      type: object
+      properties:
+        paySystemCode:
+          type: string
+        mobilePhone:
+          type: string
+          nullable: true
+          description: Информация для доставки чека
+        email:
+          type: string
+          nullable: true
+          description: Информация для доставки чека
+        basketForPayment:
+          type: array
+          items:
+            $ref: "models.yaml#/components/schemas/ItemForPayment"
+        payByBinding:
+          type: boolean
+          description: Оплата по привязанной карте или нет
+        bindingId:
+          type: string
+          description: Идентификатор связки
+          nullable: true
+        createBinding:
+          type: boolean
+          description: Создание связки после платежа
+        parameters:
+          description: >
+            Словарь (ключ-значение), где ключ - `ParameterItem.parameterId`, 
+            а значение - то что пользователь ввел в текстовое поле
+            А так же где ключ для Apple - `PaymentToken`, `MerchantId`, `BasketUUID`
+            а значение - то что пользователь ввел в текстовое поле
+          type: array
+          items:
+            $ref: "../common/models.yaml#/components/schemas/KeyValuePair"
+
+    PaymentDetailsResponse:
+      description: Ответ оплаты
+      type: object
+      properties:
+        bankProcessingUrl:
+          type: string
+          description: Ссылка на вебвью банка
+          nullable: true
+        description:
+          type: string
+          description: Текст для экрана успеха
+    
+    IsPaymentAvailableResponse:
+      description: Доступность оплаты
+      type: object
+      properties:
+        smartCardId:
+          type: string
+          description: Триколор ID
+        agreementNumber:
+          type: string
+          description: Номер договора
+        code:
+          type: string
+          description: Код ошибки. 0 -- все ок. 
+      required:
+        - code
+        - smartCardId
+  
+    BalanceInfo:
+      type: object
+      properties:
+        balance:
+          type: string
+          nullable: true
+      required:
+        - balance
+
+    UserContactInfo:
+      type: object
+      properties:
+        mobilePhone:
+          type: string
+          nullable: true
+          example: 9001234567
+        email:
+          type: string
+          nullable: true

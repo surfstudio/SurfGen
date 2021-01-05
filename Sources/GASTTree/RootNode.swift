@@ -110,8 +110,12 @@ extension RootNode {
                 return val.name == name
             case .simple(let val):
                 return val.name == name
+            case .array(let val):
+                return val.name == name
             case .reference:
                 throw CustomError(message: "\(name) is refrence. Now reference which is referenced to another reference is unsupported")
+            case .group(let val):
+                return val.name == name
             }
         }
     }
@@ -132,11 +136,5 @@ extension RootNode {
         self.responses.first(where: { reqBody in
             reqBody.name == name
         })
-    }
-}
-
-extension RootNode: StringView {
-    public var view: String {
-        return "Root:\n\tSchemas:\n\t\t\(schemas.view)\n\nParameters:\(parameters)"
     }
 }

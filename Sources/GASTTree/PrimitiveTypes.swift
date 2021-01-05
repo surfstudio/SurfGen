@@ -13,3 +13,5 @@ public enum PrimitiveType: String {
     case string = "string"
     case boolean = "boolean"
 }
+
+extension PrimitiveType: Encodable { }

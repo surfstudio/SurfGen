@@ -31,3 +31,5 @@ public struct SchemaObjectModel {
         self.description = description
     }
 }
+
+extension SchemaObjectModel: Encodable { }
