@@ -16,7 +16,7 @@ import GASTTree
 ///
 /// this method can be `GET /projects/users` for reading information
 ///
-/// Or it can be `POST /projects/users` to create new user for projectsэто 
+/// Or it can be `POST /projects/users` to create new user for projectsэто
 ///
 /// And each of those (`GET` and `POST`) will be a different `OperationModel`
 ///
@@ -102,7 +102,7 @@ public struct OperationModel: Encodable {
     ///
     /// For example `GET`
     public let httpMethod: String
-    /// Description which was proided (or not) in specification
+    /// Description provided (or not provided) in specification
     public let description: String?
     /// Path and query parameters of specific operations
     public let parameters: [Reference<ParameterModel>]?
