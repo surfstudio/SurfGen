@@ -13,7 +13,7 @@ import XCTest
 
 public final class OpenAPILinterTests: XCTestCase {
 
-    final class NextStub: PipelineEntryPoint {
+    final class NextStub: PipelineStage {
 
         var got: [URL]
 

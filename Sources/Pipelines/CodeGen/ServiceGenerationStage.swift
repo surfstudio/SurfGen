@@ -9,7 +9,7 @@ import Foundation
 import Common
 import CodeGenerator
 
-public struct ServiceGenerationStage: PipelineEntryPoint {
+public struct ServiceGenerationStage: PipelineStage {
     public var templatePathes: [String]
 
     public init(templatePathes: [String]) {

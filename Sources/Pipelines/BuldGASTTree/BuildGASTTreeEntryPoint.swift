@@ -31,7 +31,7 @@ public struct BuildGASTTreeEntryPoint {
 
 // MARK: - PipelineEntryPoint
 
-extension BuildGASTTreeEntryPoint: PipelineEntryPoint {
+extension BuildGASTTreeEntryPoint: PipelineStage {
     public func run(with input: URL) throws {
         // First stage - we need to extract all dependencies
 

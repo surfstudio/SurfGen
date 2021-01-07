@@ -9,14 +9,14 @@ import Foundation
 import Common
 import CodeGenerator
 
-public struct TreeParserStage: PipelineEntryPoint {
+public struct TreeParserStage: PipelineStage {
 
     public let parser: TreeParser
 
     // just for prototyping. u think that in future we should chage this type from [[]]
-    var next: AnyPipelineEntryPoint<[[ServiceModel]]>
+    var next: AnyPipelineStage<[[ServiceModel]]>
 
-    public init(next: AnyPipelineEntryPoint<[[ServiceModel]]>, parser: TreeParser) {
+    public init(next: AnyPipelineStage<[[ServiceModel]]>, parser: TreeParser) {
         self.next = next
         self.parser = parser
     }

@@ -14,7 +14,7 @@ import ReferenceExtractor
 
 public final class DirRefExtractorTests: XCTestCase {
 
-    class NextStub: PipelineEntryPoint {
+    class NextStub: PipelineStage {
 
         var got = [Dependency]()
 

@@ -22,7 +22,7 @@ import Common
 /// **WARNING**
 ///
 /// Excluding doesn't work for single file
-public struct OpenAPILinter: PipelineEntryPoint {
+public struct OpenAPILinter: PipelineStage {
 
     /// **WARNING**
     /// Url should be absolute
@@ -30,11 +30,11 @@ public struct OpenAPILinter: PipelineEntryPoint {
     ///
     /// `OpenAPILinter` will manually convert string to URL in `init`
     public let filesToIgnore: Set<URL>
-    public let next: AnyPipelineEntryPoint<[URL]>
+    public let next: AnyPipelineStage<[URL]>
     public let log: Logger
 
     public init(filesToIgnore: Set<String>,
-                next: AnyPipelineEntryPoint<[URL]>,
+                next: AnyPipelineStage<[URL]>,
                 log: Logger) {
         self.filesToIgnore = Set(filesToIgnore.map { URL(fileURLWithPath: $0) })
         self.next = next

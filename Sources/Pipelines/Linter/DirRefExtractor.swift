@@ -12,14 +12,14 @@ import Common
 /// This implementation can extract dependencies from an array of files
 ///
 /// If files contains duplicates, then they (duplicates) will be removed
-public struct DirRefExtractor: PipelineEntryPoint {
+public struct DirRefExtractor: PipelineStage {
 
     public typealias ReferenceExtractorProvider = (URL) throws -> ReferenceExtractor
 
     private let refExtractorProvider: ReferenceExtractorProvider
-    private let next: AnyPipelineEntryPoint<[Dependency]>
+    private let next: AnyPipelineStage<[Dependency]>
 
-    public init(refExtractorProvider: @escaping ReferenceExtractorProvider, next: AnyPipelineEntryPoint<[Dependency]>) {
+    public init(refExtractorProvider: @escaping ReferenceExtractorProvider, next: AnyPipelineStage<[Dependency]>) {
         self.refExtractorProvider = refExtractorProvider
         self.next = next
     }

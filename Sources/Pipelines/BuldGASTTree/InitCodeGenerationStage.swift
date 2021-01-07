@@ -10,7 +10,7 @@ import CodeGenerator
 import GASTTree
 import Common
 
-public struct InitCodeGenerationStage: PipelineEntryPoint {
+public struct InitCodeGenerationStage: PipelineStage {
 
     public var next: TreeParserStage
 
