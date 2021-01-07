@@ -18,16 +18,25 @@ import Common
 ///
 /// Excluding supports only pathes to files, not to dirs. We chose that way because we think, that it's very important to keep your specification clean.
 /// And the harder it gets to skip the linter, the better it will.
+///
+/// **WARNING**
+///
+/// Excluding doesn't work for single file
 public struct OpenAPILinter: PipelineEntryPoint {
 
-    public let filesToIgnore: [String]
+    /// **WARNING**
+    /// Url should be absolute
+    /// Code called this struct should take care about it.
+    ///
+    /// `OpenAPILinter` will manually convert string to URL in `init`
+    public let filesToIgnore: Set<URL>
     public let next: AnyPipelineEntryPoint<URL>
     public let log: Logger
 
-    public init(filesToIgnore: [String],
+    public init(filesToIgnore: Set<String>,
                 next: AnyPipelineEntryPoint<URL>,
                 log: Logger) {
-        self.filesToIgnore = filesToIgnore
+        self.filesToIgnore = Set(filesToIgnore.map { URL(fileURLWithPath: $0) })
         self.next = next
         self.log = log
     }
@@ -99,9 +108,18 @@ public struct OpenAPILinter: PipelineEntryPoint {
         for case let fileURL as URL in iterator {
             do {
                 let fileAttributes = try fileURL.resourceValues(forKeys:[.isRegularFileKey])
-                if fileAttributes.isRegularFile! {
-                    files.append(fileURL)
+
+                guard fileAttributes.isRegularFile == true else {
+                    log.debug("\(fileURL.absoluteString) is not a regular file")
+                    continue
                 }
+
+                guard !self.filesToIgnore.contains(fileURL) else {
+                    log.debug("\(fileURL.absoluteString) is excluded. Skip it")
+                    continue
+                }
+
+                files.append(fileURL)
             } catch {
                 log.error("Can't read attributes for file \(fileURL.absoluteString). It will be skiped!")
             }

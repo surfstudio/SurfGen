@@ -74,4 +74,33 @@ public final class OpenAPILinterTests: XCTestCase {
 
         XCTAssertEqual(stub.got.count, 34)
     }
+
+    public func testFileExcludingWorkCorrectly() throws {
+        // Arrange
+
+        let baseUrl = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/LinterTests/RealDataTests.swift
+            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/LinterTests/
+            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/
+            .appendingPathComponent("CommonTestSpecs")
+
+        let filesToExlude = [
+            baseUrl.appendingPathComponent("/auth/models.yaml").absoluteString,
+            baseUrl.appendingPathComponent("/user/models.yaml").absoluteString
+        ]
+
+        let stub = NextStub()
+        let current = OpenAPILinter(
+            filesToIgnore: Set(filesToExlude),
+            next: stub.erase(),
+            log: DefaultLogger.verbose
+        )
+
+        // Act
+
+        try current.run(with: baseUrl.absoluteString)
+
+        // Assert
+
+        XCTAssertEqual(stub.got.count, 34 - filesToExlude.count)
+    }
 }
