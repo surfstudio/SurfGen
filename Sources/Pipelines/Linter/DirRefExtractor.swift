@@ -9,15 +9,12 @@ import Foundation
 import ReferenceExtractor
 import Common
 
-// MARK: - Nested Types
+/// This implementation can extract dependencies from an array of files
+///
+/// If files contains duplicates, then they (duplicates) will be removed
+public struct DirRefExtractor: PipelineEntryPoint {
 
-extension DirRefExtractor {
     public typealias ReferenceExtractorProvider = (URL) throws -> ReferenceExtractor
-}
-
-// MARK: - BuildGASTTreeEntryPoint Declaration
-
-public struct DirRefExtractor {
 
     private let refExtractorProvider: ReferenceExtractorProvider
     private let next: AnyPipelineEntryPoint<[Dependency]>
@@ -27,11 +24,6 @@ public struct DirRefExtractor {
         self.next = next
     }
 
-}
-
-// MARK: - PipelineEntryPoint
-
-extension DirRefExtractor: PipelineEntryPoint {
     public func run(with input: [URL]) throws {
 
         let result = try Set(input.map(getDependecies(from:)).reduce(into: [Dependency](), { $0.append(contentsOf: $1) }))
