@@ -50,7 +50,7 @@ final class ServiceUseCasesTests: XCTestCase {
         
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     /// In place Parameters will be parsed
@@ -66,7 +66,7 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     /// Parameters with ref in type will be parsed
@@ -86,7 +86,7 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     /// Parameters as ref will be parsed
@@ -106,7 +106,7 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     /// Parameters with declaration in type won't be parsed
@@ -124,7 +124,7 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertThrowsError(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertThrowsError(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     // MARK: - Requests
@@ -148,7 +148,7 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     /// Ref on RequestBody will be parsed
@@ -168,7 +168,7 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     /// RequestBody with several media types will be parsed
@@ -188,7 +188,7 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     /// RequestBody without content won't be parsed
@@ -208,7 +208,7 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertThrowsError(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertThrowsError(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     /// RequestBody with declaration in schema won't be parsed
@@ -228,7 +228,7 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertThrowsError(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertThrowsError(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     // MARK: - Responses
@@ -250,7 +250,7 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     /// Ref on Responses will be parsed
@@ -270,7 +270,7 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     /// Response with several media types will be parsed
@@ -290,7 +290,7 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     /// Response with `default` content will be parsed
@@ -310,7 +310,7 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     /// Response without content will be parsed
@@ -330,7 +330,7 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     /// Response with declaration in schema won't be parsed
@@ -350,7 +350,7 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertThrowsError(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertThrowsError(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     /// Separated Response with schema declaration won't be parsed
@@ -370,6 +370,6 @@ final class ServiceUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertThrowsError(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertThrowsError(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 }

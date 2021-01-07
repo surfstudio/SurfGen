@@ -157,7 +157,7 @@ let package = Package(
         ),
         .target(
             name: "Common",
-            dependencies: []
+            dependencies: ["Rainbow"]
         ),
         .target(
             name: "GASTTree",

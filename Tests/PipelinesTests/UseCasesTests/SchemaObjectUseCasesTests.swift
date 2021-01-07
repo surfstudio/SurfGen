@@ -29,7 +29,7 @@ final class SchemaObjectUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     func testArrayInResponseDeclrationCanBeParsed() throws {
@@ -44,7 +44,7 @@ final class SchemaObjectUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 
     func testArrayInResponseWithObjAliasEnumWillBeParsed() throws {
@@ -63,6 +63,6 @@ final class SchemaObjectUseCasesTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
     }
 }

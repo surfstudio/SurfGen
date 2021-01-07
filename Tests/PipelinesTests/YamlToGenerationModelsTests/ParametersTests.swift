@@ -60,7 +60,7 @@ final class ParametersTests: XCTestCase {
 
         // Act
 
-        try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!))
+        try pipeline.run(with: URL(string: pathToRoot)!)
 
         // Assert
 
@@ -99,7 +99,7 @@ final class ParametersTests: XCTestCase {
 
         // Act
 
-        try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!))
+        try pipeline.run(with: URL(string: pathToRoot)!)
 
         // Assert
 
@@ -144,7 +144,7 @@ final class ParametersTests: XCTestCase {
 
         // Act
 
-        try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!))
+        try pipeline.run(with: URL(string: pathToRoot)!)
 
         // Assert
 
@@ -189,7 +189,7 @@ final class ParametersTests: XCTestCase {
 
         // Act
 
-        try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!))
+        try pipeline.run(with: URL(string: pathToRoot)!)
 
         // Assert
 
@@ -237,7 +237,7 @@ final class ParametersTests: XCTestCase {
 
         // Act
 
-        try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!))
+        try pipeline.run(with: URL(string: pathToRoot)!)
 
         // Assert
 
@@ -277,7 +277,7 @@ final class ParametersTests: XCTestCase {
 
         // Act-Assert
 
-        XCTAssertThrowsError(try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!))) { (err) in
+        XCTAssertThrowsError(try pipeline.run(with: URL(string: pathToRoot)!)) { (err) in
             print(err.localizedDescription)
         }
     }
@@ -309,7 +309,7 @@ final class ParametersTests: XCTestCase {
 
         // Act
 
-        try pipeline.run(with: .init(pathToSpec: URL(string: pathToRoot)!))
+        try pipeline.run(with: URL(string: pathToRoot)!)
 
         // Assert
 
