@@ -32,15 +32,27 @@ public struct OpenAPILinter: PipelineEntryPoint {
         self.log = log
     }
 
+    /// Check iput is file or dir and run linitng
+    ///
+    /// For single file run single linting
+    ///
+    /// For dir previously read all files recursively and then run lint for each read file
+    ///
+    /// **WARNING**
+    /// `input` should be string without `file://` schema
     public func run(with input: String) throws {
         guard let rootUrl = URL(string: input) else {
             throw CommonError(message: "Can convert input: \(input) to URL path")
         }
 
+        // because resourceValues require `file://` schema
+        // but for the next usage in may be dagerous to pass url like that
+        let schemaRootUrl = URL(fileURLWithPath: input)
+
         // TEST_IT: On Different OS
 
         let isDir = try wrap(
-            rootUrl.resourceValues(forKeys: [.isDirectoryKey]).isDirectory,
+            schemaRootUrl.resourceValues(forKeys: [.isDirectoryKey]).isDirectory,
             message: "While read metadata for item at path \(rootUrl.absoluteString)"
         )
 
@@ -49,7 +61,8 @@ public struct OpenAPILinter: PipelineEntryPoint {
         }
 
         if isDirGuarded {
-            
+            log.debug("\(rootUrl.absoluteString) was determined as directory")
+            try self.runForDir(at: rootUrl)
         } else {
             log.debug("\(rootUrl.absoluteString) was determined as single file")
             try self.runForSingleFile(at: rootUrl)

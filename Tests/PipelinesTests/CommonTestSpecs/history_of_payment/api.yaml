@@ -1,0 +1,34 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+  contact:
+    name: Starkina Maria
+    email: starkina@surfstudio.ru
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+
+security:
+  - bearerAuth: []
+
+paths:
+  /billings/history:
+    get:
+      summary: История операций
+      parameters:
+        - $ref: "../common/resources/models.yaml#/components/parameters/limit"
+        - $ref: "../common/resources/models.yaml#/components/parameters/offset"
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/HistoryResponse"
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"

@@ -1,0 +1,35 @@
+components:
+
+  responses:
+  
+    ApiErrorResponse:
+        description: >
+          Http StatusCode = 500
+          Ошибка, произошедшая из-за неправильных данных в Request
+          Ошибка может быть передана в `дефолтном` формате, например, если реверс-прокси не нашел метод, 
+          то МП и не будет ожидать, что ответ будет в виде кастомной структуры
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommonError"
+  schemas:
+
+    CommonError:
+      description: Это общий тип ошибки, который может возвращать сервер.
+      type: object
+      required:
+        - code
+      properties:
+        code: 
+          type: integer
+          description: >
+            Это идентификатор ошибки.
+            Этот идентификатор мобильное приложение будет использовать для того, чтобы включать определенное поведение.
+        userMessage:
+          type: string
+          nullable: true
+          description: Сообщение, которое будет выведено пользователю в снеке в случае получения ошибки
+        developerMessage:
+          type: string
+          nullable: true
+          description: Пояснение для разработчика/тестировщика о том, что пошло не так
