@@ -37,8 +37,8 @@ public final class OpenAPILinterTests: XCTestCase {
         let stub = NextStub()
         let current = OpenAPILinter(
             filesToIgnore: [],
-            next: stub.erase(),
-            log: DefaultLogger.verbose
+            log: DefaultLogger.verbose,
+            next: stub.erase()
         )
 
         // Act
@@ -62,8 +62,8 @@ public final class OpenAPILinterTests: XCTestCase {
         let stub = NextStub()
         let current = OpenAPILinter(
             filesToIgnore: [],
-            next: stub.erase(),
-            log: DefaultLogger.verbose
+            log: DefaultLogger.verbose,
+            next: stub.erase()
         )
 
         // Act
@@ -91,8 +91,8 @@ public final class OpenAPILinterTests: XCTestCase {
         let stub = NextStub()
         let current = OpenAPILinter(
             filesToIgnore: Set(filesToExlude),
-            next: stub.erase(),
-            log: DefaultLogger.verbose
+            log: DefaultLogger.verbose,
+            next: stub.erase()
         )
 
         // Act

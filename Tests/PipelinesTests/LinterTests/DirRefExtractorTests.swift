@@ -34,11 +34,11 @@ public final class DirRefExtractorTests: XCTestCase {
         let stub = NextStub()
         let current = OpenAPILinter(
             filesToIgnore: [],
+            log: DefaultLogger.verbose,
             next: DirRefExtractor(
                 refExtractorProvider: { try .init(pathToSpec: $0, fileProvider: FileManager.default) },
                 next: stub.erase()
-            ).erase(),
-            log: DefaultLogger.verbose
+            ).erase()
         )
 
         // Act
@@ -61,11 +61,11 @@ public final class DirRefExtractorTests: XCTestCase {
         let stub = NextStub()
         let current = OpenAPILinter(
             filesToIgnore: [],
+            log: DefaultLogger.verbose,
             next: DirRefExtractor(
                 refExtractorProvider: { try .init(pathToSpec: $0, fileProvider: FileManager.default) },
                 next: stub.erase()
-            ).erase(),
-            log: DefaultLogger.verbose
+            ).erase()
         )
 
         // Act

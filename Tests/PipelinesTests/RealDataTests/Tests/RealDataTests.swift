@@ -43,7 +43,7 @@ final class RealDataTests: XCTestCase {
             XCTAssertNoThrow(
                 try { () throws -> Void in
                     do {
-                        _ = try BuldGASTTreeFactory.build().run(with: url)
+                        _ = try BuildCodeGeneratorPipelineFactory.build().run(with: url)
                     } catch {
                         print("ERROR for \(url)")
                         print(error.localizedDescription)

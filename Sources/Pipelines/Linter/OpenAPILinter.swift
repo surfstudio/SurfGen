@@ -34,8 +34,8 @@ public struct OpenAPILinter: PipelineStage {
     public let log: Logger
 
     public init(filesToIgnore: Set<String>,
-                next: AnyPipelineStage<[URL]>,
-                log: Logger) {
+                log: Logger,
+                next: AnyPipelineStage<[URL]>) {
         self.filesToIgnore = Set(filesToIgnore.map { URL(fileURLWithPath: $0) })
         self.next = next
         self.log = log
