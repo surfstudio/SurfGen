@@ -30,11 +30,11 @@ public struct OpenAPILinter: PipelineEntryPoint {
     ///
     /// `OpenAPILinter` will manually convert string to URL in `init`
     public let filesToIgnore: Set<URL>
-    public let next: AnyPipelineEntryPoint<URL>
+    public let next: AnyPipelineEntryPoint<[URL]>
     public let log: Logger
 
     public init(filesToIgnore: Set<String>,
-                next: AnyPipelineEntryPoint<URL>,
+                next: AnyPipelineEntryPoint<[URL]>,
                 log: Logger) {
         self.filesToIgnore = Set(filesToIgnore.map { URL(fileURLWithPath: $0) })
         self.next = next
@@ -80,7 +80,7 @@ public struct OpenAPILinter: PipelineEntryPoint {
     }
 
     private func runForSingleFile(at path: URL) throws {
-        try next.run(with: path)
+        try next.run(with: [path])
     }
 
     private func runForDir(at path: URL) throws {
@@ -89,7 +89,7 @@ public struct OpenAPILinter: PipelineEntryPoint {
             message: "While recursively read files at path \(path.absoluteString)"
         )
 
-        try files.forEach(self.runForSingleFile(at:))
+        try self.next.run(with: files)
     }
 
     private func readFilesRecursively(at path: URL) throws -> [URL] {
@@ -114,6 +114,11 @@ public struct OpenAPILinter: PipelineEntryPoint {
                     continue
                 }
 
+                guard fileURL.pathExtension == "yaml" else {
+                    log.debug("\(fileURL.absoluteString) isn't yaml file. Skip it")
+                    continue
+                }
+
                 guard !self.filesToIgnore.contains(fileURL) else {
                     log.debug("\(fileURL.absoluteString) is excluded. Skip it")
                     continue
@@ -125,6 +130,15 @@ public struct OpenAPILinter: PipelineEntryPoint {
             }
         }
 
-        return files
+        return try files.map { fileUrl in
+            let string = fileUrl.absoluteString.replacingOccurrences(of: "file://", with: "")
+
+            guard let url = URL(string: string) else {
+                throw CommonError(message: "Can't convert \(string) to url")
+            }
+
+            return url
+        }
+
     }
 }

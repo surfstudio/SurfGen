@@ -21,8 +21,8 @@ public final class OpenAPILinterTests: XCTestCase {
             self.got = []
         }
 
-        func run(with input: URL) throws {
-            got.append(input)
+        func run(with input: [URL]) throws {
+            got.append(contentsOf: input)
         }
     }
 
