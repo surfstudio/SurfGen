@@ -155,7 +155,11 @@ let package = Package(
         ),
         .target(
             name: "CodeGenerator",
-            dependencies: ["GASTTree", "Common"]
+            dependencies: [
+                "GASTTree",
+                "Common",
+                "Stencil"
+            ]
         ),
         .target(
             name: "PipelinesCLI",
