@@ -8,16 +8,23 @@
 import Foundation
 import Pipelines
 import ReferenceExtractor
+import SwiftCLI
 
+//let rootPath = URL(string: "/Users/lastsprint/repo/iOS/prod/tricolor-swagger/catalog/api.yaml")!
+////let rootPath = URL(string: "/Users/lastsprint/repo/iOS/prod/tricolor-swagger/catalog/kek.yaml")!
+//
+//let pipeline = BuildCodeGeneratorPipelineFactory.build()
+//
+//do {
+//    try pipeline.run(with: rootPath)
+//} catch {
+//    print(error.localizedDescription)
+//}
 
-let rootPath = URL(string: "/Users/lastsprint/repo/iOS/prod/tricolor-swagger/catalog/api.yaml")!
-//let rootPath = URL(string: "/Users/lastsprint/repo/iOS/prod/tricolor-swagger/catalog/kek.yaml")!
+let version = "0.1.0"
+let cli = CLI(name: "surfgen",
+              version: version,
+              description: "surfgen code generator",
+              commands: [LintingCommend()])
 
-let pipeline = BuldGASTTreeFactory.build()
-
-do {
-    try pipeline.run(with: .init(pathToSpec: rootPath))
-} catch {
-    print(error.localizedDescription)
-}
-
+_ = cli.goAndExit()

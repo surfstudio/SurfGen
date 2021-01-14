@@ -9,7 +9,7 @@ import Foundation
 
 /// This is the interface for entity which encapsulate all stages in pipeline
 /// So it's the first stage of pipeline
-public protocol PipelineEntryPoint {
+public protocol PipelineStage {
 
     associatedtype Input
 
@@ -18,19 +18,19 @@ public protocol PipelineEntryPoint {
     func run(with input: Input) throws
 }
 
-extension PipelineEntryPoint {
-    public func erase() -> AnyPipelineEntryPoint<Input> {
+extension PipelineStage {
+    public func erase() -> AnyPipelineStage<Input> {
         return .init(nested: self)
     }
 }
 
 /// Just a Box for any specific type of PipelineEntryPoint
-public struct AnyPipelineEntryPoint<Input>: PipelineEntryPoint {
+public struct AnyPipelineStage<Input>: PipelineStage {
 
-    private let nested: _PipelineEntryPointBox<Input>
+    private let nested: _PipelineStageBox<Input>
 
-    public init<Nested: PipelineEntryPoint>(nested: Nested) where Nested.Input == Input{
-        self.nested = _PipelineEntryPoint(nested: nested)
+    public init<Nested: PipelineStage>(nested: Nested) where Nested.Input == Input{
+        self.nested = _PipelineStage(nested: nested)
     }
 
     public func run(with input: Input) throws {
@@ -39,7 +39,7 @@ public struct AnyPipelineEntryPoint<Input>: PipelineEntryPoint {
 }
 
 @usableFromInline
-internal class _PipelineEntryPointBox<Input>: PipelineEntryPoint {
+internal class _PipelineStageBox<Input>: PipelineStage {
 
     @usableFromInline
     func run(with input: Input) throws {
@@ -48,7 +48,7 @@ internal class _PipelineEntryPointBox<Input>: PipelineEntryPoint {
 }
 
 @usableFromInline
-internal class _PipelineEntryPoint<Nested: PipelineEntryPoint>: _PipelineEntryPointBox<Nested.Input> {
+internal class _PipelineStage<Nested: PipelineStage>: _PipelineStageBox<Nested.Input> {
     let nested: Nested
 
     init(nested: Nested) {

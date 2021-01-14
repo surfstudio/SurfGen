@@ -1,0 +1,107 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+  contact:
+    name: Starkina Maria
+    email: starkina@surfstudio.ru
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+
+security:
+  - bearerAuth: []
+
+paths:
+  /promotions:
+    get:
+      summary: Акции пользователя
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "models.yaml#/components/schemas/Promotion"
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
+          
+  /banners/{location}:
+    parameters:
+      - name: location
+        required: true
+        in: path
+        schema:
+          $ref: "models.yaml#/components/schemas/BannersLocation"
+        description: Место, где отображаются баннеры 
+    get:
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "models.yaml#/components/schemas/Banner"
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
+
+  /promotions/history:
+    get:
+      summary: История активации бонусов
+      parameters:
+        - $ref: "../common/resources/models.yaml#/components/parameters/limit"
+        - $ref: "../common/resources/models.yaml#/components/parameters/offset"
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/BonusHistoryResponse"
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
+
+  /promotions/{id}:  
+    parameters:
+          - name: id
+            required: true
+            in: path
+            schema:
+              type: string
+            description: ID акции 
+    get:
+      summary: Запрашиваем детальную информацию по акции
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/DetailPromotion"
+    post:
+      summary: >
+        Участие в акции. 
+        Тело запроса может отстутствовать если нет никаких доп парамтров (нет бонусов, нет текстфилдов)
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "models.yaml#/components/schemas/AcceptPromotion"
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "../common/models.yaml#/components/schemas/InfoMessage" 
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"

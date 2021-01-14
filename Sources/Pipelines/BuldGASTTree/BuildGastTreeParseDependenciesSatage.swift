@@ -11,12 +11,12 @@ import Common
 import GASTTree
 import CodeGenerator
 
-public struct BuildGastTreeParseDependenciesSatage: PipelineEntryPoint {
+public struct BuildGastTreeParseDependenciesSatage: PipelineStage {
 
     let builder: GASTBuilder
-    let next: AnyPipelineEntryPoint<[DependencyWithTree]>
+    let next: AnyPipelineStage<[DependencyWithTree]>
 
-    public init(builder: GASTBuilder, next: AnyPipelineEntryPoint<[DependencyWithTree]>) {
+    public init(builder: GASTBuilder, next: AnyPipelineStage<[DependencyWithTree]>) {
         self.builder = builder
         self.next = next
     }

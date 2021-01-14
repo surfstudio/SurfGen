@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  BuldGASTTreeFactory.swift
 //  
 //
 //  Created by Александр Кравченков on 13.12.2020.
@@ -10,7 +10,8 @@ import ReferenceExtractor
 import GASTBuilder
 import CodeGenerator
 
-public struct BuldGASTTreeFactory {
+/// Configures pipeline for code generator
+public struct BuildCodeGeneratorPipelineFactory {
 
     public static func provider(str: URL) throws -> ReferenceExtractor {
         return try .init(

@@ -1,0 +1,48 @@
+components:
+  schemas: 
+    SumType:
+      type: string
+      enum: [income, outcome]
+      description: Пополнение или списание
+
+    HistoryResponse:
+      properties:
+        history: 
+          type: array
+          items: 
+            $ref: "#/components/schemas/HistoryItem"
+        metaData: 
+          $ref: "../common/resources/models.yaml#/components/schemas/MetaData"
+    
+    HistoryItem:
+      type: object
+      properties:
+        date:
+          $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+        type:
+          type: string
+          description: Тип платежа
+        detail:
+          type: string
+          description: Описание операции. Не используется в МП
+        sum:
+          type: string
+          description: Сумма операции
+        sumType:
+          $ref: "#/components/schemas/SumType"
+          nullable: true
+        currencyType:
+          type: string
+          description: Приходит формальная строка "Руб.". Других валют нет
+        serviceName:
+          type: string
+          description: Название услуги
+        sourceName:
+          type: string
+          description: Источник
+        iconUrl:
+          type: string
+          description: Ссылка на иконку операции
+        isAuto:
+          type: boolean
+          description: Флаг автоплатежа

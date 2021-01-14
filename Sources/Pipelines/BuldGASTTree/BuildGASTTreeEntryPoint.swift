@@ -12,16 +12,7 @@ import Common
 // MARK: - Nested Types
 
 extension BuildGASTTreeEntryPoint {
-
     public typealias ReferenceExtractorProvider = (URL) throws -> ReferenceExtractor
-
-    public struct Config {
-        public let pathToSpec: URL
-
-        public init(pathToSpec: URL) {
-            self.pathToSpec = pathToSpec
-        }
-    }
 }
 
 // MARK: - BuildGASTTreeEntryPoint Declaration
@@ -40,20 +31,20 @@ public struct BuildGASTTreeEntryPoint {
 
 // MARK: - PipelineEntryPoint
 
-extension BuildGASTTreeEntryPoint: PipelineEntryPoint {
-    public func run(with input: Config) throws {
+extension BuildGASTTreeEntryPoint: PipelineStage {
+    public func run(with input: URL) throws {
         // First stage - we need to extract all dependencies
 
         let extractor = try wrap(
-            self.refExtractorProvider(input.pathToSpec),
+            self.refExtractorProvider(input),
             message: "While configuring"
         )
 
         var (links, dependencies) = try wrap(
             extractor.extract(),
-            message: "While extracting refs for \(input.pathToSpec)"
+            message: "While extracting refs for \(input)"
         )
-        links.append(input.pathToSpec.absoluteString)
+        links.append(input.absoluteString)
 
         // Second stage - Build GAST tree for each file
 

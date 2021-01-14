@@ -88,7 +88,7 @@ public struct StubGASTTreeFactory {
     }
 }
 
-public struct TreeParserStageResultStub: PipelineEntryPoint {
+public struct TreeParserStageResultStub: PipelineStage {
 
     public var next: (([[ServiceModel]]) throws -> Void)?
 

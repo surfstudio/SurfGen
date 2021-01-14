@@ -31,6 +31,6 @@ final class ResolverTests: XCTestCase {
 
         // Act - Assert
 
-        XCTAssertNoThrow(try pipeline.run(with: .init(pathToSpec: URL(string: pathToCatalogApi)!)))
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToCatalogApi)!))
     }
 }

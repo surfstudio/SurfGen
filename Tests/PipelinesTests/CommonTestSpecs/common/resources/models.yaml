@@ -1,0 +1,142 @@
+components:
+  schemas:
+
+    RequestMetaType:
+      type: string
+      enum: ["Login", "ResetPassword"]
+      description: Для чего выполняется запрос
+    
+    AttachType:
+      type: string
+      enum: [image, report, attachment]
+      description: Тип скачиваемого файла. report - договор. attachment - файлы в сообщениях. 
+
+    DocType:
+      type: string
+      enum: [report, text]
+      description: Тип скачиваемого файла. report - договор. attachment - файлы в сообщениях. 
+
+      
+    CaptchaPayloadInfo:
+      type: object
+      description: Объект содержит информацию, которая позволяет однозначно установить верно ли была распознана капча или нет. 
+      properties:
+        hash: 
+          type: string
+          nullable: false
+          description: >
+            Тот же хэш, который приходит в `Captcha`
+        value:
+          type: string
+          nullable: true
+          description: Значение, которое ввел пользователь (распознанное значение)
+
+    Captcha:
+      type: object
+      properties:
+        isNecessary: 
+          type: boolean
+          description: Указывает, нужно отображать капчу или нет. Если нет - остальные поля null
+        hash:
+          type: string
+          nullable: true
+          description: > 
+            Хэш изображения. 
+            Он необходим для того, чтобы когда МП отправили ответ, 
+            сервер мог понять, к какому изображению этот ответ относится.
+        image:
+          type: string
+          format: byte
+          nullable: true
+          description: Картинка в base64.
+
+    Attachment:
+      type: object
+      properties: 
+        attachment:
+          type: string
+          format: byte
+          description: Base64 закондированный файл
+        fileName:
+          type: string
+
+    MetaData: 
+      description: Мета-данные для пагинации
+      properties:
+        offset: 
+          type: integer
+          description: Текущий сдвиг пачки на пагинации
+          example: 0
+        limit: 
+          type: integer
+          description: Размер одной пачки пагинации
+          example: 20
+        count: 
+          type: integer 
+          description: Общий размер списка
+          example: 20
+    
+    InfoBanner: 
+      description: Информационный баннер для главной
+      properties:
+        title: 
+          type: string
+          description: Заголовок
+          example: Внимание
+        text: 
+          type: string
+          description: Основной информационный текст
+          example: Приём платежей за услуги «МАТЧ ПРЕМЬЕР» и «МАТЧ! Футбол» приостановлен в связи с истечением срока действия договора с правообладателем.
+        buttonText:
+          type: string
+          description: Текст кнопки
+          example: Закрыть
+      required:
+        - title
+        - text
+        - buttonText
+    
+    AcceptRequest:
+      description: Принятие акцепта
+      properties:
+        isFirstEnter:
+          type: boolean
+          description: Отправляется в значении true, если в auth было true
+        isNeedAccept:
+          type: boolean
+          description: Отправляется в значении true, если в auth было true
+        confirmCode:
+          type: string
+          description: Отправляется вторым запросом
+
+    AcceptRequestItem:
+      description: Информация по акцепту
+      properties:
+        id: 
+          type: string
+          description: id документа, необходим для скачивания
+        type:
+          $ref: "models.yaml#/components/schemas/DocType"
+          description: >
+            Тип документа, необходим для скачивания.
+            report - метод GET /my-tricolor-api/v1/resources/getAttachment
+            text - метод GET /my-tricolor-api/v1/resources/offer/{id}
+        title: 
+          type: string
+          description: Название документа, отображается в UI
+          example: Текст договора
+    
+  parameters:
+    limit: 
+      name: limit
+      in: query
+      description: Размер пачки пагинации
+      schema:
+        type: integer
+    offset:
+      name: offset
+      in: query
+      description: Сдвиг пагинации
+      schema:
+        type: integer
+

@@ -36,7 +36,7 @@ import Foundation
 /// `path` depend on implementation of dependency extractor
 ///
 /// For example it may be full path.
-public struct Dependency {
+public struct Dependency: Hashable {
     public let pathToCurrentFile: String
     /// Key is $ref value
     /// Value is full path to file which is referenced by key
