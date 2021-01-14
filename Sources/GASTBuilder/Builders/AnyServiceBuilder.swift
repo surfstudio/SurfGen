@@ -10,10 +10,24 @@ import Common
 import Swagger
 import GASTTree
 
+/// Just an interface for any GAST-Service builder
 public protocol ServiceBuilder {
+    /// Build all item which are under `paths:`
     func build(paths: [Path]) throws -> [PathNode]
 }
 
+/// Default implementation for `ServiceBuilder`
+/// 
+/// Builds `path` elements of Open-API spec
+///
+/// **WARNING**
+///
+/// This struct cuts out response bodies without content. So if response doesn't have body then it will be just `nil`
+///
+/// - See: https://swagger.io/docs/specification/paths-and-operations/
+///
+/// - Todo: Parameters declared `in-pace` have `name` property set to empty string. May be it isn't good idea. It isn't affect code generation.
+/// - Todo: In Swagger exists response key `default`. It's response wihout specific `httpCode`. Now we support it. But to honest. I don't like it. May be we need to throw a warning about this.
 public struct AnyServiceBuilder: ServiceBuilder {
 
     let parameterBuilder: ParametersBuilder
@@ -31,6 +45,7 @@ public struct AnyServiceBuilder: ServiceBuilder {
         self.responseBuilder = responseBuilder
     }
 
+    /// Build all item which are under `paths:`
     public func build(paths: [Path]) throws -> [PathNode] {
         return try paths.map { path in
             let operations = try wrap(self.build(operations: path.operations),
@@ -55,7 +70,7 @@ extension AnyServiceBuilder {
                         message: "While parsing operation's parameter \(val.name)")
 
                     guard params.count == 1 else {
-                        throw CustomError(message: "We had sent 1 parameter, and then got \(params.count). It's very strange. Plz contact mainteiners")
+                        throw CommonError(message: "We had sent 1 parameter, and then got \(params.count). It's very strange. Plz contact mainteiners")
                     }
 
                     return .entity(params[0])

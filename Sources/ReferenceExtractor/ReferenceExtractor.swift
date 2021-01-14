@@ -52,7 +52,7 @@ public class ReferenceExtractor {
         let normalizedPath = try pathToSpec.absoluteString.normalized()
 
         guard let url = URL(string: normalizedPath) else {
-            throw CustomError(message: "We couldn't create an URI after make rootPath \(pathToSpec) normalized: \(normalizedPath)")
+            throw CommonError(message: "We couldn't create an URI after make rootPath \(pathToSpec) normalized: \(normalizedPath)")
         }
 
         self.rootSpecPath = url
@@ -62,7 +62,7 @@ public class ReferenceExtractor {
         self.dependencies = []
 
         guard fileProvider.isReadableFile(at: pathToSpec.absoluteString) else {
-            throw CustomError(message: "file at path \(pathToSpec) isn't readable")
+            throw CommonError(message: "file at path \(pathToSpec) isn't readable")
         }
         self.readStack = [pathToSpec.absoluteString]
     }
@@ -98,7 +98,7 @@ extension ReferenceExtractor {
             let parsed = try Yams.load(yaml: str),
             let spec = parsed as? [String: Any]
         else {
-            throw CustomError(message: "Something went wrong with file at path \(path). Wa had parsed it, but we couldn't transform YAML to dictionary")
+            throw CommonError(message: "Something went wrong with file at path \(path). Wa had parsed it, but we couldn't transform YAML to dictionary")
         }
 
         return spec
@@ -134,7 +134,7 @@ extension ReferenceExtractor {
 
     func readOther(filePath: String, fromFile: String, currentDependency: inout Dependency, refString: String) throws {
         guard var rootUrl = URL(string: currentDependency.pathToCurrentFile) else {
-            throw CustomError(message: "Couldn't convert \(currentDependency.pathToCurrentFile) to URI")
+            throw CommonError(message: "Couldn't convert \(currentDependency.pathToCurrentFile) to URI")
         }
 
         rootUrl.deleteLastPathComponent()

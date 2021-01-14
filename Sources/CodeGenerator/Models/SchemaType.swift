@@ -12,6 +12,32 @@ import GASTTree
 ///
 /// It's about entities that is written in `schemas:` part
 /// In terms of this comments any items which is encluded in `schemas:` part is called `entity`
+///
+/// ## Serialization schema
+///
+/// ```YAML
+///
+/// Type:
+///     type: string
+///     enum: ['alias', 'enum', 'object', 'array', 'group']
+///
+/// SchemaType:
+///     type: object
+///     prperties:
+///         name:
+///             type: string
+///         type:
+///             type:
+///                 $ref: "#/components/schemas/Type"
+///         value:
+///             type:
+///                 oneOf:
+///                     - $ref: "primitive_type_alias_model.yaml#/components/schemas/PrimitiveTypeAliasModel"
+///                     - $ref: "schema_enum_model.yaml#/components/schemas/SchemaEnumModel"
+///                     - $ref: "schema_object_model.yaml#/components/schemas/SchemaObjectModel"
+///                     - $ref: "schema_array_model.yaml#/components/schemas/SchemaArrayModel"
+///                     - $ref: "schema_group_model.yaml#/components/schemas/SchemaGroupModel"
+/// ```
 public indirect enum SchemaType {
     /// Just a primitive type
     /// Schema which is primitive is just an alias
@@ -57,19 +83,19 @@ extension SchemaType: Encodable {
 
         switch self {
         case .alias(let val):
-            try container.encode("alias", forKey: .type)
+            try container.encode(Constants.aliasTypeName, forKey: .type)
             try container.encode(val, forKey: .value)
         case .enum(let val):
-            try container.encode("enum", forKey: .type)
+            try container.encode(Constants.enumTypeName, forKey: .type)
             try container.encode(val, forKey: .value)
         case .object(let val):
-            try container.encode("object", forKey: .type)
+            try container.encode(Constants.objectTypeName, forKey: .type)
             try container.encode(val, forKey: .value)
         case .array(let val):
-            try container.encode("array", forKey: .type)
+            try container.encode(Constants.arrayTypeName, forKey: .type)
             try container.encode(val, forKey: .value)
         case .group(let val):
-            try container.encode("group", forKey: .type)
+            try container.encode(Constants.groupTypeName, forKey: .type)
             try container.encode(val, forKey: .value)
         }
     }

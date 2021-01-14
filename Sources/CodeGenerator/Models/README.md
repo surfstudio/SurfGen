@@ -1,83 +1,175 @@
 #  Code Generator Data Structure
 
+Notice 1: 
+> For better understading look at code which will be mentioned in this file. In common, each data structure contains nesten `enum` which is determine what types of `type` this data-type can hold.
+
 There is specific data structure that provides constraints on how the specification should look like (and how entities it it should be linked witheach other). And this contraints is a nature consequence of how Swift types relate with each other.
 
-So it means that this data structure in ither words just a set of rule about how to specification should looks
+This data structure is created through parsing `GASTree` by `TreeParser` and at [this place](../Stages/TreeParserStage/TreeParser/README.md) you can learn more
+
+Notice 2:
+> That is the final data structure before code generation. But some pipelines stages can modify this structure.
 
 ## Components
 
-It's about `components:` part of specification. At this moment there may be only `schemas:` and `parameters:`
-
-### Schemas
-
-It's about `schemas:`
-
-Look at `SchemaType.swift`
-
-`Schema` must be:
-- `enum`
-- `object`
-- `primitive`
+Very big part of a OpenAPI spicification is `components`.
+According to documentation this part contains some of the nested parts:
+- `schemas` - part for data models and data types
+- `parameters` - part for request parameters
+- `requestBodies` - part for reusable request bodies declaration
+- `responses` - part for reusable response bodies desclaration
+- `headers` - part for reusable headers [**UNSUPPORTED**]
 
 ```YAML
 components:
     schemas:
     
-        AnyEnum:
-            type: string
-            enum: [pm, teamlead, developer, qa, analyst, none]
-            
-        AnyObject:
-            type: object
-            properties:
-                prop1:
-                    type: string
-                prop2:
-                    $ref:"#/components/schemas/AnyEnum"
-                    
-        AnyPrimitive:
-            type: string
+    parameters:
+    
+    requestBodies:
+    
+    responses:
+    
+    headers:
 ```
 
-Then `enum`'s type must be only `primitive`
+There is no data structure that fits this OpenAPI element, because we want to process each subcomponent independently of other.
 
----
+But each sub component has specific data structure.
 
-`object`'s properties type must be:
-- `primitive`
-- `reference(Schema)`
-- `array(PropertyType)`
+### Schemas
 
+May contains defintions of:
+- Object - `SchemaObjectModel` swift structure
+- Alias (primitive type with custom name) - `PrimitiveTypeAliasModel`  swift structure
+- Enum  - `SchemaEnumModel`  swift structure
+- Group (oneOf, allOf, anyOf) - `SchemaGroupModel` swift structure
+- Array - `SchemaArrayModel` swift structure
 
-Look at `SchemaObjectModel.swift`
+And may looks like that:
 
-As you can see, we can't parse yet another declaration inside  `object`'s properties
+```YAML
+schemas:
+    Object:                     # <-- Name
+        type: object            # <-- Type
+        properties:             # <-- object fields
+            field1:             # <-- field name
+                type: string    # <-- field schema
+    
+    Alias:
+        type: string
+    
+    Enum:
+        type: string
+        enum: ["One", "Two", "Three"]
+    
+    GroupOneOf:
+        oneOf:
+            - $ref: "#componentns/schemas/Object1"
+            - $ref: "#componentns/schemas/Object2"
 
-And the `reference` may only refers to `Schema`. So it means that you mustn't write reference to `parameter`
+    GroupAllOf:
+        allOf:
+            - $ref: "#componentns/schemas/Object1"
+            - $ref: "#componentns/schemas/Object2"
+            
+    GroupAllOf:
+        oneOf:
+            - $ref: "#componentns/schemas/Object1"
+            - $ref: "#componentns/schemas/Object2"
 
----
+    Array:
+        type: array
+        items:
+            $ref: "#/components/schemas/Alias"
+```
+
+This components represented as `SchemaType` swift structure
 
 ### Parameters
 
-It's about `parameters:`
+Contains only request parameters definition
 
-Any parameter's type must be:
-- `primitive`
-- `reference(Schema)`
-- `array(ParameterType)`
+For example:
 
 ```YAML
 parameters:
-  limit: 
-    name: limit
-    in: query
-    description: Размер пачки пагинации
-    schema:
-      $ref: "..."
-  offset:
-    name: offset
-    in: query
-    description: Сдвиг пагинации
-    schema:
-      type: integer
+    
+    QueryParameter:                             # <-- Name
+        name: id                                # <-- Key in URL
+        required: true                          
+        in: query                               # <-- Location
+        schema:
+            $ref: "#/components/schemas/Object"
+            
+    PathParameter:
+        name: id
+        required: true
+        in: path
+        schema:
+            type: string
 ```
+
+This data structure is represented by `ParameterModel` swift structure.
+
+### RequestBodies and Responses
+
+Contains full description of request body:
+
+```YAML
+requestBodies:
+
+    CatalogRequest:
+        content:
+            "application/json":
+                schema:
+                    $ref: "models.yaml#/components/schemas/Object"
+
+responses:
+
+    CatalogResponse:
+        content:
+            "application/json":
+                schema:
+                    $ref: "models.yaml#/components/schemas/Object"
+```
+
+And at this stage of SurfGen work this components dont't have a data structure, because they were included in `operation` on the previous step
+
+## Paths
+
+This element contains definition of server's methods.
+
+```YAML
+paths:
+    /collection/{id}/action:
+        parameters:
+            - name: id
+              in: path
+              schema:
+                type: string
+            - $ref: "models.yaml#/components/schemas/SomeQueryParameter"
+        get:
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "models.yaml#/components/schemas/ServiceStatus"
+        post:
+            requestBody:
+                content:
+                    "application/json":
+                        schema:
+                            $ref: "models.yaml#/components/schemas/Object"
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "models.yaml#/components/schemas/Object"
+
+
+```
+
+This object is represented by `ServiceModel` and it this project `pathes` are commonly called `services`.

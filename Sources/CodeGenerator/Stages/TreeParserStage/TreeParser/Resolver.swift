@@ -40,7 +40,7 @@ public class Resolver {
 
             let stack = self.refStack.reduce("", { $0 + "--> \($1.pathToFile) : \($1.refValue)" })
 
-            throw CustomError(message: "There is a reference cycle which is found for reference \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(stack)")
+            throw CommonError(message: "There is a reference cycle which is found for reference \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(stack)")
         }
 
         self.refStack.append(intRef)
@@ -56,11 +56,11 @@ public class Resolver {
 
         switch resolved.type.schema.next {
         case .object:
-            throw CustomError(message: "Parameter \(resolved.name) from file '\(node.dependency.pathToCurrentFile) contains object definition in type. This is unsupported.")
+            throw CommonError(message: "Parameter \(resolved.name) from file '\(node.dependency.pathToCurrentFile) contains object definition in type. This is unsupported.")
         case .enum:
-            throw CustomError(message: "Parameter \(resolved.name) from file '\(node.dependency.pathToCurrentFile) contains enum definition in type. This is unsupported.")
+            throw CommonError(message: "Parameter \(resolved.name) from file '\(node.dependency.pathToCurrentFile) contains enum definition in type. This is unsupported.")
         case .group:
-            throw CustomError(message: "Parameter \(resolved.name) from file '\(node.dependency.pathToCurrentFile) contains group definition in type. This is unsupported.")
+            throw CommonError(message: "Parameter \(resolved.name) from file '\(node.dependency.pathToCurrentFile) contains group definition in type. This is unsupported.")
         case .simple(let simple):
             self.refStack.removeLast()
             return .init(componentName: resolved.componentName,
@@ -100,7 +100,7 @@ public class Resolver {
 
             let stack = self.refStack.reduce("", { $0 + "--> \($1.pathToFile) : \($1.refValue) " })
 
-            throw CustomError(message: "There is a reference cycle which is found for reference \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(stack)")
+            throw CommonError(message: "There is a reference cycle which is found for reference \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(stack)")
         }
 
         self.refStack.append(intRef)
@@ -118,7 +118,7 @@ public class Resolver {
         switch resolved.next {
         case .enum(let val):
             guard let type = PrimitiveType(rawValue: val.type) else {
-                throw CustomError(message: "Enum \(val.name) contains type which is not primitive -- \(val.type)")
+                throw CommonError(message: "Enum \(val.name) contains type which is not primitive -- \(val.type)")
             }
             self.refStack.removeLast()
             return .enum(.init(name: val.name, cases: val.cases, type: type))
@@ -145,7 +145,7 @@ public class Resolver {
         let splited = ref.split(separator: "#")
 
         guard splited.count == 2 else {
-            throw CustomError(message: "Reference whics was used in resolving dependency in another file")
+            throw CommonError(message: "Reference whics was used in resolving dependency in another file")
         }
 
         return try self.resolveSchema(ref: "#\(splited[1])", node: dep, other: other)
@@ -153,11 +153,11 @@ public class Resolver {
 
     public func resolveRefToAnotherFile(ref: String, node: DependencyWithTree, other: [DependencyWithTree]) throws -> DependencyWithTree {
         guard let pathToDependencyFile = node.dependency.dependecies[ref] else {
-            throw CustomError(message: "Can't find dependency with ref \(ref) in \(node.dependency.pathToCurrentFile)")
+            throw CommonError(message: "Can't find dependency with ref \(ref) in \(node.dependency.pathToCurrentFile)")
         }
 
         guard let res = other.first(where: { $0.dependency.pathToCurrentFile == pathToDependencyFile }) else {
-            throw CustomError(message: "Can't find dependency which is located in file at path \(pathToDependencyFile)")
+            throw CommonError(message: "Can't find dependency which is located in file at path \(pathToDependencyFile)")
         }
 
         return res
@@ -200,16 +200,16 @@ public class Resolver {
                          node: DependencyWithTree,
                          other: [DependencyWithTree]) throws -> SchemaType {
 
-        let refs = try group.references.map { ref throws -> SchemaGroupModel.Possible in
+        let refs = try group.references.map { ref throws -> SchemaGroupModel.PossibleType in
             let resolved = try self.resolveSchema(ref: ref, node: node, other: other)
 
                 switch resolved {
                 case .alias:
-                    throw CustomError(message: "Group shouldn't contains references on aliases")
+                    throw CommonError(message: "Group shouldn't contains references on aliases")
                 case .enum:
-                    throw CustomError(message: "Group shouldn't contains references on enums")
+                    throw CommonError(message: "Group shouldn't contains references on enums")
                 case .array:
-                    throw CustomError(message: "Group shouldn't contains references on arrays")
+                    throw CommonError(message: "Group shouldn't contains references on arrays")
                 case .group(let val):
                     return .group(val)
                 case .object(let val):
@@ -225,17 +225,17 @@ public class Resolver {
                  other: [DependencyWithTree]) throws -> SchemaArrayModel {
 
 
-        let value = try { () -> SchemaArrayModel.Possible in
+        let value = try { () -> SchemaArrayModel.PossibleType in
             switch arr.type.next {
 
             case .object:
-                throw CustomError(message: "Array shouldn't contains enum definition")
+                throw CommonError(message: "Array shouldn't contains enum definition")
             case .enum:
-                throw CustomError(message: "Array shouldn't contains enum definition")
+                throw CommonError(message: "Array shouldn't contains enum definition")
             case .array:
-                throw CustomError(message: "Array shouldn't contains enum definition")
+                throw CommonError(message: "Array shouldn't contains enum definition")
             case .group:
-                throw CustomError(message: "Array shouldn't contains enum definition")
+                throw CommonError(message: "Array shouldn't contains enum definition")
             case .simple(let val):
                 return .primitive(val.type)
             case .reference(let ref):

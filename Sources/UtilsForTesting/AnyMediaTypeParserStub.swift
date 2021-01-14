@@ -13,9 +13,14 @@ import GASTTree
 import Pipelines
 import CodeGenerator
 
+
+/// **DONT USE IT IN CODE**
+///
 /// It's just a stub object that down't throw errors if request or response contains in=place definition
 /// this needs for e-2-e tests which are check another cases of specfification
 /// And this stub drammatically decrease amount of yaml spec lines which we should write
+///
+/// **DONT USE IT IN CODE**
 public struct AnyMediaTypeParserStub: MediaTypeParser {
 
     public let arrayParser: ArrayParser
@@ -32,12 +37,12 @@ public struct AnyMediaTypeParserStub: MediaTypeParser {
 
         let value = try self.parse(schema: mediaType.schema, current: current, other: other)
 
-        return .init(mediaType: mediaType.typeName, referencedValue: value)
+        return .init(mediaType: mediaType.typeName, type: value)
     }
 
     public func parse(schema: SchemaObjectNode,
                       current: DependencyWithTree,
-                      other: [DependencyWithTree]) throws -> DataModel.Possible {
+                      other: [DependencyWithTree]) throws -> DataModel.PossibleType {
         // got media type schema
         // it can be ref or in-place declaration
         // in-place declaration is unsupported

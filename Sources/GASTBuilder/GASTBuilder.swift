@@ -1,20 +1,27 @@
 //
-//  Builder.swift
+//  GASTBuilder.swift
 //  
 //
 //  Created by Александр Кравченков on 13.12.2020.
 //
 
 import Foundation
-import Yams
 import Swagger
 import Common
 import GASTTree
 
+/// Just an interface for any `GAST` builder
 public protocol GASTBuilder {
     func build(filePath: String) throws -> RootNode
 }
 
+/// Parse `API specification` to `OpenAPI-AST` then build the `GAST` from it.
+///
+/// It's a composition of different builders
+/// This object just read file, build OpenAPI-AST with help of `Swagger` lib
+/// And then run different builders for different spec's components to make `GAST`
+///
+/// - Note: Some builders contains some validation logic
 public struct AnyGASTBuilder: GASTBuilder {
 
     let fileProvider: FileProvider
@@ -38,6 +45,7 @@ public struct AnyGASTBuilder: GASTBuilder {
         self.requestBodiesBuilder = requestBodiesBuilder
     }
 
+    /// Create GAST from spec file
     public func build(filePath: String) throws -> RootNode {
 
         let fileContent = try fileProvider.readTextFile(at: filePath)

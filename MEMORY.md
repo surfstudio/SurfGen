@@ -113,3 +113,18 @@ Group which is referenced to object
 Object wchich i referenced to group
 GroupDefinitionWorksInRequest and response and so on
 
+
+---
+Write tests on resoving reference cycles betwenn different files when models from file A referenced models form file B and B -> A
+
+---
+Test hat we can declare arrays and groups in place for request/response bodies
+---
+
+--- 
+Test building parameters with each possible type
+--
+
+---
+Write tests for parameter with schema declaration in type
+---

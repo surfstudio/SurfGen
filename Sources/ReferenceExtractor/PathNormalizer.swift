@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  PathNormalizer.swift
 //  
 //
 //  Created by Александр Кравченков on 14.12.2020.
@@ -8,8 +8,22 @@
 import Foundation
 import Common
 
+/// Namspace for path normalization operations
 public enum PathNormalizer {
 
+    /// Removes any `relativity` from path
+    /// For example:
+    ///
+    /// ```
+    /// dirA/dirB/../dirC
+    /// ```
+    ///
+    /// will normalized to:
+    ///
+    /// ```
+    /// "dirA/dirC"
+    /// ```
+    ///
     /// For details look in `PathNormalizerTests`
     public static func normalize(path: String) throws -> String {
         let url = URL(string: path)
@@ -39,7 +53,7 @@ public enum PathNormalizer {
         }
 
         if componentsToRemove != 0 {
-            throw CustomError(message: "Error occured while normalizing path \(path)\nThere are more `back steps`(../ <-- this symbol) then path components before it.\nFor example if you have `a/b/../../../` then we don't know what is the path.\nIn common we can assume it as `../` but we considered to don't do it.\nIt might happen because you specify relative path to root specification. Just specify absolute path and it will be fixed.\nIf not - contact us plz")
+            throw CommonError(message: "Error occured while normalizing path \(path)\nThere are more `back steps`(../ <-- this symbol) then path components before it.\nFor example if you have `a/b/../../../` then we don't know what is the path.\nIn common we can assume it as `../` but we considered to don't do it.\nIt might happen because you specify relative path to root specification. Just specify absolute path and it will be fixed.\nIf not - contact us plz")
         }
 
         var result = normalized.reversed().joined(separator: "/")
@@ -53,6 +67,9 @@ public enum PathNormalizer {
 }
 
 extension String {
+
+    /// Returns normalized path
+    /// See `PathNormalizer` for details
     public func normalized() throws -> String {
         return try PathNormalizer.normalize(path: self)
     }

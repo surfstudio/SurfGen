@@ -15,7 +15,7 @@ class PathNormalizerTests: XCTestCase {
     func testStrings() throws {
         // Arrange
 
-        var data = [
+        let data = [
             "/file/path":"/file/path",
             "file/path": "file/path",
             "file/file/file": "file/file/file",
