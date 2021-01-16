@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Keeps all information required to fill service templates
 public struct ServiceGenerationModel {
 
     let name: String

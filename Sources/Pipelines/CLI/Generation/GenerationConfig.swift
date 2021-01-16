@@ -9,6 +9,6 @@ import Foundation
 import CodeGenerator
 
 public struct GenerationConfig: Decodable {
-    
+
     var templates: [Template]
 }

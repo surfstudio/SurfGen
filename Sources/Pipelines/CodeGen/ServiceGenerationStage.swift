@@ -47,6 +47,8 @@ public struct ServiceGenerationStage: PipelineStage {
         
         let schemaModels = modelExtractor.extractModels(from: serviceGenerationModel)
         
+        let enumModels = schemaModels.compactMap { $0.containedEnum }
+        
         // fill templates
         
         try next.run(with: [])

@@ -15,10 +15,11 @@ final class RealDataTests: XCTestCase {
     func testProjectACanBeParsedToGenerationModels() throws {
         // Arrange
 
-        let baseUrl = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/RealDataTests/Tests/RealDataTests.swift
-            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/RealDataTests/Tests
+        let baseUrl = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/RealDataTests/RealDataTests.swift
             .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/RealDataTests
-            .appendingPathComponent("ProjectA")
+            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests
+            .deletingLastPathComponent() //.../SurfGen/Tests
+            .appendingPathComponent("Common/ProjectA")
 
         let urls = [
             baseUrl.appendingPathComponent("auth/api.yaml"),

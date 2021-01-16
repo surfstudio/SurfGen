@@ -12,7 +12,8 @@ public class ModelExtractor {
     
     public init() {
     }
-    
+
+    /// Collects all object and enum schemas to be generated from given service model
     public func extractModels(from service: ServiceGenerationModel) -> [SchemaGenerationModel] {
         return service.paths.flatMap { $0.extractModels() }.uniqueElements()
     }
