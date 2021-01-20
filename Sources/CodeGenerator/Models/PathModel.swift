@@ -1,5 +1,5 @@
 //
-//  ServiceModel.swift
+//  PathModel.swift
 //  
 //
 //  Created by Александр Кравченков on 17.12.2020.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Describes service (or one `path`)
+/// Describes path (or one `path`)
 ///
 /// ```YAML
 /// /billings/payment:
@@ -64,7 +64,7 @@ import Foundation
 ///                         - $ref: "schema_object_model.yaml#/component/schemas/SchemaObjectModel"
 ///                         - $ref: "schema_group_model.yaml#/component/schemas/SchemaGroupModel"
 ///
-/// ServiceModel:
+/// PathModel:
 ///     type: object
 ///     prperties:
 ///         path:
@@ -74,8 +74,21 @@ import Foundation
 ///             items:
 ///                 $ref: "operation_model.yaml#/components/schemas/OperationModel"
 /// ```
-public struct ServiceModel: Encodable {
+public struct PathModel: Encodable {
     /// URI template
     public let path: String
     public let operations: [OperationModel]
+
+    let name: String
+    let pathWithSeparatedParameters: String
+    let parameters: [ParameterModel]
+
+    init(path: String, operations: [OperationModel]) {
+        self.path = path
+        self.operations = operations
+        self.name = path.pathName
+        self.pathWithSeparatedParameters = path.pathWithSeparatedParameters
+        self.parameters = operations[0].pathParameters
+    }
+    
 }

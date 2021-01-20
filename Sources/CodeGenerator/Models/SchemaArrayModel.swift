@@ -67,6 +67,15 @@ public struct SchemaArrayModel: Encodable {
         self.name = name
         self.itemsType = itemsType
     }
+
+    var typeName: String {
+        switch itemsType {
+        case .primitive(let type):
+            return type.rawValue
+        case .reference(let schema):
+            return schema.name
+        }
+    }
 }
 
 extension SchemaArrayModel.PossibleType: Encodable {

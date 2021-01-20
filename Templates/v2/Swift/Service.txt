@@ -1,0 +1,31 @@
+//
+//  {{ service.name }}Service.swift
+//
+
+import NodeKit
+
+public protocol {{ service.name }}Service {
+{% for path in service.paths %}{% for operation in path.operations %}
+    {% if operation.description %}/// {{ operation.description }}
+    {% endif %}func {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
+    #}{{ parameter.name }}: String{% if not forloop.last or operation.queryParameters or operation.requestGenerationModel.typeName %}, {% endif %}{% endfor %}{#
+    #}{% for parameter in operation.queryParameters %}{{ parameter.name }}: {#
+    #}{% if parameter.isTypeArray %}[{% endif %}{#
+    #}{% if parameter.typeName == "integer" %}Int{#
+    #}{% elif parameter.typeName == "number" %}Double{#
+    #}{% elif parameter.typeName == "string" %}String{#
+    #}{% elif parameter.typeName == "boolean" %}Bool{#
+    #}{% else %}{{ parameter.typeName }}{% endif %}{#
+    #}{% if parameter.isTypeArray %}]{% endif %}{#
+    #}{% if not forloop.last or operation.requestGenerationModel %}, {% endif %}{% endfor %}{#
+    #}{% if operation.requestGenerationModel %}{#
+    #}{% if operation.requestGenerationModel.isTypeArray %}[{% endif %}{#
+    #}{{ operation.requestGenerationModel.typeName|lowercaseFirstLetter }}: {{ operation.requestGenerationModel.typeName }}Entity{#
+    #}{% if operation.requestGenerationModel.isTypeArray %}]{% endif %}{#
+    #}{% endif %}) -> Observer<{#
+    #}{% if operation.responseGenerationModel.isTypeArray %}[{% endif %}{#
+    #}{{ operation.responseGenerationModel.typeName }}Entity{#
+    #}{% if operation.responseGenerationModel.isTypeArray %}]{% endif %}{#
+    #}>
+{% endfor %}{% endfor %}
+}

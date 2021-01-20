@@ -7,13 +7,19 @@
 
 import Foundation
 import CodeGenerator
+import Common
+import PathKit
 
 class FileWriterStage: PipelineStage {
     
 
     public func run(with input: [GeneratedCode]) throws {
         
-        // TODO: write files with generated code
+        for sourceCode in input {
+            let filePath = "\(sourceCode.destinationPath)/\(sourceCode.fileName)"
+            try wrap(Path(filePath).write(sourceCode.code),
+                     message: "while writing file at \(filePath)")
+        }
         
     }
 }

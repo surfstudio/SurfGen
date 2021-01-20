@@ -16,7 +16,8 @@ public class DefaultTemplateFiller: TemplateFiller {
     }
 
     public func fillTemplate(at path: String, with context: [String : Any]) throws -> String {
-        let environment = Environment()
+        var environment = Environment()
+        environment.extensions.append(buildTemplateExtension())
         return try wrap(environment.renderTemplate(string: loadTemplate(at: path), context: context),
                         message: "While filling template at path: \(path)")
     }
@@ -25,5 +26,25 @@ public class DefaultTemplateFiller: TemplateFiller {
         let templatePath = Path(path)
         return try wrap(templatePath.read(),
                         message: "While loading template at path: \(path)")
+    }
+
+    private func buildTemplateExtension() -> Extension {
+        let templateExtension = Extension()
+
+        templateExtension.registerFilter("capitalizeFirstLetter") {
+            guard let string = $0 as? String else {
+                return $0
+            }
+            return string.capitalizingFirstLetter()
+        }
+
+        templateExtension.registerFilter("lowercaseFirstLetter") {
+            guard let string = $0 as? String else {
+                return $0
+            }
+            return string.lowercaseFirstLetter()
+        }
+
+        return templateExtension
     }
 }

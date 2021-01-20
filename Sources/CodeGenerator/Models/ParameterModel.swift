@@ -75,6 +75,13 @@ public struct ParameterModel: Encodable {
         case primitive(PrimitiveType)
         case reference(SchemaType)
         case array(SchemaArrayModel)
+
+        var isArray: Bool {
+            if case .array = self {
+                return true
+            }
+            return false
+        }
     }
 
     /// Parameter can be declared both inside operation
@@ -97,7 +104,7 @@ public struct ParameterModel: Encodable {
     ///
     /// For this case `componentName` will be set to `MyParamComponentName`
     public let componentName: String?
-    /// Parametr name (as name in URI)
+    /// Parameter name (as name in URI)
     ///
     /// For `projectId` it will be `projectId`
     public let name: String
@@ -106,6 +113,34 @@ public struct ParameterModel: Encodable {
     public let type: PossibleType
     public let description: String?
     public let isRequired: Bool
+
+    /// This value will be used as type for generation
+    let typeName: String
+    let isTypeArray: Bool
+
+    init(componentName: String?,
+         name: String,
+         location: ParameterNode.Location,
+         type: ParameterModel.PossibleType,
+         description: String?,
+         isRequired: Bool) {
+        self.componentName = componentName
+        self.name = name
+        self.location = location
+        self.type = type
+        self.description = description
+        self.isRequired = isRequired
+
+        switch type {
+        case .array(let array):
+            self.typeName = array.typeName
+        case .primitive(let type):
+            self.typeName = type.rawValue
+        case .reference(let schema):
+            self.typeName = schema.name
+        }
+        self.isTypeArray = type.isArray
+    }
 }
 
 extension ParameterModel.PossibleType: Encodable {

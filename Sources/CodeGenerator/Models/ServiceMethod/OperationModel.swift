@@ -98,6 +98,7 @@ import GASTTree
 ///                 $ref: "#components/schemas/ResponseModelRef"
 /// ```
 public struct OperationModel: Encodable {
+
     /// http method string representation
     ///
     /// For example `GET`
@@ -108,4 +109,33 @@ public struct OperationModel: Encodable {
     public let parameters: [Reference<ParameterModel>]?
     public let responses: [Reference<ResponseModel>]?
     public let requestModel: Reference<RequestModel>?
+
+    let pathParameters: [ParameterModel]
+    let queryParameters: [ParameterModel]
+    let requestGenerationModel: DataGenerationModel?
+    let responseGenerationModel: DataGenerationModel?
+
+    init(httpMethod: String,
+         description: String?,
+         parameters: [Reference<ParameterModel>]?,
+         responses: [Reference<ResponseModel>]?,
+         requestModel: Reference<RequestModel>?) {
+        self.httpMethod = httpMethod
+        self.description = description
+        self.parameters = parameters
+        self.responses = responses
+        self.requestModel = requestModel
+
+        let allParameters = (parameters ?? [])
+            .map { $0.value }
+            .sorted { $0.name < $1.name }
+        self.pathParameters = allParameters.filter { $0.location == .path }
+        self.queryParameters = allParameters.filter { $0.location == .query }
+
+        let request = requestModel?.value.content.first
+        self.requestGenerationModel = request.map { DataGenerationModel(dataModel: $0) }
+
+        let response = responses?.first { $0.value.key.isSuccessStatusCode }?.value.values.first
+        self.responseGenerationModel = response.map { DataGenerationModel(dataModel: $0) }
+    }
 }

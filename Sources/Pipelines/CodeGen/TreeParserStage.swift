@@ -14,9 +14,9 @@ public struct TreeParserStage: PipelineStage {
     public let parser: TreeParser
 
     // just for prototyping. u think that in future we should chage this type from [[]]
-    var next: AnyPipelineStage<[[ServiceModel]]>
+    var next: AnyPipelineStage<[[PathModel]]>
 
-    public init(next: AnyPipelineStage<[[ServiceModel]]>, parser: TreeParser) {
+    public init(next: AnyPipelineStage<[[PathModel]]>, parser: TreeParser) {
         self.next = next
         self.parser = parser
     }

@@ -136,7 +136,7 @@ private extension OperationModel {
     }
 }
 
-private extension ServiceModel {
+private extension PathModel {
     
     func extractModels() -> [SchemaGenerationModel] {
         return operations.flatMap { $0.extractModels() }

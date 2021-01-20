@@ -69,6 +69,21 @@ public indirect enum SchemaType {
     ///         ....
     ///```
     case group(SchemaGroupModel)
+
+    var name: String {
+        switch self {
+        case .alias(let alias):
+            return alias.name
+        case .enum(let enumModel):
+            return enumModel.name
+        case .object(let object):
+            return object.name
+        case .array(let array):
+            return array.typeName
+        case .group(let group):
+            return group.name
+        }
+    }
 }
 
 extension SchemaType: Encodable {

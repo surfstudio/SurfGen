@@ -10,11 +10,11 @@ import Foundation
 /// Keeps all information required to fill service templates
 public struct ServiceGenerationModel {
 
-    let name: String
-    let paths: [ServiceModel]
+    public let name: String
+    public let paths: [PathModel]
 
-    public init(name: String, paths: [ServiceModel]) {
+    public init(name: String, paths: [PathModel]) {
         self.name = name
-        self.paths = paths
+        self.paths = paths.sorted { $0.name < $1.name }
     }
 }

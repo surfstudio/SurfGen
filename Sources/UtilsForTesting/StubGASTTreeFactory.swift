@@ -17,9 +17,9 @@ import CodeGenerator
 public struct StubGASTTreeFactory {
 
     public var fileProvider: FileProvider
-    public var resultClosure: (([[ServiceModel]]) throws -> Void)?
+    public var resultClosure: (([[PathModel]]) throws -> Void)?
 
-    public init(fileProvider: FileProvider, resultClosure: (([[ServiceModel]]) throws -> Void)? = nil) {
+    public init(fileProvider: FileProvider, resultClosure: (([[PathModel]]) throws -> Void)? = nil) {
         self.fileProvider = fileProvider
         self.resultClosure = resultClosure
     }
@@ -90,13 +90,13 @@ public struct StubGASTTreeFactory {
 
 public struct TreeParserStageResultStub: PipelineStage {
 
-    public var next: (([[ServiceModel]]) throws -> Void)?
+    public var next: (([[PathModel]]) throws -> Void)?
 
-    public init(next: (([[ServiceModel]]) throws -> Void)?) {
+    public init(next: (([[PathModel]]) throws -> Void)?) {
         self.next = next
     }
 
-    public func run(with input: [[ServiceModel]]) throws {
+    public func run(with input: [[PathModel]]) throws {
         try self.next?(input)
     }
 }

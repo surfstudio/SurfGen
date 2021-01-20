@@ -10,6 +10,10 @@ import Common
 import CodeGenerator
 
 public struct ServiceGenerationStage: PipelineStage {
+
+    private enum ContextKeys {
+        static let service = "service"
+    }
     
     private let templateFiller: TemplateFiller
     private let modelExtractor: ModelExtractor
@@ -33,7 +37,7 @@ public struct ServiceGenerationStage: PipelineStage {
         self.modelExtractor = modelExtractor
     }
 
-    public func run(with input: [[ServiceModel]]) throws {
+    public func run(with input: [[PathModel]]) throws {
         let compact = input.filter { $0.count != 0 }
         
         guard
@@ -50,8 +54,22 @@ public struct ServiceGenerationStage: PipelineStage {
         let enumModels = schemaModels.compactMap { $0.containedEnum }
         
         // fill templates
+        let generatedService = try fillServiceTemplates(templates.filter { $0.type == .service },
+                                                        with: serviceGenerationModel)
+
+        try next.run(with: generatedService)
         
-        try next.run(with: [])
-        
+    }
+
+    private func fillServiceTemplates(_ templates: [Template],
+                                      with service: ServiceGenerationModel) throws  -> [GeneratedCode] {
+        return try templates.map { template in
+            let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
+                                                             with: [ContextKeys.service: service]),
+                                      message: "while filling template at \(template.templatePath) with service \(service.name)")
+            return GeneratedCode(code: sourceCode,
+                                 fileName: service.name + (template.nameSuffix ?? "") + "." + template.fileExtension,
+                                 destinationPath: template.destinationPath)
+        }
     }
 }
