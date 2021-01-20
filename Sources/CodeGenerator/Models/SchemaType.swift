@@ -79,10 +79,20 @@ public indirect enum SchemaType {
         case .object(let object):
             return object.name
         case .array(let array):
-            return array.typeName
+            return array.itemsType.name
         case .group(let group):
             return group.name
         }
+    }
+}
+
+extension SchemaType {
+    
+    var isObject: Bool {
+        if case .object = self {
+            return true
+        }
+        return false
     }
 }
 

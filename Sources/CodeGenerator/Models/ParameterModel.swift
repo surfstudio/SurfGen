@@ -75,13 +75,6 @@ public struct ParameterModel: Encodable {
         case primitive(PrimitiveType)
         case reference(SchemaType)
         case array(SchemaArrayModel)
-
-        var isArray: Bool {
-            if case .array = self {
-                return true
-            }
-            return false
-        }
     }
 
     /// Parameter can be declared both inside operation
@@ -117,6 +110,7 @@ public struct ParameterModel: Encodable {
     /// This value will be used as type for generation
     let typeName: String
     let isTypeArray: Bool
+    let isTypeObject: Bool
 
     init(componentName: String?,
          name: String,
@@ -133,13 +127,35 @@ public struct ParameterModel: Encodable {
 
         switch type {
         case .array(let array):
-            self.typeName = array.typeName
+            self.typeName = array.itemsType.name
         case .primitive(let type):
             self.typeName = type.rawValue
         case .reference(let schema):
             self.typeName = schema.name
         }
         self.isTypeArray = type.isArray
+        self.isTypeObject = type.isObject
+    }
+}
+
+extension ParameterModel.PossibleType {
+
+    var isArray: Bool {
+        if case .array = self {
+            return true
+        }
+        return false
+    }
+
+    var isObject: Bool {
+        switch self {
+        case .array(let array):
+            return array.itemsType.isObject
+        case .primitive:
+            return false
+        case .reference(let schema):
+            return schema.isObject
+        }
     }
 }
 

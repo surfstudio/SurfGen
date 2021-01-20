@@ -65,3 +65,17 @@ extension ParameterModel.PossibleType {
         }
     }
 }
+
+extension PropertyModel.PossibleType {
+
+    func arrayType() throws -> SchemaArrayModel {
+        switch self {
+        case .primitive(let val):
+            throw CommonError(message: "The property type is primitive: \(val)")
+        case .reference(let val):
+            throw CommonError(message: "The property type is reference \(val)")
+        case .array(let val):
+            return val
+        }
+    }
+}

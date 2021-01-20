@@ -164,7 +164,16 @@ public class Resolver {
     }
 
     private func resolveObject(val: SchemaModelNode, node: DependencyWithTree, other: [DependencyWithTree]) throws -> SchemaType {
-        let unwrapper = { (input: Referenced<PrimitiveType>) -> PropertyModel.PossibleType in
+        let propertyUnwrapper = { (input: Referenced<PrimitiveType>) -> PropertyModel.PossibleType in
+            switch input{
+            case .entity(let val):
+                return .primitive(val)
+            case .ref(let ref):
+                return .reference(try self.resolveSchema(ref: ref, node: node, other: other))
+            }
+        }
+
+        let arrayUnwrapper = { (input: Referenced<PrimitiveType>) -> SchemaArrayModel.PossibleType in
             switch input{
             case .entity(let val):
                 return .primitive(val)
@@ -179,11 +188,11 @@ public class Resolver {
             case .array(let arr):
                 return .init(name: property.name,
                              description: property.description,
-                             type: try unwrapper(arr.itemsType))
+                             type: .array(.init(name: "", itemsType: try arrayUnwrapper(arr.itemsType))))
             case .simple(let val):
                 return .init(name: property.name,
                              description: property.description,
-                             type: try unwrapper(val))
+                             type: try propertyUnwrapper(val))
             }
         }
 

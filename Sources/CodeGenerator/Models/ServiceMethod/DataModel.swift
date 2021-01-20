@@ -57,14 +57,6 @@ public struct DataModel: Encodable {
         case object(SchemaObjectModel)
         case array(SchemaArrayModel)
         case group(SchemaGroupModel)
-
-        var isArray: Bool {
-            if case .array = self {
-                return true
-            }
-            return false
-        }
-        
     }
 
     /// Media-Type value
@@ -81,19 +73,38 @@ public struct DataModel: Encodable {
         self.mediaType = mediaType
         self.type = type
     }
+}
 
-    var typeName: String {
-        switch type {
+extension DataModel.PossibleType {
+
+    var name: String {
+        switch self {
         case .object(let object):
             return object.name
         case .array(let array):
-            return array.typeName
+            return array.itemsType.name
         case .group(let group):
             return group.name
         }
     }
 
-    
+    var isArray: Bool {
+        if case .array = self {
+            return true
+        }
+        return false
+    }
+
+    var isObject: Bool {
+        switch self {
+        case .object:
+            return true
+        case .array(let array):
+            return array.itemsType.isObject
+        case .group:
+            return false
+        }
+    }
 }
 
 extension DataModel.PossibleType: Encodable {

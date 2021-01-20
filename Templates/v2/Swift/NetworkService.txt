@@ -23,16 +23,18 @@ public class {{ service.name }}NetworkService: {{ service.name }}Service {
     #}{% elif parameter.typeName == "number" %}Double{#
     #}{% elif parameter.typeName == "string" %}String{#
     #}{% elif parameter.typeName == "boolean" %}Bool{#
-    #}{% else %}{{ parameter.typeName }}{% endif %}{#
+    #}{% else %}{{ parameter.typeName }}{% if parameter.isTypeObject %}Entity{% endif %}{% endif %}{#
     #}{% if parameter.isTypeArray %}]{% endif %}{#
     #}{% if not forloop.last or operation.requestGenerationModel %}, {% endif %}{% endfor %}{#
     #}{% if operation.requestGenerationModel %}{#
     #}{% if operation.requestGenerationModel.isTypeArray %}[{% endif %}{#
-    #}{{ operation.requestGenerationModel.typeName|lowercaseFirstLetter }}: {{ operation.requestGenerationModel.typeName }}Entity{#
+    #}{{ operation.requestGenerationModel.typeName|lowercaseFirstLetter }}: {{ operation.requestGenerationModel.typeName }}{#
+    #}{% if operation.requestGenerationModel.isTypeObject %}Entity{% endif %}{#
     #}{% if operation.requestGenerationModel.isTypeArray %}]{% endif %}{#
     #}{% endif %}) -> Observer<{#
     #}{% if operation.responseGenerationModel.isTypeArray %}[{% endif %}{#
-    #}{{ operation.responseGenerationModel.typeName }}Entity{#
+    #}{{ operation.responseGenerationModel.typeName }}{#
+    #}{% if operation.responseGenerationModel.isTypeObject %}Entity{% endif %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}]{% endif %}{#
     #}> {
         return builder{% if operation.queryParameters %}
