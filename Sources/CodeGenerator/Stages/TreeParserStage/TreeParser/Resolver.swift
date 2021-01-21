@@ -188,11 +188,13 @@ public class Resolver {
             case .array(let arr):
                 return .init(name: property.name,
                              description: property.description,
-                             type: .array(.init(name: "", itemsType: try arrayUnwrapper(arr.itemsType))))
+                             type: .array(.init(name: "", itemsType: try arrayUnwrapper(arr.itemsType))),
+                             isNullable: property.nullable)
             case .simple(let val):
                 return .init(name: property.name,
                              description: property.description,
-                             type: try propertyUnwrapper(val))
+                             type: try propertyUnwrapper(val),
+                             isNullable: property.nullable)
             }
         }
 

@@ -25,9 +25,6 @@ public protocol SchemaBuilder {
 ///
 /// - See: https://swagger.io/docs/specification/data-models/
 ///
-/// - Bug:
-///     - All `PropertyNode.nullable == true` because of issue in `Swagger` lib.
-///
 /// ## Don't support
 ///
 /// ### Group type may be only reference.
@@ -138,9 +135,8 @@ public struct AnySchemaBuilder: SchemaBuilder {
                                 type: type,
                                 description: property.schema.metadata.description,
                                 example: property.schema.metadata.example,
-                                // FIXME: - Swagger lib crash if its a ref. Why? No idea.
-//                                nullable: property.nullable)
-                                nullable: true)
+                                // Using `property.nullable` will lead to Swagger lib crash when property schema is external reference, because Swagger lib cannot handle external refs
+                                nullable: !property.required)
         }
 
         return SchemaModelNode(name: name, properties: properties, description: meta.description)

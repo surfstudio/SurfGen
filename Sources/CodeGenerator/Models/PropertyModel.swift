@@ -63,6 +63,9 @@ import GASTTree
 ///             description: Property's type
 ///             type:
 ///                 $ref: "#/components/schemas/PossibleType"
+///         isNullable:
+///             description: True if property can have null value
+///             type: boolean
 /// ```
 public struct PropertyModel {
 
@@ -75,6 +78,7 @@ public struct PropertyModel {
     public let name: String
     public let description: String?
     public let type: PossibleType
+    public let isNullable: Bool
 
     /// This value will be used as type for generation
     let typeName: String
@@ -83,10 +87,12 @@ public struct PropertyModel {
 
     init(name: String,
          description: String?,
-         type: PropertyModel.PossibleType) {
+         type: PropertyModel.PossibleType,
+         isNullable: Bool) {
         self.name = name
         self.description = description
         self.type = type
+        self.isNullable = isNullable
 
         switch type {
         case .array(let array):
