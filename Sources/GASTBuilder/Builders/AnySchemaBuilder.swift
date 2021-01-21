@@ -120,7 +120,8 @@ public struct AnySchemaBuilder: SchemaBuilder {
         let model = SchemaEnumNode(
             type: "string",
             cases: stringCases,
-            name: schema.name
+            name: schema.name,
+            description: schema.value.metadata.description
         )
 
         return.init(next: .enum(model))

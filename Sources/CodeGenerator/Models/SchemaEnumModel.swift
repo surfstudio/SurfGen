@@ -39,9 +39,13 @@ import GASTTree
 ///             description: Property's type
 ///             type:
 ///                 $ref: "primitive_type.yaml#/components/schemas/PrimitiveType"
+///         description:
+///             type: string
+///             nullable: true
 /// ```
 public struct SchemaEnumModel: Encodable {
     public let name: String
     public let cases: [String]
     public let type: PrimitiveType
+    public let description: String?
 }

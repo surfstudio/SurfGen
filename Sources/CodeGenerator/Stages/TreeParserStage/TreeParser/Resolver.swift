@@ -121,7 +121,7 @@ public class Resolver {
                 throw CommonError(message: "Enum \(val.name) contains type which is not primitive -- \(val.type)")
             }
             self.refStack.removeLast()
-            return .enum(.init(name: val.name, cases: val.cases, type: type))
+            return .enum(.init(name: val.name, cases: val.cases, type: type, description: val.description))
         case .simple(let val):
             self.refStack.removeLast()
             return .alias(.init(name: val.name, type: val.type))
