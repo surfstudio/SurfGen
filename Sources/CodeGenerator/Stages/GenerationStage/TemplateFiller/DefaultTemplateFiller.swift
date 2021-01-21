@@ -12,8 +12,7 @@ import Stencil
 
 public class DefaultTemplateFiller: TemplateFiller {
     
-    public init() {
-    }
+    public init() {}
 
     public func fillTemplate(at path: String, with context: [String : Any]) throws -> String {
         var environment = Environment()

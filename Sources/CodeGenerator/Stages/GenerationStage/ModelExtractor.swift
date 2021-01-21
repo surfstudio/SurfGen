@@ -10,8 +10,7 @@ import Foundation
 
 public class ModelExtractor {
     
-    public init() {
-    }
+    public init() {}
 
     /// Collects all object and enum schemas to be generated from given service model
     public func extractModels(from service: ServiceGenerationModel) -> [SchemaGenerationModel] {

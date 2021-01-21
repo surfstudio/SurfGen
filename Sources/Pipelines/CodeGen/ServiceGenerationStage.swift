@@ -20,13 +20,13 @@ public struct ServiceGenerationStage: PipelineStage {
     private let templateFiller: TemplateFiller
     private let modelExtractor: ModelExtractor
 
-    var next: AnyPipelineStage<[GeneratedCode]>
+    var next: AnyPipelineStage<[SourceCode]>
 
     private let templates: [Template]
     private let serviceName: String
 
     public init(
-        next: AnyPipelineStage<[GeneratedCode]>,
+        next: AnyPipelineStage<[SourceCode]>,
         templates: [Template],
         serviceName: String,
         templateFiller: TemplateFiller,
@@ -74,36 +74,36 @@ public struct ServiceGenerationStage: PipelineStage {
     }
 
     private func fillServiceTemplates(_ templates: [Template],
-                                      with service: ServiceGenerationModel) throws  -> [GeneratedCode] {
+                                      with service: ServiceGenerationModel) throws  -> [SourceCode] {
         return try templates.map { template in
             let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
                                                                   with: [ContextKeys.service: service]),
                                       message: "while filling template at \(template.templatePath) with service \(service.name)")
-            return GeneratedCode(code: sourceCode,
+            return SourceCode(code: sourceCode,
                                  fileName: service.name + (template.nameSuffix ?? "") + "." + template.fileExtension,
                                  destinationPath: template.destinationPath)
         }
     }
 
     private func fillObjectTemplates(_ templates: [Template],
-                                     with object: SchemaObjectModel) throws  -> [GeneratedCode] {
+                                     with object: SchemaObjectModel) throws  -> [SourceCode] {
         return try templates.map { template in
             let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
                                                                   with: [ContextKeys.model: object]),
                                       message: "while filling template at \(template.templatePath) with model \(object.name)")
-            return GeneratedCode(code: sourceCode,
+            return SourceCode(code: sourceCode,
                                  fileName: object.name + (template.nameSuffix ?? "") + "." + template.fileExtension,
                                  destinationPath: template.destinationPath)
         }
     }
 
     private func fillEnumTemplates(_ templates: [Template],
-                                     with enumModel: SchemaEnumModel) throws  -> [GeneratedCode] {
+                                     with enumModel: SchemaEnumModel) throws  -> [SourceCode] {
         return try templates.map { template in
             let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
                                                                   with: [ContextKeys.enum: enumModel]),
                                       message: "while filling template at \(template.templatePath) with model \(enumModel.name)")
-            return GeneratedCode(code: sourceCode,
+            return SourceCode(code: sourceCode,
                                  fileName: enumModel.name + (template.nameSuffix ?? "") + "." + template.fileExtension,
                                  destinationPath: template.destinationPath)
         }

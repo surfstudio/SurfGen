@@ -13,7 +13,7 @@ import PathKit
 class FileWriterStage: PipelineStage {
     
 
-    public func run(with input: [GeneratedCode]) throws {
+    public func run(with input: [SourceCode]) throws {
         
         for sourceCode in input {
             let filePath = "\(sourceCode.destinationPath)/\(sourceCode.fileName)"
