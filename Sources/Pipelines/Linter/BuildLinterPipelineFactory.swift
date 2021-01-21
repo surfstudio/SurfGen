@@ -35,6 +35,9 @@ public struct BuildLinterPipelineFactory {
             responseBuilder: responsesBuilder
         )
 
+        let templateFiller = DefaultTemplateFiller()
+        let modelExtractor = ModelExtractor()
+
         return .init(
             filesToIgnore: filesToIgnore,
             log: log,
@@ -50,7 +53,11 @@ public struct BuildLinterPipelineFactory {
                         requestBodiesBuilder: requestBodiesBuilder),
                     next: InitCodeGenerationStage(
                         parserStage: .init(
-                            next: ServiceGenerationStage(templatePathes: []).erase(),
+                            next: ServiceGenerationStage(next: FileWriterStage().erase(),
+                                                         templates: [],
+                                                         serviceName: "",
+                                                         templateFiller: templateFiller,
+                                                         modelExtractor: modelExtractor).erase(),
                             parser: buildParser()
                         )
                     ).erase()

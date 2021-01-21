@@ -20,7 +20,7 @@ public struct BuildCodeGeneratorPipelineFactory {
         )
     }
 
-    public static func build() -> BuildGASTTreeEntryPoint {
+    public static func build(templates: [Template], serviceName: String) -> BuildGASTTreeEntryPoint {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
         let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder)
@@ -33,6 +33,9 @@ public struct BuildCodeGeneratorPipelineFactory {
             requestBodyBuilder: requestBodiesBuilder,
             responseBuilder: responsesBuilder
         )
+        
+        let templateFiller = DefaultTemplateFiller()
+        let modelExtractor = ModelExtractor()
 
         return .init(
             refExtractorProvider: self.provider(str:),
@@ -46,7 +49,11 @@ public struct BuildCodeGeneratorPipelineFactory {
                     requestBodiesBuilder: requestBodiesBuilder),
                 next: InitCodeGenerationStage(
                     parserStage: .init(
-                        next: ServiceGenerationStage(templatePathes: []).erase(),
+                        next: ServiceGenerationStage(next: FileWriterStage().erase(),
+                                                     templates: templates,
+                                                     serviceName: serviceName,
+                                                     templateFiller: templateFiller,
+                                                     modelExtractor: modelExtractor).erase(),
                         parser: buildParser()
                     )
                 ).erase()
