@@ -12,7 +12,8 @@ public struct {{ model.name }}Entry: Codable {
 #}{% elif property.typeName == "string" %}String{#
 #}{% elif property.typeName == "boolean" %}Bool{#
 #}{% else %}{{ property.typeName }}{% if property.isTypeObject %}Entity{% endif %}{% endif %}{#
-#}{% if property.isTypeArray %}]{% endif %}
+#}{% if property.isTypeArray %}]{% endif %}{#
+#}{% if property.isNullable %}?{% endif %}
 {% endfor %}
 }
 

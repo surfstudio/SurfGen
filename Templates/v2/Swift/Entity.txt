@@ -7,8 +7,8 @@ import NodeKit
 public struct {{ model.name}}Entity {
 
     // MARK: - Public Properties
-
-{% for property in model.properties %}    {% if property.description %}/// {{ property.description }}
+{% for property in model.properties %}    
+    {% if property.description %}/// {{ property.description }}
     {% endif %}public let {{ property.name }}: {#
     #}{% if property.isTypeArray %}[{% endif %}{#
     #}{% if property.typeName == "integer" %}Int{#
@@ -16,7 +16,8 @@ public struct {{ model.name}}Entity {
     #}{% elif property.typeName == "string" %}String{#
     #}{% elif property.typeName == "boolean" %}Bool{#
     #}{% else %}{{ property.typeName }}{% if property.isTypeObject %}Entity{% endif %}{% endif %}{#
-    #}{% if property.isTypeArray %}]{% endif %}
+    #}{% if property.isTypeArray %}]{% endif %}{#
+    #}{% if property.isNullable %}?{% endif %}
 {% endfor %}
     // MARK: - Initialization
 
@@ -27,7 +28,7 @@ public struct {{ model.name}}Entity {
     #}{% elif property.typeName == "string" %}String{#
     #}{% elif property.typeName == "boolean" %}Bool{#
     #}{% else %}{{ property.typeName }}{% if property.isTypeObject %}Entity{% endif %}{% endif %}{#
-    #}{% if property.isTypeArray %}]{% endif %}{% if not forloop.last %},
+    #}{% if property.isTypeArray %}]{% endif %}{% if property.isNullable %}?{% endif %}{% if not forloop.last %},
                 {% else %}) {{ '{' }}{% endif %}{% endfor %}
     {% for property in model.properties %}    self.{{ property.name }} = {{ property.name }}
     {% endfor %}}

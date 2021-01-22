@@ -1,4 +1,6 @@
-
+{% if enum.description %}/**
+  {{ enum.description }}
+*/{% endif %}
 public enum {{ enum.name }}: {{ enum.type }}, Codable {
     {% for caseValue in enum.cases %}case <#caseValue#> = {{ caseValue }}{% if forloop.last %}
 }{% endif %}
