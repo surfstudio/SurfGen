@@ -136,8 +136,7 @@ public struct AnySchemaBuilder: SchemaBuilder {
                                 type: type,
                                 description: property.schema.metadata.description,
                                 example: property.schema.metadata.example,
-                                // Using `property.nullable` will lead to Swagger lib crash when property schema is external reference, because Swagger lib cannot handle external refs
-                                nullable: !property.required)
+                                nullable: property.isNullable)
         }
 
         return SchemaModelNode(name: name, properties: properties, description: meta.description)
@@ -218,4 +217,14 @@ private extension Schema {
             return .simple(.entity(.integer))
         }
     }
+}
+
+private extension Property {
+
+    // This is the correct way to detect nullable properties
+    // TODO: move this logic to Swagger lib
+    var isNullable: Bool {
+        return !required || schema.metadata.nullable
+    }
+    
 }

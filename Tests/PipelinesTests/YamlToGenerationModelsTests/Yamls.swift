@@ -333,6 +333,7 @@ extension PropertiesTests {
               type: string
             value:
               type: string
+              nullable: true
           required:
             - key
 """.data(using: .utf8)!
