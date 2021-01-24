@@ -83,6 +83,25 @@ public struct SchemaGroupModel: Encodable {
     }
 }
 
+extension SchemaGroupModel.PossibleType {
+
+    var referencedNames: [String] {
+        switch self {
+        case .object(let object):
+            return [object.name]
+        case .group(let group):
+            return group.referencedNames
+        }
+    }
+}
+
+extension SchemaGroupModel {
+
+    var referencedNames: [String] {
+        return references.flatMap { $0.referencedNames }
+    }
+}
+
 extension SchemaGroupModel.PossibleType: Encodable {
     enum Keys: String, CodingKey {
         case type = "type"

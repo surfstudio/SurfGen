@@ -20,10 +20,10 @@ public class {{ service.name }}NetworkService: {{ service.name }}Service {
     }
 
     // MARK: - Public Methods
-{% for path in service.paths %}{% for operation in path.operations %}
+{% for path in service.paths %}{% for operation in path.operations %}{% for requestModelName in operation.requestGenerationModel.typeNames %}
     {% if operation.description %}/// {{ operation.description }}
     {% endif %}public func {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
-    #}{{ parameter.name }}: String{% if not forloop.last or operation.queryParameters or operation.requestGenerationModel.typeName %}, {% endif %}{% endfor %}{#
+    #}{{ parameter.name }}: String, {% endfor %}{#
     #}{% for parameter in operation.queryParameters %}{{ parameter.name }}: {#
     #}{% if parameter.isTypeArray %}[{% endif %}{#
     #}{% if parameter.typeName == "integer" %}Int{#
@@ -32,15 +32,12 @@ public class {{ service.name }}NetworkService: {{ service.name }}Service {
     #}{% elif parameter.typeName == "boolean" %}Bool{#
     #}{% else %}{{ parameter.typeName }}{% if parameter.isTypeObject %}Entity{% endif %}{% endif %}{#
     #}{% if parameter.isTypeArray %}]{% endif %}{#
-    #}{% if not parameter.isRequired %}?{% endif %}{#
-    #}{% if not forloop.last or operation.requestGenerationModel %}, {% endif %}{% endfor %}{#
-    #}{% if operation.requestGenerationModel %}{#
+    #}{% if not parameter.isRequired %}?{% endif %}, {% endfor %}{#
     #}{% if operation.requestGenerationModel.isTypeArray %}[{% endif %}{#
-    #}{{ operation.requestGenerationModel.typeName|lowercaseFirstLetter }}: {{ operation.requestGenerationModel.typeName }}{#
+    #}{{ requestModelName|lowercaseFirstLetter }}: {{ requestModelName }}{#
     #}{% if operation.requestGenerationModel.isTypeObject %}Entity{% endif %}{#
     #}{% if operation.requestGenerationModel.isTypeArray %}]{% endif %}{#
-    #}{% if not operation.requestModel.isRequired %}?{% endif %}{#
-    #}{% endif %}) -> Observer<{#
+    #}{% if not operation.requestModel.isRequired %}?{% endif %}) -> Observer<{#
     #}{% if operation.responseGenerationModel.isTypeArray %}[{% endif %}{#
     #}{{ operation.responseGenerationModel.typeName }}{#
     #}{% if operation.responseGenerationModel.isTypeObject %}Entity{% endif %}{#
@@ -54,7 +51,36 @@ public class {{ service.name }}NetworkService: {{ service.name }}Service {
             #}{% if not forloop.last %}, {% endif %}{% endfor %}){% endif %}){% if operation.requstGenerationModel.encoding == "application/x-www-form-urlencoded" %}
             .encode(as: .formUrl){% endif %}
             .build()
-            .process({% if operation.requestGenerationModel %}{{ operation.requestGenerationModel.typeName|lowercaseFirstLetter }}{% endif %})
+            .process({{ requestModelName|lowercaseFirstLetter }})
     }
-{% endfor %}{% endfor %}
+{% empty %}
+    {% if operation.description %}/// {{ operation.description }}
+    {% endif %}public func {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
+    #}{{ parameter.name }}: String{% if not forloop.last or operation.queryParameters %}, {% endif %}{% endfor %}{#
+    #}{% for parameter in operation.queryParameters %}{{ parameter.name }}: {#
+    #}{% if parameter.isTypeArray %}[{% endif %}{#
+    #}{% if parameter.typeName == "integer" %}Int{#
+    #}{% elif parameter.typeName == "number" %}Double{#
+    #}{% elif parameter.typeName == "string" %}String{#
+    #}{% elif parameter.typeName == "boolean" %}Bool{#
+    #}{% else %}{{ parameter.typeName }}{% if parameter.isTypeObject %}Entity{% endif %}{% endif %}{#
+    #}{% if parameter.isTypeArray %}]{% endif %}{#
+    #}{% if not parameter.isRequired %}?{% endif %}{#
+    #}{% if not forloop.last %}, {% endif %}{% endfor %}) -> Observer<{#
+    #}{% if operation.responseGenerationModel.isTypeArray %}[{% endif %}{#
+    #}{{ operation.responseGenerationModel.typeName }}{#
+    #}{% if operation.responseGenerationModel.isTypeObject %}Entity{% endif %}{#
+    #}{% if operation.responseGenerationModel.isTypeArray %}]{% endif %}{#
+    #}> {
+        return builder{% if operation.queryParameters %}
+            .set(query: [{% for parameter in operation.queryParameters %}{#
+            #}Keys.{{ parameter.name }}: {{ parameter.name }}{% if not forloop.last %}, {% endif %}{% endfor %}]){% endif %}
+            .route(.{{ operation.httpMethod }}, .{{ path.name }}{#
+            #}{% if path.parameters %}({% for parameter in path.parameters %}{{ parameter.name }}: {{ parameter.name }}{#
+            #}{% if not forloop.last %}, {% endif %}{% endfor %}){% endif %}){% if operation.requstGenerationModel.encoding == "application/x-www-form-urlencoded" %}
+            .encode(as: .formUrl){% endif %}
+            .build()
+            .process()
+    }
+{% endfor %}{% endfor %}{% endfor %}
 }

@@ -77,14 +77,15 @@ public struct DataModel: Encodable {
 
 extension DataModel.PossibleType {
 
-    var name: String {
+    // returns multiple values if type is group
+    var nameOptions: [String] {
         switch self {
         case .object(let object):
-            return object.name
+            return [object.name]
         case .array(let array):
-            return array.itemsType.name
+            return [array.itemsType.name]
         case .group(let group):
-            return group.name
+            return group.referencedNames
         }
     }
 
