@@ -1,0 +1,34 @@
+
+import NodeKit
+
+public struct KeyValuePairEntity {
+
+    // MARK: - Public Properties
+    
+    public let key: String
+    
+    public let value: String
+
+    // MARK: - Initialization
+
+    public init(key: String,
+                value: String) {
+        self.key = key
+        self.value = value
+    }
+
+}
+
+// MARK: - DTOConvertible
+
+extension KeyValuePairEntity: DTOConvertible {
+    public static func from(dto model: KeyValuePairEntry) throws -> KeyValuePairEntity {
+        return .init(key: model.key,
+                     value: model.value)
+    }
+
+    public func toDTO() throws -> KeyValuePairEntry {
+        return .init(key: key,
+                     value: value)
+    }
+}

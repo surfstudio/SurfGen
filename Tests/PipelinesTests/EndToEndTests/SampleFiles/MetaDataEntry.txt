@@ -1,0 +1,18 @@
+
+import NodeKit
+
+public struct MetaDataEntry: Codable {
+
+    // MARK: - Public Properties
+
+    public let count: Int
+    public let limit: Int
+    public let offset: Int
+
+}
+
+// MARK: - RawMappable
+
+extension MetaDataEntry: RawMappable {
+    public typealias Raw = Json
+}

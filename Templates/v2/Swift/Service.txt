@@ -43,7 +43,7 @@ public protocol {{ service.name }}Service {
     #}{% if not forloop.last %}, {% endif %}{% endfor %}{#
     #}) -> Observer<{#
     #}{% if operation.responseGenerationModel.isTypeArray %}[{% endif %}{#
-    #}{{ operation.responseGenerationModel.typeName }}{% if operation.responseGenerationModel.isTypeObject %}Entity{% endif %}{#
+    #}{{ operation.responseGenerationModel.typeNames[0] }}{% if operation.responseGenerationModel.isTypeObject %}Entity{% endif %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}]{% endif %}{#
     #}>
 {% endfor %}{% endfor %}{% endfor %}

@@ -1,0 +1,86 @@
+
+import NodeKit
+
+public struct DetailPromotionEntity {
+
+    // MARK: - Public Properties
+    
+    /// ID акции
+    public let id: String
+    
+    /// Список бонусов акции.
+
+    public let bonuses: [PromotionBonusEntity]
+    
+    /// Детальное описание акции
+    public let description: String
+    
+    /// Дата начала акции
+    public let fromDate: ISO8601Date
+    
+    public let imageUrl: String
+    
+    /// Заголовок акции
+    public let name: String
+    
+    /// Массив текстовых полей для ввода.
+    public let textFields: [PromotionInputEntity]
+    
+    /// Дата конца акции
+    public let toDate: ISO8601Date
+    
+    /// Идентификатор акции для подачи заявки на акцию.
+
+    public let tradeInCampaignLink: String
+
+    // MARK: - Initialization
+
+    public init(id: String,
+                bonuses: [PromotionBonusEntity],
+                description: String,
+                fromDate: ISO8601Date,
+                imageUrl: String,
+                name: String,
+                textFields: [PromotionInputEntity],
+                toDate: ISO8601Date,
+                tradeInCampaignLink: String) {
+        self.id = id
+        self.bonuses = bonuses
+        self.description = description
+        self.fromDate = fromDate
+        self.imageUrl = imageUrl
+        self.name = name
+        self.textFields = textFields
+        self.toDate = toDate
+        self.tradeInCampaignLink = tradeInCampaignLink
+    }
+
+}
+
+// MARK: - DTOConvertible
+
+extension DetailPromotionEntity: DTOConvertible {
+    public static func from(dto model: DetailPromotionEntry) throws -> DetailPromotionEntity {
+        return .init(id: model.id,
+                     bonuses: .from(dto: model.bonuses),
+                     description: model.description,
+                     fromDate: model.fromDate,
+                     imageUrl: model.imageUrl,
+                     name: model.name,
+                     textFields: .from(dto: model.textFields),
+                     toDate: model.toDate,
+                     tradeInCampaignLink: model.tradeInCampaignLink)
+    }
+
+    public func toDTO() throws -> DetailPromotionEntry {
+        return .init(id: id,
+                     bonuses: bonuses.toDTO(),
+                     description: description,
+                     fromDate: fromDate,
+                     imageUrl: imageUrl,
+                     name: name,
+                     textFields: textFields.toDTO(),
+                     toDate: toDate,
+                     tradeInCampaignLink: tradeInCampaignLink)
+    }
+}
