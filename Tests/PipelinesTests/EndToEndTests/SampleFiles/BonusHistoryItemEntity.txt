@@ -1,6 +1,9 @@
 
 import NodeKit
 
+/**
+ История активации бонусов
+*/
 public struct BonusHistoryItemEntity {
 
     // MARK: - Public Properties

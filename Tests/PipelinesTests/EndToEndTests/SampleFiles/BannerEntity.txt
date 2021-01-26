@@ -1,6 +1,9 @@
 
 import NodeKit
 
+/**
+ Баннеры пользователя
+*/
 public struct BannerEntity {
 
     // MARK: - Public Properties

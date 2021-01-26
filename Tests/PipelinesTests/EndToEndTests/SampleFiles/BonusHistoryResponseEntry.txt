@@ -5,8 +5,8 @@ public struct BonusHistoryResponseEntry: Codable {
 
     // MARK: - Public Properties
 
-    public let history: [BonusHistoryItemEntity]
-    public let metaData: MetaDataEntity
+    public let history: [BonusHistoryItemEntry]
+    public let metaData: MetaDataEntry
 
 }
 

@@ -1,6 +1,9 @@
 
 import NodeKit
 
+/**
+ Описание бонусов
+*/
 public struct PromotionBonusEntity {
 
     // MARK: - Public Properties

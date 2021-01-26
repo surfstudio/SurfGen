@@ -1,6 +1,9 @@
 
 import NodeKit
 
+/**
+ Описывает TextField в который нужно будет какие-то данные для акции
+*/
 public struct PromotionInputEntity {
 
     // MARK: - Public Properties

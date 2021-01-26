@@ -1,6 +1,9 @@
 
 import NodeKit
 
+/**
+ Акция пользователя
+*/
 public struct PromotionEntity {
 
     // MARK: - Public Properties

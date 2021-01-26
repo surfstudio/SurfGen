@@ -1,6 +1,9 @@
 
 import NodeKit
 
+/**
+ Мета-данные для пагинации
+*/
 public struct MetaDataEntity {
 
     // MARK: - Public Properties

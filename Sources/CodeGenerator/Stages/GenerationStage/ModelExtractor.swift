@@ -30,8 +30,8 @@ private extension SchemaType {
             return arrayModel.extractModels()
         case .group(let groupModel):
             return groupModel.extractModels()
-        case .alias:
-            return []
+        case .alias(let typeAliasModel):
+            return [.typealias(typeAliasModel)]
         }
     }
 }

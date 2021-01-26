@@ -9,7 +9,7 @@ public class {{ service.name }}NetworkService: {{ service.name }}Service {
     // MARK: - Constants
 
     private enum Keys {
-        {% for key in service.codingKeys %}static let {{ key }} = "{{ key }}"{% if not forloop.last %}
+        {% for key in service.codingKeys %}static let {{ key|snakeCaseToCamelCase }} = "{{ key }}"{% if not forloop.last %}
         {% endif %}{% endfor %}
     }
 {% endif %}
@@ -33,22 +33,22 @@ public class {{ service.name }}NetworkService: {{ service.name }}Service {
     #}{% else %}{{ parameter.typeName }}{% if parameter.isTypeObject %}Entity{% endif %}{% endif %}{#
     #}{% if parameter.isTypeArray %}]{% endif %}{#
     #}{% if not parameter.isRequired %}?{% endif %}, {% endfor %}{#
-    #}{% if operation.requestGenerationModel.isTypeArray %}[{% endif %}{#
-    #}{{ requestModelName|lowercaseFirstLetter }}: {{ requestModelName }}{#
+    #}{{ requestModelName|lowercaseFirstLetter }}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}: {#
+        #}{% if operation.requestGenerationModel.isTypeArray %}[{% endif %}{{ requestModelName }}{#
     #}{% if operation.requestGenerationModel.isTypeObject %}Entity{% endif %}{#
     #}{% if operation.requestGenerationModel.isTypeArray %}]{% endif %}{#
-    #}{% if not operation.requestModel.isRequired %}?{% endif %}) -> Observer<{#
+    #}{% if not operation.requestModel.isRequired %}?{% endif %}) -> Observer<{% if operation.responseGenerationModel %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}[{% endif %}{#
-    #}{{ operation.responseGenerationModel.typeName }}{#
+    #}{% for responseName in operation.responseGenerationModel.typeNames %}{{ responseName }}{% endfor %}{#
     #}{% if operation.responseGenerationModel.isTypeObject %}Entity{% endif %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}]{% endif %}{#
-    #}> {
+    #}{% else %}Void{% endif %}> {
         return builder{% if operation.queryParameters %}
             .set(query: [{% for parameter in operation.queryParameters %}{#
-            #}Keys.{{ parameter.name }}: {{ parameter.name }}{% if not forloop.last %}, {% endif %}{% endfor %}]){% endif %}
+            #}Keys.{{ parameter.name|snakeCaseToCamelCase }}: {{ parameter.name }}{% if not forloop.last %}, {% endif %}{% endfor %}]){% endif %}
             .route(.{{ operation.httpMethod }}, .{{ path.name }}{#
             #}{% if path.parameters %}({% for parameter in path.parameters %}{{ parameter.name }}: {{ parameter.name }}{#
-            #}{% if not forloop.last %}, {% endif %}{% endfor %}){% endif %}){% if operation.requstGenerationModel.encoding == "application/x-www-form-urlencoded" %}
+            #}{% if not forloop.last %}, {% endif %}{% endfor %}){% endif %}){% if operation.requestGenerationModel.encoding == "application/x-www-form-urlencoded" %}
             .encode(as: .formUrl){% endif %}
             .build()
             .process({{ requestModelName|lowercaseFirstLetter }})
@@ -66,12 +66,12 @@ public class {{ service.name }}NetworkService: {{ service.name }}Service {
     #}{% else %}{{ parameter.typeName }}{% if parameter.isTypeObject %}Entity{% endif %}{% endif %}{#
     #}{% if parameter.isTypeArray %}]{% endif %}{#
     #}{% if not parameter.isRequired %}?{% endif %}{#
-    #}{% if not forloop.last %}, {% endif %}{% endfor %}) -> Observer<{#
+    #}{% if not forloop.last %}, {% endif %}{% endfor %}) -> Observer<{% if operation.responseGenerationModel %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}[{% endif %}{#
     #}{% for responseName in operation.responseGenerationModel.typeNames%}{{ responseName }}{% endfor %}{#
     #}{% if operation.responseGenerationModel.isTypeObject %}Entity{% endif %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}]{% endif %}{#
-    #}> {
+    #}{% else %}Void{% endif %}> {
         return builder{% if operation.queryParameters %}
             .set(query: [{% for parameter in operation.queryParameters %}{#
             #}Keys.{{ parameter.name }}: {{ parameter.name }}{% if not forloop.last %}, {% endif %}{% endfor %}]){% endif %}

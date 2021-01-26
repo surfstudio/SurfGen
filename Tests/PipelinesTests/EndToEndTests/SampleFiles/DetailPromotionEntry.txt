@@ -6,12 +6,12 @@ public struct DetailPromotionEntry: Codable {
     // MARK: - Public Properties
 
     public let id: String
-    public let bonuses: [PromotionBonusEntity]
+    public let bonuses: [PromotionBonusEntry]
     public let description: String
     public let fromDate: ISO8601Date
     public let imageUrl: String
     public let name: String
-    public let textFields: [PromotionInputEntity]
+    public let textFields: [PromotionInputEntry]
     public let toDate: ISO8601Date
     public let tradeInCampaignLink: String
 

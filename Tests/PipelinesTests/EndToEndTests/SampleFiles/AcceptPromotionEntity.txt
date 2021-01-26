@@ -1,6 +1,10 @@
 
 import NodeKit
 
+/**
+ Модель для согласия участия в акции.  Может включать в себя инфомрацию, которую выбрал/ввел пользователь (если акция уже выполнена)
+
+*/
 public struct AcceptPromotionEntity {
 
     // MARK: - Public Properties

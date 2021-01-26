@@ -1,6 +1,9 @@
 
 import NodeKit
 
+/**
+ Пара ключ-значение
+*/
 public struct KeyValuePairEntity {
 
     // MARK: - Public Properties

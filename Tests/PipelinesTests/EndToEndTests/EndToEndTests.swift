@@ -112,6 +112,11 @@ private extension EndToEndTests {
                      nameSuffix: nil,
                      fileExtension: "txt",
                      templatePath: baseTemplatePath + "/Enum.txt",
+                     destinationPath: testOutputPath),
+            Template(type: .typealias,
+                     nameSuffix: nil,
+                     fileExtension: "txt",
+                     templatePath: baseTemplatePath + "/Typealias.txt",
                      destinationPath: testOutputPath)
         ]
     }
