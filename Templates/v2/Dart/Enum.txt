@@ -1,0 +1,5 @@
+{% if enum.description %}
+/// {{ enum.description }}{% endif %}
+enum {{ enum.name }}: {
+{% for caseValue in enum.cases %}	{{ caseValue }}{% if not forloop.last %},{% endif %}
+{% endfor %}}
