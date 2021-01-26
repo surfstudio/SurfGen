@@ -9,7 +9,7 @@ public protocol {{ service.name }}Service {
     {% if operation.description %}/// {{ operation.description }}
     {% endif %}func {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
     #}{{ parameter.name }}: String, {% endfor %}{#
-    #}{% for parameter in operation.queryParameters %}{{ parameter.name }}: {#
+    #}{% for parameter in operation.queryParameters %}{{ parameter.name|snakeCaseToCamelCase }}: {#
     #}{% if parameter.isTypeArray %}[{% endif %}{#
     #}{% if parameter.typeName == "integer" %}Int{#
     #}{% elif parameter.typeName == "number" %}Double{#
@@ -18,20 +18,21 @@ public protocol {{ service.name }}Service {
     #}{% else %}{{ parameter.typeName }}{% if parameter.isTypeObject %}Entity{% endif %}{% endif %}{#
     #}{% if parameter.isTypeArray %}]{% endif %}{#
     #}{% if not parameter.isRequired %}?{% endif %}, {% endfor %}{#
-    #}{% if operation.requestGenerationModel.isTypeArray %}[{% endif %}{#
-    #}{{ requestModelName|lowercaseFirstLetter }}: {{ requestModelName }}{#
+    #}{{ requestModelName|lowercaseFirstLetter }}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}: {#
+        #}{% if operation.requestGenerationModel.isTypeArray %}[{% endif %}{{ requestModelName }}{#
     #}{% if operation.requestGenerationModel.isTypeObject %}Entity{% endif %}{#
     #}{% if operation.requestGenerationModel.isTypeArray %}]{% endif %}{#
-    #}{% if not operation.requestModel.isRequired %}?{% endif %}) -> Observer<{#
+    #}{% if not operation.requestModel.isRequired %}?{% endif %}) -> Observer<{% if operation.responseGenerationModel %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}[{% endif %}{#
-    #}{{ operation.responseGenerationModel.typeName }}{% if operation.responseGenerationModel.isTypeObject %}Entity{% endif %}{#
+    #}{% for responseName in operation.responseGenerationModel.typeNames %}{{ responseName }}{% endfor %}{#
+    #}{% if operation.responseGenerationModel.isTypeObject %}Entity{% endif %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}]{% endif %}{#
-    #}>
+    #}{% else %}Void{% endif %}>
 {% empty %}
     {% if operation.description %}/// {{ operation.description }}
     {% endif %}func {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
     #}{{ parameter.name }}: String{% if not forloop.last or operation.queryParameters %}, {% endif %}{% endfor %}{#
-    #}{% for parameter in operation.queryParameters %}{{ parameter.name }}: {#
+    #}{% for parameter in operation.queryParameters %}{{ parameter.name|snakeCaseToCamelCase }}: {#
     #}{% if parameter.isTypeArray %}[{% endif %}{#
     #}{% if parameter.typeName == "integer" %}Int{#
     #}{% elif parameter.typeName == "number" %}Double{#
@@ -41,10 +42,11 @@ public protocol {{ service.name }}Service {
     #}{% if parameter.isTypeArray %}]{% endif %}{#
     #}{% if not parameter.isRequired %}?{% endif %}{#
     #}{% if not forloop.last %}, {% endif %}{% endfor %}{#
-    #}) -> Observer<{#
+    #}) -> Observer<{% if operation.responseGenerationModel %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}[{% endif %}{#
-    #}{{ operation.responseGenerationModel.typeNames[0] }}{% if operation.responseGenerationModel.isTypeObject %}Entity{% endif %}{#
+    #}{% for responseName in operation.responseGenerationModel.typeNames %}{{ responseName }}{% endfor %}{#
+    #}{% if operation.responseGenerationModel.isTypeObject %}Entity{% endif %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}]{% endif %}{#
-    #}>
+    #}{% else %}Void{% endif %}>
 {% endfor %}{% endfor %}{% endfor %}
 }

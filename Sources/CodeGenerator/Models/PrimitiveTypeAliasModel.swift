@@ -39,8 +39,12 @@ public struct PrimitiveTypeAliasModel: Encodable {
     public let name: String
     public let type: PrimitiveType
 
+    /// This value will be used as type for generation
+    public let typeName: String
+
     public init(name: String, type: PrimitiveType) {
         self.name = name
         self.type = type
+        self.typeName = type.rawValue
     }
 }

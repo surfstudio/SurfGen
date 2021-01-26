@@ -7,10 +7,11 @@
 
 import Foundation
 
-/// Describes a model (enum or object) which can be generated with an appropriate template
+/// Describes a model (enum, typealias or object) which can be generated with an appropriate template
 public enum SchemaGenerationModel {
     case `enum`(SchemaEnumModel)
     case object(SchemaObjectModel)
+    case `typealias`(PrimitiveTypeAliasModel)
 
     public var containedEnum: SchemaEnumModel? {
         if case let .enum(enumModel) = self {
@@ -26,12 +27,21 @@ public enum SchemaGenerationModel {
         return nil
     }
 
+    public var containedTypealias: PrimitiveTypeAliasModel? {
+        if case let .typealias(typeAliasModel) = self {
+            return typeAliasModel
+        }
+        return nil
+    }
+
     var name: String {
         switch self {
         case .enum(let enumModel):
             return enumModel.name
         case .object(let objectModel):
             return objectModel.name
+        case .typealias(let typeAliasModel):
+            return typeAliasModel.name
         }
     }
 }
@@ -44,10 +54,10 @@ extension SchemaGenerationModel: Hashable {
 
     public static func == (lhs: SchemaGenerationModel, rhs: SchemaGenerationModel) -> Bool {
         switch (lhs, rhs) {
-        case (.enum(let leftEnum), .enum(let rightEnum)):
-            return leftEnum.name == rightEnum.name
-        case (.object(let leftObject), .object(let rightObject)):
-            return leftObject.name == rightObject.name
+        case (.enum, .enum),
+             (.object, .object),
+             (.typealias, .typealias):
+            return lhs.name == rhs.name
         default:
             return false
         }

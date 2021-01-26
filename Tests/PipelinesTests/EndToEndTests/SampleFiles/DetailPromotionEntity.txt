@@ -1,6 +1,9 @@
 
 import NodeKit
 
+/**
+ Детальная информация по акции пользователя
+*/
 public struct DetailPromotionEntity {
 
     // MARK: - Public Properties

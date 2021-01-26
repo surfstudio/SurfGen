@@ -1,6 +1,9 @@
 
 import NodeKit
 
+/**
+ Это общий тип ошибки, который может возвращать сервер.
+*/
 public struct CommonErrorEntity {
 
     // MARK: - Public Properties

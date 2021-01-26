@@ -1,6 +1,9 @@
 
 import NodeKit
 
+/**
+ Модель, которая хранит какое-то сообщение
+*/
 public struct InfoMessageEntity {
 
     // MARK: - Public Properties

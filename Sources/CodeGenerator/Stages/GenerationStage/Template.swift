@@ -15,6 +15,7 @@ public struct Template: Decodable {
         case service
         case model
         case `enum`
+        case `typealias`
     }
 
     public let type: TemplateType

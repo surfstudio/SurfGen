@@ -1,15 +1,15 @@
 
 import NodeKit
-{% if description %}
+{% if model.description %}
 /**
  {{ model.description }}
 */{% endif %}
-public struct {{ model.name}}Entity {
+public struct {{ model.name }}Entity {
 
     // MARK: - Public Properties
 {% for property in model.properties %}    
     {% if property.description %}/// {{ property.description }}
-    {% endif %}public let {{ property.name }}: {#
+    {% endif %}public let {{ property.name|snakeCaseToCamelCase }}: {#
     #}{% if property.isTypeArray %}[{% endif %}{#
     #}{% if property.typeName == "integer" %}Int{#
     #}{% elif property.typeName == "number" %}Double{#
@@ -21,7 +21,7 @@ public struct {{ model.name}}Entity {
 {% endfor %}
     // MARK: - Initialization
 
-    public init({% for property in model.properties %}{{ property.name }}: {#
+    public init({% for property in model.properties %}{{ property.name|snakeCaseToCamelCase }}: {#
     #}{% if property.isTypeArray %}[{% endif %}{#
     #}{% if property.typeName == "integer" %}Int{#
     #}{% elif property.typeName == "number" %}Double{#
@@ -30,7 +30,8 @@ public struct {{ model.name}}Entity {
     #}{% else %}{{ property.typeName }}{% if property.isTypeObject %}Entity{% endif %}{% endif %}{#
     #}{% if property.isTypeArray %}]{% endif %}{% if property.isNullable %}?{% endif %}{% if not forloop.last %},
                 {% else %}) {{ '{' }}{% endif %}{% endfor %}
-    {% for property in model.properties %}    self.{{ property.name }} = {{ property.name }}
+    {% for property in model.properties %}{#
+    #}    self.{{ property.name|snakeCaseToCamelCase }} = {{ property.name|snakeCaseToCamelCase }}
     {% endfor %}}
 
 }
@@ -39,14 +40,14 @@ public struct {{ model.name}}Entity {
 
 extension {{ model.name }}Entity: DTOConvertible {
     public static func from(dto model: {{ model.name }}Entry) throws -> {{ model.name }}Entity {
-        return .init({% for property in model.properties %}{{ property.name }}: {#
+        return .init({% for property in model.properties %}{{ property.name|snakeCaseToCamelCase }}: {#
         #}{% if property.isTypeObject %}.from(dto: model.{{ property.name }}){% else %}model.{{ property.name }}{% endif %}{#
         #}{% if not forloop.last %},
                      {% endif %}{% endfor %})
     }
 
     public func toDTO() throws -> {{ model.name }}Entry {
-        return .init({% for property in model.properties %}{{ property.name }}: {{ property.name }}{#
+        return .init({% for property in model.properties %}{{ property.name }}: {{ property.name|snakeCaseToCamelCase }}{#
         #}{% if property.isTypeObject %}.toDTO(){% endif %}{#
         #}{% if not forloop.last %},
                      {% endif %}{% endfor %})
