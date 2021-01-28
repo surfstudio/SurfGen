@@ -1,0 +1,14 @@
+
+import dagger.Module
+import dagger.Provides
+import retrofit2.Retrofit
+import ru.surfstudio.android.dagger.scope.PerApplication
+
+@Module
+class {{ service.name }}Module {
+    @Provides
+    @PerApplication
+    internal fun provide{{ service.name }}Api(retrofit: Retrofit): {{ service.name }}Api {
+        return retrofit.create({{ service.name }}Api::class.java)
+    }
+}
