@@ -1,6 +1,5 @@
-{% if enum.description %}/**
-  {{ enum.description }}
-*/{% endif %}
+{% for line in enum.description|splitLines %}
+/// {{ line }}{% endfor %}
 public enum {{ enum.name }}: {#
     #}{% if enum.generatedType == "integer" %}Int{#
     #}{% elif enum.generatedType == "number" %}Double{#

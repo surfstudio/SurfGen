@@ -4,12 +4,14 @@ class {{ service.name }}Repository {
 
 	final Http _http;
 {% for path in service.paths %}{% for operation in path.operations %}{% for requestModelName in operation.requestGenerationModel.typeNames %}
-	{% if operation.description %}/// {{ operation.description }}
-	{% endif %}Future<{% if operation.responseGenerationModel %}{#
+	{% for line in operation.description|splitLines %}
+	/// {{ line }}{% endfor %}Future<{% if operation.responseGenerationModel %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}List<{% endif %}{#
     #}{% for responseName in operation.responseGenerationModel.typeNames %}{{ responseName }}{% endfor %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}>{% endif %}{#
-    #}{% else %}void{% endif %}> {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
+    #}{% else %}void{% endif %}> {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}{#
+    #}{% if operation.requestGenerationModel.typeNames.count > 1 %}With{{ requestModelName }}{% endif %}{#
+    #}({% for parameter in operation.pathParameters %}{#
   #}String {{ parameter.name }}, {% endfor %}{#
   #}{% for parameter in operation.queryParameters %}{#
     #}{% if parameter.isTypeArray %}List<{% endif %}{#
@@ -38,8 +40,8 @@ class {{ service.name }}Repository {
     #}.fromJson(response.body);{% endif %}
 	}
 {% empty %}
-  {% if operation.description %}/// {{ operation.description }}
-  {% endif %}Future<{% if operation.responseGenerationModel %}{#
+  {% for line in operation.description|splitLines %}
+	/// {{ line }}{% endfor %}Future<{% if operation.responseGenerationModel %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}List<{% endif %}{#
     #}{% for responseName in operation.responseGenerationModel.typeNames %}{{ responseName }}{% endfor %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}>{% endif %}{#

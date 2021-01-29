@@ -21,8 +21,8 @@ public class {{ service.name }}NetworkService: {{ service.name }}Service {
 
     // MARK: - Public Methods
 {% for path in service.paths %}{% for operation in path.operations %}{% for requestModelName in operation.requestGenerationModel.typeNames %}
-    {% if operation.description %}/// {{ operation.description }}
-    {% endif %}public func {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
+    {% for line in operation.description|splitLines %}
+    /// {{ line }}{% endfor %}public func {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
     #}{{ parameter.name }}: String, {% endfor %}{#
     #}{% for parameter in operation.queryParameters %}{{ parameter.name }}: {#
     #}{% if parameter.isTypeArray %}[{% endif %}{#
@@ -54,8 +54,8 @@ public class {{ service.name }}NetworkService: {{ service.name }}Service {
             .process({{ requestModelName|lowercaseFirstLetter }})
     }
 {% empty %}
-    {% if operation.description %}/// {{ operation.description }}
-    {% endif %}public func {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
+    {% for line in operation.description|splitLines %}
+    /// {{ line }}{% endfor %}public func {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
     #}{{ parameter.name }}: String{% if not forloop.last or operation.queryParameters %}, {% endif %}{% endfor %}{#
     #}{% for parameter in operation.queryParameters %}{{ parameter.name }}: {#
     #}{% if parameter.isTypeArray %}[{% endif %}{#

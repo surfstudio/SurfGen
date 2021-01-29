@@ -51,6 +51,20 @@ public class DefaultTemplateFiller: TemplateFiller {
             return string.snakeCaseToCamelCase()
         }
 
+        templateExtension.registerFilter("trim") {
+            guard let string = $0 as? String else {
+                return $0
+            }
+            return string.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+
+        templateExtension.registerFilter("splitLines") {
+            guard let string = $0 as? String else {
+                return $0
+            }
+            return string.split(separator: "\n")
+        }
+
         return templateExtension
     }
 }
