@@ -1,0 +1,67 @@
+
+import io.reactivex.Completable
+import io.reactivex.Single
+import retrofit2.http.Body
+import retrofit2.http.Header
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
+
+interface {{ service.name }}Api {
+	{% for path in service.paths %}{% for operation in path.operations %}{% for requestModelName in operation.requestGenerationModel.typeNames %}
+	{% if operation.description %}/**
+	 * {{ operation.description }}
+	 */
+	{% endif %}@{{ operation.httpMethod|uppercase }}({{ path.name|camelCaseToCaps }})
+	fun {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}
+    	@Path("{{ parameter.name }}") {{ parameter.name|snakeCaseToCamelCase }}: String,{% endfor %}{#
+    	#}{% for parameter in operation.queryParameters %}
+    	@Query("{{ parameter.name }}") {{ parameter.name|snakeCaseToCamelCase }}: {#
+            #}{% if parameter.isTypeArray %}List<{% endif %}{#
+            #}{% if parameter.typeName == "integer" %}Int{#
+            #}{% elif parameter.typeName == "number" %}Double{#
+            #}{% elif parameter.typeName == "string" %}String{#
+            #}{% elif parameter.typeName == "boolean" %}Boolean{#
+            #}{% else %}{{ parameter.typeName }}{% endif %}{#
+            #}{% if parameter.isTypeArray %}>{% endif %}{#
+            #}{% if not parameter.isRequired %}?{% endif %},{% endfor %}
+    	@Body {{ requestModelName|lowercaseFirstLetter }}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}{#
+        #}: {% if operation.requestGenerationModel.isTypeArray %}List<{% endif %}{{ requestModelName }}{#
+        #}{% if operation.requestGenerationModel.isTypeArray %}>{% endif %}{#
+        #}{% if not operation.requestModel.isRequired %}?{% endif %}
+    ): {% if operation.responseGenerationModel %}Single<{#
+        #}{% if operation.responseGenerationModel.isTypeArray %}List<{% endif %}{#
+        #}{{ operation.responseGenerationModel.typeNames|join }}{#
+        #}{% if operation.responseGenerationModel.isTypeArray %}>{% endif %}{#
+    #}>{% else %}Completable{% endif %}
+	{% empty %}
+    {% if operation.description %}/**
+     * {{ operation.description }}
+     */
+    {% endif %}@{{ operation.httpMethod|uppercase }}({{ path.name|camelCaseToCaps }})
+    fun {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}
+        @Path("{{ parameter.name }}") {{ parameter.name|snakeCaseToCamelCase }}: String{#
+        #}{% if not forloop.last or operation.queryParameters %},{% else %}
+    {% endif %}{% endfor %}{#
+        #}{% for parameter in operation.queryParameters %}
+        @Query("{{ parameter.name }}") {{ parameter.name|snakeCaseToCamelCase }}: {#
+            #}{% if parameter.isTypeArray %}List<{% endif %}{#
+            #}{% if parameter.typeName == "integer" %}Int{#
+            #}{% elif parameter.typeName == "number" %}Double{#
+            #}{% elif parameter.typeName == "string" %}String{#
+            #}{% elif parameter.typeName == "boolean" %}Boolean{#
+            #}{% else %}{{ parameter.typeName }}{% endif %}{#
+            #}{% if parameter.isTypeArray %}>{% endif %}{#
+            #}{% if not parameter.isRequired %}?{% endif %}{#
+            #}{% if not forloop.last %},{% else %}
+    {% endif %}{% endfor %}): {% if operation.responseGenerationModel %}Single<{#
+        #}{% if operation.responseGenerationModel.isTypeArray %}List<{% endif %}{#
+        #}{% for responseName in operation.responseGenerationModel.typeNames %}{{ responseName }}{% endfor %}{#
+        #}{% if operation.responseGenerationModel.isTypeArray %}>{% endif %}{#
+    #}>{% else %}Completable{% endif %}
+    {% endfor %}{% endfor %}{% endfor %}
+}
