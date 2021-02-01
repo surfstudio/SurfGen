@@ -1,0 +1,37 @@
+
+import NodeKit
+
+/**
+ Описание бонусов
+*/
+public struct PromotionBonusEntity {
+
+    // MARK: - Public Properties
+    
+    public let bonusId: String
+    
+    public let bonusName: String
+
+    // MARK: - Initialization
+
+    public init(bonusId: String,
+                bonusName: String) {
+        self.bonusId = bonusId
+        self.bonusName = bonusName
+    }
+
+}
+
+// MARK: - DTOConvertible
+
+extension PromotionBonusEntity: DTOConvertible {
+    public static func from(dto model: PromotionBonusEntry) throws -> PromotionBonusEntity {
+        return .init(bonusId: model.bonusId,
+                     bonusName: model.bonusName)
+    }
+
+    public func toDTO() throws -> PromotionBonusEntry {
+        return .init(bonusId: bonusId,
+                     bonusName: bonusName)
+    }
+}

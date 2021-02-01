@@ -1,0 +1,17 @@
+
+import NodeKit
+
+public struct KeyValuePairEntry: Codable {
+
+    // MARK: - Public Properties
+
+    public let key: String
+    public let value: String
+
+}
+
+// MARK: - RawMappable
+
+extension KeyValuePairEntry: RawMappable {
+    public typealias Raw = Json
+}

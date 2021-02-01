@@ -44,6 +44,13 @@ public class DefaultTemplateFiller: TemplateFiller {
             return string.lowercaseFirstLetter()
         }
 
+        templateExtension.registerFilter("snakeCaseToCamelCase") {
+            guard let string = $0 as? String else {
+                return $0
+            }
+            return string.snakeCaseToCamelCase()
+        }
+
         return templateExtension
     }
 }

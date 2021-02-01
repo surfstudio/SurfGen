@@ -52,7 +52,8 @@ extension String {
         return prefix(1).lowercased() + dropFirst()
     }
 
-    private func snakeCaseToCamelCase() -> String {
+    /// Turns snake_case into camelCase
+    public func snakeCaseToCamelCase() -> String {
         return self.split(separator: "_")
             .map { String($0) }
             .reduce("", { $0 + $1.capitalizingFirstLetter() })

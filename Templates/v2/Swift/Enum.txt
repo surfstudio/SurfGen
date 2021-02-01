@@ -1,5 +1,13 @@
-
-public enum {{ enum.name }}: {{ enum.type }}, Codable {
-    {% for caseValue in enum.cases %}case <#caseValue#> = {{ caseValue }}{% if forloop.last %}
+{% if enum.description %}/**
+  {{ enum.description }}
+*/{% endif %}
+public enum {{ enum.name }}: {#
+    #}{% if enum.generatedType == "integer" %}Int{#
+    #}{% elif enum.generatedType == "number" %}Double{#
+    #}{% elif enum.generatedType == "string" %}String{#
+    #}{% elif enum.generatedType == "boolean" %}Bool{% endif %}, Codable {
+    {% for caseValue in enum.cases %}{#
+    #}case {% if enum.generatedType == "string" %}{{ caseValue }}{% else %}<#caseValue#>{% endif %} = {#
+    #}{% if enum.generatedType == "string" %}"{% endif %}{{ caseValue }}{% if enum.generatedType == "string" %}"{% endif %}{% if forloop.last %}
 }{% endif %}
     {% endfor %}

@@ -1,0 +1,41 @@
+
+import NodeKit
+
+/**
+ Модель для согласия участия в акции.  Может включать в себя инфомрацию, которую выбрал/ввел пользователь (если акция уже выполнена)
+
+*/
+public struct AcceptPromotionEntity {
+
+    // MARK: - Public Properties
+    
+    /// ИД бонуса, который выбрал пользователь
+    public let bonusId: String
+    
+    /// Словарь (ключ-значение), где ключ - `PromotionInput.fieldName`,  а значение - то что пользователь ввел в текстовое поле
+
+    public let userInputs: [KeyValuePairEntity]
+
+    // MARK: - Initialization
+
+    public init(bonusId: String,
+                userInputs: [KeyValuePairEntity]) {
+        self.bonusId = bonusId
+        self.userInputs = userInputs
+    }
+
+}
+
+// MARK: - DTOConvertible
+
+extension AcceptPromotionEntity: DTOConvertible {
+    public static func from(dto model: AcceptPromotionEntry) throws -> AcceptPromotionEntity {
+        return .init(bonusId: model.bonusId,
+                     userInputs: .from(dto: model.userInputs))
+    }
+
+    public func toDTO() throws -> AcceptPromotionEntry {
+        return .init(bonusId: bonusId,
+                     userInputs: userInputs.toDTO())
+    }
+}

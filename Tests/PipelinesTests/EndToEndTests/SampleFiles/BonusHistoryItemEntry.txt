@@ -1,0 +1,19 @@
+
+import NodeKit
+
+public struct BonusHistoryItemEntry: Codable {
+
+    // MARK: - Public Properties
+
+    public let id: String
+    public let bonusName: String
+    public let operationDate: ISO8601Date
+    public let campaignName: String
+
+}
+
+// MARK: - RawMappable
+
+extension BonusHistoryItemEntry: RawMappable {
+    public typealias Raw = Json
+}

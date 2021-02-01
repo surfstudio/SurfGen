@@ -1,0 +1,31 @@
+
+import NodeKit
+
+/**
+ Модель, которая хранит какое-то сообщение
+*/
+public struct InfoMessageEntity {
+
+    // MARK: - Public Properties
+    
+    public let text: String
+
+    // MARK: - Initialization
+
+    public init(text: String) {
+        self.text = text
+    }
+
+}
+
+// MARK: - DTOConvertible
+
+extension InfoMessageEntity: DTOConvertible {
+    public static func from(dto model: InfoMessageEntry) throws -> InfoMessageEntity {
+        return .init(text: model.text)
+    }
+
+    public func toDTO() throws -> InfoMessageEntry {
+        return .init(text: text)
+    }
+}

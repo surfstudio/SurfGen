@@ -1,0 +1,32 @@
+//
+//  PromotionsUrlRoute.swift
+//
+
+import NodeKit
+
+enum PromotionsUrlRoute {
+    case bannersLocation
+    case history
+    case promotions
+    case promotionsId
+}
+
+// MARK: - UrlRouteProvider
+
+extension PromotionsUrlRoute: UrlRouteProvider {
+
+    func url() throws -> URL {
+        let base = URL(string: Urls.base)
+        switch self {
+        case .bannersLocation(let location):
+            return try base + "/banners/" + location + ""
+        case .history:
+            return try base + "/promotions/history"
+        case .promotions:
+            return try base + "/promotions"
+        case .promotionsId(let id):
+            return try base + "/promotions/" + id + ""
+        }
+    }
+
+}

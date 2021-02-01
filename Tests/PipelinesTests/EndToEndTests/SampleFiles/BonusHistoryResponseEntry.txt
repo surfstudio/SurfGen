@@ -1,0 +1,17 @@
+
+import NodeKit
+
+public struct BonusHistoryResponseEntry: Codable {
+
+    // MARK: - Public Properties
+
+    public let history: [BonusHistoryItemEntry]
+    public let metaData: MetaDataEntry
+
+}
+
+// MARK: - RawMappable
+
+extension BonusHistoryResponseEntry: RawMappable {
+    public typealias Raw = Json
+}

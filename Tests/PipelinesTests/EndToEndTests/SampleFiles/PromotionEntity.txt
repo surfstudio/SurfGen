@@ -1,0 +1,66 @@
+
+import NodeKit
+
+/**
+ Акция пользователя
+*/
+public struct PromotionEntity {
+
+    // MARK: - Public Properties
+    
+    /// ID акции
+    public let id: String
+    
+    /// Заголовок акции
+    public let name: String
+    
+    public let imageUrl: String
+    
+    /// Дата начала акции
+    public let fromDate: ISO8601Date
+    
+    /// Короткое описание акции. Оно выводится как превью в списке акций
+    public let summary: String
+    
+    /// Дата конца акции
+    public let toDate: ISO8601Date
+
+    // MARK: - Initialization
+
+    public init(id: String,
+                name: String,
+                imageUrl: String,
+                fromDate: ISO8601Date,
+                summary: String,
+                toDate: ISO8601Date) {
+        self.id = id
+        self.name = name
+        self.imageUrl = imageUrl
+        self.fromDate = fromDate
+        self.summary = summary
+        self.toDate = toDate
+    }
+
+}
+
+// MARK: - DTOConvertible
+
+extension PromotionEntity: DTOConvertible {
+    public static func from(dto model: PromotionEntry) throws -> PromotionEntity {
+        return .init(id: model.id,
+                     name: model.name,
+                     imageUrl: model.imageUrl,
+                     fromDate: model.fromDate,
+                     summary: model.summary,
+                     toDate: model.toDate)
+    }
+
+    public func toDTO() throws -> PromotionEntry {
+        return .init(id: id,
+                     name: name,
+                     imageUrl: imageUrl,
+                     fromDate: fromDate,
+                     summary: summary,
+                     toDate: toDate)
+    }
+}

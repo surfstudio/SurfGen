@@ -139,3 +139,11 @@ public struct OperationModel: Encodable {
         self.responseGenerationModel = response.map { DataGenerationModel(dataModel: $0) }
     }
 }
+
+extension OperationModel {
+
+    var codingKeys: [String] {
+        return queryParameters.map { $0.name }
+    }
+    
+}

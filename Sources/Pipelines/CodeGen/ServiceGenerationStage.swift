@@ -55,6 +55,7 @@ public struct ServiceGenerationStage: PipelineStage {
         
         let objectModels = schemaModels.compactMap { $0.containedObject }
         let enumModels = schemaModels.compactMap { $0.containedEnum }
+        let typeAliasModels = schemaModels.compactMap { $0.containedTypealias }
         
         // fill templates
         let generatedService = try fillServiceTemplates(templates.filter { $0.type == .service },
@@ -69,43 +70,66 @@ public struct ServiceGenerationStage: PipelineStage {
                                          with: $0)
         }
 
-        try next.run(with: generatedService + generatedModels + generatedEnums)
+        let generatedTypeAliases = try typeAliasModels.flatMap {
+            return try fillTypealiasTemplates(templates.filter { $0.type == .typealias },
+                                              with: $0)
+        }
+
+        try next.run(with: generatedService + generatedModels + generatedEnums + generatedTypeAliases)
         
     }
 
     private func fillServiceTemplates(_ templates: [Template],
-                                      with service: ServiceGenerationModel) throws  -> [SourceCode] {
+                                      with model: ServiceGenerationModel) throws  -> [SourceCode] {
         return try templates.map { template in
             let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
-                                                                  with: [ContextKeys.service: service]),
-                                      message: "while filling template at \(template.templatePath) with service \(service.name)")
+                                                                  with: [ContextKeys.service: model]),
+                                      message: "while filling template at \(template.templatePath) with service \(model.name)")
             return SourceCode(code: sourceCode,
-                                 fileName: service.name + (template.nameSuffix ?? "") + "." + template.fileExtension,
+                                 fileName: model.name + (template.nameSuffix ?? "") + "." + template.fileExtension,
                                  destinationPath: template.destinationPath)
         }
     }
 
     private func fillObjectTemplates(_ templates: [Template],
-                                     with object: SchemaObjectModel) throws  -> [SourceCode] {
+                                     with model: SchemaObjectModel) throws  -> [SourceCode] {
         return try templates.map { template in
             let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
-                                                                  with: [ContextKeys.model: object]),
-                                      message: "while filling template at \(template.templatePath) with model \(object.name)")
+                                                                  with: [ContextKeys.model: model]),
+                                      message: "while filling template at \(template.templatePath) with model \(model.name)")
             return SourceCode(code: sourceCode,
-                                 fileName: object.name + (template.nameSuffix ?? "") + "." + template.fileExtension,
-                                 destinationPath: template.destinationPath)
+                              fileName: template.buildFileName(for: model.name),
+                              destinationPath: template.destinationPath)
         }
     }
 
     private func fillEnumTemplates(_ templates: [Template],
-                                     with enumModel: SchemaEnumModel) throws  -> [SourceCode] {
+                                   with model: SchemaEnumModel) throws  -> [SourceCode] {
         return try templates.map { template in
             let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
-                                                                  with: [ContextKeys.enum: enumModel]),
-                                      message: "while filling template at \(template.templatePath) with model \(enumModel.name)")
+                                                                  with: [ContextKeys.enum: model]),
+                                      message: "while filling template at \(template.templatePath) with model \(model.name)")
             return SourceCode(code: sourceCode,
-                                 fileName: enumModel.name + (template.nameSuffix ?? "") + "." + template.fileExtension,
+                                 fileName: template.buildFileName(for: model.name),
                                  destinationPath: template.destinationPath)
         }
+    }
+
+    private func fillTypealiasTemplates(_ templates: [Template],
+                                        with model: PrimitiveTypeAliasModel) throws  -> [SourceCode] {
+        return try templates.map { template in
+            let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
+                                                                  with: [ContextKeys.model: model]),
+                                      message: "while filling template at \(template.templatePath) with model \(model.name)")
+            return SourceCode(code: sourceCode,
+                              fileName: template.buildFileName(for: model.name),
+                              destinationPath: template.destinationPath)
+        }
+    }
+}
+
+private extension Template {
+    func buildFileName(for modelName: String) -> String {
+        return modelName + (nameSuffix ?? "") + "." + fileExtension
     }
 }

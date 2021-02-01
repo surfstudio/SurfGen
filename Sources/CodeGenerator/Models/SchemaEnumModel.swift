@@ -48,4 +48,15 @@ public struct SchemaEnumModel: Encodable {
     public let cases: [String]
     public let type: PrimitiveType
     public let description: String?
+
+    /// This value will be used as type for generation
+    public let generatedType: String
+
+    init(name: String, cases: [String], type: PrimitiveType, description: String?) {
+        self.name = name
+        self.cases = cases.sorted()
+        self.type = type
+        self.description = description
+        self.generatedType = type.rawValue
+    }
 }

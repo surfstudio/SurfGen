@@ -85,10 +85,17 @@ public struct PathModel: Encodable {
 
     init(path: String, operations: [OperationModel]) {
         self.path = path
-        self.operations = operations
+        self.operations = operations.sorted { $0.httpMethod < $1.httpMethod }
         self.name = path.pathName
         self.pathWithSeparatedParameters = path.pathWithSeparatedParameters
         self.parameters = operations[0].pathParameters
     }
     
+}
+
+extension PathModel {
+
+    var codingKeys: [String] {
+        return operations.flatMap { $0.codingKeys }
+    }
 }

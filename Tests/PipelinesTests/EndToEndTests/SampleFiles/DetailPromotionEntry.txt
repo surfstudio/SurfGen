@@ -1,0 +1,24 @@
+
+import NodeKit
+
+public struct DetailPromotionEntry: Codable {
+
+    // MARK: - Public Properties
+
+    public let id: String
+    public let bonuses: [PromotionBonusEntry]
+    public let description: String
+    public let fromDate: ISO8601Date
+    public let imageUrl: String
+    public let name: String
+    public let textFields: [PromotionInputEntry]
+    public let toDate: ISO8601Date
+    public let tradeInCampaignLink: String
+
+}
+
+// MARK: - RawMappable
+
+extension DetailPromotionEntry: RawMappable {
+    public typealias Raw = Json
+}
