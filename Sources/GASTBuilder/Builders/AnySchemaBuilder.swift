@@ -25,9 +25,6 @@ public protocol SchemaBuilder {
 ///
 /// - See: https://swagger.io/docs/specification/data-models/
 ///
-/// - Bug:
-///     - All `PropertyNode.nullable == true` because of issue in `Swagger` lib.
-///
 /// ## Don't support
 ///
 /// ### Group type may be only reference.
@@ -123,7 +120,8 @@ public struct AnySchemaBuilder: SchemaBuilder {
         let model = SchemaEnumNode(
             type: "string",
             cases: stringCases,
-            name: schema.name
+            name: schema.name,
+            description: schema.value.metadata.description
         )
 
         return.init(next: .enum(model))
@@ -138,9 +136,7 @@ public struct AnySchemaBuilder: SchemaBuilder {
                                 type: type,
                                 description: property.schema.metadata.description,
                                 example: property.schema.metadata.example,
-                                // FIXME: - Swagger lib crash if its a ref. Why? No idea.
-//                                nullable: property.nullable)
-                                nullable: true)
+                                nullable: property.isNullable)
         }
 
         return SchemaModelNode(name: name, properties: properties, description: meta.description)
@@ -221,4 +217,14 @@ private extension Schema {
             return .simple(.entity(.integer))
         }
     }
+}
+
+private extension Property {
+
+    // This is the correct way to detect nullable properties
+    // TODO: move this logic to Swagger lib
+    var isNullable: Bool {
+        return !required || schema.metadata.nullable
+    }
+    
 }

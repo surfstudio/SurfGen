@@ -28,7 +28,7 @@ class PropertiesTests: XCTestCase {
         let pathToRoot = "/path/to/services.yaml"
         let fileProvider = FileProviderStub()
         fileProvider.isReadableFile = true
-        fileProvider.files = [pathToRoot: PropertiesTests.yamlWithArrayTypeWillBeParsed]
+        fileProvider.files = [pathToRoot: PropertiesTests.yamlWithArrayPropertyTypeWillBeParsed]
 
         var factory = StubGASTTreeFactory(fileProvider: fileProvider)
 
@@ -57,5 +57,42 @@ class PropertiesTests: XCTestCase {
 
         XCTAssert(arrayProperty.isTypeArray)
         XCTAssertEqual(try arrayProperty.type.arrayType().itemsType.name, "KeyValuePair")
+    }
+
+    /// Required and nullable properties are detected correctly
+    func testNullablePropertyWillBeParsed() throws {
+        // Arrange
+
+        let pathToRoot = "/path/to/services.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [pathToRoot: PropertiesTests.yamlWithNullablePropertyWillBeParsed]
+
+        var factory = StubGASTTreeFactory(fileProvider: fileProvider)
+
+        var result = [[PathModel]]()
+
+        factory.resultClosure = { (val: [[PathModel]]) throws -> Void in
+            result = val
+        }
+
+        let pipeline = factory.build()
+
+        // Act
+
+        try pipeline.run(with: URL(string: pathToRoot)!)
+
+        // Assert
+
+        guard
+            let requestBody = result[0][0].operations[0].requestModel?.value.content[0],
+            case .object(let objectSchema) = requestBody.type
+        else {
+            XCTFail("Can't extract request model properties from \(result)")
+            return
+        }
+
+        XCTAssertFalse(objectSchema.properties[0].isNullable)
+        XCTAssert(objectSchema.properties[1].isNullable)
     }
 }

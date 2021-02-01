@@ -121,7 +121,7 @@ public class Resolver {
                 throw CommonError(message: "Enum \(val.name) contains type which is not primitive -- \(val.type)")
             }
             self.refStack.removeLast()
-            return .enum(.init(name: val.name, cases: val.cases, type: type))
+            return .enum(.init(name: val.name, cases: val.cases, type: type, description: val.description))
         case .simple(let val):
             self.refStack.removeLast()
             return .alias(.init(name: val.name, type: val.type))
@@ -188,11 +188,13 @@ public class Resolver {
             case .array(let arr):
                 return .init(name: property.name,
                              description: property.description,
-                             type: .array(.init(name: "", itemsType: try arrayUnwrapper(arr.itemsType))))
+                             type: .array(.init(name: "", itemsType: try arrayUnwrapper(arr.itemsType))),
+                             isNullable: property.nullable)
             case .simple(let val):
                 return .init(name: property.name,
                              description: property.description,
-                             type: try propertyUnwrapper(val))
+                             type: try propertyUnwrapper(val),
+                             isNullable: property.nullable)
             }
         }
 
