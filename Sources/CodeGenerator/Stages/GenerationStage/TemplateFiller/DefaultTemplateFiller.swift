@@ -30,25 +30,20 @@ public class DefaultTemplateFiller: TemplateFiller {
     private func buildTemplateExtension() -> Extension {
         let templateExtension = Extension()
 
-        templateExtension.registerFilter("capitalizeFirstLetter") {
-            guard let string = $0 as? String else {
-                return $0
-            }
-            return string.capitalizingFirstLetter()
+        templateExtension.registerStringFilter("capitalizeFirstLetter") {
+            $0.capitalizingFirstLetter()
         }
 
-        templateExtension.registerFilter("lowercaseFirstLetter") {
-            guard let string = $0 as? String else {
-                return $0
-            }
-            return string.lowercaseFirstLetter()
+        templateExtension.registerStringFilter("lowercaseFirstLetter") {
+            $0.lowercaseFirstLetter()
         }
 
-        templateExtension.registerFilter("snakeCaseToCamelCase") {
-            guard let string = $0 as? String else {
-                return $0
-            }
-            return string.snakeCaseToCamelCase()
+        templateExtension.registerStringFilter("snakeCaseToCamelCase") {
+            $0.snakeCaseToCamelCase()
+        }
+
+        templateExtension.registerStringFilter("camelCaseToCaps") {
+            $0.camelCaseToCaps()
         }
 
         templateExtension.registerFilter("trim") {
@@ -66,5 +61,17 @@ public class DefaultTemplateFiller: TemplateFiller {
         }
 
         return templateExtension
+    }
+}
+
+private extension Extension {
+
+    func registerStringFilter(_ name: String, stringFilter: @escaping (String) -> String) {
+        registerFilter(name) {
+            guard let stringValue = $0 as? String else {
+                return $0
+            }
+            return stringFilter(stringValue)
+        }
     }
 }

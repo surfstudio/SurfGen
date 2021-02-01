@@ -54,14 +54,23 @@ extension String {
 
     /// Turns snake_case into camelCase
     public func snakeCaseToCamelCase() -> String {
-        return self.split(separator: "_")
+        return self
+            .split(separator: "_")
             .map { String($0) }
             .reduce("", { $0 + $1.capitalizingFirstLetter() })
             .lowercaseFirstLetter()
     }
 
+    /// Turns camelCase into CAPS_STRING
+    public func camelCaseToCaps() -> String {
+        return self
+            .replacingOccurrences(of: "(?<!^)(?=[A-Z])", with: "_", options: .regularExpression)
+            .uppercased()
+    }
+
     private func pathToCamelCase() -> String {
-        return self.split(whereSeparator: { $0 == "/" || $0 == "_" })
+        return self
+            .split(whereSeparator: { $0 == "/" || $0 == "_" })
             .map { String($0) }
             .reduce("", { $0 + $1.capitalizingFirstLetter() })
             .lowercaseFirstLetter()

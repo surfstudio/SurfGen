@@ -6,7 +6,7 @@ public enum {{ enum.name }}: {#
     #}{% elif enum.generatedType == "string" %}String{#
     #}{% elif enum.generatedType == "boolean" %}Bool{% endif %}, Codable {
     {% for caseValue in enum.cases %}{#
-    #}case {% if enum.generatedType == "string" %}{{ caseValue }}{% else %}<#caseValue#>{% endif %} = {#
+    #}case {% if enum.generatedType == "string" %}{{ caseValue|snakeCaseToCamelCase }}{% else %}<#caseValue#>{% endif %} = {#
     #}{% if enum.generatedType == "string" %}"{% endif %}{{ caseValue }}{% if enum.generatedType == "string" %}"{% endif %}{% if forloop.last %}
 }{% endif %}
     {% endfor %}
