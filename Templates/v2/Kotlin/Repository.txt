@@ -63,13 +63,13 @@ class {{ service.name }}Repository @Inject constructor(
             #}{% if not forloop.last %},{% elif operation.parameters.count > 1 %}
     {% endif %}{% endfor %}): Single</* Domain Model Name */> =
         {{ service.name|lowercaseFirstLetter }}Api.{{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}{#
-        #}({% for parameter in operation.pathParameters %}
-            {{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }}{#
-            #}{% if not forloop.last or operation.queryParameters %},{% else %}
+        #}({% for parameter in operation.pathParameters %}{% if operation.parameters.count > 1 %}
+            {% endif %}{{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }}{#
+            #}{% if not forloop.last or operation.queryParameters %},{% elif operation.parameters.count > 1 %}
         {% endif %}{% endfor %}{#
-            #}{% for parameter in operation.queryParameters %}
-            {{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }}{#
-            #}{% if not forloop.last %},{% else %}
+            #}{% for parameter in operation.queryParameters %}{% if operation.parameters.count > 1 %}
+            {% endif %}{{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }}{#
+            #}{% if not forloop.last %},{% elif operation.parameters.count > 1 %}
         {% endif %}{% endfor %}{#
         #}).transform{% if operation.responseGenerationModel.isTypeArray %}Collection{% endif %}()
     {% endfor %}{% endfor %}{% endfor %}
