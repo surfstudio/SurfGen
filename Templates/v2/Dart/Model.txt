@@ -1,15 +1,15 @@
-{% if model.description %}
-/// {{ model.description }}{% endif %}
+{% for line in model.description|splitLines %}
+/// {{ line }}{% endfor %}
 class {{ model.name }} {
-	{{ model.name }}(
-		{% for property in model.properties %}this._{{ property.name }},{% if not forloop.last %}
+	{{ model.name }}({
+		{% for property in model.properties %}this.{{ property.name }},{% if not forloop.last %}
 		{% endif %}{% endfor %}
-	);
+	});
 
 	factory {{ model.name }}.fromJson(Map<String, Object> json) {
 		return {{ model.name }}(
 			{% for property in model.properties %}{% if not property.isTypeObject %}{#
-			#}_{{ property.name }}: json.get<{% if property.isTypeArray %}List<{% endif %}{#
+			#}{{ property.name }}: json.get<{% if property.isTypeArray %}List<{% endif %}{#
 			#}{% if property.typeName == "integer" %}int{#
     		#}{% elif property.typeName == "number" %}double{#
     		#}{% elif property.typeName == "string" %}String{#
@@ -25,8 +25,8 @@ class {{ model.name }} {
 		)
 	}{#
 	#}{% for property in model.properties %}
-	{% if property.description %}
-	/// {{ property.description }}{% endif %}
+	{% for line in property.description|splitLines %}
+	/// {{ line }}{% endfor %}
 	final {% if property.isTypeArray %}List<{% endif %}{#
 	#}{% if property.typeName == "integer" %}int{#
     #}{% elif property.typeName == "number" %}double{#
@@ -34,12 +34,12 @@ class {{ model.name }} {
     #}{% elif property.typeName == "boolean" %}bool{#
     #}{% else %}{{ property.typeName }}{% endif %}{#
     #}{% if property.isTypeArray %}>{% endif %}{#
-	#} _{{ property.name }};{% endfor %}
+	#} {{ property.name }};{% endfor %}
 
 	Map<String, Object> get json => {
 		{% for property in model.properties %}{#
-		#}'{{ property.name }}': _{{ property.name }}{#
-		#}{% if property.isTypeObject %}{% if property.isTypeArray %}.map((e) => e.json){% else %}.json{% endif %}{% endif %}{#
+		#}'{{ property.name }}': {{ property.name }}{#
+		#}{% if property.isTypeObject %}{% if property.isTypeArray %}.map((e) => e.json){% else %}.json{% endif %}{% endif %},{#
 		#}{% if not forloop.last %}
 		{% endif %}{% endfor %}
 	};

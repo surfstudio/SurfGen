@@ -46,6 +46,20 @@ public class DefaultTemplateFiller: TemplateFiller {
             $0.camelCaseToCaps()
         }
 
+        templateExtension.registerFilter("trim") {
+            guard let string = $0 as? String else {
+                return $0
+            }
+            return string.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+
+        templateExtension.registerFilter("splitLines") {
+            guard let string = $0 as? String else {
+                return $0
+            }
+            return string.split(separator: "\n")
+        }
+
         return templateExtension
     }
 }

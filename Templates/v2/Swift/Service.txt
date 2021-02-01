@@ -6,8 +6,8 @@ import NodeKit
 
 public protocol {{ service.name }}Service {
 {% for path in service.paths %}{% for operation in path.operations %}{% for requestModelName in operation.requestGenerationModel.typeNames %}
-    {% if operation.description %}/// {{ operation.description }}
-    {% endif %}func {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
+    {% for line in operation.description|splitLines %}
+    /// {{ line }}{% endfor %}func {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
     #}{{ parameter.name }}: String, {% endfor %}{#
     #}{% for parameter in operation.queryParameters %}{{ parameter.name|snakeCaseToCamelCase }}: {#
     #}{% if parameter.isTypeArray %}[{% endif %}{#
@@ -29,8 +29,8 @@ public protocol {{ service.name }}Service {
     #}{% if operation.responseGenerationModel.isTypeArray %}]{% endif %}{#
     #}{% else %}Void{% endif %}>
 {% empty %}
-    {% if operation.description %}/// {{ operation.description }}
-    {% endif %}func {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
+    {% for line in operation.description|splitLines %}
+    /// {{ line }}{% endfor %}func {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
     #}{{ parameter.name }}: String{% if not forloop.last or operation.queryParameters %}, {% endif %}{% endfor %}{#
     #}{% for parameter in operation.queryParameters %}{{ parameter.name|snakeCaseToCamelCase }}: {#
     #}{% if parameter.isTypeArray %}[{% endif %}{#

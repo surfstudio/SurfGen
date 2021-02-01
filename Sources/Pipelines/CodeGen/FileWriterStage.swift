@@ -16,8 +16,12 @@ class FileWriterStage: PipelineStage {
     public func run(with input: [SourceCode]) throws {
         
         for sourceCode in input {
-            let filePath = "\(sourceCode.destinationPath)/\(sourceCode.fileName)"
-            try wrap(Path(filePath).write(sourceCode.code),
+            guard Path(sourceCode.destinationPath).exists else {
+                throw CommonError(message: "directory \(sourceCode.destinationPath) doesn't exist")
+            }
+            
+            let filePath = Path("\(sourceCode.destinationPath)/\(sourceCode.fileName)")
+            try wrap(filePath.write(sourceCode.code),
                      message: "while writing file at \(filePath)")
         }
         
