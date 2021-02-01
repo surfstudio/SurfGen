@@ -1,0 +1,23 @@
+{% if enum.description %}/**
+ * {{ enum.description }}
+ */
+{% endif %}enum class {{ enum.name }}(val value: {#
+    #}{% if enum.generatedType == "integer" %}Int{#
+    #}{% elif enum.generatedType == "number" %}Double{#
+    #}{% elif enum.generatedType == "string" %}String{#
+    #}{% elif enum.generatedType == "boolean" %}Boolean{% endif %}) {
+	{% for caseValue in enum.cases %}{% if enum.generatedType == "string" %}{#
+	#}{{ caseValue|camelCaseToCaps }}{% else %}/* case name */{% endif %}{#
+	#}({% if enum.generatedType == "string" %}"{{ caseValue }}"{% else %}{{ caseValue }}{% endif %}){% if not forloop.last %},
+	{% else %};{% endif %}{% endfor %}
+	{% if enum.generatedType == "string" %}{% for caseValue in enum.cases %}
+	fun is{{ caseValue|capitalizeFirstLetter }}(): Boolean = this == {{ caseValue|camelCaseToCaps }}{% endfor %}
+	{% endif %}
+	companion object {
+		fun getBy(value: {#
+    		#}{% if enum.generatedType == "integer" %}Int{#
+    		#}{% elif enum.generatedType == "number" %}Double{#
+    		#}{% elif enum.generatedType == "string" %}String{#
+    		#}{% elif enum.generatedType == "boolean" %}Boolean{% endif %}) = values().find { it.value.equals(value) }
+	}
+}

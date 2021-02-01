@@ -1,0 +1,20 @@
+import com.google.gson.annotations.SerializedName
+
+{% if model.description %}/**
+ * {{ model.description }}
+ */
+{% endif %}data class {{ model.name }}(
+ 	{% for property in model.properties %}
+ 	{% if property.description != nil %}// {{ property.description }}
+ 	{% endif %}@SerializedName("{{ property.name }}")
+ 	val {{ property.name|snakeCaseToCamelCase }}: {#
+    	#}{% if property.isTypeArray %}<List{% endif %}{#
+    	#}{% if property.typeName == "integer" %}Int{#
+    	#}{% elif property.typeName == "number" %}Double{#
+    	#}{% elif property.typeName == "string" %}String{#
+    	#}{% elif property.typeName == "boolean" %}Boolean{#
+    	#}{% else %}{{ property.typeName }}{% endif %}{#
+    	#}{% if property.isTypeArray %}>{% endif %}{#
+    	#}{% if property.isNullable %}?{% endif %}{% if not forloop.last %},
+ 	{% endif %}{% endfor %}
+ )
