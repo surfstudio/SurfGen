@@ -1,0 +1,17 @@
+
+import NodeKit
+
+public struct PromotionBonusEntry: Codable {
+
+    // MARK: - Public Properties
+
+    public let bonusId: String?
+    public let bonusName: String?
+
+}
+
+// MARK: - RawMappable
+
+extension PromotionBonusEntry: RawMappable {
+    public typealias Raw = Json
+}

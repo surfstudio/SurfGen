@@ -10,8 +10,7 @@ import Foundation
 
 public class ModelExtractor {
     
-    public init() {
-    }
+    public init() {}
 
     /// Collects all object and enum schemas to be generated from given service model
     public func extractModels(from service: ServiceGenerationModel) -> [SchemaGenerationModel] {
@@ -31,8 +30,8 @@ private extension SchemaType {
             return arrayModel.extractModels()
         case .group(let groupModel):
             return groupModel.extractModels()
-        case .alias:
-            return []
+        case .alias(let typeAliasModel):
+            return [.typealias(typeAliasModel)]
         }
     }
 }
@@ -136,7 +135,7 @@ private extension OperationModel {
     }
 }
 
-private extension ServiceModel {
+private extension PathModel {
     
     func extractModels() -> [SchemaGenerationModel] {
         return operations.flatMap { $0.extractModels() }

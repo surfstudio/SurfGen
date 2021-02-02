@@ -29,8 +29,8 @@ public struct TreeParser {
         self.responsesParser = responsesParser
     }
 
-    public func parse(trees: [DependencyWithTree]) throws -> [[ServiceModel]] {
-        let mapper = { (tree: DependencyWithTree) throws -> [ServiceModel] in
+    public func parse(trees: [DependencyWithTree]) throws -> [[PathModel]] {
+        let mapper = { (tree: DependencyWithTree) throws -> [PathModel] in
             return try wrap(
                 self.parse(tree: tree, other: trees),
                 message: "While parsing tree from file \(tree.dependency.pathToCurrentFile)"
@@ -42,9 +42,9 @@ public struct TreeParser {
         return res
     }
 
-    func parse(tree: DependencyWithTree, other: [DependencyWithTree]) throws -> [ServiceModel] {
+    func parse(tree: DependencyWithTree, other: [DependencyWithTree]) throws -> [PathModel] {
 
-        let mapper = { (service: PathNode) throws -> ServiceModel in
+        let mapper = { (service: PathNode) throws -> PathModel in
             return try wrap(
                 self.parse(service: service, current: tree, other: other),
                 message: "While parsing service at path \(service.path)"
@@ -56,7 +56,7 @@ public struct TreeParser {
         return services
     }
 
-    func parse(service: PathNode, current: DependencyWithTree, other: [DependencyWithTree]) throws -> ServiceModel {
+    func parse(service: PathNode, current: DependencyWithTree, other: [DependencyWithTree]) throws -> PathModel {
 
         let mapper = { (operation: OperationNode) throws -> OperationModel in
             return try wrap(

@@ -15,7 +15,7 @@ public struct ServiceGenerationStage {
         self.templatePathes = templatePathes
     }
 
-    public func run(input: [[ServiceModel]]) throws {
+    public func run(input: [[PathModel]]) throws {
         let compact = input.filter { $0.count != 0 }
 
         let json = try wrap(JSONEncoder().encode(compact), message: "While serialize CodeGenerator models to JSON")

@@ -50,9 +50,9 @@ final class ParametersTests: XCTestCase {
 
         var factory = StubGASTTreeFactory(fileProvider: fileProvider)
 
-        var result = [[ServiceModel]]()
+        var result = [[PathModel]]()
 
-        factory.resultClosure = { (val: [[ServiceModel]]) throws -> Void in
+        factory.resultClosure = { (val: [[PathModel]]) throws -> Void in
             result = val
         }
 
@@ -89,9 +89,9 @@ final class ParametersTests: XCTestCase {
 
         var factory = StubGASTTreeFactory(fileProvider: fileProvider)
 
-        var result = [[ServiceModel]]()
+        var result = [[PathModel]]()
 
-        factory.resultClosure = { (val: [[ServiceModel]]) throws -> Void in
+        factory.resultClosure = { (val: [[PathModel]]) throws -> Void in
             result = val
         }
 
@@ -134,9 +134,9 @@ final class ParametersTests: XCTestCase {
 
         var factory = StubGASTTreeFactory(fileProvider: fileProvider)
 
-        var result = [[ServiceModel]]()
+        var result = [[PathModel]]()
 
-        factory.resultClosure = { (val: [[ServiceModel]]) throws -> Void in
+        factory.resultClosure = { (val: [[PathModel]]) throws -> Void in
             result = val
         }
 
@@ -179,9 +179,9 @@ final class ParametersTests: XCTestCase {
 
         var factory = StubGASTTreeFactory(fileProvider: fileProvider)
 
-        var result = [[ServiceModel]]()
+        var result = [[PathModel]]()
 
-        factory.resultClosure = { (val: [[ServiceModel]]) throws -> Void in
+        factory.resultClosure = { (val: [[PathModel]]) throws -> Void in
             result = val
         }
 
@@ -227,9 +227,9 @@ final class ParametersTests: XCTestCase {
 
         var factory = StubGASTTreeFactory(fileProvider: fileProvider)
 
-        var result = [[ServiceModel]]()
+        var result = [[PathModel]]()
 
-        factory.resultClosure = { (val: [[ServiceModel]]) throws -> Void in
+        factory.resultClosure = { (val: [[PathModel]]) throws -> Void in
             result = val.filter { $0.count != 0 }
         }
 
@@ -299,9 +299,9 @@ final class ParametersTests: XCTestCase {
 
         var factory = StubGASTTreeFactory(fileProvider: fileProvider)
 
-        var result = [[ServiceModel]]()
+        var result = [[PathModel]]()
 
-        factory.resultClosure = { (val: [[ServiceModel]]) throws -> Void in
+        factory.resultClosure = { (val: [[PathModel]]) throws -> Void in
             result = val.filter { $0.count != 0 }
         }
 

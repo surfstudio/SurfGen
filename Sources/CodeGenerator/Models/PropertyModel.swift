@@ -63,6 +63,9 @@ import GASTTree
 ///             description: Property's type
 ///             type:
 ///                 $ref: "#/components/schemas/PossibleType"
+///         isNullable:
+///             description: True if property can have null value
+///             type: boolean
 /// ```
 public struct PropertyModel {
 
@@ -75,6 +78,54 @@ public struct PropertyModel {
     public let name: String
     public let description: String?
     public let type: PossibleType
+    public let isNullable: Bool
+
+    /// This value will be used as type for generation
+    let typeName: String
+    let isTypeArray: Bool
+    let isTypeObject: Bool
+
+    init(name: String,
+         description: String?,
+         type: PropertyModel.PossibleType,
+         isNullable: Bool) {
+        self.name = name
+        self.description = description
+        self.type = type
+        self.isNullable = isNullable
+
+        switch type {
+        case .array(let array):
+            self.typeName = array.itemsType.name
+        case .primitive(let type):
+            self.typeName = type.rawValue
+        case .reference(let schema):
+            self.typeName = schema.name
+        }
+        self.isTypeArray = type.isArray
+        self.isTypeObject = type.isObject
+    }
+}
+
+extension PropertyModel.PossibleType {
+
+    var isArray: Bool {
+        if case .array = self {
+            return true
+        }
+        return false
+    }
+
+    var isObject: Bool {
+        switch self {
+        case .array(let arrayModel):
+            return arrayModel.itemsType.isObject
+        case .primitive:
+            return false
+        case .reference(let schema):
+            return schema.isObject
+        }
+    }
 }
 
 

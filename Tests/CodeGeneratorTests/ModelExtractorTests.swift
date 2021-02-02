@@ -20,7 +20,7 @@ class ModelExtractorTests: XCTestCase {
             .deletingLastPathComponent() //.../SurfGen/Tests
             .appendingPathComponent("Common/ProjectA/catalog/api.yaml")
 
-        var serviceModel: [ServiceModel] = []
+        var serviceModel: [PathModel] = []
 
         let fileProvider = FileManager()
         let _ = try StubGASTTreeFactory(fileProvider: fileProvider) {
@@ -34,6 +34,7 @@ class ModelExtractorTests: XCTestCase {
             "CatalogItem",
             "CommonError",
             "InfoMessage",
+            "ISO8601Date",
             "Service",
             "ServiceStatus",
             "SetTariffRequest",

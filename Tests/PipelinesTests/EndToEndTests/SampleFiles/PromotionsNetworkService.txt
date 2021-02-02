@@ -1,0 +1,60 @@
+//
+//  PromotionsNetworkService.swift
+//
+
+import NodeKit
+
+public class PromotionsNetworkService: PromotionsService {
+
+    // MARK: - Constants
+
+    private enum Keys {
+        static let limit = "limit"
+        static let offset = "offset"
+    }
+
+    // MARK: - Private Properties
+
+    private var builder: DefaultChain<PromotionsUrlRoute> {
+        return DefaultChain()
+    }
+
+    // MARK: - Public Methods
+
+    public func getBannersLocation(location: String) -> Observer<[BannerEntity]> {
+        return builder
+            .route(.get, .bannersLocation(location: location))
+            .build()
+            .process()
+    }
+
+    public func getHistory(limit: Int?, offset: Int?) -> Observer<BonusHistoryResponseEntity> {
+        return builder
+            .set(query: [Keys.limit: limit, Keys.offset: offset])
+            .route(.get, .history)
+            .build()
+            .process()
+    }
+
+    public func getPromotions() -> Observer<[PromotionEntity]> {
+        return builder
+            .route(.get, .promotions)
+            .build()
+            .process()
+    }
+
+    public func getPromotionsId(id: String) -> Observer<DetailPromotionEntity> {
+        return builder
+            .route(.get, .promotionsId(id: id))
+            .build()
+            .process()
+    }
+
+    public func postPromotionsId(id: String, acceptPromotion: AcceptPromotionEntity?) -> Observer<InfoMessageEntity> {
+        return builder
+            .route(.post, .promotionsId(id: id))
+            .build()
+            .process(acceptPromotion)
+    }
+
+}

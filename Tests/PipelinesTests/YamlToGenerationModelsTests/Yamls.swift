@@ -251,3 +251,90 @@ extension ParametersTests {
               description: Статус услуги
 """.data(using: .utf8)!
 }
+
+extension PropertiesTests {
+
+    static var yamlWithArrayPropertyTypeWillBeParsed = """
+    paths:
+      /promotions/{id}:
+        parameters:
+              - name: id
+                required: true
+                in: path
+                schema:
+                  type: string
+                description: ID акции
+        post:
+          requestBody:
+            required: false
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/AcceptPromotion"
+          responses:
+            "200":
+              description: "Все ок"
+              content:
+                application/json:
+                  schema:
+                    type: string
+    components:
+      schemas:
+        AcceptPromotion:
+          type: object
+          properties:
+            userInputs:
+              type: array
+              items:
+                $ref: "#/components/schemas/KeyValuePair"
+        KeyValuePair:
+          type: object
+          description: Пара ключ-значение
+          properties:
+            key:
+              type: string
+            value:
+              type: string
+          required:
+            - key
+            - value
+""".data(using: .utf8)!
+
+    static var yamlWithNullablePropertyWillBeParsed = """
+    paths:
+      /promotions/{id}:
+        parameters:
+              - name: id
+                required: true
+                in: path
+                schema:
+                  type: string
+                description: ID акции
+        post:
+          requestBody:
+            required: false
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/KeyValuePair"
+          responses:
+            "200":
+              description: "Все ок"
+              content:
+                application/json:
+                  schema:
+                    type: string
+    components:
+      schemas:
+        KeyValuePair:
+          type: object
+          properties:
+            key:
+              type: string
+            value:
+              type: string
+              nullable: true
+          required:
+            - key
+""".data(using: .utf8)!
+}

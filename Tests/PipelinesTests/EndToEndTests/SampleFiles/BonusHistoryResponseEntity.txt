@@ -1,0 +1,34 @@
+
+import NodeKit
+
+public struct BonusHistoryResponseEntity {
+
+    // MARK: - Public Properties
+    
+    public let history: [BonusHistoryItemEntity]?
+    
+    public let metaData: MetaDataEntity?
+
+    // MARK: - Initialization
+
+    public init(history: [BonusHistoryItemEntity]?,
+                metaData: MetaDataEntity?) {
+        self.history = history
+        self.metaData = metaData
+    }
+
+}
+
+// MARK: - DTOConvertible
+
+extension BonusHistoryResponseEntity: DTOConvertible {
+    public static func from(dto model: BonusHistoryResponseEntry) throws -> BonusHistoryResponseEntity {
+        return .init(history: .from(dto: model.history),
+                     metaData: .from(dto: model.metaData))
+    }
+
+    public func toDTO() throws -> BonusHistoryResponseEntry {
+        return .init(history: history.toDTO(),
+                     metaData: metaData.toDTO())
+    }
+}

@@ -121,7 +121,7 @@ public class Resolver {
                 throw CommonError(message: "Enum \(val.name) contains type which is not primitive -- \(val.type)")
             }
             self.refStack.removeLast()
-            return .enum(.init(name: val.name, cases: val.cases, type: type))
+            return .enum(.init(name: val.name, cases: val.cases, type: type, description: val.description))
         case .simple(let val):
             self.refStack.removeLast()
             return .alias(.init(name: val.name, type: val.type))
@@ -164,7 +164,16 @@ public class Resolver {
     }
 
     private func resolveObject(val: SchemaModelNode, node: DependencyWithTree, other: [DependencyWithTree]) throws -> SchemaType {
-        let unwrapper = { (input: Referenced<PrimitiveType>) -> PropertyModel.PossibleType in
+        let propertyTypeUnwrapper = { (input: Referenced<PrimitiveType>) -> PropertyModel.PossibleType in
+            switch input{
+            case .entity(let val):
+                return .primitive(val)
+            case .ref(let ref):
+                return .reference(try self.resolveSchema(ref: ref, node: node, other: other))
+            }
+        }
+
+        let arrayItemTypeUnwrapper = { (input: Referenced<PrimitiveType>) -> SchemaArrayModel.PossibleType in
             switch input{
             case .entity(let val):
                 return .primitive(val)
@@ -179,11 +188,13 @@ public class Resolver {
             case .array(let arr):
                 return .init(name: property.name,
                              description: property.description,
-                             type: try unwrapper(arr.itemsType))
+                             type: .array(.init(name: "", itemsType: try arrayItemTypeUnwrapper(arr.itemsType))),
+                             isNullable: property.nullable)
             case .simple(let val):
                 return .init(name: property.name,
                              description: property.description,
-                             type: try unwrapper(val))
+                             type: try propertyTypeUnwrapper(val),
+                             isNullable: property.nullable)
             }
         }
 

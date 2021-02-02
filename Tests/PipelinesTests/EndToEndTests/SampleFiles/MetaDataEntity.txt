@@ -1,0 +1,44 @@
+
+import NodeKit
+
+/// Мета-данные для пагинации
+public struct MetaDataEntity {
+
+    // MARK: - Public Properties
+    
+    /// Общий размер списка
+    public let count: Int?
+    
+    /// Размер одной пачки пагинации
+    public let limit: Int?
+    
+    /// Текущий сдвиг пачки на пагинации
+    public let offset: Int?
+
+    // MARK: - Initialization
+
+    public init(count: Int?,
+                limit: Int?,
+                offset: Int?) {
+        self.count = count
+        self.limit = limit
+        self.offset = offset
+    }
+
+}
+
+// MARK: - DTOConvertible
+
+extension MetaDataEntity: DTOConvertible {
+    public static func from(dto model: MetaDataEntry) throws -> MetaDataEntity {
+        return .init(count: model.count,
+                     limit: model.limit,
+                     offset: model.offset)
+    }
+
+    public func toDTO() throws -> MetaDataEntry {
+        return .init(count: count,
+                     limit: limit,
+                     offset: offset)
+    }
+}

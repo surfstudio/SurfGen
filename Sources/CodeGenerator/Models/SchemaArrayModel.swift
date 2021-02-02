@@ -69,6 +69,30 @@ public struct SchemaArrayModel: Encodable {
     }
 }
 
+extension SchemaArrayModel.PossibleType {
+
+    var name: String {
+        switch self {
+        case .primitive(let type):
+            return type.rawValue
+        case .reference(let schema):
+            return schema.name
+        }
+    }
+
+    var isObject: Bool {
+        switch self {
+        case .primitive:
+            return false
+        case .reference(let schema):
+            if case .object = schema {
+                return true
+            }
+            return false
+        }
+    }
+}
+
 extension SchemaArrayModel.PossibleType: Encodable {
 
     enum Keys: String, CodingKey {

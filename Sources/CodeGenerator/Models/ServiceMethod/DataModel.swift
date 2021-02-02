@@ -75,6 +75,39 @@ public struct DataModel: Encodable {
     }
 }
 
+extension DataModel.PossibleType {
+
+    // returns multiple values if type is group
+    var nameOptions: [String] {
+        switch self {
+        case .object(let object):
+            return [object.name]
+        case .array(let array):
+            return [array.itemsType.name]
+        case .group(let group):
+            return group.referencedNames
+        }
+    }
+
+    var isArray: Bool {
+        if case .array = self {
+            return true
+        }
+        return false
+    }
+
+    var isObject: Bool {
+        switch self {
+        case .object:
+            return true
+        case .array(let array):
+            return array.itemsType.isObject
+        case .group:
+            return false
+        }
+    }
+}
+
 extension DataModel.PossibleType: Encodable {
 
     enum Keys: String, CodingKey {

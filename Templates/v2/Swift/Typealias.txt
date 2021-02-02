@@ -1,0 +1,6 @@
+
+public typealias {{ model.name }} = {#
+	#}{% if model.typeName == "integer" %}Int{#
+    #}{% elif model.typeName == "number" %}Double{#
+    #}{% elif model.typeName == "string" %}String{#
+    #}{% elif model.typeName == "boolean" %}Bool{% endif %}

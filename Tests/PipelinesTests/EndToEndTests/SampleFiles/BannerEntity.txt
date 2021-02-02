@@ -1,0 +1,44 @@
+
+import NodeKit
+
+/// Баннеры пользователя
+public struct BannerEntity {
+
+    // MARK: - Public Properties
+    
+    /// ID баннера
+    public let id: String
+    
+    /// Картинки баннера
+    public let imageUrl: String
+    
+    /// Ссылка на внешний ресурс
+    public let url: String
+
+    // MARK: - Initialization
+
+    public init(id: String,
+                imageUrl: String,
+                url: String) {
+        self.id = id
+        self.imageUrl = imageUrl
+        self.url = url
+    }
+
+}
+
+// MARK: - DTOConvertible
+
+extension BannerEntity: DTOConvertible {
+    public static func from(dto model: BannerEntry) throws -> BannerEntity {
+        return .init(id: model.id,
+                     imageUrl: model.imageUrl,
+                     url: model.url)
+    }
+
+    public func toDTO() throws -> BannerEntry {
+        return .init(id: id,
+                     imageUrl: imageUrl,
+                     url: url)
+    }
+}

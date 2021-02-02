@@ -15,6 +15,7 @@ public struct Template: Decodable {
         case service
         case model
         case `enum`
+        case `typealias`
     }
 
     public let type: TemplateType
@@ -34,4 +35,16 @@ public struct Template: Decodable {
     /// Where to place file generated with this template
     /// Example: Path/To/Project/Models
     public let destinationPath: String
+
+    public init(type: Template.TemplateType,
+                nameSuffix: String?,
+                fileExtension: String,
+                templatePath: String,
+                destinationPath: String) {
+        self.type = type
+        self.nameSuffix = nameSuffix
+        self.fileExtension = fileExtension
+        self.templatePath = templatePath
+        self.destinationPath = destinationPath
+    }
 }

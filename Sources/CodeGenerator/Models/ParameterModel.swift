@@ -97,7 +97,7 @@ public struct ParameterModel: Encodable {
     ///
     /// For this case `componentName` will be set to `MyParamComponentName`
     public let componentName: String?
-    /// Parametr name (as name in URI)
+    /// Parameter name (as name in URI)
     ///
     /// For `projectId` it will be `projectId`
     public let name: String
@@ -106,6 +106,58 @@ public struct ParameterModel: Encodable {
     public let type: PossibleType
     public let description: String?
     public let isRequired: Bool
+
+    /// This value will be used as type for generation
+    let typeName: String
+    let isTypeArray: Bool
+    /// True if type is a ref to model or array with ref to model
+    let isTypeObject: Bool
+
+    init(componentName: String?,
+         name: String,
+         location: ParameterNode.Location,
+         type: ParameterModel.PossibleType,
+         description: String?,
+         isRequired: Bool) {
+        self.componentName = componentName
+        self.name = name
+        self.location = location
+        self.type = type
+        self.description = description
+        self.isRequired = isRequired
+
+        switch type {
+        case .array(let array):
+            self.typeName = array.itemsType.name
+        case .primitive(let type):
+            self.typeName = type.rawValue
+        case .reference(let schema):
+            self.typeName = schema.name
+        }
+        self.isTypeArray = type.isArray
+        self.isTypeObject = type.isObject
+    }
+}
+
+extension ParameterModel.PossibleType {
+
+    var isArray: Bool {
+        if case .array = self {
+            return true
+        }
+        return false
+    }
+
+    var isObject: Bool {
+        switch self {
+        case .array(let array):
+            return array.itemsType.isObject
+        case .primitive:
+            return false
+        case .reference(let schema):
+            return schema.isObject
+        }
+    }
 }
 
 extension ParameterModel.PossibleType: Encodable {

@@ -1,0 +1,19 @@
+//
+//  PromotionsService.swift
+//
+
+import NodeKit
+
+public protocol PromotionsService {
+
+    func getBannersLocation(location: String) -> Observer<[BannerEntity]>
+
+    func getHistory(limit: Int?, offset: Int?) -> Observer<BonusHistoryResponseEntity>
+
+    func getPromotions() -> Observer<[PromotionEntity]>
+
+    func getPromotionsId(id: String) -> Observer<DetailPromotionEntity>
+
+    func postPromotionsId(id: String, acceptPromotion: AcceptPromotionEntity?) -> Observer<InfoMessageEntity>
+
+}
