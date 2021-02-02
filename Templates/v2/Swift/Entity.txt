@@ -6,8 +6,8 @@ public struct {{ model.name }}Entity {
 
     // MARK: - Public Properties
 {% for property in model.properties %}    
-    {% for line in property.description|splitLines %}
-    /// {{ line }}{% endfor %}public let {{ property.name|snakeCaseToCamelCase }}: {#
+    {% for line in property.description|splitLines %}/// {{ line }}
+    {% endfor %}public let {{ property.name|snakeCaseToCamelCase }}: {#
     #}{% if property.isTypeArray %}[{% endif %}{#
     #}{% if property.typeName == "integer" %}Int{#
     #}{% elif property.typeName == "number" %}Double{#

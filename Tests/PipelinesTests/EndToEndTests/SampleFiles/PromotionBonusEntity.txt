@@ -1,21 +1,19 @@
 
 import NodeKit
 
-/**
- Описание бонусов
-*/
+/// Описание бонусов
 public struct PromotionBonusEntity {
 
     // MARK: - Public Properties
     
-    public let bonusId: String
+    public let bonusId: String?
     
-    public let bonusName: String
+    public let bonusName: String?
 
     // MARK: - Initialization
 
-    public init(bonusId: String,
-                bonusName: String) {
+    public init(bonusId: String?,
+                bonusName: String?) {
         self.bonusId = bonusId
         self.bonusName = bonusName
     }

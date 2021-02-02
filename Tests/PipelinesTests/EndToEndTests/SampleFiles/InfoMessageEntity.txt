@@ -1,18 +1,16 @@
 
 import NodeKit
 
-/**
- Модель, которая хранит какое-то сообщение
-*/
+/// Модель, которая хранит какое-то сообщение
 public struct InfoMessageEntity {
 
     // MARK: - Public Properties
     
-    public let text: String
+    public let text: String?
 
     // MARK: - Initialization
 
-    public init(text: String) {
+    public init(text: String?) {
         self.text = text
     }
 

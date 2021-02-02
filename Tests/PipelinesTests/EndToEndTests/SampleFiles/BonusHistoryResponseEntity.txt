@@ -5,14 +5,14 @@ public struct BonusHistoryResponseEntity {
 
     // MARK: - Public Properties
     
-    public let history: [BonusHistoryItemEntity]
+    public let history: [BonusHistoryItemEntity]?
     
-    public let metaData: MetaDataEntity
+    public let metaData: MetaDataEntity?
 
     // MARK: - Initialization
 
-    public init(history: [BonusHistoryItemEntity],
-                metaData: MetaDataEntity) {
+    public init(history: [BonusHistoryItemEntity]?,
+                metaData: MetaDataEntity?) {
         self.history = history
         self.metaData = metaData
     }

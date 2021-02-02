@@ -5,8 +5,8 @@ public struct PromotionBonusEntry: Codable {
 
     // MARK: - Public Properties
 
-    public let bonusId: String
-    public let bonusName: String
+    public let bonusId: String?
+    public let bonusName: String?
 
 }
 

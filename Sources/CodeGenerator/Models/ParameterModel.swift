@@ -110,6 +110,7 @@ public struct ParameterModel: Encodable {
     /// This value will be used as type for generation
     let typeName: String
     let isTypeArray: Bool
+    /// True if type is a ref to model or array with ref to model
     let isTypeObject: Bool
 
     init(componentName: String?,

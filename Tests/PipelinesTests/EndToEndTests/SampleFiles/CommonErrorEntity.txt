@@ -1,28 +1,25 @@
 
 import NodeKit
 
-/**
- Это общий тип ошибки, который может возвращать сервер.
-*/
+/// Это общий тип ошибки, который может возвращать сервер.
 public struct CommonErrorEntity {
 
     // MARK: - Public Properties
     
     /// Это идентификатор ошибки. Этот идентификатор мобильное приложение будет использовать для того, чтобы включать определенное поведение.
-
     public let code: Int
     
     /// Пояснение для разработчика/тестировщика о том, что пошло не так
-    public let developerMessage: String
+    public let developerMessage: String?
     
     /// Сообщение, которое будет выведено пользователю в снеке в случае получения ошибки
-    public let userMessage: String
+    public let userMessage: String?
 
     // MARK: - Initialization
 
     public init(code: Int,
-                developerMessage: String,
-                userMessage: String) {
+                developerMessage: String?,
+                userMessage: String?) {
         self.code = code
         self.developerMessage = developerMessage
         self.userMessage = userMessage

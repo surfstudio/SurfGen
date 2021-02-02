@@ -1,9 +1,7 @@
 
 import NodeKit
 
-/**
- Акция пользователя
-*/
+/// Акция пользователя
 public struct PromotionEntity {
 
     // MARK: - Public Properties
@@ -17,22 +15,22 @@ public struct PromotionEntity {
     public let imageUrl: String
     
     /// Дата начала акции
-    public let fromDate: ISO8601Date
+    public let fromDate: ISO8601Date?
     
     /// Короткое описание акции. Оно выводится как превью в списке акций
-    public let summary: String
+    public let summary: String?
     
     /// Дата конца акции
-    public let toDate: ISO8601Date
+    public let toDate: ISO8601Date?
 
     // MARK: - Initialization
 
     public init(id: String,
                 name: String,
                 imageUrl: String,
-                fromDate: ISO8601Date,
-                summary: String,
-                toDate: ISO8601Date) {
+                fromDate: ISO8601Date?,
+                summary: String?,
+                toDate: ISO8601Date?) {
         self.id = id
         self.name = name
         self.imageUrl = imageUrl

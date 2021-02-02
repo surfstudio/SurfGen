@@ -8,7 +8,7 @@ public struct BonusHistoryItemEntry: Codable {
     public let id: String
     public let bonusName: String
     public let operationDate: ISO8601Date
-    public let campaignName: String
+    public let campaignName: String?
 
 }
 

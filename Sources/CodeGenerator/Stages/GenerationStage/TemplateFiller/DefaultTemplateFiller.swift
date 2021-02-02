@@ -46,18 +46,12 @@ public class DefaultTemplateFiller: TemplateFiller {
             $0.camelCaseToCaps()
         }
 
-        templateExtension.registerFilter("trim") {
-            guard let string = $0 as? String else {
-                return $0
-            }
-            return string.trimmingCharacters(in: .whitespacesAndNewlines)
+        templateExtension.registerStringFilter("trim") {
+            $0.trimmingCharacters(in: .whitespacesAndNewlines)
         }
 
-        templateExtension.registerFilter("splitLines") {
-            guard let string = $0 as? String else {
-                return $0
-            }
-            return string.split(separator: "\n")
+        templateExtension.registerStringFilter("splitLines") {
+            $0.split(separator: "\n")
         }
 
         return templateExtension
@@ -66,7 +60,7 @@ public class DefaultTemplateFiller: TemplateFiller {
 
 private extension Extension {
 
-    func registerStringFilter(_ name: String, stringFilter: @escaping (String) -> String) {
+    func registerStringFilter(_ name: String, stringFilter: @escaping (String) -> Any) {
         registerFilter(name) {
             guard let stringValue = $0 as? String else {
                 return $0

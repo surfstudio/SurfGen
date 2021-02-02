@@ -5,8 +5,8 @@ public struct AcceptPromotionEntry: Codable {
 
     // MARK: - Public Properties
 
-    public let bonusId: String
-    public let userInputs: [KeyValuePairEntry]
+    public let bonusId: String?
+    public let userInputs: [KeyValuePairEntry]?
 
 }
 

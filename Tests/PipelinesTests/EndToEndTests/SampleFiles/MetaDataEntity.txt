@@ -1,27 +1,25 @@
 
 import NodeKit
 
-/**
- Мета-данные для пагинации
-*/
+/// Мета-данные для пагинации
 public struct MetaDataEntity {
 
     // MARK: - Public Properties
     
     /// Общий размер списка
-    public let count: Int
+    public let count: Int?
     
     /// Размер одной пачки пагинации
-    public let limit: Int
+    public let limit: Int?
     
     /// Текущий сдвиг пачки на пагинации
-    public let offset: Int
+    public let offset: Int?
 
     // MARK: - Initialization
 
-    public init(count: Int,
-                limit: Int,
-                offset: Int) {
+    public init(count: Int?,
+                limit: Int?,
+                offset: Int?) {
         self.count = count
         self.limit = limit
         self.offset = offset

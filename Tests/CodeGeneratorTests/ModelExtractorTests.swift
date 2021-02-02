@@ -34,6 +34,7 @@ class ModelExtractorTests: XCTestCase {
             "CatalogItem",
             "CommonError",
             "InfoMessage",
+            "ISO8601Date",
             "Service",
             "ServiceStatus",
             "SetTariffRequest",

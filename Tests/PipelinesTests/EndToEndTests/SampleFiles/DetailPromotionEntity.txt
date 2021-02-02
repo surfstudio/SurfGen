@@ -1,9 +1,7 @@
 
 import NodeKit
 
-/**
- Детальная информация по акции пользователя
-*/
+/// Детальная информация по акции пользователя
 public struct DetailPromotionEntity {
 
     // MARK: - Public Properties
@@ -12,41 +10,39 @@ public struct DetailPromotionEntity {
     public let id: String
     
     /// Список бонусов акции.
-
-    public let bonuses: [PromotionBonusEntity]
+    public let bonuses: [PromotionBonusEntity]?
     
     /// Детальное описание акции
-    public let description: String
+    public let description: String?
     
     /// Дата начала акции
-    public let fromDate: ISO8601Date
+    public let fromDate: ISO8601Date?
     
-    public let imageUrl: String
+    public let imageUrl: String?
     
     /// Заголовок акции
-    public let name: String
+    public let name: String?
     
     /// Массив текстовых полей для ввода.
-    public let textFields: [PromotionInputEntity]
+    public let textFields: [PromotionInputEntity]?
     
     /// Дата конца акции
-    public let toDate: ISO8601Date
+    public let toDate: ISO8601Date?
     
     /// Идентификатор акции для подачи заявки на акцию.
-
-    public let tradeInCampaignLink: String
+    public let tradeInCampaignLink: String?
 
     // MARK: - Initialization
 
     public init(id: String,
-                bonuses: [PromotionBonusEntity],
-                description: String,
-                fromDate: ISO8601Date,
-                imageUrl: String,
-                name: String,
-                textFields: [PromotionInputEntity],
-                toDate: ISO8601Date,
-                tradeInCampaignLink: String) {
+                bonuses: [PromotionBonusEntity]?,
+                description: String?,
+                fromDate: ISO8601Date?,
+                imageUrl: String?,
+                name: String?,
+                textFields: [PromotionInputEntity]?,
+                toDate: ISO8601Date?,
+                tradeInCampaignLink: String?) {
         self.id = id
         self.bonuses = bonuses
         self.description = description

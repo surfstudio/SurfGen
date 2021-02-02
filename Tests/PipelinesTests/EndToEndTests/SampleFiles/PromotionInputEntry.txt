@@ -6,10 +6,10 @@ public struct PromotionInputEntry: Codable {
     // MARK: - Public Properties
 
     public let fieldName: String
-    public let errorText: String
-    public let fieldDescription: String
-    public let optional: Bool
-    public let regEx: String
+    public let errorText: String?
+    public let fieldDescription: String?
+    public let optional: Bool?
+    public let regEx: String?
 
 }
 

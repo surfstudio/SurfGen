@@ -1,9 +1,7 @@
 
 import NodeKit
 
-/**
- История активации бонусов
-*/
+/// История активации бонусов
 public struct BonusHistoryItemEntity {
 
     // MARK: - Public Properties
@@ -18,14 +16,14 @@ public struct BonusHistoryItemEntity {
     public let operationDate: ISO8601Date
     
     /// Заголовок истории (название акции)
-    public let campaignName: String
+    public let campaignName: String?
 
     // MARK: - Initialization
 
     public init(id: String,
                 bonusName: String,
                 operationDate: ISO8601Date,
-                campaignName: String) {
+                campaignName: String?) {
         self.id = id
         self.bonusName = bonusName
         self.operationDate = operationDate

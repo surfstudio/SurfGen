@@ -1,4 +1,5 @@
 
+/// Месторасположение баннеров -- главный экран или каталог
 public enum BannersLocation: String, Codable {
     case catalog = "catalog"
     case main = "main"
