@@ -96,6 +96,7 @@ public struct TreeParser {
 
         return .init(
             httpMethod: operation.method,
+            summary: operation.summary,
             description: operation.description,
             parameters: params,
             responses: responses,

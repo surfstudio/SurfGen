@@ -1,12 +1,12 @@
 import com.google.gson.annotations.SerializedName
 
 {% if model.description %}/**
- * {{ model.description }}
- */
+ {% for line in model.description|splitLines %}* {{ line }}
+ {% endfor %}*/
 {% endif %}data class {{ model.name }}(
  	{% for property in model.properties %}
- 	{% if property.description != nil %}// {{ property.description }}
- 	{% endif %}@SerializedName("{{ property.name }}")
+ 	{% for line in property.description|splitLines %}// {{ line }}
+    {% endfor %}@SerializedName("{{ property.name }}")
  	val {{ property.name|snakeCaseToCamelCase }}: {#
     	#}{% if property.isTypeArray %}<List{% endif %}{#
     	#}{% if property.typeName == "integer" %}Int{#

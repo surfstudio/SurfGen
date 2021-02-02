@@ -103,7 +103,9 @@ public struct OperationModel: Encodable {
     ///
     /// For example `GET`
     public let httpMethod: String
-    /// Description provided (or not provided) in specification
+    /// Short summary of what the operation does
+    public let summary: String?
+    /// Verbose explanation of the operation behavior
     public let description: String?
     /// Path and query parameters of specific operations
     public let parameters: [Reference<ParameterModel>]?
@@ -116,11 +118,13 @@ public struct OperationModel: Encodable {
     let responseGenerationModel: DataGenerationModel?
 
     init(httpMethod: String,
+         summary: String?,
          description: String?,
          parameters: [Reference<ParameterModel>]?,
          responses: [Reference<ResponseModel>]?,
          requestModel: Reference<RequestModel>?) {
         self.httpMethod = httpMethod
+        self.summary = summary
         self.description = description
         self.parameters = parameters
         self.responses = responses

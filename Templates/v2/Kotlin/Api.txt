@@ -13,10 +13,11 @@ import retrofit2.http.Query
 
 interface {{ service.name }}Api {
 	{% for path in service.paths %}{% for operation in path.operations %}{% for requestModelName in operation.requestGenerationModel.typeNames %}
-	{% if operation.description %}/**
-	 * {{ operation.description }}
-	 */
-	{% endif %}@{{ operation.httpMethod|uppercase }}({{ path.name|camelCaseToCaps }})
+	{% if operation.summary or operation.description %}/**
+     {% for line in operation.summary|splitLines %}* {{ line }}
+     {% endfor %}{% for line in operation.description|splitLines %}* {{ line }}
+     {% endfor %}*/
+    {% endif %}@{{ operation.httpMethod|uppercase }}({{ path.name|camelCaseToCaps }})
 	fun {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}
     	@Path("{{ parameter.name }}") {{ parameter.name|snakeCaseToCamelCase }}: String,{% endfor %}{#
     	#}{% for parameter in operation.queryParameters %}
@@ -39,9 +40,10 @@ interface {{ service.name }}Api {
         #}{% if operation.responseGenerationModel.isTypeArray %}>{% endif %}{#
     #}>{% else %}Completable{% endif %}
 	{% empty %}
-    {% if operation.description %}/**
-     * {{ operation.description }}
-     */
+    {% if operation.summary or operation.description %}/**
+     {% for line in operation.summary|splitLines %}* {{ line }}
+     {% endfor %}{% for line in operation.description|splitLines %}* {{ line }}
+     {% endfor %}*/
     {% endif %}@{{ operation.httpMethod|uppercase }}({{ path.name|camelCaseToCaps }})
     fun {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}
         @Path("{{ parameter.name }}") {{ parameter.name|snakeCaseToCamelCase }}: String{#

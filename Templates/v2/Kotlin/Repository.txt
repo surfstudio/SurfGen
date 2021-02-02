@@ -9,10 +9,11 @@ import javax.inject.Inject
 class {{ service.name }}Repository @Inject constructor(
 	private val {{ service.name|lowercaseFirstLetter }}Api: {{ service.name }}Api 
 ) { {% for path in service.paths %}{% for operation in path.operations %}{% for requestModelName in operation.requestGenerationModel.typeNames %}
-	{% if operation.description %}/**
-	 * {{ operation.description }}
-	 */
-	{% endif %}fun {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}{#
+	{% if operation.summary or operation.description %}/**
+     {% for line in operation.summary|splitLines %}* {{ line }}
+     {% endfor %}{% for line in operation.description|splitLines %}* {{ line }}
+     {% endfor %}*/
+    {% endif %}fun {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}{#
 	#}({% for parameter in operation.pathParameters %}
     	{{ parameter.name|snakeCaseToCamelCase }}: String,{% endfor %}{#
     	#}{% for parameter in operation.queryParameters %}
@@ -42,9 +43,10 @@ class {{ service.name }}Repository @Inject constructor(
             #}{% if operation.parameters.count > 0 %}
 	    {% endif %}).transform{% if operation.responseGenerationModel.isTypeArray %}Collection{% endif %}()
 	{% empty %}
-    {% if operation.description %}/**
-     * {{ operation.description }}
-     */
+    {% if operation.summary or operation.description %}/**
+     {% for line in operation.summary|splitLines %}* {{ line }}
+     {% endfor %}{% for line in operation.description|splitLines %}* {{ line }}
+     {% endfor %}*/
     {% endif %}fun {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}{#
     #}({% for parameter in operation.pathParameters %}{% if operation.parameters.count > 1 %}
         {% endif %}{{ parameter.name|snakeCaseToCamelCase }}: String{#

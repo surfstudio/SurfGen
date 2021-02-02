@@ -8,12 +8,16 @@ public protocol PromotionsService {
 
     func getBannersLocation(location: String) -> Observer<[BannerEntity]>
 
+    /// История активации бонусов
     func getHistory(limit: Int?, offset: Int?) -> Observer<BonusHistoryResponseEntity>
 
+    /// Акции пользователя
     func getPromotions() -> Observer<[PromotionEntity]>
 
+    /// Запрашиваем детальную информацию по акции
     func getPromotionsId(id: String) -> Observer<DetailPromotionEntity>
 
+    /// Участие в акции.  Тело запроса может отстутствовать если нет никаких доп парамтров (нет бонусов, нет текстфилдов)
     func postPromotionsId(id: String, acceptPromotion: AcceptPromotionEntity?) -> Observer<InfoMessageEntity>
 
 }
