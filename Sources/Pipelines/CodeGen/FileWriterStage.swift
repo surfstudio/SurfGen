@@ -17,12 +17,12 @@ class FileWriterStage: PipelineStage {
         
         for sourceCode in input {
             guard Path(sourceCode.destinationPath).exists else {
-                throw CommonError(message: "directory \(sourceCode.destinationPath) doesn't exist")
+                throw CommonError(message: "Directory \(sourceCode.destinationPath) doesn't exist")
             }
             
             let filePath = Path("\(sourceCode.destinationPath)/\(sourceCode.fileName)")
             try wrap(filePath.write(sourceCode.code),
-                     message: "while writing file at \(filePath)")
+                     message: "While writing file at \(filePath)")
         }
         
     }
