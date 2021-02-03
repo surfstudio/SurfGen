@@ -31,7 +31,8 @@ public class GenerationCommand: Command {
         }
 
         let pipeline = BuildCodeGeneratorPipelineFactory.build(templates: config.templates,
-                                                               serviceName: serviceName)
+                                                               serviceName: serviceName,
+                                                               logger: logger())
 
         guard let specUrl = URL(string: specPath.value) else {
             logger().fatal("Invalid path to root spec: \(specPath.value)")

@@ -28,6 +28,7 @@ public class PromotionsNetworkService: PromotionsService {
             .process()
     }
 
+    /// История активации бонусов
     public func getHistory(limit: Int?, offset: Int?) -> Observer<BonusHistoryResponseEntity> {
         return builder
             .set(query: [Keys.limit: limit, Keys.offset: offset])
@@ -36,6 +37,7 @@ public class PromotionsNetworkService: PromotionsService {
             .process()
     }
 
+    /// Акции пользователя
     public func getPromotions() -> Observer<[PromotionEntity]> {
         return builder
             .route(.get, .promotions)
@@ -43,6 +45,7 @@ public class PromotionsNetworkService: PromotionsService {
             .process()
     }
 
+    /// Запрашиваем детальную информацию по акции
     public func getPromotionsId(id: String) -> Observer<DetailPromotionEntity> {
         return builder
             .route(.get, .promotionsId(id: id))
@@ -50,6 +53,7 @@ public class PromotionsNetworkService: PromotionsService {
             .process()
     }
 
+    /// Участие в акции.  Тело запроса может отстутствовать если нет никаких доп парамтров (нет бонусов, нет текстфилдов)
     public func postPromotionsId(id: String, acceptPromotion: AcceptPromotionEntity?) -> Observer<InfoMessageEntity> {
         return builder
             .route(.post, .promotionsId(id: id))

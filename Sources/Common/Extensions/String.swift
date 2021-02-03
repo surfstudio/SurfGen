@@ -61,11 +61,10 @@ extension String {
             .lowercaseFirstLetter()
     }
 
-    /// Turns camelCase into CAPS_STRING
-    public func camelCaseToCaps() -> String {
+    /// Turns camelCase into snake_case
+    public func camelCaseToSnakeCase() -> String {
         return self
             .replacingOccurrences(of: "(?<!^)(?=[A-Z])", with: "_", options: .regularExpression)
-            .uppercased()
     }
 
     private func pathToCamelCase() -> String {

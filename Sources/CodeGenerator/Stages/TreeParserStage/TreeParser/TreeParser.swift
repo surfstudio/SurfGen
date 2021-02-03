@@ -9,12 +9,6 @@ import Foundation
 import GASTTree
 import Common
 
-// WRANING
-//
-// NotImplemented:
-//
-//  - Request/Response in OperationNode
-
 public struct TreeParser {
 
     let parametersParser: ParametersTreeParser
@@ -96,6 +90,7 @@ public struct TreeParser {
 
         return .init(
             httpMethod: operation.method,
+            summary: operation.summary,
             description: operation.description,
             parameters: params,
             responses: responses,

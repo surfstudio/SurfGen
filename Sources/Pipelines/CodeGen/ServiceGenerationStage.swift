@@ -84,7 +84,7 @@ public struct ServiceGenerationStage: PipelineStage {
         return try templates.map { template in
             let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
                                                                   with: [ContextKeys.service: model]),
-                                      message: "while filling template at \(template.templatePath) with service \(model.name)")
+                                      message: "While filling template at \(template.templatePath) with service \(model.name)")
             return SourceCode(code: sourceCode,
                                  fileName: model.name + (template.nameSuffix ?? "") + "." + template.fileExtension,
                                  destinationPath: template.destinationPath)
@@ -96,7 +96,7 @@ public struct ServiceGenerationStage: PipelineStage {
         return try templates.map { template in
             let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
                                                                   with: [ContextKeys.model: model]),
-                                      message: "while filling template at \(template.templatePath) with model \(model.name)")
+                                      message: "While filling template at \(template.templatePath) with model \(model.name)")
             return SourceCode(code: sourceCode,
                               fileName: template.buildFileName(for: model.name),
                               destinationPath: template.destinationPath)
@@ -108,7 +108,7 @@ public struct ServiceGenerationStage: PipelineStage {
         return try templates.map { template in
             let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
                                                                   with: [ContextKeys.enum: model]),
-                                      message: "while filling template at \(template.templatePath) with model \(model.name)")
+                                      message: "While filling template at \(template.templatePath) with model \(model.name)")
             return SourceCode(code: sourceCode,
                                  fileName: template.buildFileName(for: model.name),
                                  destinationPath: template.destinationPath)
@@ -120,7 +120,7 @@ public struct ServiceGenerationStage: PipelineStage {
         return try templates.map { template in
             let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
                                                                   with: [ContextKeys.model: model]),
-                                      message: "while filling template at \(template.templatePath) with model \(model.name)")
+                                      message: "While filling template at \(template.templatePath) with model \(model.name)")
             return SourceCode(code: sourceCode,
                               fileName: template.buildFileName(for: model.name),
                               destinationPath: template.destinationPath)

@@ -17,8 +17,16 @@ public class DefaultTemplateFiller: TemplateFiller {
     public func fillTemplate(at path: String, with context: [String : Any]) throws -> String {
         var environment = Environment()
         environment.extensions.append(buildTemplateExtension())
-        return try wrap(environment.renderTemplate(string: loadTemplate(at: path), context: context),
-                        message: "While filling template at path: \(path)")
+        let template = try loadTemplate(at: path)
+        do {
+            return try environment.renderTemplate(string: template, context: context)
+        } catch {
+            // There is no implemented `localizedDescription` in Stenicl's TemplateSyntaxError so we have to get the message ourselves
+            guard let templateError = error as? TemplateSyntaxError else {
+                throw CommonError(message: "Unknown error in template")
+            }
+            throw CommonError(message: templateError.description)
+        }
     }
 
     private func loadTemplate(at path: String) throws -> String {
@@ -43,7 +51,7 @@ public class DefaultTemplateFiller: TemplateFiller {
         }
 
         templateExtension.registerStringFilter("camelCaseToCaps") {
-            $0.camelCaseToCaps()
+            $0.camelCaseToSnakeCase().uppercased()
         }
 
         templateExtension.registerStringFilter("trim") {

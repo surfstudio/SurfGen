@@ -53,11 +53,15 @@ public struct BuildLinterPipelineFactory {
                         requestBodiesBuilder: requestBodiesBuilder),
                     next: InitCodeGenerationStage(
                         parserStage: .init(
-                            next: ServiceGenerationStage(next: FileWriterStage().erase(),
-                                                         templates: [],
-                                                         serviceName: "",
-                                                         templateFiller: templateFiller,
-                                                         modelExtractor: modelExtractor).erase(),
+                            next: SwaggerCorrectorStage(
+                                next: ServiceGenerationStage(
+                                    next: FileWriterStage().erase(),
+                                    templates: [],
+                                    serviceName: "",
+                                    templateFiller: templateFiller,
+                                    modelExtractor: modelExtractor).erase(),
+                                corrector: SwaggerCorrector(logger: log)
+                            ).erase(),
                             parser: buildParser()
                         )
                     ).erase()
