@@ -58,7 +58,7 @@ public struct BuildLinterPipelineFactory {
                                                          serviceName: "",
                                                          templateFiller: templateFiller,
                                                          modelExtractor: modelExtractor).erase(),
-                            parser: buildParser()
+                            parser: buildParser(with: log)
                         )
                     ).erase()
                 ).erase()
@@ -66,7 +66,7 @@ public struct BuildLinterPipelineFactory {
         )
     }
 
-    static func buildParser() -> TreeParser {
+    static func buildParser(with logger: Logger?) -> TreeParser {
 
         let arrayParser = AnyArrayParser()
         let groupParser = AnyGroupParser()
@@ -76,8 +76,11 @@ public struct BuildLinterPipelineFactory {
         let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser)
         let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser)
 
+        let validator = SwaggerValidator(logger: logger)
+
         return .init(parametersParser: .init(array: arrayParser),
                      requestBodyParser: requestBodyParser,
-                     responsesParser: responsesParser)
+                     responsesParser: responsesParser,
+                     validator: validator)
     }
 }

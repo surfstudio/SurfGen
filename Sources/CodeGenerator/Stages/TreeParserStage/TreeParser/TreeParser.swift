@@ -9,24 +9,22 @@ import Foundation
 import GASTTree
 import Common
 
-// WRANING
-//
-// NotImplemented:
-//
-//  - Request/Response in OperationNode
-
 public struct TreeParser {
 
     let parametersParser: ParametersTreeParser
     let requestBodyParser: RequestBodyParser
     let responsesParser: ResponseBodyParser
 
+    let validator: SwaggerValidator
+
     public init(parametersParser: ParametersTreeParser,
                 requestBodyParser: RequestBodyParser,
-                responsesParser: ResponseBodyParser) {
+                responsesParser: ResponseBodyParser,
+                validator: SwaggerValidator) {
         self.parametersParser = parametersParser
         self.requestBodyParser = requestBodyParser
         self.responsesParser = responsesParser
+        self.validator = validator
     }
 
     public func parse(trees: [DependencyWithTree]) throws -> [[PathModel]] {
@@ -67,7 +65,9 @@ public struct TreeParser {
 
         let operations = try service.operations.map(mapper)
 
-        return .init(path: service.path, operations: operations)
+        let validatedPath = validator.validatePath(service.path)
+
+        return .init(path: validatedPath, operations: operations)
     }
 
     func parse(operation: OperationNode, current: DependencyWithTree, other: [DependencyWithTree]) throws -> OperationModel {

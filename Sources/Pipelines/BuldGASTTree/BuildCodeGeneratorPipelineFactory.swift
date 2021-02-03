@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Common
 import ReferenceExtractor
 import GASTBuilder
 import CodeGenerator
@@ -20,7 +21,9 @@ public struct BuildCodeGeneratorPipelineFactory {
         )
     }
 
-    public static func build(templates: [Template], serviceName: String) -> BuildGASTTreeEntryPoint {
+    public static func build(templates: [Template],
+                             serviceName: String,
+                             logger: Logger? = nil) -> BuildGASTTreeEntryPoint {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
         let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder)
@@ -54,14 +57,14 @@ public struct BuildCodeGeneratorPipelineFactory {
                                                      serviceName: serviceName,
                                                      templateFiller: templateFiller,
                                                      modelExtractor: modelExtractor).erase(),
-                        parser: buildParser()
+                        parser: buildParser(with: logger)
                     )
                 ).erase()
             )
         )
     }
 
-    static func buildParser() -> TreeParser {
+    static func buildParser(with logger: Logger?) -> TreeParser {
 
         let arrayParser = AnyArrayParser()
         let groupParser = AnyGroupParser()
@@ -71,8 +74,11 @@ public struct BuildCodeGeneratorPipelineFactory {
         let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser)
         let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser)
 
+        let validator = SwaggerValidator(logger: logger)
+
         return .init(parametersParser: .init(array: arrayParser),
                      requestBodyParser: requestBodyParser,
-                     responsesParser: responsesParser)
+                     responsesParser: responsesParser,
+                     validator: validator)
     }
 }
