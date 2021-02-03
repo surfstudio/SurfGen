@@ -51,7 +51,7 @@ public class DefaultTemplateFiller: TemplateFiller {
         }
 
         templateExtension.registerStringFilter("camelCaseToCaps") {
-            $0.camelCaseToCaps()
+            $0.camelCaseToSnakeCase().uppercased()
         }
 
         templateExtension.registerStringFilter("trim") {
