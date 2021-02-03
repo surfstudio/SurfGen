@@ -52,19 +52,23 @@ public struct BuildCodeGeneratorPipelineFactory {
                     requestBodiesBuilder: requestBodiesBuilder),
                 next: InitCodeGenerationStage(
                     parserStage: .init(
-                        next: ServiceGenerationStage(next: FileWriterStage().erase(),
-                                                     templates: templates,
-                                                     serviceName: serviceName,
-                                                     templateFiller: templateFiller,
-                                                     modelExtractor: modelExtractor).erase(),
-                        parser: buildParser(with: logger)
+                        next: SwaggerCorrectorStage(
+                            next: ServiceGenerationStage(
+                                next: FileWriterStage().erase(),
+                                templates: templates,
+                                serviceName: serviceName,
+                                templateFiller: templateFiller,
+                                modelExtractor: modelExtractor).erase(),
+                            corrector: SwaggerCorrector(logger: logger)
+                        ).erase(),
+                        parser: buildParser()
                     )
                 ).erase()
             )
         )
     }
 
-    static func buildParser(with logger: Logger?) -> TreeParser {
+    static func buildParser() -> TreeParser {
 
         let arrayParser = AnyArrayParser()
         let groupParser = AnyGroupParser()
@@ -74,11 +78,8 @@ public struct BuildCodeGeneratorPipelineFactory {
         let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser)
         let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser)
 
-        let validator = SwaggerValidator(logger: logger)
-
         return .init(parametersParser: .init(array: arrayParser),
                      requestBodyParser: requestBodyParser,
-                     responsesParser: responsesParser,
-                     validator: validator)
+                     responsesParser: responsesParser)
     }
 }

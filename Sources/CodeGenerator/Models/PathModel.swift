@@ -83,7 +83,7 @@ public struct PathModel: Encodable {
     let pathWithSeparatedParameters: String
     let parameters: [ParameterModel]
 
-    init(path: String, operations: [OperationModel]) {
+    public init(path: String, operations: [OperationModel]) {
         self.path = path
         self.operations = operations.sorted { $0.httpMethod < $1.httpMethod }
         self.name = path.pathName
