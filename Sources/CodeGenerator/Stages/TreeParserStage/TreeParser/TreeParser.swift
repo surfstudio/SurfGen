@@ -15,16 +15,12 @@ public struct TreeParser {
     let requestBodyParser: RequestBodyParser
     let responsesParser: ResponseBodyParser
 
-    let validator: SwaggerValidator
-
     public init(parametersParser: ParametersTreeParser,
                 requestBodyParser: RequestBodyParser,
-                responsesParser: ResponseBodyParser,
-                validator: SwaggerValidator) {
+                responsesParser: ResponseBodyParser) {
         self.parametersParser = parametersParser
         self.requestBodyParser = requestBodyParser
         self.responsesParser = responsesParser
-        self.validator = validator
     }
 
     public func parse(trees: [DependencyWithTree]) throws -> [[PathModel]] {
@@ -65,9 +61,7 @@ public struct TreeParser {
 
         let operations = try service.operations.map(mapper)
 
-        let validatedPath = validator.validatePath(service.path)
-
-        return .init(path: validatedPath, operations: operations)
+        return .init(path: service.path, operations: operations)
     }
 
     func parse(operation: OperationNode, current: DependencyWithTree, other: [DependencyWithTree]) throws -> OperationModel {

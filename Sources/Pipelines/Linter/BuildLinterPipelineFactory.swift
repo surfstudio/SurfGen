@@ -53,12 +53,16 @@ public struct BuildLinterPipelineFactory {
                         requestBodiesBuilder: requestBodiesBuilder),
                     next: InitCodeGenerationStage(
                         parserStage: .init(
-                            next: ServiceGenerationStage(next: FileWriterStage().erase(),
-                                                         templates: [],
-                                                         serviceName: "",
-                                                         templateFiller: templateFiller,
-                                                         modelExtractor: modelExtractor).erase(),
-                            parser: buildParser(with: log)
+                            next: SwaggerCorrectorStage(
+                                next: ServiceGenerationStage(
+                                    next: FileWriterStage().erase(),
+                                    templates: [],
+                                    serviceName: "",
+                                    templateFiller: templateFiller,
+                                    modelExtractor: modelExtractor).erase(),
+                                corrector: SwaggerCorrector(logger: log)
+                            ).erase(),
+                            parser: buildParser()
                         )
                     ).erase()
                 ).erase()
@@ -66,7 +70,7 @@ public struct BuildLinterPipelineFactory {
         )
     }
 
-    static func buildParser(with logger: Logger?) -> TreeParser {
+    static func buildParser() -> TreeParser {
 
         let arrayParser = AnyArrayParser()
         let groupParser = AnyGroupParser()
@@ -76,11 +80,8 @@ public struct BuildLinterPipelineFactory {
         let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser)
         let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser)
 
-        let validator = SwaggerValidator(logger: logger)
-
         return .init(parametersParser: .init(array: arrayParser),
                      requestBodyParser: requestBodyParser,
-                     responsesParser: responsesParser,
-                     validator: validator)
+                     responsesParser: responsesParser)
     }
 }

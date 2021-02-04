@@ -84,8 +84,7 @@ public struct StubGASTTreeFactory {
 
         return .init(parametersParser: .init(array: arrayParser),
                      requestBodyParser: requestBodyParser,
-                     responsesParser: responsesParser,
-                     validator: SwaggerValidator())
+                     responsesParser: responsesParser)
     }
 }
 
