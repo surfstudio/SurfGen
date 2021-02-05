@@ -54,6 +54,7 @@ public struct BuildCodeGeneratorPipelineFactory {
                 next: InitCodeGenerationStage(
                     parserStage: .init(
                         next: SwaggerCorrectorStage(
+                            corrector: SwaggerCorrector(logger: logger),
                             next: ServiceGenerationStage(
                                 next: FileWriterStage(
                                     needRewriteExistingFiles: needRewriteExistingFiles,
@@ -63,8 +64,7 @@ public struct BuildCodeGeneratorPipelineFactory {
                                 serviceName: serviceName,
                                 templateFiller: templateFiller,
                                 modelExtractor: modelExtractor
-                            ).erase(),
-                            corrector: SwaggerCorrector(logger: logger)
+                            ).erase()
                         ).erase(),
                         parser: buildParser()
                     )

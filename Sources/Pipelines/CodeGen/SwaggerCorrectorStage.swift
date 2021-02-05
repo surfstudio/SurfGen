@@ -13,15 +13,15 @@ class SwaggerCorrectorStage: PipelineStage {
 
     private let corrector: SwaggerCorrector
 
-    var next: AnyPipelineStage<[[PathModel]]>
+    var next: AnyPipelineStage<[[PathModel]]>?
 
-    init(next: AnyPipelineStage<[[PathModel]]>, corrector: SwaggerCorrector) {
-        self.next = next
+    init(corrector: SwaggerCorrector, next: AnyPipelineStage<[[PathModel]]>? = nil) {
         self.corrector = corrector
+        self.next = next
     }
 
     public func run(with input: [[PathModel]]) throws {
-        try next.run(with: input.map { correctService($0) })
+        try next?.run(with: input.map { correctService($0) })
     }
 
     private func correctService(_ service: [PathModel]) -> [PathModel] {
