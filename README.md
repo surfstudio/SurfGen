@@ -68,3 +68,53 @@ make executable
 cp -R Binary <your_project_path>
 ```
 In order to use generate command you need to setup configuration file. See Configuration File 
+
+## Usage
+
+SurfGen currently has 2 workflows: **linter** and **generator**.
+
+### Lint command
+
+Use `lint` command to check if your OpenAPI spec is correct in terms of SurfGen. If not, you will see log with errors and warnings, describing what exactly is wrong with the spec.
+
+```sh
+SurfGen lint <pathToSpec>
+```
+
+where `pathToSpec` is a path either to one file in OpenAPI spec or to the directory containing whole spec.
+
+#### Available parameters:
+
+`-c, --config <pathToConfig>` (optional) Config for linting is just a list of files, which are to be ignored while linting, provided in following format:
+
+```yaml
+exclude:
+- /Path/To/OpenAPI/Project/fileName.yaml
+- /Path/To/OpenAPI/Project/anotherFile.yaml
+```
+
+**Warning:** this ignore-list can contain paths only to files, not directories.
+
+### Generate command
+
+Use `generate` command to generate files with code.
+
+```sh
+SurfGen generate <pathToSpec>
+```
+
+where `pathToSpec` is a path to one file in OpenAPI spec which describes service you need to generate.
+
+#### Available parameters:
+
+`-c, --config <pathToConfig>` (**necessary**) Generation config keeps description of templates and output files. See [Generation config](Sources/CodeGenerator/Stages/GenerationStage/Template.md) for details.
+
+`-n, --name <serviceName>` (**necessary**) This name will be used as name for generated service files.
+
+#### Available flags:
+
+`-r, --rewrite` If set, new generated files will replace existing ones. Default is `false`
+
+## Editing templates
+
+See [Templates](TEMPLATES.md)
