@@ -23,6 +23,7 @@ public struct BuildCodeGeneratorPipelineFactory {
 
     public static func build(templates: [Template],
                              serviceName: String,
+                             needRewriteExistingFiles: Bool = false,
                              logger: Logger? = nil) -> BuildGASTTreeEntryPoint {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
@@ -53,13 +54,17 @@ public struct BuildCodeGeneratorPipelineFactory {
                 next: InitCodeGenerationStage(
                     parserStage: .init(
                         next: SwaggerCorrectorStage(
+                            corrector: SwaggerCorrector(logger: logger),
                             next: ServiceGenerationStage(
-                                next: FileWriterStage().erase(),
+                                next: FileWriterStage(
+                                    needRewriteExistingFiles: needRewriteExistingFiles,
+                                    logger: logger
+                                ).erase(),
                                 templates: templates,
                                 serviceName: serviceName,
                                 templateFiller: templateFiller,
-                                modelExtractor: modelExtractor).erase(),
-                            corrector: SwaggerCorrector(logger: logger)
+                                modelExtractor: modelExtractor
+                            ).erase()
                         ).erase(),
                         parser: buildParser()
                     )

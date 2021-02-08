@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "AEXML",
-        "repositoryURL": "https://github.com/tadija/AEXML",
-        "state": {
-          "branch": null,
-          "revision": "e4d517844dd03dac557e35d77a8e9ab438de91a6",
-          "version": "4.4.0"
-        }
-      },
-      {
         "package": "JSONUtilities",
         "repositoryURL": "https://github.com/yonaskolb/JSONUtilities.git",
         "state": {
@@ -80,15 +71,6 @@
           "branch": null,
           "revision": "df4d5b3ec2c1421a58d71010ff43528db5b19e04",
           "version": "5.3.3"
-        }
-      },
-      {
-        "package": "XcodeProj",
-        "repositoryURL": "https://github.com/JohnReeze/XcodeProj",
-        "state": {
-          "branch": null,
-          "revision": "6a0b9e0e66fd246f18483c81f86456994f577493",
-          "version": "7.8.2"
         }
       },
       {

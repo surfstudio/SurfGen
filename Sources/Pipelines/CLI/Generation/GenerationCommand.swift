@@ -16,9 +16,22 @@ public class GenerationCommand: Command {
     public let name: String = "generate"
     public let shortDescription = "Generate files with provided templates"
 
-    public let serviceName = Key<String>("--name", "-n", description: "Name of service to generate")
-    public let configPath = Key<String>("--config", "-c", description: "Path to config yaml-file")
-    public let verbose = Flag("--verbose", "-v", description: "If set, will print debug-level logs")
+    public let serviceName = Key<String>("--name",
+                                         "-n",
+                                         description: "Name of service to generate")
+
+    public let configPath = Key<String>("--config",
+                                        "-c",
+                                        description: "Path to config yaml-file")
+
+    public let verbose = Flag("--verbose",
+                              "-v",
+                              description: "If set, will print debug-level logs")
+
+    public let rewrite = Flag("--rewrite",
+                              "-r",
+                              description: "If set, existing files will be rewritten with new generated ones",
+                              defaultValue: false)
 
     public var specPath = Parameter()
 
@@ -32,6 +45,7 @@ public class GenerationCommand: Command {
 
         let pipeline = BuildCodeGeneratorPipelineFactory.build(templates: config.templates,
                                                                serviceName: serviceName,
+                                                               needRewriteExistingFiles: rewrite.value,
                                                                logger: logger())
 
         guard let specUrl = URL(string: specPath.value) else {
