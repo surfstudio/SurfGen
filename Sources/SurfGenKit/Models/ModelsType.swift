@@ -6,24 +6,24 @@
 //  Copyright © 2019 Surf. All rights reserved.
 //
 
-public enum ModelType {
+public enum ModelType: String {
     case entity
     case entry
     case `enum`
 
-    var name: String {
+    private func getName(for platform: Platform) -> String {
         switch self {
         case .entity:
-            return "Entity"
+            return platform.entitySuffix
         case .entry:
-            return "Entry"
+            return platform.entrySuffix
         case .enum:
             return ""
         }
     }
 
-    func form(name value: String) -> String {
-        return "\(value)\(name)"
+    func form(name value: String, for platform: Platform) -> String {
+        return "\(value)\(getName(for: platform))"
     }
 
 }

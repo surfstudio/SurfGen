@@ -1,0 +1,40 @@
+//
+//  ActivationNetworkService.swift
+//
+
+import NodeKit
+
+public class ActivationNetworkService: ActivationService {
+
+    // MARK: - Constants
+
+    private enum Keys {
+        static let secretCode = "secretCode"
+    }
+
+    // MARK: - Private Properties
+
+    private var builder: DefaultChain<ActivationUrlRoute> {
+        return DefaultChain()
+    }
+
+    // MARK: - Public Methods
+
+    func getCard(secretCode: String) -> Observer<VoucherInfoEntity> {
+        return builder
+            .set(query: [Keys.secretCode: secretCode])
+            .route(.get, .card)
+            .build()
+            .process()
+        }
+    }
+
+    func postCard(activationRequest: ActivationRequestEntity) -> Observer<InfoMessageEntity> {
+        return builder
+            .route(.post, .card)
+            .build()
+            .process(activationRequest)
+        }
+    }
+
+}

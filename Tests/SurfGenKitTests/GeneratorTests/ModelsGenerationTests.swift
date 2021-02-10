@@ -35,8 +35,9 @@ class ModelsGenerationTests: XCTestCase {
         // then
         
         do {
-            let path = Path(#file) + "../../../../Templates"
-            let genModel = try RootGenerator(tempatesPath: path).generateCode(for: root, types: [modelType])
+            let path = Path(#file) + "../../../../Templates/Swift"
+            let genModel = try RootGenerator(tempatesPath: path, platform: .swift).generateModel(from: root,
+                                                                                                 types: [modelType])
             let fileName = genModel[modelType]![0].fileName
             let code = genModel[modelType]![0].code
 
@@ -53,8 +54,8 @@ class ModelsGenerationTests: XCTestCase {
     func testErrorForNotRootToken() {
         let errorTokens: [ASTToken] = [.decl, .content, .name(value: ""), .field(isOptional: false), .type(name: "")]
         for errorToken in errorTokens {
-            assertThrow(try RootGenerator().generateCode(for: Node(token: errorToken, []),
-                                                         types: [.entity]),
+            assertThrow(try RootGenerator(platform: .swift).generateModel(from: Node(token: errorToken, []),
+                                                                          types: [.entity]),
                         throws: GeneratorError.incorrectNodeToken(""))
         }
     }

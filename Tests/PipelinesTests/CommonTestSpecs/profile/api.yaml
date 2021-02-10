@@ -1,0 +1,118 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+  contact:
+    name: Starkina Maria
+    email: starkina@surfstudio.ru
+ 
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+
+security:
+  - bearerAuth: []
+    
+paths:
+  /user/profile/registrationInfo:
+    get:
+      summary: Регистрационные данные пользователя
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/AllClientInfo"
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
+
+  /user/profile/updateInfo:
+    patch:
+      summary: Изменение данных пользователя для флоу оплаты 
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema:
+              $ref: "models.yaml#/components/schemas/UpdateUserInfo"
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "../common/models.yaml#/components/schemas/InfoMessage"
+                  - $ref: "../common/models.yaml#/components/schemas/OtpRequired"
+    put:
+      summary: Изменение данных пользователя из профиля
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema:
+              $ref: "models.yaml#/components/schemas/UpdateUserInfoFromProfile"
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "../common/models.yaml#/components/schemas/InfoMessage"
+                  - $ref: "../common/models.yaml#/components/schemas/OtpRequired"
+  
+  /user/profile/creditInfo:
+    get:
+      summary: Получение информации о кредите
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/CreditInformation"
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
+
+  /user/profile/changePassword:
+    put:
+      summary: Изменение пароля 
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema:
+              $ref: "models.yaml#/components/schemas/ChangePasswordRequest"
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "../common/models.yaml#/components/schemas/InfoMessage"
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
+    
+  /user/profile/changeAlias:
+    put:
+      summary: Изменение псевдонима 
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema:
+              $ref: "models.yaml#/components/schemas/ChangeAliasRequest"
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "../common/models.yaml#/components/schemas/InfoMessage"
+        default:
+          $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"

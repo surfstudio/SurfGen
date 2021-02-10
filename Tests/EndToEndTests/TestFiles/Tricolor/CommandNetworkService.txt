@@ -1,0 +1,33 @@
+//
+//  CommandNetworkService.swift
+//
+
+import NodeKit
+
+public class CommandNetworkService: CommandService {
+
+    // MARK: - Private Properties
+
+    private var builder: DefaultChain<CommandUrlRoute> {
+        return DefaultChain()
+    }
+
+    // MARK: - Public Methods
+
+    func getCommand() -> Observer<CheckResultEntity> {
+        return builder
+            .route(.get, .command)
+            .build()
+            .process()
+        }
+    }
+
+    func postCommand() -> Observer<InfoMessageEntity> {
+        return builder
+            .route(.post, .command)
+            .build()
+            .process()
+        }
+    }
+
+}

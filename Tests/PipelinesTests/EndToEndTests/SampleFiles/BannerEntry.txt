@@ -1,0 +1,18 @@
+
+import NodeKit
+
+public struct BannerEntry: Codable {
+
+    // MARK: - Public Properties
+
+    public let id: String
+    public let imageUrl: String
+    public let url: String
+
+}
+
+// MARK: - RawMappable
+
+extension BannerEntry: RawMappable {
+    public typealias Raw = Json
+}

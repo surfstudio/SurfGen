@@ -1,0 +1,18 @@
+//
+//  PushService.swift
+//
+
+import NodeKit
+
+public protocol PushService {
+
+    /// Разрыв связи токена с МП
+    func deleteFcmToken(pushDeleteTokenRequest: PushDeleteTokenRequestEntity) -> Observer<Void>
+
+    /// Установка связи токена с МП
+    func postFcmToken(pushTokenRequest: PushTokenRequestEntity) -> Observer<Void>
+
+    /// Сохранение информации о факте запуска приложения через пуш
+    func postRegisterFcmToken(registerPushTokenRequest: RegisterPushTokenRequestEntity) -> Observer<Void>
+
+}

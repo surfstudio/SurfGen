@@ -27,22 +27,45 @@ indirect enum Type {
 
 }
 
+enum PlainType: String {
+    case boolean
+    case integer
+    case number
+    case string
+}
+
 final class TypeNodeParser {
+
+    private enum Constants {
+        static let errorMessage = "Could not detect type"
+    }
+
+    private let platform: Platform
+
+    init(platform: Platform) {
+        self.platform = platform
+    }
 
     /**
      Method for detection of concreate type for ASTNode with Type token
      */
     func detectType(for typeNode: ASTNode) throws -> Type {
         guard case let .type(name) = typeNode.token else {
-            throw GeneratorError.incorrectNodeToken("provided node is not type node")
+            throw SurfGenError(nested: GeneratorError.incorrectNodeToken("provided node is not type node"),
+                               message: Constants.errorMessage)
         }
 
         switch typeNode.subNodes.count {
         case .zero:
-            return .plain(name)
+            guard let type = PlainType.init(rawValue: name) else {
+                throw SurfGenError(nested: GeneratorError.nodeConfiguration("plain type name is not recognized"),
+                                   message: Constants.errorMessage)
+            }
+            return .plain(platform.plainType(type: type))
         case 1:
             guard let subNode = typeNode.subNodes.first, case let .type(subName) = subNode.token else {
-                throw GeneratorError.nodeConfiguration("can find subnode with correct type for typeNode with name \(name)")
+                throw SurfGenError(nested: GeneratorError.nodeConfiguration("can find subnode with correct type for typeNode with name \(name)"),
+                                   message: Constants.errorMessage)
             }
 
             switch name {
@@ -51,12 +74,19 @@ final class TypeNodeParser {
             case ASTConstants.object:
                 return .object(subName)
             case ASTConstants.enum:
-                return .enum(subName)
+                guard let type = PlainType.init(rawValue: subName) else {
+                    throw SurfGenError(nested: GeneratorError.nodeConfiguration("plain type name is not recognized"),
+                                       message: Constants.errorMessage)
+                }
+                return .enum(platform.plainType(type: type))
             default:
-                throw GeneratorError.nodeConfiguration("provided node with name \(name) can not be resolved")
+                throw SurfGenError(nested: GeneratorError.nodeConfiguration("provided node with name \(name) can not be resolved"),
+                                   message: Constants.errorMessage)
+
             }
         default:
-            throw GeneratorError.incorrectNodeNumber("Type node contains to many nodes")
+            throw SurfGenError(nested: GeneratorError.incorrectNodeNumber("Type node contains to many nodes"),
+                               message: Constants.errorMessage)
         }
 
     }

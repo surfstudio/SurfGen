@@ -1,0 +1,16 @@
+
+import NodeKit
+
+public struct InfoMessageEntry: Codable {
+
+    // MARK: - Public Properties
+
+    public let text: String?
+
+}
+
+// MARK: - RawMappable
+
+extension InfoMessageEntry: RawMappable {
+    public typealias Raw = Json
+}

@@ -1,0 +1,51 @@
+
+import NodeKit
+
+/// История активации бонусов
+public struct BonusHistoryItemEntity {
+
+    // MARK: - Public Properties
+    
+    /// ID истории операции
+    public let id: String
+    
+    /// Название бонуса
+    public let bonusName: String
+    
+    /// Дата получения бонуса
+    public let operationDate: ISO8601Date
+    
+    /// Заголовок истории (название акции)
+    public let campaignName: String?
+
+    // MARK: - Initialization
+
+    public init(id: String,
+                bonusName: String,
+                operationDate: ISO8601Date,
+                campaignName: String?) {
+        self.id = id
+        self.bonusName = bonusName
+        self.operationDate = operationDate
+        self.campaignName = campaignName
+    }
+
+}
+
+// MARK: - DTOConvertible
+
+extension BonusHistoryItemEntity: DTOConvertible {
+    public static func from(dto model: BonusHistoryItemEntry) throws -> BonusHistoryItemEntity {
+        return .init(id: model.id,
+                     bonusName: model.bonusName,
+                     operationDate: model.operationDate,
+                     campaignName: model.campaignName)
+    }
+
+    public func toDTO() throws -> BonusHistoryItemEntry {
+        return .init(id: id,
+                     bonusName: bonusName,
+                     operationDate: operationDate,
+                     campaignName: campaignName)
+    }
+}

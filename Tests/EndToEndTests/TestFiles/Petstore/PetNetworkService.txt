@@ -1,0 +1,79 @@
+//
+//  PetNetworkService.swift
+//
+
+import NodeKit
+
+public class PetNetworkService: PetService {
+
+    // MARK: - Constants
+
+    private enum Keys {
+        static let additionalMetadata = "additionalMetadata"
+        static let name = "name"
+        static let status = "status"
+    }
+
+    // MARK: - Private Properties
+
+    private var builder: DefaultChain<PetUrlRoute> {
+        return DefaultChain()
+    }
+
+    // MARK: - Public Methods
+
+    func addPet(pet: PetEntity) -> Observer<PetEntity> {
+        return builder
+            .route(.post, .pet)
+            .build()
+            .process(pet)
+        }
+    }
+
+    func deletePet(petId: String) -> Observer<Void> {
+        return builder
+            .route(.delete, .petPetId(petId: petId))
+            .build()
+            .process()
+        }
+    }
+
+    func findPetsByStatus(status: String) -> Observer<[PetEntity]> {
+        return builder
+            .set(query: [Keys.status: status])
+            .route(.get, .findByStatus)
+            .build()
+            .process()
+        }
+    }
+
+    func getPetById(petId: String) -> Observer<PetEntity> {
+        return builder
+            .route(.get, .petPetId(petId: petId))
+            .build()
+            .process()
+        }
+    }
+
+    func updatePet(pet: PetEntity) -> Observer<PetEntity> {
+        return builder
+            .route(.put, .pet)
+            .build()
+            .process(pet)
+        }
+    }
+
+    func updatePetWithForm(petId: String, name: String, status: String) -> Observer<Void> {
+        return builder
+            .set(query: [Keys.name: name, Keys.status: status])
+            .route(.post, .petPetId(petId: petId))
+            .build()
+            .process()
+        }
+    }
+
+    func uploadFile(petId: String, additionalMetadata: String, /* body with unsupported encoding */) -> Observer<ApiResponseEntity> {
+        // body with unsupported encoding: application/octet-stream
+    }
+
+}

@@ -1,0 +1,47 @@
+//
+//  UnitedUrlRoute.swift
+//
+
+import NodeKit
+
+enum UnitedUrlRoute {
+    case account
+    case accounts
+    case accountsForTransfer
+    case changeAccount
+    case info
+    case isAccountUnionAvailable
+    case reasons
+    case transfer
+    case vouchersForTransfer
+}
+
+// MARK: - UrlRouteProvider
+
+extension UnitedUrlRoute: UrlRouteProvider {
+
+    func url() throws -> URL {
+        let base = URL(string: Urls.base)
+        switch self {
+        case .account:
+            return try base + "/united/account"
+        case .accounts:
+            return try base + "/united/accounts"
+        case .accountsForTransfer:
+            return try base + "/united/accountsForTransfer"
+        case .changeAccount:
+            return try base + "/united/changeAccount"
+        case .info:
+            return try base + "/united/info"
+        case .isAccountUnionAvailable:
+            return try base + "/united/isAccountUnionAvailable"
+        case .reasons:
+            return try base + "/united/reasons"
+        case .transfer:
+            return try base + "/united/transfer"
+        case .vouchersForTransfer:
+            return try base + "/united/vouchersForTransfer"
+        }
+    }
+
+}

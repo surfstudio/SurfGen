@@ -9,4 +9,5 @@ public enum ASTConstants {
     public static let `enum` = "enum"
     public static let object = "object"
     public static let array = "array"
+    public static let group = "group"
 }

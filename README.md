@@ -1,21 +1,68 @@
 
-
-# SurfGen
+<p align="center">
+  <img src="Docs/logo.png">
+</p>
 [![Build Status](https://travis-ci.com/JohnReeze/SurfGen.svg?token=ZXokqeDnBGm8WAqyowYA&branch=master)](https://travis-ci.com/JohnReeze/SurfGen) [![codebeat badge](https://codebeat.co/badges/09676c44-a507-48e8-bfa7-c286ce949212)](https://codebeat.co/projects/github-com-johnreeze-surfgen-master) [![codecov](https://codecov.io/gh/JohnReeze/SurfGen/branch/master/graph/badge.svg)](https://codecov.io/gh/JohnReeze/SurfGen)
  ![Swift Version](https://img.shields.io/badge/swift-5.0-orange) ![LISENCE](https://img.shields.io/badge/LICENSE-MIT-green)
 
-SurfGen is a CLI written in Swift for generating Swift code from OpenApi specification(maybe from blueprint in future). Main purpose is to generate DTO and application layer models for [NodeKit](https://github.com/surfstudio/NodeKit). But you can modify templates written in Stencil or just change models generation to suit your needs in own your fork. 
+SurfGen is an language and plaform agnistic CLI tool written which is used for generate Model and Service layers from OpenAPI 3.x specification
+
+## How it works
+
+1. SurfGen parses OpenAPI file 
+2. collects all dependencies (resolves `$ref` even for another files)
+3. Create an internal representation of specification
+4. Send internal representation to code generator
+5. Code generator read code templates and generate files via them.
+
+Ypu can use our templates, or just write your own.
+
+In SurfGen you determine the result platform and language by templtes you give to SurfGen!
+
+## Supported OpenAPI features
+
+We support lots of thing. Just it will be more easy to say what we don't support (:
+
+## Unsupported OpenAPI features
+
+- We don't support key `not`
+- We don't support in-place schema declration (when you don't create a `components/schemas/Object` but you write schema just in place where you use it (for example in response))
+- We don't support groups (oneOf, allOf, anyOf) which are include arrays
+- We don't support arrays whose item's type is aray (like arrays of arrays)
+
+... and may be we forgot something ...
+
+BUT if you find something that isn't work - plz contact us, or create an issue and we will fix it!
+
+And if you need some of the features that isn't supported - create an issue, or create a PR (:
+
+## Supported plaforms
+
+SurfGen can be run on:
+
+- MacOS
+- Ubuntu
+
+## Templates
+
+At this moment we have:
+
+- iOS
+- Android
+- Flutter
+
+To create your own templates use [https://stencil.fuller.li](https://stencil.fuller.li)
 
 ## Installation
 
 Just add next snippet to your Podfile
 ```
-pod 'SurfGen', :git => "https://github.com/JohnReeze/SurfGen.git", :tag => "0.1.0"
+pod 'SurfGen', :git => "https://github.com/surfstudio/SurfGen.git"
 ```
 
 Also you can build it from source and just add it to your project using next snippet
 ```sh
-git clone https://github.com/JohnReeze/SurfGen
+git clone https://github.com/surfstudio/SurfGen
 cd SurfGen
 make executable
 cp -R Binary <your_project_path>
@@ -24,149 +71,50 @@ In order to use generate command you need to setup configuration file. See Confi
 
 ## Usage
 
-Example:
+SurfGen currently has 2 workflows: **linter** and **generator**.
+
+### Lint command
+
+Use `lint` command to check if your OpenAPI spec is correct in terms of SurfGen. If not, you will see log with errors and warnings, describing what exactly is wrong with the spec.
 
 ```sh
-surfgen generate ../openapi.yaml --modelNames Order,StatusType --config ./config.yaml
+SurfGen lint <pathToSpec>
 ```
 
-Use `--help` to see usage information
+where `pathToSpec` is a path either to one file in OpenAPI spec or to the directory containing whole spec.
 
-```
-surfgen --help
-Usage: surfgen <command> [options]
+#### Available parameters:
 
-surfgen code generator
-
-Commands:
-  generate        Generates models for provided spec
-  help            Prints help information
-  version         Prints the current version of this app
-```
-
-Use `surfgen generate --help` to see the list of generation options
-
-```
-
-Usage: surfgen generate <spec> [options]
-
-Generates models for provided spec
-
-Options:
-  --config, -c <value>        Path to config yaml-file
-  --modelNames, -m <value>    Model names to be generated. Example: --modelNames Order,StatusType
-  -h, --help                  Show help information
-```
----
-**NOTE**
-
-* You can specify not only local path, but any URL of your yaml spec.
-* In order to use generate command you need to setup configuration file. See Configuration File 
-
----
-
-
-
-## Configuration File
-
-Configuration file is a yaml-file which could contain next parameters
+`-c, --config <pathToConfig>` (optional) Config for linting is just a list of files, which are to be ignored while linting, provided in following format:
 
 ```yaml
-# Generation Pathes
-
-entities_path: ./Common/Models/Models/Entity
-entries_path: .Common/Models/Models/Entry
-enums_path: ./Common/Models/Models/Shared
-
-# Project Info
-
-# Path to .xcodeproj file where generated files are supposed to be added
-project_path: .Common/Models/Models.xcodeproj
-
-# Name of root main project directory. Used to detect correct subgroup in project tree
-project_main_group: Models
-
-# Targets in provided Project for generated files
-targets:
-    - Models
-    - AnyOtherTargetInProject
-
-# Flag responsible for properties and models comments
-generate_descriptions: true
-
-# Types of models supposed to be generated, current avaliable values: 'nodeKitEntry', 'nodeKitEntity', 'enum'"
-generation_types:
-  - nodeKitEntity
-  - nodeKitEntry
-  - enum
-
-# Resources Pathes
-
-# Path to template files.
-templates_path: ./surfgen/Templates
-
-# Path to black list file. Model names in this list will be ignored during generation proccess
-black_list_path: ./surfgen/black_list.txt
-
-# If your spec is located at private repo on gitlab you can specify personal access token (for more info see https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html)
-gitlab_token: HkDpUKE87yWEHET-_Mns
-
+exclude:
+- /Path/To/OpenAPI/Project/fileName.yaml
+- /Path/To/OpenAPI/Project/anotherFile.yaml
 ```
 
----
-**NOTE**
+**Warning:** this ignore-list can contain paths only to files, not directories.
 
-After you set gitlab_token value, you need to correctly configure your spec URL.
-Spec URL in general for using with personal access token would be like
+### Generate command
 
-```
-https://gitlab.com/api/v4/projects/<your_project_id>/repository/files/<path_to_your_spec>/raw?ref=<branch_name>
-```
-Where: 
-- your_project_id is an integer id value (you can find it under your project name in gitlab on main repo's page).
-- path_to_your_spec is a relative path to your yaml-file
+Use `generate` command to generate files with code.
 
-Tips:
-
-If you using gitlab personal access token, you can add next snippet to your Makefile
-
-```makefile
-model:
-    /Pods/SurfGen/Binary/surfgen generate https://gitlab.com/api/v4/projects/<your_project_id>/repository/files/<path_to_your_spec>/raw?ref=master --modelNames $(modelNames) 
-```
----
-
-## Models
-
-Currently there are only three types of models avaliable (btw you can create you own):
-
-* nodeKitEntity
-* nodeKitEntry
-* enum
-
-First two types are supposed to be used with [NodeKit](https://github.com/surfstudio/NodeKiti). 
-Enum model is a regular Codable enum:
-
-```swift
-public enum ExampleType: Int, Codable { 
-}
+```sh
+SurfGen generate <pathToSpec>
 ```
 
-## Editing
+where `pathToSpec` is a path to one file in OpenAPI spec which describes service you need to generate.
 
-```
-$ swift package generate-xcodeproj
-$ open SurfGen.xcodeproj
-```
-This use Swift Project Manager to create an `xcodeproj` file that you can open, edit and run in Xcode, which makes editing any code easier.
+#### Available parameters:
 
-If you want to pass any required arguments when running in XCode, you can edit the scheme to include launch arguments.
+`-c, --config <pathToConfig>` (**necessary**) Generation config keeps description of templates and output files. See [Generation config](Sources/CodeGenerator/Stages/GenerationStage/Template.md) for details.
 
-## How it works
+`-n, --name <serviceName>` (**necessary**) This name will be used as name for generated service files.
 
-![](./Docs/surfgen_work_scheme.jpg)
+#### Available flags:
 
-## Templates
+`-r, --rewrite` If set, new generated files will replace existing ones. Default is `false`
 
-Templates are just .txt files in Templates directory. You need to specify path to that directory in config file. These files follow the **Stencil** file format outlined here [https://stencil.fuller.li](https://stencil.fuller.li)
+## Editing templates
 
+See [Templates](TEMPLATES.md)

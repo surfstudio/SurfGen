@@ -1,0 +1,16 @@
+
+import NodeKit
+
+public struct {{ className }}: Codable {
+
+    // MARK: - Public Properties
+
+{% for property in properties %}    public let {{ property.entryName }}: {{ property.type }}{% if property.isOptional %}?{% endif %}
+{% endfor %}
+}
+
+// MARK: - RawMappable
+
+extension {{ className }}: RawMappable {
+    public typealias Raw = Json
+}

@@ -1,0 +1,25 @@
+//
+//  HelpNetworkService.swift
+//
+
+import NodeKit
+
+public class HelpNetworkService: HelpService {
+
+    // MARK: - Private Properties
+
+    private var builder: DefaultChain<HelpUrlRoute> {
+        return DefaultChain()
+    }
+
+    // MARK: - Public Methods
+
+    func getFaq() -> Observer<[FaqItemEntity]> {
+        return builder
+            .route(.get, .faq)
+            .build()
+            .process()
+        }
+    }
+
+}

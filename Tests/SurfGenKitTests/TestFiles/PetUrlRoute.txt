@@ -1,0 +1,26 @@
+//
+//  PetUrlRoute.swift
+//
+
+import NodeKit
+
+enum PetUrlRoute {
+    case findByStatus
+    case petPetId(petId: String)
+}
+
+// MARK: - UrlRouteProvider
+
+extension PetUrlRoute: UrlRouteProvider {
+
+    func url() throws -> URL {
+        let base = URL(string: Urls.base)
+        switch self {
+        case .findByStatus:
+            return try base + "/pet/findByStatus"
+        case .petPetId(let petId):
+            return try base + "/pet/\(petId)"
+        }
+    }
+
+}

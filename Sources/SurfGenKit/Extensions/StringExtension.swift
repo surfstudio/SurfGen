@@ -8,8 +8,15 @@
 
 extension String {
 
-    func formOptional(_ isOptional: Bool) -> String {
-        return self + isOptional.asOptionalSign
+    func asArray(platform: Platform) -> String {
+        return platform.arrayLiteral.start + self + platform.arrayLiteral.end
+    }
+
+    func plainType(for platform: Platform) -> String? {
+        guard let plainType = PlainType(rawValue: self) else {
+            return nil
+        }
+        return platform.plainType(type: plainType)
     }
 
     func capitalizingFirstLetter() -> String {
@@ -24,8 +31,56 @@ extension String {
         self = self.capitalizingFirstLetter()
     }
 
-    var withSwiftExt: String {
-        return self + ".swift"
+    func withFileExtension(_ ext: String) -> String {
+        return "\(self).\(ext)"
+    }
+
+    func operationName(with method: String, rootPath: String) -> String {
+        guard self.pathPartsCount > 1 else {
+            return method + self
+            .replacingOccurrences(of: "[{}]", with: "", options: .regularExpression)
+            .pathToCamelCase()
+            .capitalizingFirstLetter()
+        }
+
+        let camelRootPath = rootPath.pathToCamelCase().capitalizingFirstLetter()
+    
+        return method + self
+            .replacingOccurrences(of: "[{}]", with: "", options: .regularExpression)
+            .split(separator: "/")
+            .map { String($0) }
+            .reduce("", { $0 + $1.capitalizingFirstLetter() })
+            .snakeCaseToCamelCase()
+            .capitalizingFirstLetter()
+            .replacingOccurrences(of: camelRootPath, with: "")
+        }
+
+    var pathName: String {
+        guard self.pathPartsCount > 1 else {
+            return self
+                .replacingOccurrences(of: "[{}]", with: "", options: .regularExpression)
+                .pathToCamelCase()
+        }
+        return self
+            .replacingOccurrences(of: "[{}]", with: "", options: .regularExpression)
+            .split(separator: "/")
+            .map { String($0) }
+            .removingFirst()
+            .reduce("", { $0 + $1.capitalizingFirstLetter() })
+            .snakeCaseToCamelCase()
+    }
+
+    func pathToCamelCase() -> String {
+        return self.split(whereSeparator: { $0 == "/" || $0 == "_" })
+            .map { String($0) }
+            .reduce("", { $0 + $1.capitalizingFirstLetter() })
+            .lowercaseFirstLetter()
+    }
+
+    func pathWithParameterInterpolation(platform: Platform) -> String {
+        return self
+            .replacingOccurrences(of: "{", with: platform.stringInterpolation.start)
+            .replacingOccurrences(of: "}", with: platform.stringInterpolation.end)
     }
 
     func snakeCaseToCamelCase() -> String {
@@ -33,6 +88,10 @@ extension String {
             .map { String($0) }
             .reduce("", { $0 + $1.capitalizingFirstLetter() })
             .lowercaseFirstLetter()
+    }
+
+    func tabShifted() -> String {
+        return self.replacingOccurrences(of: "\n", with: "\n\t")
     }
 
     /// index for default model properties order
@@ -47,6 +106,14 @@ extension String {
         default:
             return 0
         }
+    }
+
+    private var pathPartsCount: Int {
+        return self
+            .split(separator: "/")
+            .map { String($0) }
+            .filter { !$0.contains("{") }
+            .count
     }
 
 }

@@ -1,0 +1,23 @@
+//
+//  ActivationUrlRoute.swift
+//
+
+import NodeKit
+
+enum ActivationUrlRoute {
+    case card
+}
+
+// MARK: - UrlRouteProvider
+
+extension ActivationUrlRoute: UrlRouteProvider {
+
+    func url() throws -> URL {
+        let base = URL(string: Urls.base)
+        switch self {
+        case .card:
+            return try base + "/activation/card"
+        }
+    }
+
+}

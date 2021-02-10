@@ -1,0 +1,55 @@
+
+import NodeKit
+
+/// Описывает TextField в который нужно будет какие-то данные для акции
+public struct PromotionInputEntity {
+
+    // MARK: - Public Properties
+    
+    public let fieldName: String
+    
+    /// В случае если поле заполнено с ошибкой (не прошло регэксп)
+    public let errorText: String?
+    
+    public let fieldDescription: String?
+    
+    /// Если null, то считается false
+    public let optional: Bool?
+    
+    public let regEx: String?
+
+    // MARK: - Initialization
+
+    public init(fieldName: String,
+                errorText: String?,
+                fieldDescription: String?,
+                optional: Bool?,
+                regEx: String?) {
+        self.fieldName = fieldName
+        self.errorText = errorText
+        self.fieldDescription = fieldDescription
+        self.optional = optional
+        self.regEx = regEx
+    }
+
+}
+
+// MARK: - DTOConvertible
+
+extension PromotionInputEntity: DTOConvertible {
+    public static func from(dto model: PromotionInputEntry) throws -> PromotionInputEntity {
+        return .init(fieldName: model.fieldName,
+                     errorText: model.errorText,
+                     fieldDescription: model.fieldDescription,
+                     optional: model.optional,
+                     regEx: model.regEx)
+    }
+
+    public func toDTO() throws -> PromotionInputEntry {
+        return .init(fieldName: fieldName,
+                     errorText: errorText,
+                     fieldDescription: fieldDescription,
+                     optional: optional,
+                     regEx: regEx)
+    }
+}

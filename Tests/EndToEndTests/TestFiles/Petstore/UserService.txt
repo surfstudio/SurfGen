@@ -1,0 +1,30 @@
+//
+//  UserService.swift
+//
+
+import NodeKit
+
+public protocol UserService {
+
+    /// Create user
+    func createUser(user: UserEntity) -> Observer<Void>
+
+    /// Creates list of users with given input array
+    func createUsersWithListInput(user: [UserEntity]) -> Observer<UserEntity>
+
+    /// Delete user
+    func deleteUser(username: String) -> Observer<Void>
+
+    /// Get user by user name
+    func getUserByName(username: String) -> Observer<UserEntity>
+
+    /// Logs user into the system
+    func loginUser(username: String, password: String) -> Observer<String>
+
+    /// Logs out current logged in user session
+    func logoutUser() -> Observer<Void>
+
+    /// Update user
+    func updateUser(username: String, user: UserEntity) -> Observer<Void>
+
+}

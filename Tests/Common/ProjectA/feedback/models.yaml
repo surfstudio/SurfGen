@@ -1,0 +1,66 @@
+components:
+  schemas: 
+
+    Attachment:
+      description: Файл
+      type: object
+      properties:
+        fileId:
+          type: string
+          description: Ссылка на файл 
+      required:
+        - fileId
+
+    Report:
+      description: Обратная связь
+      type: object
+      properties:
+        message:
+          type: string
+        mail:
+          type: string
+        phone:
+          type: string
+          example: 9001234567
+        firstName:
+          type: string
+          description: Имя
+          nullable: false
+        secondName:
+          type: string
+          description: Фамилия
+          nullable: false
+        thirdName: 
+          type: string
+          description: Отчество
+          nullable: true
+        attacments:
+          type: array
+          items: 
+            $ref: "models.yaml#/components/schemas/Attachment"
+      required:
+      - message
+      - mail
+      - phone
+      - firstName
+      - secondName
+      - agree
+
+    ReportAddAccounts:
+      description: Обратная связь с темой объединение аккаунтов 
+      type: object
+      properties:
+        mail:
+          type: string
+        phone:
+          type: string
+          example: 9001234567
+        accounts:
+          description: Список аккаунтов для объединения
+          type: array
+          items: 
+            type: string
+      required:
+      - mail
+      - phone
+      - accounts

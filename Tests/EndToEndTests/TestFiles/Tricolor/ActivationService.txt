@@ -1,0 +1,15 @@
+//
+//  ActivationService.swift
+//
+
+import NodeKit
+
+public protocol ActivationService {
+
+    /// Общая информация по активируемой карте
+    func getCard(secretCode: String) -> Observer<VoucherInfoEntity>
+
+    /// Активация карты оплаты
+    func postCard(activationRequest: ActivationRequestEntity) -> Observer<InfoMessageEntity>
+
+}

@@ -1,0 +1,27 @@
+//
+//  ProfileService.swift
+//
+
+import NodeKit
+
+public protocol ProfileService {
+
+    /// Получение информации о кредите
+    func getCreditInfo() -> Observer<CreditInformationEntity>
+
+    /// Регистрационные данные пользователя
+    func getRegistrationInfo() -> Observer<AllClientInfoEntity>
+
+    /// Изменение псевдонима
+    func updateChangeAlias(changeAliasRequest: ChangeAliasRequestEntity) -> Observer<InfoMessageEntity>
+
+    /// Изменение пароля
+    func updateChangePassword(changePasswordRequest: ChangePasswordRequestEntity) -> Observer<InfoMessageEntity>
+
+    /// Изменение данных пользователя для флоу оплаты
+    func updateUpdateInfo(updateUserInfo: UpdateUserInfoEntity) -> Observer</* response with undefined model name */>
+
+    /// Изменение данных пользователя из профиля
+    func updateUpdateInfo(updateUserInfoFromProfile: UpdateUserInfoFromProfileEntity) -> Observer</* response with undefined model name */>
+
+}

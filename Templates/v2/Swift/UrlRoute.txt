@@ -1,0 +1,27 @@
+//
+//  {{ service.name }}UrlRoute.swift
+//
+
+import NodeKit
+
+enum {{ service.name }}UrlRoute {
+{% for path in service.paths %}    case {{ path.name }}{% if path.hasParameters %}{#
+#}({% for parameter in path.parameters %}{{ parameter.name }}: String{% if not forloop.last %}, {% endif %}{#
+#}{% endfor %}){% endif %}{% if not forloop.last %}
+{% endif %}{% endfor %}
+}
+
+// MARK: - UrlRouteProvider
+
+extension {{ service.name }}UrlRoute: UrlRouteProvider {
+
+    func url() throws -> URL {
+        let base = URL(string: Urls.base)
+        switch self {
+        {% for path in service.paths %}case .{{ path.name }}{% if path.parameters %}({% for parameter in path.parameters %}let {{ parameter.name }}{% if not forloop.last %}, {% endif %}{% endfor %}){% endif %}:
+            return try base + "{{ path.pathWithSeparatedParameters }}"{% if not forloop.last %}
+        {% endif %}{% endfor %}
+        }
+    }
+
+}

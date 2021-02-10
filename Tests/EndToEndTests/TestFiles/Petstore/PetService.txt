@@ -1,0 +1,30 @@
+//
+//  PetService.swift
+//
+
+import NodeKit
+
+public protocol PetService {
+
+    /// Add a new pet to the store
+    func addPet(pet: PetEntity) -> Observer<PetEntity>
+
+    /// Deletes a pet
+    func deletePet(petId: String) -> Observer<Void>
+
+    /// Finds Pets by status
+    func findPetsByStatus(status: String) -> Observer<[PetEntity]>
+
+    /// Find pet by ID
+    func getPetById(petId: String) -> Observer<PetEntity>
+
+    /// Update an existing pet
+    func updatePet(pet: PetEntity) -> Observer<PetEntity>
+
+    /// Updates a pet in the store with form data
+    func updatePetWithForm(petId: String, name: String, status: String) -> Observer<Void>
+
+    /// uploads an image
+    func uploadFile(petId: String, additionalMetadata: String, /* body with unsupported encoding */) -> Observer<ApiResponseEntity>
+
+}

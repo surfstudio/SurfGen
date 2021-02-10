@@ -25,12 +25,13 @@ class EnumGeneratorTests: XCTestCase {
         // then
 
         do {
-            let path = Path(#file) + "../../../../Templates"
+            let path = Path(#file) + "../../../../Templates/Swift"
 
             let loader = FileSystemLoader(paths: [path])
             let environment = Environment(loader: loader)
 
-            let model = try EnumGenerator().generateCode(declNode: type.typeDeclNode, environment: environment)
+            let model = try EnumGenerator(platform: .swift).generateCode(for: type.typeDeclNode,
+                                                                         environment: environment)
 
             XCTAssert(model.fileName == exptecedFileName, "File name is not equal to expected one (resulted value is \(model.fileName)")
             XCTAssert(model.code == expectedCode, "Code is not equal to expected one (resulted value is \(model.code)")

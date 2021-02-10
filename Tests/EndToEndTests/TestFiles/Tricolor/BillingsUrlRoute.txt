@@ -1,0 +1,38 @@
+//
+//  BillingsUrlRoute.swift
+//
+
+import NodeKit
+
+enum BillingsUrlRoute {
+    case balance
+    case basket
+    case contactInfo
+    case isPaymentAvailable
+    case payment
+    case paymentsInfo
+}
+
+// MARK: - UrlRouteProvider
+
+extension BillingsUrlRoute: UrlRouteProvider {
+
+    func url() throws -> URL {
+        let base = URL(string: Urls.base)
+        switch self {
+        case .balance:
+            return try base + "/billings/balance"
+        case .basket:
+            return try base + "/billings/basket"
+        case .contactInfo:
+            return try base + "/billings/contactInfo"
+        case .isPaymentAvailable:
+            return try base + "/billings/isPaymentAvailable"
+        case .payment:
+            return try base + "/billings/payment"
+        case .paymentsInfo:
+            return try base + "/billings/paymentsInfo"
+        }
+    }
+
+}

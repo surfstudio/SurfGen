@@ -16,26 +16,10 @@ enum ConfigManagerError: Error {
 
 final class ConfigManager {
 
-    // MARK: - Nested types
-
-    private enum GeneratedModelType: String {
-        case nodeKitEntry
-        case nodeKitEntity
-        case `enum`
-    }
-
     // MARK: - Properties
 
-    var generationPathes: [ModelType: String] {
-        return [
-            .entity: model.entitiesPath,
-            .entry: model.entriesPath,
-            .enum: model.enumPath
-        ]
-    }
-
-    var tempatePath: Path {
-        return Path(model.tempatesPath)
+    var templatePath: Path {
+        return Path(model.templatesPath)
     }
 
     var projectPath: Path? {
@@ -78,27 +62,36 @@ final class ConfigManager {
 
     // MARK: - Internal methods
 
+    func getPlatform() throws -> Platform {
+        guard let platform = Platform(rawValue: model.platform) else {
+            throw SurfGenError(nested: ConfigManagerError.incorrectYamlFile,
+                               message: "Could not get platform")
+        }
+        return platform
+    }
+
+    func getModelGenerationPaths() throws -> [ModelType: String] {
+        return [
+            .entity: model.entitiesPath,
+            .entry: model.entriesPath,
+            .enum: model.enumPath
+        ].compactMapValues { $0 }
+    }
+
+    func getServiceGenerationPaths(for serviceName: String) throws -> [ServicePart: String] {
+        return [
+            .urlRoute: model.endpointsPath,
+            .protocol: model.serviceProtocolsPath?.filePathInserting(name: serviceName.capitalizingFirstLetter()),
+            .service: model.servicesPath?.filePathInserting(name: serviceName.capitalizingFirstLetter())
+        ].compactMapValues { $0 }
+    }
+
     func getBlackList() throws -> [String] {
         guard let blackList = model.blackList else {
             return []
         }
         let blackListFile: String = try Path(blackList).read()
         return blackListFile.split(separator: "\n").map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
-    }
-
-    func getGenerationTypes() throws -> [ModelType] {
-        return try model.generationTypes.map {
-            switch GeneratedModelType(rawValue: $0) {
-            case .nodeKitEntry?:
-                return .entry
-            case .nodeKitEntity?:
-                return .entity
-            case .enum?:
-                return .enum
-            case .none:
-                throw ConfigManagerError.incorrectGenerationType
-            }
-        }
     }
 
 }

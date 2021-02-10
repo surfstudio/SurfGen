@@ -8,28 +8,34 @@
 
 public class TypeNameBuilder {
 
+    private let platform: Platform
+
+    init(platform: Platform) {
+        self.platform = platform
+    }
+
     /**
      Method for generating type description in code
 
-     For type: .object(Profile), isOptional: true, modelType: .entity the result string will be "ProfileEntity?"
-     Other exapmles of resulted string: [Int]?, Bool, [ProfileEntry]?
+     For type: .object(Profile), isOptional: true, modelType: .entity the result string will be "ProfileEntity"
+     Other exapmles of resulted string: [Int], Bool, [ProfileEntry]
      */
-    func buildString(for type: Type, isOptional: Bool, modelType: ModelType) -> String {
+    func buildString(for type: Type, modelType: ModelType) -> String {
         switch type {
         case .plain(let value):
-            return value.formOptional(isOptional)
+            return value
         case .enum(let value):
-            return value.formOptional(isOptional)
+            return value
         case .object(let value):
-            return modelType.form(name: value).formOptional(isOptional)
+            return modelType.form(name: value, for: platform)
         case .array(let subType):
             switch subType {
             case .enum(let value):
-                return "[\(value)]".formOptional(isOptional)
+                return value.asArray(platform: platform)
             case .plain(let value):
-                return "[\(value)]".formOptional(isOptional)
+                return value.asArray(platform: platform)
             case .object(let value):
-                return "[\(modelType.form(name: value))]".formOptional(isOptional)
+                return (modelType.form(name: value, for: platform)).asArray(platform: platform)
             case .array:
                 return "not supported case"
             }

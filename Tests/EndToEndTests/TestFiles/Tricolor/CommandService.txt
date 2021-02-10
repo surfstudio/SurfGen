@@ -1,0 +1,15 @@
+//
+//  CommandService.swift
+//
+
+import NodeKit
+
+public protocol CommandService {
+
+    /// Проверка доступности команд активации
+    func getCommand() -> Observer<CheckResultEntity>
+
+    /// Повтор команд активации
+    func postCommand() -> Observer<InfoMessageEntity>
+
+}

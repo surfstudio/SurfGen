@@ -1,0 +1,21 @@
+//
+//  {{ name }}Service.swift
+//
+
+import NodeKit
+
+public protocol {{ name }}Service {
+{% for operation in operations %}
+    {% if operation.hasDescription %}/// {{ operation.description }}
+    {% endif %}func {{ operation.name }}({% for parameter in operation.pathParameters %}{#
+    #}{{ parameter.name }}: String{% if not forloop.last or operation.hasQueryParameters or operation.hasBody %}, {% endif %}{% endfor %}{#
+    #}{% for parameter in operation.queryParameters %}{{ parameter.name }}: {{ parameter.type }}{% if not forloop.last or operation.hasBody %}, {% endif %}{% endfor %}{#
+    #}{% if operation.hasBody %}{% if operation.requestBody.hasUnsupportedEncoding %}/* body with unsupported encoding */{% endif %}{#
+    #}{% if operation.requestBody.isModel %}{{ operation.requestBody.modelName }}: {{ operation.requestBody.modelType }}{% endif %}{#
+    #}{% if operation.requestBody.isArray %}{{ operation.requestBody.modelName }}: [{{ operation.requestBody.modelType }}]{% endif %}{#
+    #}{% if operation.requestBody.isDictionary %}{% for parameter in operation.requestBody.parameters %}{{ parameter.name }}: {{ parameter.type }}{% if not forloop.last %}, {% endif %}{#
+    #}{% endfor %}{% endif %}{% endif %}){#
+    #} -> Observer<{% if operation.hasUndefinedResponseBody %}/* response with undefined model name */{#
+    #}{% else %}{{ operation.responseModel }}{% endif %}>
+{% endfor %}
+}

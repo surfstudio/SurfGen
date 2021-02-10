@@ -1,0 +1,14 @@
+//
+//  PetService.swift
+//
+
+import NodeKit
+
+public protocol PetService {
+
+    /// Finds Pets by status
+    func getFindByStatus(status: String, testBoolValue: Bool, testDoubleValue: Double, testIntValue: Int) -> Observer<[PetEntity]>
+
+    func postPetPetId(petId: String, pet: PetEntity) -> Observer<Void>
+
+}

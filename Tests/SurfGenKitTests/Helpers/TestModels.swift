@@ -30,26 +30,26 @@ enum TestModels: CaseIterable {
     func getFilePath(for model: ModelType) -> String {
         switch self {
         case .profile:
-            return model.form(name: "TestFiles/ProfileCustomData")
+            return model.form(name: "TestFiles/ProfileCustomData", for: .swift)
         case .shop:
-            return model.form(name: "TestFiles/Shop")
+            return model.form(name: "TestFiles/Shop", for: .swift)
         case .shopLocation:
-            return model.form(name: "TestFiles/ShopLocation")
+            return model.form(name: "TestFiles/ShopLocation", for: .swift)
         case .token:
-            return model.form(name: "TestFiles/ContactToken")
+            return model.form(name: "TestFiles/ContactToken", for: .swift)
         }
     }
 
     func getTestFileName(for model: ModelType) -> String {
         switch self {
         case .profile:
-            return model.form(name: "ProfileCustomData")
+            return model.form(name: "ProfileCustomData", for: .swift)
         case .shop:
-            return model.form(name: "Shop")
+            return model.form(name: "Shop", for: .swift)
         case .shopLocation:
-            return model.form(name: "ShopLocation")
+            return model.form(name: "ShopLocation", for: .swift)
         case .token:
-            return model.form(name: "ContactToken")
+            return model.form(name: "ContactToken", for: .swift)
         }
     }
 

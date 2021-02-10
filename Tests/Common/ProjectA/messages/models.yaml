@@ -1,0 +1,65 @@
+components:
+  schemas:
+  
+    UnreadMessages:
+      type: object
+      properties:
+        unreadMessages:
+          type: integer
+          example: 3
+          nullable: true
+
+    MessageStatusId:
+      type: string
+      enum: [Sended, Delivered, Readed, Deleted]
+      description: Статус сообщения
+
+    MessagesResponse:
+      properties:
+        messages: 
+          type: array
+          items: 
+            $ref: "#/components/schemas/Message"
+        metaData: 
+          $ref: "../common/resources/models.yaml#/components/schemas/MetaData"
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 00000000-0000-0e3c-0000-000000000bf8
+        message:
+          type: string
+          description: Текст сообщения (в html)
+        attachments: 
+          type: array
+          items:
+            $ref: "models.yaml#/components/schemas/AttachmentID"
+        subject:
+          type: string
+          description: Тема сообщения
+          nullable: true
+        status:
+          $ref: "models.yaml#/components/schemas/MessageStatusId"
+          description: Статус сообщения
+        sendDate:
+          $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+          description: Дата отправки
+      required: 
+        - id
+        - message
+        - status
+        - sendDate
+
+    AttachmentID:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+        - id
+        - name
+

@@ -1,0 +1,61 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+  contact:
+    name: Starkina Maria
+    email: starkina@surfstudio.ru
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+
+security:
+  - bearerAuth: []
+
+paths:
+  /user/fcmToken:
+    post:
+      summary: Установка связи токена с МП
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "models.yaml#/components/schemas/PushTokenRequest"
+      responses:
+          "204":
+            description: "Успех"
+          default:
+            $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
+    delete:
+      summary: Разрыв связи токена с МП
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "models.yaml#/components/schemas/PushDeleteTokenRequest"
+      responses:
+          "204":
+            description: "Успех"
+          default:
+            $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
+
+  /user/registerFcmToken:
+    post:
+      summary: Сохранение информации о факте запуска приложения через пуш
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "models.yaml#/components/schemas/RegisterPushTokenRequest"
+      responses:
+          "204":
+            description: "Успех"
+          default:
+            $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"

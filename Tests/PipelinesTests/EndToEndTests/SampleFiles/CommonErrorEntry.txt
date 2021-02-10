@@ -1,0 +1,18 @@
+
+import NodeKit
+
+public struct CommonErrorEntry: Codable {
+
+    // MARK: - Public Properties
+
+    public let code: Int
+    public let developerMessage: String?
+    public let userMessage: String?
+
+}
+
+// MARK: - RawMappable
+
+extension CommonErrorEntry: RawMappable {
+    public typealias Raw = Json
+}
