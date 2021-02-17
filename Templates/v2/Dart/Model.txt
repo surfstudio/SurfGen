@@ -22,7 +22,7 @@ class {{ model.name }} {
 							json.get<Map<String, Object>>('{{ property.name }}'),
 						), // {{ property.typeName }}.fromJson{% endif %}
 			{% endfor %}
-		)
+		);
 	}{#
 	#}{% for property in model.properties %}
 	{% for line in property.description|splitLines %}

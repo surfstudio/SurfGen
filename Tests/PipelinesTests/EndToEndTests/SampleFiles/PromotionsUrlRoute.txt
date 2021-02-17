@@ -5,10 +5,10 @@
 import NodeKit
 
 enum PromotionsUrlRoute {
-    case bannersLocation
+    case bannersLocation(location: String)
     case history
     case promotions
-    case promotionsId
+    case promotionsId(id: String)
 }
 
 // MARK: - UrlRouteProvider

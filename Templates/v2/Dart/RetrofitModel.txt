@@ -1,0 +1,24 @@
+{% for line in model.description|splitLines %}
+/// {{ line }}{% endfor %}
+@JsonSerializable()
+class {{ model.name }} {{ '{' }}{#
+	#}{% for property in model.properties %}
+	{% for line in property.description|splitLines %}
+	/// {{ line }}{% endfor %}
+	{% if property.isTypeArray %}List<{% endif %}{#
+	#}{% if property.typeName == "integer" %}int{#
+    #}{% elif property.typeName == "number" %}double{#
+    #}{% elif property.typeName == "string" %}String{#
+    #}{% elif property.typeName == "boolean" %}bool{#
+    #}{% else %}{{ property.typeName }}{% endif %}{#
+    #}{% if property.isTypeArray %}>{% endif %}{#
+	#} {{ property.name }};{% endfor %}
+
+	{{ model.name }}({
+		{% for property in model.properties %}this.{{ property.name }},{% if not forloop.last %}
+		{% endif %}{% endfor %}
+	});
+
+	factory {{ model.name }}.fromJson(Map<String, dynamic> json) => _${{ model.name }}FromJson(json);
+	Map<String, dynamic> toJson() => _${{ model.name }}ToJson(this);
+}
