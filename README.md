@@ -6,19 +6,19 @@
 [![Build Status](https://travis-ci.com/JohnReeze/SurfGen.svg?token=ZXokqeDnBGm8WAqyowYA&branch=master)](https://travis-ci.com/JohnReeze/SurfGen) [![codebeat badge](https://codebeat.co/badges/09676c44-a507-48e8-bfa7-c286ce949212)](https://codebeat.co/projects/github-com-johnreeze-surfgen-master) [![codecov](https://codecov.io/gh/JohnReeze/SurfGen/branch/master/graph/badge.svg)](https://codecov.io/gh/JohnReeze/SurfGen)
  ![Swift Version](https://img.shields.io/badge/swift-5.0-orange) ![LISENCE](https://img.shields.io/badge/LICENSE-MIT-green)
 
-SurfGen is an language and plaform agnistic CLI tool written which is used for generate Model and Service layers from OpenAPI 3.x specification
+SurfGen is an language and plaform agnostic CLI tool written which is used for generate Model and Service layers from OpenAPI 3.x specification
 
 ## How it works
 
 1. SurfGen parses OpenAPI file 
-2. collects all dependencies (resolves `$ref` even for another files)
+2. Collects all dependencies (resolves `$ref` even for another files)
 3. Create an internal representation of specification
 4. Send internal representation to code generator
 5. Code generator read code templates and generate files via them.
 
-Ypu can use our templates, or just write your own.
+You can use our templates, or just write your own.
 
-In SurfGen you determine the result platform and language by templtes you give to SurfGen!
+In SurfGen you determine the result platform and language by templates you give to SurfGen!
 
 ## Supported OpenAPI features
 
