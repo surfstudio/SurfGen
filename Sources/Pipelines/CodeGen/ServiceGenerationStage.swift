@@ -34,7 +34,7 @@ public struct ServiceGenerationStage: PipelineStage {
     ) {
         self.next = next
         self.templates = templates
-        self.serviceName = serviceName
+        self.serviceName = serviceName.capitalizingFirstLetter()
         self.templateFiller = templateFiller
         self.modelExtractor = modelExtractor
     }
@@ -91,15 +91,22 @@ public struct ServiceGenerationStage: PipelineStage {
                                       message: "While filling template at \(template.templatePath) with model \(name)")
             return SourceCode(code: sourceCode,
                               fileName: template.buildFileName(for: name),
-                              destinationPath: template.destinationPath)
+                              destinationPath: template.buildDestinationPath(for: name))
         }
     }
 }
 
 private extension Template {
+
+    func buildDestinationPath(for name: String) -> String {
+        let fileNameCase = self.fileNameCase ?? .camelCase
+        let groupName = fileNameCase.apply(for: name)
+        return destinationPath.replaceNameTemplate(with: groupName)
+    }
+
     func buildFileName(for modelName: String) -> String {
         let fileName = modelName + (nameSuffix ?? "")
         let fileNameCase = self.fileNameCase ?? .camelCase
-        return fileNameCase.nameTransformation(fileName) + "." + fileExtension
+        return fileNameCase.apply(for: fileName) + "." + fileExtension
     }
 }

@@ -15,13 +15,13 @@ class {{ service.name }}ServiceStub: {{ service.name }}Service {
     func {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
     #}{{ parameter.name }}: String, {% endfor %}{#
     #}{% for parameter in operation.queryParameters %}{{ parameter.name }}: {#
-    #}{% if parameter.isTypeArray %}[{% endif %}{#
-    #}{% if parameter.typeName == "integer" %}Int{#
-    #}{% elif parameter.typeName == "number" %}Double{#
-    #}{% elif parameter.typeName == "string" %}String{#
-    #}{% elif parameter.typeName == "boolean" %}Bool{#
-    #}{% else %}{{ parameter.typeName }}{% if parameter.isTypeObject %}Entity{% endif %}{% endif %}{#
-    #}{% if parameter.isTypeArray %}]{% endif %}{#
+    #}{% if parameter.typeModel.isArray %}[{% endif %}{#
+    #}{% if parameter.typeModel.name == "integer" %}Int{#
+    #}{% elif parameter.typeModel.name == "number" %}Double{#
+    #}{% elif parameter.typeModel.name == "string" %}String{#
+    #}{% elif parameter.typeModel.name == "boolean" %}Bool{#
+    #}{% else %}{{ parameter.typeName }}{% if parameter.typeModel.isObject %}Entity{% endif %}{% endif %}{#
+    #}{% if parameter.typeModel.isArray %}]{% endif %}{#
     #}{% if not parameter.isRequired %}?{% endif %}, {% endfor %}{#
     #}{{ requestModelName|lowercaseFirstLetter }}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}: {#
         #}{% if operation.requestGenerationModel.isTypeArray %}[{% endif %}{{ requestModelName }}{#
@@ -41,13 +41,13 @@ class {{ service.name }}ServiceStub: {{ service.name }}Service {
     func {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
     #}{{ parameter.name }}: String{% if not forloop.last or operation.queryParameters %}, {% endif %}{% endfor %}{#
     #}{% for parameter in operation.queryParameters %}{{ parameter.name }}: {#
-    #}{% if parameter.isTypeArray %}[{% endif %}{#
-    #}{% if parameter.typeName == "integer" %}Int{#
-    #}{% elif parameter.typeName == "number" %}Double{#
-    #}{% elif parameter.typeName == "string" %}String{#
-    #}{% elif parameter.typeName == "boolean" %}Bool{#
-    #}{% else %}{{ parameter.typeName }}{% if parameter.isTypeObject %}Entity{% endif %}{% endif %}{#
-    #}{% if parameter.isTypeArray %}]{% endif %}{#
+    #}{% if parameter.typeModel.isArray %}[{% endif %}{#
+    #}{% if parameter.typeModel.name == "integer" %}Int{#
+    #}{% elif parameter.typeModel.name == "number" %}Double{#
+    #}{% elif parameter.typeModel.name == "string" %}String{#
+    #}{% elif parameter.typeModel.name == "boolean" %}Bool{#
+    #}{% else %}{{ parameter.typeModel.name }}{% if parameter.typeModel.isObject %}Entity{% endif %}{% endif %}{#
+    #}{% if parameter.typeModel.isArray %}]{% endif %}{#
     #}{% if not parameter.isRequired %}?{% endif %}{#
     #}{% if not forloop.last %}, {% endif %}{% endfor %}) -> Observer<{% if operation.responseGenerationModel %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}[{% endif %}{#

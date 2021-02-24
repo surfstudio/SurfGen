@@ -94,6 +94,20 @@ extension SchemaType {
         }
         return false
     }
+
+    var enumTypeName: String? {
+        guard case .enum(let enumModel) = self else {
+            return nil
+        }
+        return enumModel.generatedType
+    }
+
+    var aliasTypeName: String? {
+        guard case .alias(let alias) = self else {
+            return nil
+        }
+        return alias.typeName
+    }
 }
 
 extension SchemaType: Encodable {

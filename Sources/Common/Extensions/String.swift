@@ -68,6 +68,10 @@ extension String {
             .lowercased()
     }
 
+    public func replaceNameTemplate(with name: String) -> String {
+        return self.replacingOccurrences(of: "\\{.*?\\}", with: name, options: .regularExpression)
+    }
+
     private func pathToCamelCase() -> String {
         return self
             .split(whereSeparator: { $0 == "/" || $0 == "_" })

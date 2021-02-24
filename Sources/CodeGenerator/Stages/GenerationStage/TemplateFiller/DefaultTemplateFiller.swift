@@ -50,6 +50,10 @@ public class DefaultTemplateFiller: TemplateFiller {
             $0.snakeCaseToCamelCase()
         }
 
+        templateExtension.registerStringFilter("camelCaseToSnakeCase") {
+            $0.camelCaseToSnakeCase()
+        }
+
         templateExtension.registerStringFilter("camelCaseToCaps") {
             $0.camelCaseToSnakeCase().uppercased()
         }

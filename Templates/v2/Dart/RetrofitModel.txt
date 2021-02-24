@@ -1,3 +1,4 @@
+part '{{ model.name|camelCaseToSnakeCase  }}.g.dart'
 {% for line in model.description|splitLines %}
 /// {{ line }}{% endfor %}
 @JsonSerializable()
@@ -5,13 +6,13 @@ class {{ model.name }} {{ '{' }}{#
 	#}{% for property in model.properties %}
 	{% for line in property.description|splitLines %}
 	/// {{ line }}{% endfor %}
-	{% if property.isTypeArray %}List<{% endif %}{#
-	#}{% if property.typeName == "integer" %}int{#
-    #}{% elif property.typeName == "number" %}double{#
-    #}{% elif property.typeName == "string" %}String{#
-    #}{% elif property.typeName == "boolean" %}bool{#
-    #}{% else %}{{ property.typeName }}{% endif %}{#
-    #}{% if property.isTypeArray %}>{% endif %}{#
+	{% if property.typeModel.isArray %}List<{% endif %}{#
+	#}{% if property.typeModel.name == "integer" or property.typeModel.aliasTypeName == "integer" %}int{#
+    #}{% elif property.typeModel.name == "number" or property.typeModel.aliasTypeName == "number" %}double{#
+    #}{% elif property.typeModel.name == "string" or property.typeModel.aliasTypeName == "string" %}String{#
+    #}{% elif property.typeModel.name == "boolean" or property.typeModel.aliasTypeName == "boolean" %}bool{#
+    #}{% else %}{{ property.typeModel.name }}{% endif %}{#
+    #}{% if property.typeModel.isArray %}>{% endif %}{#
 	#} {{ property.name }};{% endfor %}
 
 	{{ model.name }}({

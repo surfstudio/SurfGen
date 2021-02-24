@@ -22,12 +22,12 @@ public struct Template: Decodable {
         case camelCase
         case snakeCase
 
-        public var nameTransformation: (String) -> String {
+        public func apply(for name: String) -> String {
             switch self {
             case .camelCase:
-                return { $0 }
+                return name
             case .snakeCase:
-                return { $0.camelCaseToSnakeCase() }
+                return name.camelCaseToSnakeCase()
             }
         }
     }

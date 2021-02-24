@@ -6,13 +6,13 @@ public struct {{ model.name }}Entry: Codable {
     // MARK: - Public Properties
 
 {% for property in model.properties %}    public let {{ property.name }}: {#
-#}{% if property.isTypeArray %}[{% endif %}{#
-#}{% if property.typeName == "integer" %}Int{#
-#}{% elif property.typeName == "number" %}Double{#
-#}{% elif property.typeName == "string" %}String{#
-#}{% elif property.typeName == "boolean" %}Bool{#
-#}{% else %}{{ property.typeName }}{% if property.isTypeObject %}Entry{% endif %}{% endif %}{#
-#}{% if property.isTypeArray %}]{% endif %}{#
+#}{% if property.typeModel.isArray %}[{% endif %}{#
+#}{% if property.typeModel.name == "integer" %}Int{#
+#}{% elif property.typeModel.name == "number" %}Double{#
+#}{% elif property.typeModel.name == "string" %}String{#
+#}{% elif property.typeModel.name == "boolean" %}Bool{#
+#}{% else %}{{ property.typeModel.name }}{% if property.typeModel.isObject %}Entry{% endif %}{% endif %}{#
+#}{% if property.typeModel.isArray %}]{% endif %}{#
 #}{% if property.isNullable %}?{% endif %}
 {% endfor %}
 }

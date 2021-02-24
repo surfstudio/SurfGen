@@ -55,7 +55,7 @@ class PropertiesTests: XCTestCase {
             return
         }
 
-        XCTAssert(arrayProperty.isTypeArray)
+        XCTAssert(arrayProperty.typeModel.isArray)
         XCTAssertEqual(try arrayProperty.type.arrayType().itemsType.name, "KeyValuePair")
     }
 

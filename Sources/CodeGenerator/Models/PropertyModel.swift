@@ -81,9 +81,7 @@ public struct PropertyModel {
     public let isNullable: Bool
 
     /// This value will be used as type for generation
-    let typeName: String
-    let isTypeArray: Bool
-    let isTypeObject: Bool
+    let typeModel: ItemTypeModel
 
     init(name: String,
          description: String?,
@@ -93,21 +91,26 @@ public struct PropertyModel {
         self.description = description
         self.type = type
         self.isNullable = isNullable
-
-        switch type {
-        case .array(let array):
-            self.typeName = array.itemsType.name
-        case .primitive(let type):
-            self.typeName = type.rawValue
-        case .reference(let schema):
-            self.typeName = schema.name
-        }
-        self.isTypeArray = type.isArray
-        self.isTypeObject = type.isObject
+        self.typeModel = ItemTypeModel(name: type.name,
+                                       isArray: type.isArray,
+                                       isObject: type.isObject,
+                                       enumTypeName: type.enumTypeName,
+                                       aliasTypeName: type.aliasTypeName)
     }
 }
 
 extension PropertyModel.PossibleType {
+
+    var name: String {
+        switch self {
+        case .array(let array):
+            return array.itemsType.name
+        case .primitive(let type):
+            return type.rawValue
+        case .reference(let schema):
+            return schema.name
+        }
+    }
 
     var isArray: Bool {
         if case .array = self {
@@ -125,6 +128,20 @@ extension PropertyModel.PossibleType {
         case .reference(let schema):
             return schema.isObject
         }
+    }
+
+    var enumTypeName: String? {
+        guard case .reference(let schema) = self else {
+            return nil
+        }
+        return schema.enumTypeName
+    }
+
+    var aliasTypeName: String? {
+        guard case .reference(let schema) = self else {
+            return nil
+        }
+        return schema.aliasTypeName
     }
 }
 
