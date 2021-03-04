@@ -64,10 +64,20 @@ let componentName: String? // Name used in parameter component in OpenAPI
 let name: String // Name used in URL     
 let description: String?
 let isRequired: Bool
-let typeName: String // This value will be used as type for generation, contains model name or plain type name
-let isTypeArray: Bool // True if type is array of some type
-let isTypeObject: Bool // True if type is a ref to model or array with ref to model 
+let typeModel: ItemTypeModel
 ```
+
+### Item Type model
+
+```swift
+let name: String
+let isArray: Bool
+let isObject: Bool // True if type is a ref to model or array with ref to model
+let enumTypeName: String? // If type is enum, this is enum's primitive type name
+let aliasTypeName: String? // If type is alias of primitive type, this is the real primitive type name
+```
+
+
 
 ### DataGenerationModel
 
@@ -98,9 +108,7 @@ let description: String?
 let name: String // Property name
 let description: String?
 let isNullable: Bool // True if property is not required
-let typeName: String // This value will be used as type for generation, contains model name or plain type name
-let isTypeArray: Bool // True if type is array of some type
-let isTypeObject: Bool // True if type is a ref to model or array with ref to model
+let typeModel: ItemTypeModel
 ```
 
 
@@ -137,7 +145,8 @@ In addition to Stencil`s built-in filters we have some custom ones.
 
 - `capitalizeFirstLetter` Capitalizes first letter of a string but doesn't touch the rest of string. Example: `"exampleText" -> "ExampleText"`
 - `lowercaseFirstLetter` Makes first letter of a string lowercase but doesn't touch the rest of string. Example: "`ExampleText" -> "exampleText"`
--  `snakeCaseToCamelCase` Example: "`example_text" -> "exampleText"`
+-  `snakeCaseToCamelCase` Example: `"example_text" -> "exampleText"`
+-  `camelCaseToSnakeCase` Example: `"exampleText" -> "example_text"`
 - `camelCaseToCaps` Example: "`exampleText" -> "EXAMPLE_TEXT"`
 - `trim` Example: `"\n   exampleText       " -> "exampleText" `
 - `splitLines` Returns list of strings, made by splitting input string by "\n" symbol. Example: `"example\nstring" -> ["example", "string"]`

@@ -51,7 +51,10 @@ public struct Template: Decodable {
     public let templatePath: String
 
     /// Where to place file generated with this template
-    /// Example: Path/To/Project/Models
+    /// If some directories are missing, they will be generated automatically
+    /// All entries of `{name}` will be replaced with the name of passed context (model, service, etc)
+    /// It allows you to group files by name
+    /// Example: Path/To/Project/Models/{name}
     public let destinationPath: String
 
     public init(type: Template.TemplateType,
