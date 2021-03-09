@@ -21,7 +21,7 @@ import SwiftCLI
 //    print(error.localizedDescription)
 //}
 
-let version = "0.1.0"
+let version = "1.0.1"
 let cli = CLI(name: "surfgen",
               version: version,
               description: "surfgen code generator",

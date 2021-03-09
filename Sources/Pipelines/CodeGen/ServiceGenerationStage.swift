@@ -34,7 +34,7 @@ public struct ServiceGenerationStage: PipelineStage {
     ) {
         self.next = next
         self.templates = templates
-        self.serviceName = serviceName
+        self.serviceName = serviceName.capitalizingFirstLetter()
         self.templateFiller = templateFiller
         self.modelExtractor = modelExtractor
     }
@@ -58,78 +58,55 @@ public struct ServiceGenerationStage: PipelineStage {
         let typeAliasModels = schemaModels.compactMap { $0.containedTypealias }
         
         // fill templates
-        let generatedService = try fillServiceTemplates(templates.filter { $0.type == .service },
-                                                        with: serviceGenerationModel)
+        
+        let generatedService = try fillTemplates(templates.filter { $0.type == .service },
+                                                 with: [ContextKeys.service: serviceGenerationModel],
+                                                 name: serviceGenerationModel.name)
+
         let generatedModels = try objectModels.flatMap {
-            return try fillObjectTemplates(templates.filter { $0.type == .model },
-                                           with: $0)
+            return try fillTemplates(templates.filter { $0.type == .model },
+                                     with: [ContextKeys.model: $0],
+                                     name: $0.name)
         }
 
         let generatedEnums = try enumModels.flatMap {
-            return try fillEnumTemplates(templates.filter { $0.type == .enum },
-                                         with: $0)
+            return try fillTemplates(templates.filter { $0.type == .enum },
+                                     with: [ContextKeys.enum: $0],
+                                     name: $0.name)
         }
 
         let generatedTypeAliases = try typeAliasModels.flatMap {
-            return try fillTypealiasTemplates(templates.filter { $0.type == .typealias },
-                                              with: $0)
+            return try fillTemplates(templates.filter { $0.type == .typealias },
+                                     with: [ContextKeys.model: $0],
+                                     name: $0.name)
         }
 
         try next.run(with: generatedService + generatedModels + generatedEnums + generatedTypeAliases)
         
     }
 
-    private func fillServiceTemplates(_ templates: [Template],
-                                      with model: ServiceGenerationModel) throws  -> [SourceCode] {
+    private func fillTemplates(_ templates: [Template], with model: [String: Any], name: String) throws -> [SourceCode] {
         return try templates.map { template in
-            let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
-                                                                  with: [ContextKeys.service: model]),
-                                      message: "While filling template at \(template.templatePath) with service \(model.name)")
+            let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath, with: model),
+                                      message: "While filling template at \(template.templatePath) with model \(name)")
             return SourceCode(code: sourceCode,
-                                 fileName: model.name + (template.nameSuffix ?? "") + "." + template.fileExtension,
-                                 destinationPath: template.destinationPath)
-        }
-    }
-
-    private func fillObjectTemplates(_ templates: [Template],
-                                     with model: SchemaObjectModel) throws  -> [SourceCode] {
-        return try templates.map { template in
-            let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
-                                                                  with: [ContextKeys.model: model]),
-                                      message: "While filling template at \(template.templatePath) with model \(model.name)")
-            return SourceCode(code: sourceCode,
-                              fileName: template.buildFileName(for: model.name),
-                              destinationPath: template.destinationPath)
-        }
-    }
-
-    private func fillEnumTemplates(_ templates: [Template],
-                                   with model: SchemaEnumModel) throws  -> [SourceCode] {
-        return try templates.map { template in
-            let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
-                                                                  with: [ContextKeys.enum: model]),
-                                      message: "While filling template at \(template.templatePath) with model \(model.name)")
-            return SourceCode(code: sourceCode,
-                                 fileName: template.buildFileName(for: model.name),
-                                 destinationPath: template.destinationPath)
-        }
-    }
-
-    private func fillTypealiasTemplates(_ templates: [Template],
-                                        with model: PrimitiveTypeAliasModel) throws  -> [SourceCode] {
-        return try templates.map { template in
-            let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath,
-                                                                  with: [ContextKeys.model: model]),
-                                      message: "While filling template at \(template.templatePath) with model \(model.name)")
-            return SourceCode(code: sourceCode,
-                              fileName: template.buildFileName(for: model.name),
-                              destinationPath: template.destinationPath)
+                              fileName: template.buildFileName(for: name),
+                              destinationPath: template.buildDestinationPath(for: name))
         }
     }
 }
 
 private extension Template {
+
+    func buildDestinationPath(for name: String) -> String {
+        let fileNameCase = self.fileNameCase ?? .camelCase
+        let groupName = fileNameCase.apply(for: name)
+        return destinationPath.replaceNameTemplate(with: groupName)
+    }
+
     func buildFileName(for modelName: String) -> String {
-        return modelName + (nameSuffix ?? "") + "." + fileExtension
+        let fileName = modelName + (nameSuffix ?? "")
+        let fileNameCase = self.fileNameCase ?? .camelCase
+        return fileNameCase.apply(for: fileName) + "." + fileExtension
     }
 }

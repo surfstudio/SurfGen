@@ -15,13 +15,13 @@ class {{ service.name }}Repository {
     #}({% for parameter in operation.pathParameters %}{#
   #}String {{ parameter.name }}, {% endfor %}{#
   #}{% for parameter in operation.queryParameters %}{#
-    #}{% if parameter.isTypeArray %}List<{% endif %}{#
-    #}{% if parameter.typeName == "integer" %}int{#
-    #}{% elif parameter.typeName == "number" %}double{#
-    #}{% elif parameter.typeName == "string" %}String{#
-    #}{% elif parameter.typeName == "boolean" %}bool{#
-    #}{% else %}{{ parameter.typeName }}{% endif %}{#
-    #}{% if parameter.isTypeArray %}>{% endif %} {{ parameter.name|snakeCaseToCamelCase }}, {% endfor %}{#
+    #}{% if parameter.typeModel.isArray %}List<{% endif %}{#
+    #}{% if parameter.typeModel.name == "integer" or parameter.typeModel.aliasTypeName == "integer" %}int{#
+    #}{% elif parameter.typeModel.name == "number" or parameter.typeModel.aliasTypeName == "number" %}double{#
+    #}{% elif parameter.typeModel.name == "string" or parameter.typeModel.aliasTypeName == "string" %}String{#
+    #}{% elif parameter.typeModel.name == "boolean" or parameter.typeModel.aliasTypeName == "boolean" %}bool{#
+    #}{% else %}{{ parameter.typeModel.name }}{% endif %}{#
+    #}{% if parameter.typeModel.isArray %}>{% endif %} {{ parameter.name|snakeCaseToCamelCase }}, {% endfor %}{#
   #}{% if operation.requestGenerationModel.isTypeArray %}List<{% endif %}{{ requestModelName }}{#
     #}{% if operation.requestGenerationModel.isTypeArray %}>{% endif %}{#
     #} {{ requestModelName|lowercaseFirstLetter }}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}) async {
@@ -50,13 +50,13 @@ class {{ service.name }}Repository {
     #}{% else %}void{% endif %}> {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}({% for parameter in operation.pathParameters %}{#
   #}String {{ parameter.name }}{% if not forloop.last or operation.hasQueryParameters %}, {% endif %}{% endfor %}{#
   #}{% for parameter in operation.queryParameters %}{#
-    #}{% if parameter.isTypeArray %}List<{% endif %}{#
-    #}{% if parameter.typeName == "integer" %}int{#
-    #}{% elif parameter.typeName == "number" %}double{#
-    #}{% elif parameter.typeName == "string" %}String{#
-    #}{% elif parameter.typeName == "boolean" %}bool{#
-    #}{% else %}{{ parameter.typeName }}{% endif %}{#
-    #}{% if parameter.isTypeArray %}>{% endif %} {{ parameter.name|snakeCaseToCamelCase }}{#
+    #}{% if parameter.typeModel.isArray %}List<{% endif %}{#
+    #}{% if parameter.typeModel.name == "integer" or parameter.typeModel.aliasTypeName == "integer" %}int{#
+    #}{% elif parameter.typeModel.name == "number" or parameter.typeModel.aliasTypeName == "number" %}double{#
+    #}{% elif parameter.typeModel.name == "string" or parameter.typeModel.aliasTypeName == "string" %}String{#
+    #}{% elif parameter.typeModel.name == "boolean" or parameter.typeModel.aliasTypeName == "boolean" %}bool{#
+    #}{% else %}{{ parameter.typeModel.name }}{% endif %}{#
+    #}{% if parameter.typeModel.isArray %}>{% endif %} {{ parameter.name|snakeCaseToCamelCase }}{#
     #}{% if not forloop.last %}, {% endif %}{% endfor %}) async {
     final response = await _http.{{ operation.httpMethod }}<Map<String, Object>>(
       {{ service.name }}Urls.{{ path.name }}{% if operation.pathParameters %}{#

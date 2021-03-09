@@ -108,10 +108,7 @@ public struct ParameterModel: Encodable {
     public let isRequired: Bool
 
     /// This value will be used as type for generation
-    let typeName: String
-    let isTypeArray: Bool
-    /// True if type is a ref to model or array with ref to model
-    let isTypeObject: Bool
+    let typeModel: ItemTypeModel
 
     init(componentName: String?,
          name: String,
@@ -125,21 +122,26 @@ public struct ParameterModel: Encodable {
         self.type = type
         self.description = description
         self.isRequired = isRequired
-
-        switch type {
-        case .array(let array):
-            self.typeName = array.itemsType.name
-        case .primitive(let type):
-            self.typeName = type.rawValue
-        case .reference(let schema):
-            self.typeName = schema.name
-        }
-        self.isTypeArray = type.isArray
-        self.isTypeObject = type.isObject
+        self.typeModel = ItemTypeModel(name: type.name,
+                                       isArray: type.isArray,
+                                       isObject: type.isObject,
+                                       enumTypeName: type.enumTypeName,
+                                       aliasTypeName: type.aliasTypeName)
     }
 }
 
 extension ParameterModel.PossibleType {
+
+    var name: String {
+        switch self {
+        case .array(let array):
+            return array.itemsType.name
+        case .primitive(let type):
+            return type.rawValue
+        case .reference(let schema):
+            return schema.name
+        }
+    }
 
     var isArray: Bool {
         if case .array = self {
@@ -158,6 +160,21 @@ extension ParameterModel.PossibleType {
             return schema.isObject
         }
     }
+
+    var enumTypeName: String? {
+        guard case .reference(let schema) = self else {
+            return nil
+        }
+        return schema.enumTypeName
+    }
+
+    var aliasTypeName: String? {
+        guard case .reference(let schema) = self else {
+            return nil
+        }
+        return schema.aliasTypeName
+    }
+    
 }
 
 extension ParameterModel.PossibleType: Encodable {

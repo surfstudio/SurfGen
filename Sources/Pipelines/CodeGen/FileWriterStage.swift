@@ -24,13 +24,11 @@ class FileWriterStage: PipelineStage {
 
     public func run(with input: [SourceCode]) throws {
         for sourceCode in input {
+            
+            let outputDirectory = Path(sourceCode.destinationPath)
+            try outputDirectory.mkpath()
 
-            // Make sure that output directory exists
-            guard Path(sourceCode.destinationPath).exists else {
-                throw CommonError(message: "Directory \(sourceCode.destinationPath) doesn't exist")
-            }
-
-            let filePath = Path("\(sourceCode.destinationPath)/\(sourceCode.fileName)")
+            let filePath = outputDirectory + sourceCode.fileName
 
             // Check if files already exist and need to be overwritten
             guard !filePath.exists || needRewriteExistingFiles else {
@@ -38,7 +36,8 @@ class FileWriterStage: PipelineStage {
                 continue
             }
 
-            try wrap(filePath.write(sourceCode.code),
+            let fileUrl = URL(fileURLWithPath: filePath.string)
+            try wrap(sourceCode.code.write(to: fileUrl, atomically: true, encoding: .utf8),
                      message: "While writing file at \(filePath)")
         }
         

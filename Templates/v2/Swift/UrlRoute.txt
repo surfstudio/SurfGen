@@ -5,7 +5,7 @@
 import NodeKit
 
 enum {{ service.name }}UrlRoute {
-{% for path in service.paths %}    case {{ path.name }}{% if path.hasParameters %}{#
+{% for path in service.paths %}    case {{ path.name }}{% if path.parameters %}{#
 #}({% for parameter in path.parameters %}{{ parameter.name }}: String{% if not forloop.last %}, {% endif %}{#
 #}{% endfor %}){% endif %}{% if not forloop.last %}
 {% endif %}{% endfor %}

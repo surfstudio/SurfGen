@@ -18,6 +18,20 @@ public struct Template: Decodable {
         case `typealias`
     }
 
+    public enum FileNameCase: String, Decodable {
+        case camelCase
+        case snakeCase
+
+        public func apply(for name: String) -> String {
+            switch self {
+            case .camelCase:
+                return name
+            case .snakeCase:
+                return name.camelCaseToSnakeCase()
+            }
+        }
+    }
+
     public let type: TemplateType
 
     /// All files generated with this template will have this suffix after passed name
@@ -27,23 +41,32 @@ public struct Template: Decodable {
     /// All files generated with this template will have this extension
     /// Examples: swift, dart, kt
     public let fileExtension: String
+
+    /// String case for files, generated with this template
+    /// Examples: TestModelName.txt, test_model_name.txt
+    public let fileNameCase: FileNameCase?
     
     /// Template file location
     /// Example:  Path/To/Project/SurfGenTemplates/example.txt
     public let templatePath: String
 
     /// Where to place file generated with this template
-    /// Example: Path/To/Project/Models
+    /// If some directories are missing, they will be generated automatically
+    /// All entries of `{name}` will be replaced with the name of passed context (model, service, etc)
+    /// It allows you to group files by name
+    /// Example: Path/To/Project/Models/{name}
     public let destinationPath: String
 
     public init(type: Template.TemplateType,
                 nameSuffix: String?,
                 fileExtension: String,
+                fileNameCase: FileNameCase? = .camelCase,
                 templatePath: String,
                 destinationPath: String) {
         self.type = type
         self.nameSuffix = nameSuffix
         self.fileExtension = fileExtension
+        self.fileNameCase = fileNameCase
         self.templatePath = templatePath
         self.destinationPath = destinationPath
     }

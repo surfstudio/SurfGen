@@ -65,6 +65,11 @@ extension String {
     public func camelCaseToSnakeCase() -> String {
         return self
             .replacingOccurrences(of: "(?<!^)(?=[A-Z])", with: "_", options: .regularExpression)
+            .lowercased()
+    }
+
+    public func replaceNameTemplate(with name: String) -> String {
+        return self.replacingOccurrences(of: "\\{.*?\\}", with: name, options: .regularExpression)
     }
 
     private func pathToCamelCase() -> String {

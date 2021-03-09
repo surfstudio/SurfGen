@@ -1,4 +1,4 @@
-TOOL_NAME =surfgen
+TOOL_NAME =SurfGen
 BUILD_PATH =.build/release/$(TOOL_NAME)
 
 test:
@@ -9,4 +9,3 @@ release_build:
 
 executable: release_build
 	cp $(BUILD_PATH) ./Binary
-	cp -R Templates ./Binary

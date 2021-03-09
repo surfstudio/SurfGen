@@ -29,7 +29,7 @@ let type: TemplateType
 ### `nameSuffix`
 
 All files generated with this template will have this suffix after passed name
-Examples:​ NetworkService, Repository, Urls, Entity
+Examples: NetworkService, Repository, Urls, Entity
 
 ``` swift
 let nameSuffix: String?
@@ -38,16 +38,27 @@ let nameSuffix: String?
 ### `fileExtension`
 
 All files generated with this template will have this extension
-Examples:​ swift, dart, kt
+Examples: swift, dart, kt
 
 ``` swift
 let fileExtension: String
 ```
 
+
+### `fileNameCase`
+
+String case for files, generated with this template
+Options: camelCase, snakeCase
+Results: TestModelName.txt, test_model_name.txt
+
+``` swift
+let fileNameCase: FileNameCase
+```
+
 ### `templatePath`
 
 Template file location
-Example:​  Path/To/Project/SurfGenTemplates/example.txt
+Example:  Path/To/Project/SurfGenTemplates/example.txt
 
 ``` swift
 let templatePath: String
@@ -56,7 +67,10 @@ let templatePath: String
 ### `destinationPath`
 
 Where to place file generated with this template
-Example:​ Path/To/Project/Models
+If some directories are missing, they will be generated automatically
+All entries of `{name}` will be replaced with the name of passed context (model, service, etc)
+It allows you to group files by name
+Example: Path/To/Project/Models/{name}
 
 ``` swift
 let destinationPath: String
