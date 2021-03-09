@@ -36,7 +36,8 @@ class FileWriterStage: PipelineStage {
                 continue
             }
 
-            try wrap(filePath.write(sourceCode.code),
+            let fileUrl = URL(fileURLWithPath: filePath.string)
+            try wrap(sourceCode.code.write(to: fileUrl, atomically: true, encoding: .utf8),
                      message: "While writing file at \(filePath)")
         }
         
