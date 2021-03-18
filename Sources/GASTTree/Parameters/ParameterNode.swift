@@ -10,6 +10,7 @@ import Foundation
 public struct ParameterNode {
 
     public enum Location {
+        case header
         case query
         case path
     }

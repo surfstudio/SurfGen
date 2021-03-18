@@ -15,14 +15,16 @@ extension ParameterLocation {
     ///
     /// ## Don't support
     ///
-    /// ### `cookie` and `header` as parameter's location
+    /// ### `cookie` as parameter's location
     func convert() throws -> ParameterNode.Location {
         switch self {
         case .query:
             return .query
         case .path:
             return .path
-        case .cookie, .header:
+        case .header:
+            return .header
+        case .cookie:
             throw CommonError(message: "We only support parameters whics is located in `query` and `path`")
         }
     }
