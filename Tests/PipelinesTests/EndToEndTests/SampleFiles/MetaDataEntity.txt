@@ -5,13 +5,13 @@ import NodeKit
 public struct MetaDataEntity {
 
     // MARK: - Public Properties
-    
+
     /// Общий размер списка
     public let count: Int?
-    
+
     /// Размер одной пачки пагинации
     public let limit: Int?
-    
+
     /// Текущий сдвиг пачки на пагинации
     public let offset: Int?
 

@@ -5,7 +5,7 @@ import NodeKit
 public struct InfoMessageEntity {
 
     // MARK: - Public Properties
-    
+
     public let text: String?
 
     // MARK: - Initialization
