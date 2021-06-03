@@ -90,6 +90,13 @@ let package = Package(
         .library(
             name: "CodeGenerator",
             targets: ["CodeGenerator"]
+        ),
+
+        // MARK: -- Analytics
+
+        .library (
+            name: "AnalyticsClient",
+            targets: ["AnalyticsClient"]
         )
     ],
     dependencies: dependencies,
@@ -164,10 +171,14 @@ let package = Package(
             name: "PipelinesCLI",
             dependencies: [
                 "Pipelines",
-                "SwiftCLI"
+                "SwiftCLI",
+                "AnalyticsClient"
             ],
             path: "Sources/Pipelines",
             sources: ["main.swift", "CLI"]
+        ),
+        .target(
+            name: "AnalyticsClient"
         )
     ] + testTargets
 )

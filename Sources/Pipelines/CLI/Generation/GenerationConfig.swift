@@ -11,4 +11,5 @@ import CodeGenerator
 public struct GenerationConfig: Decodable {
 
     var templates: [Template]
+    var logstashEnpointURI: String?
 }

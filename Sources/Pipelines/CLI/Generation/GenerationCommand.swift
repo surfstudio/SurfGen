@@ -10,6 +10,7 @@ import SwiftCLI
 import Yams
 import Common
 import Pipelines
+import AnalyticsClient
 
 public class GenerationCommand: Command {
 
@@ -38,8 +39,22 @@ public class GenerationCommand: Command {
     public func execute() throws {
         let config = self.loadConfig()
 
+        let analytics = self.initAnalyticsClientIfPossible(config: config)
+
+        var defaultPayload = [
+            "commandName": self.name,
+            "serviceName": self.serviceName,
+            "configPath": self.configPath,
+            "verbose": self.verbose,
+            "rewrite": self.rewrite,
+            "specPath": self.specPath.value
+        ] as [String : Any]
+
         guard let serviceName = serviceName.value else {
             logger().fatal("Service name was not provided.")
+            defaultPayload["Result"] = "Error"
+            defaultPayload["Error"] = "Service name was not provided."
+            try analytics?.logEvent(payload: defaultPayload)
             exit(-1)
         }
 
@@ -50,14 +65,22 @@ public class GenerationCommand: Command {
 
         guard let specUrl = URL(string: specPath.value) else {
             logger().fatal("Invalid path to root spec: \(specPath.value)")
+            defaultPayload["Result"] = "Error"
+            defaultPayload["Error"] = "Invalid path to root spec: \(specPath.value)"
+            try analytics?.logEvent(payload: defaultPayload)
             exit(-1)
         }
 
         do {
             try pipeline.run(with: specUrl)
             logger().success("All files generated successfully!")
+            defaultPayload["Result"] = "OK"
+            try? analytics?.logEvent(payload: defaultPayload)
         } catch {
             logger().fatal(error.localizedDescription)
+            defaultPayload["Result"] = "Error"
+            defaultPayload["Error"] = error.localizedDescription
+            try analytics?.logEvent(payload: defaultPayload)
             exit(-1)
         }
     }
@@ -97,5 +120,20 @@ public class GenerationCommand: Command {
         }
 
         return Set(result)
+    }
+
+    func initAnalyticsClientIfPossible(config: GenerationConfig) -> AnalyticsClient? {
+
+        guard let logstashEnpoint = config.logstashEnpointURI else {
+            logger().info("Logstash enpoint URL is empty. Analytics won't be sent")
+            return nil
+        }
+
+        guard let logstashEndpointURI = URL(string: logstashEnpoint) else {
+            logger().error("An error occured while creating URI from logstashEnpointURI \(logstashEnpoint)")
+            return nil
+        }
+
+        return LogstashHttpClient(enpointUri: logstashEndpointURI)
     }
 }
