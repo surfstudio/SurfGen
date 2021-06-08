@@ -36,47 +36,47 @@ public struct LogstashHttpClient {
 extension LogstashHttpClient: AnalyticsClient {
 
     public func logEvent(payload: [String : Any]) throws {
-//        var payload = payload
-//        payload["sender"] = "SurfGen"
-//        payload["user_defined"] = self.staticPayload
-//
-//        let jsonData = try JSONSerialization.data(withJSONObject: payload, options: .fragmentsAllowed)
-//
-//        var urlRequest = URLRequest(url: enpointUri)
-//        urlRequest.httpMethod = "POST"
-//        urlRequest.httpBody = jsonData
-//
-//        var resp: HTTPURLResponse?
-//        var err: Error?
-//
-//        let wg = DispatchGroup()
-//
-//        wg.enter()
-//
-//        let task = URLSession.shared.dataTask(with: urlRequest) { _, response, error in
-//
-//            resp = response as! HTTPURLResponse
-//
-//            err = error
-//
-//            wg.leave()
-//        }
-//
-//        task.resume()
-//
-//        _ = wg.wait(timeout: .now() + .seconds(5))
-//
-//        if let err = err {
-//            throw err
-//        }
-//
-//        guard let resp = resp else {
-//            throw Err.ServerDidNotReply
-//        }
-//
-//
-//        guard resp.statusCode == 200 else {
-//            throw Err.ServerReplyWithBadCode(resp.statusCode)
-//        }
+        var payload = payload
+        payload["sender"] = "SurfGen"
+        payload["user_defined"] = self.staticPayload
+
+        let jsonData = try JSONSerialization.data(withJSONObject: payload, options: .fragmentsAllowed)
+
+        var urlRequest = URLRequest(url: enpointUri)
+        urlRequest.httpMethod = "POST"
+        urlRequest.httpBody = jsonData
+
+        var resp: HTTPURLResponse?
+        var err: Error?
+
+        let wg = DispatchGroup()
+
+        wg.enter()
+
+        let task = URLSession.shared.dataTask(with: urlRequest) { _, response, error in
+
+            resp = response as! HTTPURLResponse
+
+            err = error
+
+            wg.leave()
+        }
+
+        task.resume()
+
+        _ = wg.wait(timeout: .now() + .seconds(5))
+
+        if let err = err {
+            throw err
+        }
+
+        guard let resp = resp else {
+            throw Err.ServerDidNotReply
+        }
+
+
+        guard resp.statusCode == 200 else {
+            throw Err.ServerReplyWithBadCode(resp.statusCode)
+        }
     }
 }
