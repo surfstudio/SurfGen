@@ -5,30 +5,30 @@ import NodeKit
 public struct DetailPromotionEntity {
 
     // MARK: - Public Properties
-    
+
     /// ID акции
     public let id: String
-    
+
     /// Список бонусов акции.
     public let bonuses: [PromotionBonusEntity]?
-    
+
     /// Детальное описание акции
     public let description: String?
-    
+
     /// Дата начала акции
     public let fromDate: ISO8601Date?
-    
+
     public let imageUrl: String?
-    
+
     /// Заголовок акции
     public let name: String?
-    
+
     /// Массив текстовых полей для ввода.
     public let textFields: [PromotionInputEntity]?
-    
+
     /// Дата конца акции
     public let toDate: ISO8601Date?
-    
+
     /// Идентификатор акции для подачи заявки на акцию.
     public let tradeInCampaignLink: String?
 
@@ -60,7 +60,7 @@ public struct DetailPromotionEntity {
 
 extension DetailPromotionEntity: DTOConvertible {
     public static func from(dto model: DetailPromotionEntry) throws -> DetailPromotionEntity {
-        return .init(id: model.id,
+        return try .init(id: model.id,
                      bonuses: .from(dto: model.bonuses),
                      description: model.description,
                      fromDate: model.fromDate,
@@ -72,13 +72,13 @@ extension DetailPromotionEntity: DTOConvertible {
     }
 
     public func toDTO() throws -> DetailPromotionEntry {
-        return .init(id: id,
-                     bonuses: bonuses.toDTO(),
+        return try .init(id: id,
+                     bonuses: bonuses?.toDTO(),
                      description: description,
                      fromDate: fromDate,
                      imageUrl: imageUrl,
                      name: name,
-                     textFields: textFields.toDTO(),
+                     textFields: textFields?.toDTO(),
                      toDate: toDate,
                      tradeInCampaignLink: tradeInCampaignLink)
     }

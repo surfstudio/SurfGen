@@ -5,16 +5,16 @@ import NodeKit
 public struct BonusHistoryItemEntity {
 
     // MARK: - Public Properties
-    
+
     /// ID истории операции
     public let id: String
-    
+
     /// Название бонуса
     public let bonusName: String
-    
+
     /// Дата получения бонуса
     public let operationDate: ISO8601Date
-    
+
     /// Заголовок истории (название акции)
     public let campaignName: String?
 

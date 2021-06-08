@@ -5,9 +5,9 @@ import NodeKit
 public struct PromotionBonusEntity {
 
     // MARK: - Public Properties
-    
+
     public let bonusId: String?
-    
+
     public let bonusName: String?
 
     // MARK: - Initialization

@@ -5,21 +5,21 @@ import NodeKit
 public struct PromotionEntity {
 
     // MARK: - Public Properties
-    
+
     /// ID акции
     public let id: String
-    
+
     /// Заголовок акции
     public let name: String
-    
+
     public let imageUrl: String
-    
+
     /// Дата начала акции
     public let fromDate: ISO8601Date?
-    
+
     /// Короткое описание акции. Оно выводится как превью в списке акций
     public let summary: String?
-    
+
     /// Дата конца акции
     public let toDate: ISO8601Date?
 

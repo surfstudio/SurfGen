@@ -5,9 +5,9 @@ import NodeKit
 public struct KeyValuePairEntity {
 
     // MARK: - Public Properties
-    
+
     public let key: String
-    
+
     public let value: String
 
     // MARK: - Initialization

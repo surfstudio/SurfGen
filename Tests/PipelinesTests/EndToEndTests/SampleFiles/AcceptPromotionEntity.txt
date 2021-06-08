@@ -5,10 +5,10 @@ import NodeKit
 public struct AcceptPromotionEntity {
 
     // MARK: - Public Properties
-    
+
     /// ИД бонуса, который выбрал пользователь
     public let bonusId: String?
-    
+
     /// Словарь (ключ-значение), где ключ - `PromotionInput.fieldName`,  а значение - то что пользователь ввел в текстовое поле
     public let userInputs: [KeyValuePairEntity]?
 
@@ -26,12 +26,12 @@ public struct AcceptPromotionEntity {
 
 extension AcceptPromotionEntity: DTOConvertible {
     public static func from(dto model: AcceptPromotionEntry) throws -> AcceptPromotionEntity {
-        return .init(bonusId: model.bonusId,
+        return try .init(bonusId: model.bonusId,
                      userInputs: .from(dto: model.userInputs))
     }
 
     public func toDTO() throws -> AcceptPromotionEntry {
-        return .init(bonusId: bonusId,
-                     userInputs: userInputs.toDTO())
+        return try .init(bonusId: bonusId,
+                     userInputs: userInputs?.toDTO())
     }
 }
