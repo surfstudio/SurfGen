@@ -5,17 +5,17 @@ import NodeKit
 public struct PromotionInputEntity {
 
     // MARK: - Public Properties
-    
+
     public let fieldName: String
-    
+
     /// В случае если поле заполнено с ошибкой (не прошло регэксп)
     public let errorText: String?
-    
+
     public let fieldDescription: String?
-    
+
     /// Если null, то считается false
     public let optional: Bool?
-    
+
     public let regEx: String?
 
     // MARK: - Initialization

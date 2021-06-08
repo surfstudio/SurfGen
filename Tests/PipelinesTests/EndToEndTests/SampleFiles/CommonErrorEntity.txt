@@ -5,13 +5,13 @@ import NodeKit
 public struct CommonErrorEntity {
 
     // MARK: - Public Properties
-    
+
     /// Это идентификатор ошибки. Этот идентификатор мобильное приложение будет использовать для того, чтобы включать определенное поведение.
     public let code: Int
-    
+
     /// Пояснение для разработчика/тестировщика о том, что пошло не так
     public let developerMessage: String?
-    
+
     /// Сообщение, которое будет выведено пользователю в снеке в случае получения ошибки
     public let userMessage: String?
 

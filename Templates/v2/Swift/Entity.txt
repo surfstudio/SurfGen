@@ -5,7 +5,7 @@ import NodeKit
 public struct {{ model.name }}Entity {
 
     // MARK: - Public Properties
-{% for property in model.properties %}    
+{% for property in model.properties %}
     {% for line in property.description|splitLines %}/// {{ line }}
     {% endfor %}public let {{ property.name|snakeCaseToCamelCase }}: {#
     #}{% if property.typeModel.isArray %}[{% endif %}{#
@@ -38,15 +38,17 @@ public struct {{ model.name }}Entity {
 
 extension {{ model.name }}Entity: DTOConvertible {
     public static func from(dto model: {{ model.name }}Entry) throws -> {{ model.name }}Entity {
-        return .init({% for property in model.properties %}{{ property.name|snakeCaseToCamelCase }}: {#
+        return {% for property in model.properties where property.typeModel.isObject %}{% if forloop.first %}try {% endif %}{% endfor %}{#
+        #}.init({% for property in model.properties %}{{ property.name|snakeCaseToCamelCase }}: {#
         #}{% if property.typeModel.isObject %}.from(dto: model.{{ property.name }}){% else %}model.{{ property.name }}{% endif %}{#
         #}{% if not forloop.last %},
                      {% endif %}{% endfor %})
     }
 
     public func toDTO() throws -> {{ model.name }}Entry {
-        return .init({% for property in model.properties %}{{ property.name }}: {{ property.name|snakeCaseToCamelCase }}{#
-        #}{% if property.typeModel.isObject %}.toDTO(){% endif %}{#
+        return {% for property in model.properties where property.typeModel.isObject %}{% if forloop.first %}try {% endif %}{% endfor %}{#
+        #}.init({% for property in model.properties %}{{ property.name }}: {{ property.name|snakeCaseToCamelCase }}{#
+        #}{% if property.typeModel.isObject %}{% if property.isNullable %}?{% endif %}.toDTO(){% endif %}{#
         #}{% if not forloop.last %},
                      {% endif %}{% endfor %})
     }

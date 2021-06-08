@@ -5,13 +5,13 @@ import NodeKit
 public struct BannerEntity {
 
     // MARK: - Public Properties
-    
+
     /// ID баннера
     public let id: String
-    
+
     /// Картинки баннера
     public let imageUrl: String
-    
+
     /// Ссылка на внешний ресурс
     public let url: String
 

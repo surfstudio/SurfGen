@@ -4,4 +4,3 @@ public enum BannersLocation: String, Codable {
     case catalog = "catalog"
     case main = "main"
 }
-    

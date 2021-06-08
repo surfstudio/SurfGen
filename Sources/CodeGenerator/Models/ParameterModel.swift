@@ -205,6 +205,8 @@ extension ParameterNode.Location: Encodable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
+        case .header:
+            try container.encode("header")
         case .query:
             try container.encode("query")
         case .path:
