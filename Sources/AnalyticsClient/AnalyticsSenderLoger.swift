@@ -8,10 +8,18 @@
 import Foundation
 import Common
 
+/// This logger is a combination of any other loger and AnalytcClient
+///
+/// The idea is send logs to some loger and at the same time send event to analytcs service
+///
+/// This implementation will create analytcs events from logs with `error`, `warning`, `success` and `fatal` levels
 public struct AnalyticsSenderLoger {
 
+    /// Any loger you need to
     private let stdioLogger: Loger
+    /// Any kind of analytcs collector
     private let analyticsClient: AnalyticsClient
+    /// string representation of CMD args which was sent to SurfGen on start up
     private let initCmdCommandRaw: String
 
     public init(stdioLogger: Loger, analyticsClient: AnalyticsClient, initCmdCommandRaw: String) {

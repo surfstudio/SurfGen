@@ -23,20 +23,20 @@ public struct LogstashHttpClient {
     /// This uri is used `AS IS` to send requests
     /// It means that requests will be sent exactly to this URI
     public let enpointUri: URL
+    /// This is user-defined payload which will be send to analytcs
     public let staticPayload: [String: String]
 
     public init(enpointUri: URL, payload: [String: String]) {
         self.enpointUri = enpointUri
         self.staticPayload = payload
     }
-}
+
 
 extension LogstashHttpClient: AnalyticsClient {
     public func logEvent(payload: [String : Any]) throws {
         var payload = payload
         payload["sender"] = "SurfGen"
-
-        payload = payload.merging(self.staticPayload, uniquingKeysWith: {left, _ in left })
+        payload["user_defined"] = self.staticPayload
 
         let jsonData = try JSONSerialization.data(withJSONObject: payload, options: .fragmentsAllowed)
 
