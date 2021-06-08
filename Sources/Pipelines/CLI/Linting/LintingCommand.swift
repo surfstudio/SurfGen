@@ -37,7 +37,7 @@ public class LintingCommend: Command {
         }
     }
 
-    func logger() -> Logger {
+    func logger() -> Loger {
         return self.verbose.value ? DefaultLogger.verbose : DefaultLogger.default
     }
 

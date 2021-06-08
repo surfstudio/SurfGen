@@ -24,7 +24,7 @@ public struct BuildCodeGeneratorPipelineFactory {
     public static func build(templates: [Template],
                              serviceName: String,
                              needRewriteExistingFiles: Bool = false,
-                             logger: Logger? = nil) -> BuildGASTTreeEntryPoint {
+                             logger: Loger? = nil) -> BuildGASTTreeEntryPoint {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
         let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder)

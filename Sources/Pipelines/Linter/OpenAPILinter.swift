@@ -31,10 +31,10 @@ public struct OpenAPILinter: PipelineStage {
     /// `OpenAPILinter` will manually convert string to URL in `init`
     public let filesToIgnore: Set<URL>
     public let next: AnyPipelineStage<[URL]>
-    public let log: Logger
+    public let log: Loger
 
     public init(filesToIgnore: Set<String>,
-                log: Logger,
+                log: Loger,
                 next: AnyPipelineStage<[URL]>) {
         self.filesToIgnore = Set(filesToIgnore.map { URL(fileURLWithPath: $0) })
         self.next = next

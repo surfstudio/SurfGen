@@ -178,7 +178,10 @@ let package = Package(
             sources: ["main.swift", "CLI"]
         ),
         .target(
-            name: "AnalyticsClient"
+            name: "AnalyticsClient",
+            dependencies: [
+                "Common"
+            ]
         )
     ] + testTargets
 )

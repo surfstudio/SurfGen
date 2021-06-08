@@ -14,10 +14,10 @@ class FileWriterStage: PipelineStage {
 
     private let needRewriteExistingFiles: Bool
 
-    private let logger: Logger?
+    private let logger: Loger?
 
     public init(needRewriteExistingFiles: Bool = false,
-                logger: Logger? = nil) {
+                logger: Loger? = nil) {
         self.needRewriteExistingFiles = needRewriteExistingFiles
         self.logger = logger
     }

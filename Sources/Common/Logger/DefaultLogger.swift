@@ -23,7 +23,7 @@ import Rainbow
 /// This logger is based on `allow-list` implementation - so, you specify which level can be handled.
 ///
 /// Contains some common implementation: `verbose` and `default`
-public struct DefaultLogger: Logger {
+public struct DefaultLogger: Loger {
 
     /// Will print all levels.
     public static var verbose: DefaultLogger {

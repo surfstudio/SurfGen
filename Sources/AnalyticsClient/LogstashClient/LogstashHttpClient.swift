@@ -23,9 +23,11 @@ public struct LogstashHttpClient {
     /// This uri is used `AS IS` to send requests
     /// It means that requests will be sent exactly to this URI
     public let enpointUri: URL
+    public let staticPayload: [String: String]
 
-    public init(enpointUri: URL) {
+    public init(enpointUri: URL, payload: [String: String]) {
         self.enpointUri = enpointUri
+        self.staticPayload = payload
     }
 }
 
@@ -34,13 +36,15 @@ extension LogstashHttpClient: AnalyticsClient {
         var payload = payload
         payload["sender"] = "SurfGen"
 
+        payload = payload.merging(self.staticPayload, uniquingKeysWith: {left, _ in left })
+
         let jsonData = try JSONSerialization.data(withJSONObject: payload, options: .fragmentsAllowed)
 
         var urlRequest = URLRequest(url: enpointUri)
         urlRequest.httpMethod = "POST"
         urlRequest.httpBody = jsonData
 
-        var resp: URLResponse?
+        var resp: HTTPURLResponse?
         var err: Error?
 
         let wg = DispatchGroup()
@@ -49,8 +53,8 @@ extension LogstashHttpClient: AnalyticsClient {
 
         let task = URLSession.shared.dataTask(with: urlRequest) { _, response, error in
 
-            let rp = response
-            dump(rp)
+            resp = response as! HTTPURLResponse
+
             err = error
 
             wg.leave()
@@ -68,12 +72,9 @@ extension LogstashHttpClient: AnalyticsClient {
             throw Err.ServerDidNotReply
         }
 
-//        guard let httpResp = resp as? HTTPURLResponse else {
-//            throw Err.BadResponse
-//        }
-//
-//        guard httpResp.statusCode == 200 else {
-//            throw Err.ServerReplyWithBadCode(httpResp.statusCode)
-//        }
+
+        guard resp.statusCode == 200 else {
+            throw Err.ServerReplyWithBadCode(resp.statusCode)
+        }
     }
 }
