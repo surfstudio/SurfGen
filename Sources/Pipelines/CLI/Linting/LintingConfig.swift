@@ -14,4 +14,6 @@ public struct LintingConfig: Decodable {
     ///
     /// Patch should be path to file. Not to dir.
     var exclude: [String]
+
+    var analytcsConfig: AnalytcsConfig?
 }
