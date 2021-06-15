@@ -22,12 +22,12 @@ public struct LogstashHttpClient {
 
     /// This uri is used `AS IS` to send requests
     /// It means that requests will be sent exactly to this URI
-    public let enpointUri: URL
+    public let endpointUri: URL
     /// This is user-defined payload which will be send to analytcs
     public let staticPayload: [String: String]
 
-    public init(enpointUri: URL, payload: [String: String]) {
-        self.enpointUri = enpointUri
+    public init(endpointUri: URL, payload: [String: String]) {
+        self.endpointUri = endpointUri
         self.staticPayload = payload
     }
 }
@@ -42,7 +42,7 @@ extension LogstashHttpClient: AnalyticsClient {
 
         let jsonData = try JSONSerialization.data(withJSONObject: payload, options: .fragmentsAllowed)
 
-        var urlRequest = URLRequest(url: enpointUri)
+        var urlRequest = URLRequest(url: endpointUri)
         urlRequest.httpMethod = "POST"
         urlRequest.httpBody = jsonData
 
