@@ -13,10 +13,10 @@ import Common
 /// All found issues are passed to the Logger
 public class SwaggerCorrector {
 
-    private let logger: Logger?
+    private let logger: Loger?
 
     /// Works silently, without making warnings, if no `Logger` passed
-    public init(logger: Logger? = nil) {
+    public init(logger: Loger? = nil) {
         self.logger = logger
     }
 

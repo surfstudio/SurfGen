@@ -10,6 +10,7 @@ import SwiftCLI
 import Yams
 import Common
 import Pipelines
+import AnalyticsClient
 
 public class GenerationCommand: Command {
 
@@ -35,40 +36,53 @@ public class GenerationCommand: Command {
 
     public var specPath = Parameter()
 
+    public var loger: Loger = DefaultLogger.default
+
     public func execute() throws {
         let config = self.loadConfig()
 
+        self.loger = self.initLoger(config: config)
+
         guard let serviceName = serviceName.value else {
-            logger().fatal("Service name was not provided.")
+            self.loger.fatal("Service name was not provided.")
             exit(-1)
         }
 
         let pipeline = BuildCodeGeneratorPipelineFactory.build(templates: config.templates,
                                                                serviceName: serviceName,
                                                                needRewriteExistingFiles: rewrite.value,
-                                                               logger: logger())
+                                                               logger: self.loger)
 
         guard let specUrl = URL(string: specPath.value) else {
-            logger().fatal("Invalid path to root spec: \(specPath.value)")
+            self.loger.fatal("Invalid path to root spec: \(specPath.value)")
             exit(-1)
         }
 
         do {
             try pipeline.run(with: specUrl)
-            logger().success("All files generated successfully!")
+            self.loger.success("All files generated successfully!")
         } catch {
-            logger().fatal(error.localizedDescription)
+            self.loger.fatal(error.localizedDescription)
             exit(-1)
         }
     }
 
-    func logger() -> Logger {
-        return self.verbose.value ? DefaultLogger.verbose : DefaultLogger.default
+    func initLoger(config: GenerationConfig) -> Loger {
+
+        let stdioLoger = self.verbose.value ? DefaultLogger.verbose : DefaultLogger.default
+
+        guard let analytics = self.initAnalyticsClientIfPossible(config: config) else {
+            return stdioLoger
+        }
+
+        return AnalyticsSenderLoger(stdioLogger: stdioLoger,
+                                    analyticsClient: analytics,
+                                    initCmdCommandRaw: CommandLine.arguments.joined(separator: " "))
     }
 
     func loadConfig() -> GenerationConfig {
         guard let configPath = self.configPath.value else {
-            logger().fatal("Config file was not provided.")
+            self.loger.fatal("Config file was not provided.")
             exit(-1)
         }
 
@@ -76,7 +90,7 @@ public class GenerationCommand: Command {
             let data = FileManager.default.readFile(at: configPath),
             let yamlString =  String(data: data, encoding: .utf8)
         else {
-            logger().fatal("Can't read config at \(configPath).")
+            self.loger.fatal("Can't read config at \(configPath).")
             exit(-1)
         }
 
@@ -84,7 +98,7 @@ public class GenerationCommand: Command {
             let config: GenerationConfig = try YAMLDecoder().decode(from: yamlString)
             return config
         } catch {
-            logger().fatal("Can't serialize config at \(configPath) as YAML with error \(error.localizedDescription).")
+            self.loger.fatal("Can't serialize config at \(configPath) as YAML with error \(error.localizedDescription).")
             exit(-1)
         }
     }
@@ -97,5 +111,20 @@ public class GenerationCommand: Command {
         }
 
         return Set(result)
+    }
+
+    func initAnalyticsClientIfPossible(config: GenerationConfig) -> AnalyticsClient? {
+
+        guard let analytcsConfig = config.analytcsConfig else {
+            self.loger.info("Analytics config is empty")
+            return nil
+        }
+
+        guard let logstashEndpointURI = URL(string: analytcsConfig.logstashEnpointURI) else {
+            self.loger.error("An error occured while creating URI from logstashEnpointURI \(analytcsConfig.logstashEnpointURI)")
+            return nil
+        }
+
+        return LogstashHttpClient(enpointUri: logstashEndpointURI, payload: analytcsConfig.payload ?? [:])
     }
 }

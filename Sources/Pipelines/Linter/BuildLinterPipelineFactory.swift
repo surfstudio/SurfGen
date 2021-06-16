@@ -21,7 +21,7 @@ public struct BuildLinterPipelineFactory {
         )
     }
 
-    public static func build(filesToIgnore: Set<String>, log: Logger) -> OpenAPILinter {
+    public static func build(filesToIgnore: Set<String>, log: Loger) -> OpenAPILinter {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
         let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder)

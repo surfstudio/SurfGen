@@ -10,8 +10,11 @@ import SwiftCLI
 import Yams
 import Common
 import Pipelines
+import AnalyticsClient
 
-public class LintingCommend: Command {
+public class LintingCommand: Command {
+
+    public var loger: Loger = DefaultLogger.default
 
     public let name: String = "lint"
     public let shortDescription = "Check that api specification is correct (in terms of SurfGen) and ready for code generation"
@@ -23,22 +26,21 @@ public class LintingCommend: Command {
 
     public func execute() throws {
         let config = self.loadConfig()
+
+        self.loger = self.initLoger(config: config)
+
         let pipeline = BuildLinterPipelineFactory.build(
             filesToIgnore: try self.makeUrlsAbsolute(urls: config.exclude),
-            log: self.logger()
+            log: self.loger
         )
 
         do {
             try pipeline.run(with: pathToLint.value)
-            logger().success("All right!!! Good Job!")
+            self.loger.success("All right!!! Good Job!")
         } catch {
-            logger().fatal(error.localizedDescription)
+            self.loger.fatal(error.localizedDescription)
             exit(-1)
         }
-    }
-
-    func logger() -> Logger {
-        return self.verbose.value ? DefaultLogger.verbose : DefaultLogger.default
     }
 
     func loadConfig() -> LintingConfig {
@@ -72,5 +74,36 @@ public class LintingCommend: Command {
         }
 
         return Set(result)
+    }
+}
+
+private extension LintingCommand {
+
+    func initLoger(config: LintingConfig) -> Loger {
+
+        let stdioLoger = self.verbose.value ? DefaultLogger.verbose : DefaultLogger.default
+
+        guard let analytics = self.initAnalyticsClientIfPossible(config: config) else {
+            return stdioLoger
+        }
+
+        return AnalyticsSenderLoger(stdioLogger: stdioLoger,
+                                    analyticsClient: analytics,
+                                    initCmdCommandRaw: CommandLine.arguments.joined(separator: " "))
+    }
+    
+    func initAnalyticsClientIfPossible(config: LintingConfig) -> AnalyticsClient? {
+
+        guard let analytcsConfig = config.analytcsConfig else {
+            self.loger.info("Analytics config is empty")
+            return nil
+        }
+
+        guard let logstashEndpointURI = URL(string: analytcsConfig.logstashEnpointURI) else {
+            self.loger.error("An error occured while creating URI from logstashEnpointURI \(analytcsConfig.logstashEnpointURI)")
+            return nil
+        }
+
+        return LogstashHttpClient(enpointUri: logstashEndpointURI, payload: analytcsConfig.payload ?? [:])
     }
 }

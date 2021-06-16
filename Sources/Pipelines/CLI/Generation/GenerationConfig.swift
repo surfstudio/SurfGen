@@ -8,7 +8,13 @@
 import Foundation
 import CodeGenerator
 
+public struct AnalytcsConfig: Decodable {
+    public var logstashEnpointURI: String
+    public var payload: [String: String]?
+}
+
 public struct GenerationConfig: Decodable {
 
     var templates: [Template]
+    var analytcsConfig: AnalytcsConfig?
 }

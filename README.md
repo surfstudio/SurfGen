@@ -119,3 +119,20 @@ where `pathToSpec` is a path to one file in OpenAPI spec which describes service
 ## Editing templates
 
 See [Templates](TEMPLATES.md)
+
+## Analytcs
+
+There is a way to collect usage analytcs for your needs.
+
+Analytics collection is turned off by default, but you can set it up with config.
+
+To do this you need to add `analytcsConfig` section to ypu config. It can look like:
+
+```Yaml
+analytcsConfig:
+    logstashEnpointURI: http://127.0.0.1:6644
+    payload:
+        project: Test
+```
+
+We use this setting in our projects just to understand how good SurfGen works. You can use it as you wish :)

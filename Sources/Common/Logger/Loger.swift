@@ -23,8 +23,29 @@ public enum CommonLogLevel: CaseIterable {
     case debug
 }
 
+extension CommonLogLevel {
+    /// Returns string representation of log level
+    /// Useful for serialization
+    public var stringValue: String {
+        switch self {
+        case .success:
+            return "success"
+        case .fatal:
+            return "fatal"
+        case .error:
+            return "error"
+        case .warning:
+            return "warning"
+        case .info:
+            return "info"
+        case .debug:
+            return "debug"
+        }
+    }
+}
+
 /// Interface for any logger
-public protocol Logger {
+public protocol Loger {
     /// Write information to output stream, which is spicified in specific `Logger` implementation
     ///
     /// You also can log in short notation. Like `log.success("Some msg")`
@@ -33,7 +54,7 @@ public protocol Logger {
 
 
 /// Contains inline omplementation of logging for each `CommonLogLevel` case.
-extension Logger {
+extension Loger {
     public func success(_ msg: String) {
         self.log(.success, msg)
     }
