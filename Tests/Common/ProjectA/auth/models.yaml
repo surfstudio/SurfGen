@@ -47,7 +47,7 @@ components:
         token_type:
           type: string
         issued:
-          $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
+          $ref: "../common/models.yaml#/components/schemas/ISO8601Date"
           description: Дата генерации токена в ISO8601
         expires:
           $ref: "../common/aliases.yaml#/components/schemas/ISO8601Date"
