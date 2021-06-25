@@ -187,6 +187,9 @@ public struct AnySchemaBuilder: SchemaBuilder {
 private extension Schema {
 
     func extractType() throws -> PropertyNode.PossibleType {
+        if self.metadata.enumValues != nil {
+            throw CommonError(message: "Embeded enum was found! SurfGen now doesn't support embeded enums")
+        }
         switch self.type {
         case .any:
             throw CommonError(message: "Type is `any`, but we can process only primitive types, arrays and $ref")

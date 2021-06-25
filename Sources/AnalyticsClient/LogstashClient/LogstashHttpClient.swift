@@ -55,9 +55,9 @@ extension LogstashHttpClient: AnalyticsClient {
 
         let task = URLSession.shared.dataTask(with: urlRequest) { _, response, error in
 
-            resp = response as! HTTPURLResponse
-
-            err = error
+//            resp = response as! HTTPURLResponse
+//
+//            err = error
 
             wg.leave()
         }

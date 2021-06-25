@@ -1,0 +1,15 @@
+components:
+    schemas:
+        Alert:
+              type: object
+              properties:
+                notificationType:
+                  type: string
+                  enum: [incidentInfo, callsControlInfo, unassignedEmergencyInfo, notFreeAmbulamceInfo]
+                  description:  |
+                      Тип оповещения:
+                        - incidentInfo - происшествие
+                        - callsControlInfo - вызов на контроле
+                        - unassignedEmergencyInfo - экстренный вызов не назначен вовремя
+                        - notFreeAmbulamceInfo - нет свободных бригад
+                  example: "incidentInfo"
