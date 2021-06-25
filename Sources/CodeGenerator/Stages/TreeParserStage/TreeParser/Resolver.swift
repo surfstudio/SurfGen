@@ -108,12 +108,14 @@ public class Resolver {
         let res = ref.split(separator: "#")
 
         if res.count == 2 {
-            let res = try self.resolveAnotherFile(ref: ref, node: node, other: other)
+            let res = try wrap(self.resolveAnotherFile(ref: ref, node: node, other: other),
+                               message: "While resolving \(ref)")
             self.refStack.removeLast()
             return res
         }
 
-        let resolved: SchemaObjectNode = try node.tree.resolve(reference: String(ref))
+        let resolved: SchemaObjectNode = try wrap(node.tree.resolve(reference: String(ref)),
+                                                  message: "While resolving \(ref) in \(node.dependency.pathToCurrentFile)")
 
         switch resolved.next {
         case .enum(let val):
@@ -130,6 +132,7 @@ public class Resolver {
             self.refStack.removeLast()
             return res
         case .reference(let ref):
+            print()
             let res = try resolveSchema(ref: ref, node: node, other: other)
             self.refStack.removeLast()
             return res

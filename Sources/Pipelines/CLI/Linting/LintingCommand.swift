@@ -52,7 +52,7 @@ public class LintingCommand: Command {
             let data = FileManager.default.readFile(at: configPath),
             let yamlString =  String(data: data, encoding: .utf8)
         else {
-            DefaultLogger.default.error("Can't read config at \(configPath). SurfGen will continue with empty config")
+            self.loger.error("Can't read config at \(configPath). SurfGen will continue with empty config")
             return .init(exclude: [])
         }
 
@@ -60,7 +60,7 @@ public class LintingCommand: Command {
             let config: LintingConfig = try YAMLDecoder().decode(from: yamlString)
             return config
         } catch {
-            DefaultLogger.default.error("Can't serialize config at \(configPath) as YAML with error \(error.localizedDescription). SurfGen will continue with empty config")
+            self.loger.error("Can't serialize config at \(configPath) as YAML with error \(error.localizedDescription). SurfGen will continue with empty config")
         }
 
         return .init(exclude: [])
@@ -80,6 +80,8 @@ public class LintingCommand: Command {
 private extension LintingCommand {
 
     func initLoger(config: LintingConfig) -> Loger {
+
+        CommonError.saveDebugInfo = self.verbose.value
 
         let stdioLoger = self.verbose.value ? DefaultLogger.verbose : DefaultLogger.default
 

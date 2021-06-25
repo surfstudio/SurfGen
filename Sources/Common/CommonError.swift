@@ -16,6 +16,11 @@ import Foundation
 ///
 /// Contains factory of `stub errors`
 public struct CommonError: LocalizedError {
+
+    /// It's global static variable which is used to configure error string representation
+    /// If the value is `false` then `localizedDescription` won't return call stack
+    public static var saveDebugInfo: Bool = false
+
     /// Message for user. This mesage should explain `What was happen` clearly (for junior developer)
     let message: String
     /// Line of code where error was occured.
@@ -53,6 +58,9 @@ public struct CommonError: LocalizedError {
         var msg = "❌ Error!"
         msg += "\n"
         msg += "Message: \(self.message)"
+
+        guard CommonError.saveDebugInfo else { return msg }
+
         msg += "\n"
         msg += "Debug info:"
         msg += "\n\t"
@@ -63,6 +71,7 @@ public struct CommonError: LocalizedError {
         msg += "Column: \(self.column)"
         msg += "\n\t"
         msg += "File: \(self.file)"
+        
         msg += "\n\t"
         msg += "Call Stack: \(self.stack.reduce(into: "", { $0 += "\n\t\($1)" }))"
         return msg

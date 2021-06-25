@@ -69,6 +69,8 @@ public class GenerationCommand: Command {
 
     func initLoger(config: GenerationConfig) -> Loger {
 
+        CommonError.saveDebugInfo = self.verbose.value
+
         let stdioLoger = self.verbose.value ? DefaultLogger.verbose : DefaultLogger.default
 
         guard let analytics = self.initAnalyticsClientIfPossible(config: config) else {
