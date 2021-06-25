@@ -5,18 +5,6 @@ import PackageDescription
 
 var testTargets: [Target] = [
     .testTarget(
-        name: "SurfGenKitTests",
-        dependencies: ["SurfGenKit"]
-    ),
-    .testTarget(
-        name: "YamlParserTests",
-        dependencies: ["YamlParser"]
-    ),
-    .testTarget(
-        name: "EndToEndTests",
-        dependencies: ["YamlParser", "SurfGenKit"]
-    ),
-    .testTarget(
         name: "RefereceExtractorTests",
         dependencies: ["ReferenceExtractor", "Common"]
     ),
@@ -32,12 +20,12 @@ var testTargets: [Target] = [
 
 var dependencies: [PackageDescription.Package.Dependency] = [
     // because SPM cant resolve it by their own ((((:
-    .package(url: "https://github.com/kylef/PathKit.git", from: "0.9.0"),
+    .package(url: "https://github.com/onevcat/Rainbow", from: "3.1.5"),
     .package(url: "https://github.com/jpsim/Yams", from: "1.0.0"),
+    .package(url: "https://github.com/kylef/PathKit.git", from: "0.9.0"),
     .package(url: "https://github.com/LastSprint/SwagGen", .revision("4fd5a299db0ba733e5cd6fa4e421b40248657cb6")),
     .package(url: "https://github.com/stencilproject/Stencil", from: "0.13.1"),
-    .package(url: "https://github.com/jakeheis/SwiftCLI", from: "5.3.0"),
-    .package(url: "https://github.com/onevcat/Rainbow", from: "3.1.5")
+    .package(url: "https://github.com/jakeheis/SwiftCLI", from: "5.3.0")
 ]
 
 let package = Package(
@@ -65,20 +53,12 @@ let package = Package(
             targets: ["Pipelines"]
         ),
         .library(
-            name: "SurfGenKit",
-            targets: ["SurfGenKit"]
-        ),
-        .library(
             name: "UtilsForTesting",
             targets: ["UtilsForTesting"]
         ),
 
         // MARK: -- Specific
 
-        .library(
-            name: "YamlParser",
-            targets: ["YamlParser"]
-        ),
         .library(
             name: "ReferenceExtractor",
             targets: ["ReferenceExtractor"]
@@ -116,19 +96,6 @@ let package = Package(
             dependencies: [
                 "Yams",
                 "Common"
-            ]
-        ),
-        .target(
-            name: "SurfGenKit",
-            dependencies: [
-                "Stencil"
-            ]
-        ),
-        .target(
-            name: "YamlParser",
-            dependencies: [
-                "SurfGenKit",
-                "Swagger"
             ]
         ),
         .target(
