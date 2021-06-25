@@ -70,13 +70,13 @@ extension LogstashHttpClient: AnalyticsClient {
             throw err
         }
 
-        guard let resp = resp else {
+        guard let guardedResp = resp else {
             throw Err.ServerDidNotReply
         }
 
 
-        guard resp.statusCode == 200 else {
-            throw Err.ServerReplyWithBadCode(resp.statusCode)
+        guard guardedResp.statusCode == 200 else {
+            throw Err.ServerReplyWithBadCode(guardedResp.statusCode)
         }
     }
 }
