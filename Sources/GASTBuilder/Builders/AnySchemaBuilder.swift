@@ -99,7 +99,7 @@ public struct AnySchemaBuilder: SchemaBuilder {
         case .number:
             return .init(next: .simple(.init(name: schema.name, type: .number)))
         case .integer:
-            return .init(next: .simple(.init(name: schema.name, type: .integer)))
+            return try self.processInteger(schema: schema)
         case .boolean:
             return .init(next: .simple(.init(name: schema.name, type: .boolean)))
         }
@@ -114,12 +114,31 @@ public struct AnySchemaBuilder: SchemaBuilder {
         }
 
         guard let stringCases = enumValues as? [String] else {
-            throw CommonError(message: "We couldn't parse it as enum (where were no one string case)")
+            throw CommonError(message: "We couldn't parse it as string enum (where were no one string case)")
         }
 
         let model = SchemaEnumNode(
-            type: "string",
+            type: PrimitiveType.string.rawValue,
             cases: stringCases,
+            name: schema.name,
+            description: schema.value.metadata.description
+        )
+
+        return.init(next: .enum(model))
+    }
+
+    func processInteger(schema: ComponentObject<Schema>) throws -> SchemaObjectNode {
+        guard let enumValues = schema.value.metadata.enumValues else {
+            return .init(next: .simple(.init(name: schema.name, type: .integer)))
+        }
+
+        guard let intCases = enumValues as? [Int] else {
+            throw CommonError(message: "We couldn't parse it as int enum (where were no one int case)")
+        }
+
+        let model = SchemaEnumNode(
+            type: PrimitiveType.integer.rawValue,
+            cases: intCases.map { "\($0)" },
             name: schema.name,
             description: schema.value.metadata.description
         )

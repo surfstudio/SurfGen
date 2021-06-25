@@ -7,6 +7,8 @@
 
 import Foundation
 import XCTest
+import CodeGenerator
+import GASTTree
 import UtilsForTesting
 
 /// Cases:
@@ -64,5 +66,36 @@ final class SchemaObjectUseCasesTests: XCTestCase {
         // Act - Assert
 
         XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToRoot)!))
+    }
+
+    func testIntEnumWillBeInterpretedAsEnumAndNotAsTypealias() throws {
+        // Arrange
+
+        let pathToRoot = "/path/to/services.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [
+            pathToRoot: SchemaObjectUseCasesYamls.intEnum,
+        ]
+
+        var result = [DependencyWithTree]()
+
+        let stub = InitCodeGenerationStageStub(closure: { result = $0 })
+
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider, initCodeGeneratorStageStub: stub.erase()).build()
+
+        // Act
+
+        try pipeline.run(with: URL(string: pathToRoot)!)
+
+        // Assert
+
+        let value = result[0].tree.schemas[0]
+
+        guard case SchemaObjectNode.Possibility.enum(_) = value.next else {
+            XCTFail("Expected type is enum. But got \(value.next)")
+            return
+        }
+
     }
 }
