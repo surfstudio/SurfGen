@@ -106,6 +106,6 @@ private extension LintingCommand {
             return nil
         }
 
-        return LogstashHttpClient(enpointUri: logstashEndpointURI, payload: analytcsConfig.payload ?? [:])
+        return LogstashHttpClient(endpointUri: logstashEndpointURI, payload: analytcsConfig.payload ?? [:])
     }
 }

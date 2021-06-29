@@ -103,4 +103,21 @@ public final class OpenAPILinterTests: XCTestCase {
 
         XCTAssertEqual(stub.got.count, 34 - filesToExlude.count)
     }
+
+    public func testLinterWillFailCheckForModelWithEmbededEnum() {
+        // Arrange
+
+        let baseUrl = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/LinterTests/RealDataTests.swift
+            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/LinterTests/
+            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/
+            .appendingPathComponent("SpecificTestSpecs")
+            .appendingPathComponent("ModelWithEmbededEnum.yaml")
+
+
+        let linter = BuildLinterPipelineFactory.build(filesToIgnore: [], log: DefaultLogger.verbose)
+
+        // Act - Assert
+
+        XCTAssertThrowsError(try linter.run(with: baseUrl.absoluteString))
+    }
 }
