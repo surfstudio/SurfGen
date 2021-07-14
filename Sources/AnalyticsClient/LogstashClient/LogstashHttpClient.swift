@@ -55,9 +55,9 @@ extension LogstashHttpClient: AnalyticsClient {
 
         let task = URLSession.shared.dataTask(with: urlRequest) { _, response, error in
 
-            resp = response as! HTTPURLResponse
-
-            err = error
+//            resp = response as! HTTPURLResponse
+//
+//            err = error
 
             wg.leave()
         }
@@ -70,13 +70,13 @@ extension LogstashHttpClient: AnalyticsClient {
             throw err
         }
 
-        guard let resp = resp else {
+        guard let guardedResp = resp else {
             throw Err.ServerDidNotReply
         }
 
 
-        guard resp.statusCode == 200 else {
-            throw Err.ServerReplyWithBadCode(resp.statusCode)
+        guard guardedResp.statusCode == 200 else {
+            throw Err.ServerReplyWithBadCode(guardedResp.statusCode)
         }
     }
 }
