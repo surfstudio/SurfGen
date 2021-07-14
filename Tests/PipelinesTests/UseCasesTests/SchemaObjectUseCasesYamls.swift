@@ -128,4 +128,18 @@ enum SchemaObjectUseCasesYamls {
                 cycle:
                     $ref: "#/components/schemas/CycledA"
 """.data(using: .utf8)!
+
+    static var intEnum = """
+    components:
+        schemas:
+            AlertsType:
+                  type: integer
+                  enum: [1,2,3]
+                  description:  |
+                    Тип передачи уведомления:
+                    - 1 - выкл
+                    - 2 - push
+                    - 3 - sms
+                  example: 3
+""".data(using: .utf8)!
 }

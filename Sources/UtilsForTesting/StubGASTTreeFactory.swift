@@ -18,10 +18,14 @@ public struct StubGASTTreeFactory {
 
     public var fileProvider: FileProvider
     public var resultClosure: (([[PathModel]]) throws -> Void)?
+    public var initCodeGeneratorStageStub: AnyPipelineStage<[DependencyWithTree]>?
 
-    public init(fileProvider: FileProvider, resultClosure: (([[PathModel]]) throws -> Void)? = nil) {
+    public init(fileProvider: FileProvider,
+                initCodeGeneratorStageStub: AnyPipelineStage<[DependencyWithTree]>? = nil,
+                resultClosure: (([[PathModel]]) throws -> Void)? = nil) {
         self.fileProvider = fileProvider
         self.resultClosure = resultClosure
+        self.initCodeGeneratorStageStub = initCodeGeneratorStageStub
     }
 
     public func provider(str: URL) throws -> ReferenceExtractor {
@@ -48,6 +52,16 @@ public struct StubGASTTreeFactory {
 
         let parser = self.buildParser(enableDisclarationChecking: enableDisclarationChecking)
 
+        var initStage: AnyPipelineStage<[DependencyWithTree]> = InitCodeGenerationStage(
+            parserStage: .init(
+                next: TreeParserStageResultStub(next: resultClosure).erase(),
+                parser: parser)
+        ).erase()
+
+        if let stage = self.initCodeGeneratorStageStub {
+            initStage = stage.erase()
+        }
+
         return .init(
             refExtractorProvider: self.provider(str:),
             next: .init(
@@ -58,11 +72,7 @@ public struct StubGASTTreeFactory {
                     serviceBuilder: serviceBuilder,
                     responsesBuilder: responsesBuilder,
                     requestBodiesBuilder: requestBodiesBuilder),
-                next: InitCodeGenerationStage(
-                    parserStage: .init(
-                        next: TreeParserStageResultStub(next: resultClosure).erase(),
-                        parser: parser)
-                ).erase()
+                next: initStage
             )
         )
     }
@@ -98,5 +108,18 @@ public struct TreeParserStageResultStub: PipelineStage {
 
     public func run(with input: [[PathModel]]) throws {
         try self.next?(input)
+    }
+}
+
+public struct InitCodeGenerationStageStub: PipelineStage {
+
+    public var closure: ([DependencyWithTree]) -> Void
+
+    public init(closure: @escaping ([DependencyWithTree]) -> Void) {
+        self.closure = closure
+    }
+
+    public func run(with input: [DependencyWithTree]) throws {
+        self.closure(input)
     }
 }
