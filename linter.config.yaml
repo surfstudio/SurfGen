@@ -1,0 +1,4 @@
+analytcsConfig:
+  logstashEnpointURI: http://logs.ps.surfstudio.ru
+  payload:
+    project: HEL

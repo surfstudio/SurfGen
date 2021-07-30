@@ -30,7 +30,7 @@ public class LintingCommand: Command {
         self.loger = self.initLoger(config: config)
 
         let pipeline = BuildLinterPipelineFactory.build(
-            filesToIgnore: try self.makeUrlsAbsolute(urls: config.exclude),
+            filesToIgnore: try self.makeUrlsAbsolute(urls: config.exclude ?? []),
             log: self.loger
         )
 
