@@ -1,0 +1,34 @@
+components:
+  schemas:
+
+    QuestionItem:
+      type: object
+      properties:
+        question_id:
+          type: integer
+        question:
+          type: string
+        answer_id:
+          type: integer
+        answer:
+          type: string
+        imageURL:
+          type: array
+          items:
+            type: string
+
+    QuestionsInfo:
+      type: array
+      items:
+        $ref: "#/components/schemas/QuestionItem" 
+
+
+    ConsultationInfoForPatient:
+      type: object
+      properties:
+        symptom_checker_answers:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionsInfo"
+        doctor_questions:
+          $ref: "#/components/schemas/QuestionsInfo"

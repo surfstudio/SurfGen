@@ -1,0 +1,36 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+  contact:
+    name: Новоселова Анна
+    email: novosyolova@surfstudio.ru
+
+servers:
+  - url: https://someaddress.com
+    description: TODO заглушка, требуется поправить в будущем на реальный адрес. 
+
+components:
+  securitySchemes:
+    AuthApiKey:
+      description: Ключ авторизованного пользователя
+      type: apiKey
+      in: header
+      name: Authorization  
+
+
+security:
+  - AuthApiKey: []
+
+paths:
+  /api/1.1/consultations:
+    get:
+      summary: Получение подробной информации по консультации
+      responses:
+        '200':
+          description: |
+            Подробная информация по консультации получена
+          content:
+            application/json:
+              schema:
+                $ref: "t.yaml#/components/schemas/ConsultationInfoForPatient" 
