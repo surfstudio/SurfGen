@@ -137,9 +137,13 @@ public class Resolver {
             self.refStack.removeLast()
             return res
         case .array(let arr):
-            return .array(try self.resolve(arr: arr, node: node, other: other))
+            let res = SchemaType.array(try self.resolve(arr: arr, node: node, other: other))
+            self.refStack.removeLast()
+            return res
         case .group(let val):
-            return try self.resolve(group: val, node: node, other: other)
+            let res = try self.resolve(group: val, node: node, other: other)
+            self.refStack.removeLast()
+            return res
         }
     }
 
