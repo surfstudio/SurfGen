@@ -78,8 +78,8 @@ public struct PathModel: Encodable {
     /// URI template
     public let path: String
     public let operations: [OperationModel]
-
-    let name: String
+    // TODO - create new model for code gen
+    public var name: String
     let pathWithSeparatedParameters: String
     let parameters: [ParameterModel]
 

@@ -10,6 +10,7 @@ import Common
 import ReferenceExtractor
 import GASTBuilder
 import CodeGenerator
+import Operations
 
 /// Configures pipeline for code generator
 public struct BuildCodeGeneratorPipelineFactory {
@@ -24,7 +25,8 @@ public struct BuildCodeGeneratorPipelineFactory {
     public static func build(templates: [Template],
                              serviceName: String,
                              needRewriteExistingFiles: Bool = false,
-                             logger: Loger? = nil) -> BuildGASTTreeEntryPoint {
+                             logger: Loger? = nil,
+                             prefixCutter: PrefixCutter? = nil) -> BuildGASTTreeEntryPoint {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
         let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder)
@@ -63,7 +65,8 @@ public struct BuildCodeGeneratorPipelineFactory {
                                 templates: templates,
                                 serviceName: serviceName,
                                 templateFiller: templateFiller,
-                                modelExtractor: modelExtractor
+                                modelExtractor: modelExtractor,
+                                prefixCutter: prefixCutter
                             ).erase()
                         ).erase(),
                         parser: buildParser()

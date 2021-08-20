@@ -11,6 +11,7 @@ import Yams
 import Common
 import Pipelines
 import AnalyticsClient
+import Operations
 
 public class GenerationCommand: Command {
 
@@ -48,10 +49,17 @@ public class GenerationCommand: Command {
             exit(-1)
         }
 
+        var prefixCutter: PrefixCutter?
+
+        if let masks = config.prefixesToCutDownInServiceNames, !masks.isEmpty {
+            prefixCutter = PrefixCutter(prefixesToCut: Set(masks))
+        }
+
         let pipeline = BuildCodeGeneratorPipelineFactory.build(templates: config.templates,
                                                                serviceName: serviceName,
                                                                needRewriteExistingFiles: rewrite.value,
-                                                               logger: self.loger)
+                                                               logger: self.loger,
+                                                               prefixCutter: prefixCutter)
 
         guard let specUrl = URL(string: specPath.value) else {
             self.loger.fatal("Invalid path to root spec: \(specPath.value)")
