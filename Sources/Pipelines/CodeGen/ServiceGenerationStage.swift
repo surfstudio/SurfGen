@@ -8,6 +8,7 @@
 import Foundation
 import Common
 import CodeGenerator
+import Operations
 
 public struct ServiceGenerationStage: PipelineStage {
 
@@ -24,19 +25,22 @@ public struct ServiceGenerationStage: PipelineStage {
 
     private let templates: [Template]
     private let serviceName: String
+    private let prefixCutter: PrefixCutter?
 
     public init(
         next: AnyPipelineStage<[SourceCode]>,
         templates: [Template],
         serviceName: String,
         templateFiller: TemplateFiller,
-        modelExtractor: ModelExtractor
+        modelExtractor: ModelExtractor,
+        prefixCutter: PrefixCutter? = nil
     ) {
         self.next = next
         self.templates = templates
         self.serviceName = serviceName.capitalizingFirstLetter()
         self.templateFiller = templateFiller
         self.modelExtractor = modelExtractor
+        self.prefixCutter = prefixCutter
     }
 
     public func run(with input: [[PathModel]]) throws {
@@ -44,9 +48,17 @@ public struct ServiceGenerationStage: PipelineStage {
         
         guard
             compact.count == 1,
-            let servicePaths = compact.first
+            var servicePaths = compact.first
         else {
             throw CommonError(message: "We expect only one service to generate, but got \(compact.count)")
+        }
+
+        if let prefixCutter = self.prefixCutter {
+            servicePaths = servicePaths.map { item in
+                var mutable = item
+                mutable.name = prefixCutter.Run(urlToCut: item.path)?.pathName ?? item.name
+                return mutable
+            }
         }
 
         let serviceGenerationModel = ServiceGenerationModel(name: serviceName, paths: servicePaths)
