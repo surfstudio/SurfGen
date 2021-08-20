@@ -98,4 +98,73 @@ enum ResolverYamls {
 
         """.data(using: .utf8)!
     }
+
+    // See https://github.com/surfstudio/SurfGen/issues/46
+    enum ModelWithDoubledRefs {
+        public static var model = """
+        components:
+          schemas:
+
+            QuestionItem:
+              type: object
+              properties:
+                question_id:
+                  type: integer
+
+            QuestionsInfo:
+              type: array
+              items:
+                $ref: "#/components/schemas/QuestionItem"
+
+            ConsultationInfoForPatient:
+              type: object
+              properties:
+                symptom_checker_answers:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/QuestionsInfo"
+                doctor_questions:
+                  $ref: "#/components/schemas/QuestionsInfo"
+    """.data(using: .utf8)!
+
+        public static var api = """
+        openapi: 3.0.2
+        info:
+          title: "API"
+          version: "1.0.0"
+          contact:
+            name: Новоселова Анна
+            email: novosyolova@surfstudio.ru
+
+        servers:
+          - url: https://someaddress.com
+            description: TODO заглушка, требуется поправить в будущем на реальный адрес.
+
+        components:
+          securitySchemes:
+            AuthApiKey:
+              description: Ключ авторизованного пользователя
+              type: apiKey
+              in: header
+              name: Authorization
+
+
+        security:
+          - AuthApiKey: []
+
+        paths:
+          /api/1.1/consultations:
+            get:
+              summary: Получение подробной информации по консультации
+              responses:
+                '200':
+                  description: |
+                    Подробная информация по консультации получена
+                  content:
+                    application/json:
+                      schema:
+                        $ref: "models.yaml#/components/schemas/ConsultationInfoForPatient"
+        """.data(using: .utf8)!
+    }
+    
 }

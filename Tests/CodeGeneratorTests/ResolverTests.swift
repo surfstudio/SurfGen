@@ -33,4 +33,24 @@ final class ResolverTests: XCTestCase {
 
         XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToCatalogApi)!))
     }
+
+    // For details look at https://github.com/surfstudio/SurfGen/issues/46
+    func testDoubledRefOnSameModelWontBeFoundAsReferenceCycle() throws {
+        // Arrange
+
+        let pathToModelsFile = "/project-swagger/catalog/models.yaml"
+        let pathToApi = "/project-swagger/catalog/api.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [
+            pathToModelsFile: ResolverYamls.ModelWithDoubledRefs.model,
+            pathToApi: ResolverYamls.ModelWithDoubledRefs.api,
+        ]
+
+        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build()
+
+        // Act - Assert
+
+        XCTAssertNoThrow(try pipeline.run(with: URL(string: pathToApi)!))
+    }
 }
