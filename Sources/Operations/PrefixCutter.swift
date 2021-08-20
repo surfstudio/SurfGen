@@ -9,6 +9,10 @@ import Foundation
 
 public struct PrefixCutter {
     let prefixesToCut: Set<String>
+
+    public init(prefixesToCut: Set<String>) {
+        self.prefixesToCut = prefixesToCut
+    }
 }
 
 extension PrefixCutter {

@@ -52,7 +52,7 @@ public class GenerationCommand: Command {
         var prefixCutter: PrefixCutter?
 
         if let masks = config.prefixesToCutDownInServiceNames, !masks.isEmpty {
-            prefixCutter = PrefixCutter(masks)
+            prefixCutter = PrefixCutter(prefixesToCut: Set(masks))
         }
 
         let pipeline = BuildCodeGeneratorPipelineFactory.build(templates: config.templates,
