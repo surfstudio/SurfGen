@@ -125,6 +125,7 @@ public struct OperationModel: Encodable {
          requestModel: Reference<RequestModel>?) {
         self.httpMethod = httpMethod
         self.summary = summary
+        
         self.description = description
         self.parameters = parameters
         self.responses = responses

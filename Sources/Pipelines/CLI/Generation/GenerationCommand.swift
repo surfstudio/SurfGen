@@ -53,6 +53,7 @@ public class GenerationCommand: Command {
                                                                needRewriteExistingFiles: rewrite.value,
                                                                logger: self.loger)
 
+        
         guard let specUrl = URL(string: specPath.value) else {
             self.loger.fatal("Invalid path to root spec: \(specPath.value)")
             exit(-1)
