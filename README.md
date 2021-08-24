@@ -28,7 +28,7 @@ We support lots of thing. Just it will be more easy to say what we don't support
 
 We support properties nullability by two strategies
 
-Old strategy is based on `required` property of `schema` and we use it to determine if property nullable or not (if property is listed in `required` then it is nullable)
+Old strategy is based on `required` property of `schema` and we use it to determine if property nullable or not (if property is listed in `required` then it isn't nullable)
 
 But also we have a new strategy that is based on `nullable` field. And if  `nullable: false` then the property will not be nullable. Also property won't be nullable if field `nullable` wasn't specified.
 
