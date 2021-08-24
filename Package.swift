@@ -15,6 +15,10 @@ var testTargets: [Target] = [
     .testTarget(
         name: "CodeGeneratorTests",
         dependencies: ["Pipelines", "CodeGenerator", "Common", "ReferenceExtractor", "GASTBuilder", "UtilsForTesting"]
+    ),
+    .testTarget(
+        name: "OperationsTests",
+        dependencies: ["Operations"]
     )
 ]
 
@@ -56,6 +60,10 @@ let package = Package(
         .library(
             name: "UtilsForTesting",
             targets: ["UtilsForTesting"]
+        ),
+        .library(
+            name: "Operations",
+            targets: ["Operations"]
         ),
 
         // MARK: -- Specific
@@ -107,6 +115,7 @@ let package = Package(
                 "GASTBuilder",
                 "GASTTree",
                 "CodeGenerator",
+                "Operations"
             ],
             exclude: ["main.swift", "CLI"]
         ),
@@ -150,6 +159,9 @@ let package = Package(
             dependencies: [
                 "Common"
             ]
+        ),
+        .target(
+            name: "Operations"
         )
     ] + testTargets
 )

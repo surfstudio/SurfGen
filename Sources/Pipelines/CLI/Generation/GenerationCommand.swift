@@ -11,6 +11,7 @@ import Yams
 import Common
 import Pipelines
 import AnalyticsClient
+import Operations
 
 public class GenerationCommand: Command {
 
@@ -52,12 +53,18 @@ public class GenerationCommand: Command {
             loger.warning("Now you use old nullable determination strategy. We won't support this strategy in next major release. \nFor more detail look at https://github.com/surfstudio/SurfGen/blob/master/README.md#nullability")
         }
 
+        var prefixCutter: PrefixCutter?
+
+        if let masks = config.prefixesToCutDownInServiceNames, !masks.isEmpty {
+            prefixCutter = PrefixCutter(prefixesToCut: Set(masks))
+        }
+
         let pipeline = BuildCodeGeneratorPipelineFactory.build(templates: config.templates,
                                                                serviceName: serviceName,
                                                                needRewriteExistingFiles: rewrite.value,
                                                                useNewNullableDefinitionStartegy: config.useNewNullableDeterminationStrategy ?? false,
+                                                               prefixCutter: prefixCutter,
                                                                logger: self.loger)
-
         
         guard let specUrl = URL(string: specPath.value) else {
             self.loger.fatal("Invalid path to root spec: \(specPath.value)")

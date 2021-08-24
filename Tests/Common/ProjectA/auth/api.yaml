@@ -8,7 +8,7 @@ info:
 
 paths:
 
-  /auth:
+  /api/v1.1/auth:
     post:
       summary: Метод для отправки логина и пароля на сервер. Первый фактор авторизации.
       requestBody:
