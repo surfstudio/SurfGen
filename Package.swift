@@ -24,12 +24,13 @@ var testTargets: [Target] = [
 
 var dependencies: [PackageDescription.Package.Dependency] = [
     // because SPM cant resolve it by their own ((((:
-    .package(url: "https://github.com/onevcat/Rainbow", from: "3.1.5"),
-    .package(url: "https://github.com/jpsim/Yams", from: "1.0.0"),
     .package(url: "https://github.com/kylef/PathKit.git", from: "0.9.0"),
     .package(url: "https://github.com/LastSprint/SwagGen", .revision("4fd5a299db0ba733e5cd6fa4e421b40248657cb6")),
     .package(url: "https://github.com/stencilproject/Stencil", from: "0.13.1"),
-    .package(url: "https://github.com/jakeheis/SwiftCLI", from: "5.3.0")
+    .package(url: "https://github.com/jakeheis/SwiftCLI", from: "5.3.0"),
+    .package(url: "https://github.com/onevcat/Rainbow", from: "3.1.5"),
+    .package(url: "https://github.com/jpsim/Yams", from: "1.0.0"),
+
 ]
 
 let package = Package(
@@ -102,7 +103,7 @@ let package = Package(
         .target(
             name: "ReferenceExtractor",
             dependencies: [
-                "Yams",
+                 "Yams",
                 "Common"
             ]
         ),
@@ -121,7 +122,7 @@ let package = Package(
         .target(
             name: "GASTBuilder",
             dependencies: [
-                "Yams",
+                 "Yams",
                 "Swagger",
                 "Common",
                 "GASTTree"

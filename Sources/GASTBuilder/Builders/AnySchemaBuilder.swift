@@ -60,7 +60,15 @@ public protocol SchemaBuilder {
 /// Isn't supported in any place
 public struct AnySchemaBuilder: SchemaBuilder {
 
-    public init() { }
+    /// If set to false than old method will be used
+    /// old method is based on `required` filed of schema
+    ///
+    /// the new method is based on `nullable` field
+    public let useNewNullableDeterminationStrategy: Bool
+
+    public init(useNewNullableDeterminationStrategy: Bool = false) {
+        self.useNewNullableDeterminationStrategy = useNewNullableDeterminationStrategy
+    }
 
     /// Build all item which are under `schemas:`
     public func build(schemas: [ComponentObject<Schema>]) throws -> [SchemaObjectNode] {
@@ -151,11 +159,19 @@ public struct AnySchemaBuilder: SchemaBuilder {
             let type = try wrap(property.schema.extractType(),
                                 message: "In object \(name), in property \(property.name)")
 
+
+            var isNullable = property.isNullable
+
+            if self.useNewNullableDeterminationStrategy {
+                isNullable = property.schema.metadata.nullable
+            }
+
+
             return PropertyNode(name: property.name,
                                 type: type,
                                 description: property.schema.metadata.description,
                                 example: property.schema.metadata.example,
-                                nullable: property.isNullable)
+                                nullable: isNullable)
         }
 
         return SchemaModelNode(name: name, properties: properties, description: meta.description)

@@ -16,6 +16,7 @@ import CodeGenerator
 
 public struct StubGASTTreeFactory {
 
+    public var useNewNullableDeterminationStrategy: Bool = false
     public var fileProvider: FileProvider
     public var resultClosure: (([[PathModel]]) throws -> Void)?
     public var initCodeGeneratorStageStub: AnyPipelineStage<[DependencyWithTree]>?
@@ -36,7 +37,7 @@ public struct StubGASTTreeFactory {
     }
 
     public func build(enableDisclarationChecking: Bool = false) -> BuildGASTTreeEntryPoint {
-        let schemaBuilder = AnySchemaBuilder()
+        let schemaBuilder = AnySchemaBuilder(useNewNullableDeterminationStrategy: self.useNewNullableDeterminationStrategy)
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
         let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder,
                                                      enableDisclarationChecking: enableDisclarationChecking)
