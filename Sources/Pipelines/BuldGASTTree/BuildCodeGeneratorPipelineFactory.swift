@@ -24,8 +24,9 @@ public struct BuildCodeGeneratorPipelineFactory {
     public static func build(templates: [Template],
                              serviceName: String,
                              needRewriteExistingFiles: Bool = false,
+                             useNewNullableDefinitionStartegy: Bool,
                              logger: Loger? = nil) -> BuildGASTTreeEntryPoint {
-        let schemaBuilder = AnySchemaBuilder()
+        let schemaBuilder = AnySchemaBuilder(useNewNullableDeterminationStrategy: useNewNullableDefinitionStartegy)
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
         let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder)
         let responsesBuilder = AnyResponsesBuilder(mediaTypesBuilder: mediaTypesBuilder)

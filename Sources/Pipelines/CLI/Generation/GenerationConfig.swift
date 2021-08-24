@@ -17,4 +17,5 @@ public struct GenerationConfig: Decodable {
 
     var templates: [Template]
     var analytcsConfig: AnalytcsConfig?
+    var useNewNullableDeterminationStrategy: Bool?
 }

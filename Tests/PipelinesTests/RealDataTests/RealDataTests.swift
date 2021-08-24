@@ -45,7 +45,8 @@ final class RealDataTests: XCTestCase {
                 try { () throws -> Void in
                     do {
                         _ = try BuildCodeGeneratorPipelineFactory.build(templates: [],
-                                                                        serviceName: "").run(with: url)
+                                                                        serviceName: "",
+                                                                        useNewNullableDefinitionStartegy: false).run(with: url)
                     } catch {
                         print("ERROR for \(url)")
                         print(error.localizedDescription)

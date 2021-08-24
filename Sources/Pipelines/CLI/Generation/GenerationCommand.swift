@@ -48,9 +48,14 @@ public class GenerationCommand: Command {
             exit(-1)
         }
 
+        if config.useNewNullableDeterminationStrategy == nil || config.useNewNullableDeterminationStrategy == false {
+            loger.warning("Now you use old nullable determination strategy. We won't support this strategy in next major release. \nFor more detail look at https://github.com/surfstudio/SurfGen/blob/master/README.md#nullability")
+        }
+
         let pipeline = BuildCodeGeneratorPipelineFactory.build(templates: config.templates,
                                                                serviceName: serviceName,
                                                                needRewriteExistingFiles: rewrite.value,
+                                                               useNewNullableDefinitionStartegy: config.useNewNullableDeterminationStrategy ?? false,
                                                                logger: self.loger)
 
         

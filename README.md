@@ -24,6 +24,32 @@ In SurfGen you determine the result platform and language by templates you give 
 
 We support lots of thing. Just it will be more easy to say what we don't support (:
 
+### Nullability
+
+We support properties nullability by two strategies
+
+Old strategy is based on `required` property of `schema` and we use it to determine if property nullable or not (if property is listed in `required` then it is nullable)
+
+But also we have a new strategy that is based on `nullable` field. And if  `nullable: false` then the property will not be nullable. Also property won't be nullable if field `nullable` wasn't specified.
+
+If `nullable: true` then the property will be `nullable`
+
+**By default SurfGen use old strategy**
+
+We do it in terms of backward compatibility, but we will change default haaviour in next major release.
+
+Not if you want to use the new strategy you need to write it in root of ypur generation config:
+
+```Yaml
+
+useNewNullableDeterminationStrategy: true
+
+templates:
+    ...
+analyticsConfig:
+    ...
+```
+
 ## Unsupported OpenAPI features
 
 - We don't support key `not`
