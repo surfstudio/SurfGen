@@ -22,7 +22,7 @@ public class LintingCommand: Command {
     public let configPath = Key<String>("--config", "-c", description: "Path to config yaml-file")
     public let verbose = Flag("--verbose", "-v", description: "If set, will print debug-level logs")
 
-    public var pathToLint = Parameter()
+    public var pathToLint = Param<String>()
 
     public func execute() throws {
         let config = self.loadConfig()

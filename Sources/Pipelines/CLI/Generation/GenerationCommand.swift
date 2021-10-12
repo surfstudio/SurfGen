@@ -32,14 +32,14 @@ public class GenerationCommand: Command {
 
     public let rewrite = Flag("--rewrite",
                               "-r",
-                              description: "If set, existing files will be rewritten with new generated ones",
-                              defaultValue: false)
+                              description: "If set, existing files will be rewritten with new generated ones")
 
-    public var specPath = Parameter()
+    public var specPath = Param<String>()
 
     public var loger: Loger = DefaultLogger.default
 
     public func execute() throws {
+
         let config = self.loadConfig()
 
         self.loger = self.initLoger(config: config)
