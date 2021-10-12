@@ -69,6 +69,7 @@ SurfGen can be run on:
 
 - MacOS
 - Ubuntu
+- On Windows (through WSL)
 
 ## Templates
 
@@ -102,7 +103,7 @@ SurfGen currently has 2 workflows: **linter** and **generator**.
 
 ### Lint command
 
-Use `lint` command to check if your OpenAPI spec is correct in terms of SurfGen. If not, you will see log with errors and warnings, describing what exactly is wrong with the spec.
+Use `lint` command to check if your OpenAPI spec is correct in terms of SurfGen (source coude can be generated without errors). If not, you will see log with errors and warnings, describing what exactly is wrong with the spec.
 
 ```sh
 SurfGen lint <pathToSpec>
@@ -110,9 +111,13 @@ SurfGen lint <pathToSpec>
 
 where `pathToSpec` is a path either to one file in OpenAPI spec or to the directory containing whole spec.
 
-#### Available parameters:
+| Parameter | Description |
+|---------|---------------|
+| `--config` or `-c` | Path to config file |
+| `--verbose` or `-v` | Prints `DEBUG` logs |
 
-`-c, --config <pathToConfig>` (optional) Config for linting is just a list of files, which are to be ignored while linting, provided in following format:
+
+#### Linter Config
 
 ```yaml
 exclude:
@@ -120,27 +125,35 @@ exclude:
 - /Path/To/OpenAPI/Project/anotherFile.yaml
 ```
 
+By `exclude` keyword you can specify files which you want to exclude from linting.
+
 **Warning:** this ignore-list can contain paths only to files, not directories.
 
 ### Generate command
 
-Use `generate` command to generate files with code.
+Use `generate` command to generate files with source code.
 
 ```sh
-SurfGen generate <pathToSpec>
+SurfGen generate -c <pathToConfig> <pathToSpec>
 ```
 
-where `pathToSpec` is a path to one file in OpenAPI spec which describes service you need to generate.
+where `pathToSpec` is a path to one file in OpenAPI spec **which describes service** you need to generate.
 
-#### Available parameters:
+| Parameter | Description |
+|---------|---------------|
+| `--config` or `-c` | Path to config file |
+| `--verbose` or `-v` | Prints `DEBUG` logs |
+| `--name` or `-n` | This name will be used for service which you want to generate. So models have their own names, but HTTP enpoint don't you need specify a name for you service|
+| `--rewrite` or `-r` | If set wil rewrite old files by new ones. When SurfGen generate file it creates a name for file. If file with this name adlready exists then SurfGen will rewrite it |
 
-`-c, --config <pathToConfig>` (**necessary**) Generation config keeps description of templates and output files. See [Generation config](Sources/CodeGenerator/Stages/GenerationStage/Template.md) for details.
+#### Generator config
 
-`-n, --name <serviceName>` (**necessary**) This name will be used as name for generated service files.
-
-#### Available flags:
-
-`-r, --rewrite` If set, new generated files will replace existing ones. Default is `false`
+| Parameter | Description |
+|---------|---------------|
+| `templates`| Contains array of structures called `Tenpmlate` |
+| `--verbose` or `-v` | Prints `DEBUG` logs |
+| `--name` or `-n` | This name will be used for service which you want to generate. So models have their own names, but HTTP enpoint don't you need specify a name for you service|
+| `--rewrite` or `-r` | If set wil rewrite old files by new ones. When SurfGen generate file it creates a name for file. If file with this name adlready exists then SurfGen will rewrite it |
 
 ## Editing templates
 
