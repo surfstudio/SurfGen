@@ -6,6 +6,9 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// Very simple client which is add property `"sender": "SurfGen"` to input payload
 /// Then serialize it to JSON and send given to Logstash endpoint.

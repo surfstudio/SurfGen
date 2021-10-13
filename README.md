@@ -25,7 +25,7 @@ In SurfGen you determine the result platform and language by templates you give 
 SurfGen can be run on:
 
 - MacOS
-- Ubuntu
+- Ubuntu (look [this script](InstallSwiftOnLinux.sh))
 - On Windows (through WSL)
 
 ## Templates
