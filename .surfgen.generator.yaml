@@ -52,7 +52,7 @@ templates:
 
   - type: enum
     fileExtension: swift
-    fileNameCase: snakeCase # ATTENTION! Just for exmplae that ypu can change naming pattern for files
+    fileNameCase: snakeCase # ATTENTION! Just for example that you can change naming pattern for files
     templatePath: ./Templates/Swift/Entity.txt
     destinationPath: ./trash/Sources/Models/{name}
 
