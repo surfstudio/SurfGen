@@ -25,46 +25,46 @@ public enum ConfigTemplates {
       - type: service
         nameSuffix: Service
         fileExtension: ${fileExtension}
-        templatePath: ./Templates/Swift/Service.txt
-        destinationPath: ./project/Sources/Services/{name}
+        templatePath: ./Templates/v2/Swift/Service.txt
+        destinationPath: ./trash/Sources/Services/{name}
 
     # This template will generate Implementation for service
 
       - type: service
         nameSuffix: Service
         fileExtension: ${fileExtension}
-        templatePath: ./Templates/Swift/NetworkService.txt
-        destinationPath: ./project/Sources/Services/{name}
+        templatePath: ./Templates/v2/Swift/NetworkService.txt
+        destinationPath: ./trash/Sources/Services/{name}
 
     # This template will generate Business Model
 
       - type: model
         nameSuffix: Entity
         fileExtension: ${fileExtension}
-        templatePath: ./Templates/Swift/Entity.txt
+        templatePath: ./Templates/v2/Swift/Entity.txt
         destinationPath: ./trash/Sources/Models/{name}
 
     # This template will generate Plain Model (for network communication)
 
       - type: model
-        nameSuffix: Entity
+        nameSuffix: Entry
         fileExtension: ${fileExtension}
-        templatePath: ./Templates/Swift/Entry.txt
+        templatePath: ./Templates/v2/Swift/Entry.txt
         destinationPath: ./trash/Sources/Models/{name}
 
     # This template will generate alias on other types
 
       - type: typealias
         fileExtension: ${fileExtension}
-        templatePath: ./Templates/Swift/Typealias.txt
+        templatePath: ./Templates/v2/Swift/Typealias.txt
         destinationPath: ./trash/Sources/Aliases/{name}
 
     # This template will generate enum
 
       - type: enum
         fileExtension: ${fileExtension}
-        fileNameCase: snakeCase # ATTENTION! Just for exmplae that ypu can change naming pattern for files
-        templatePath: ./Templates/Swift/Entity.txt
+        fileNameCase: snakeCase # ATTENTION! Just for example that you can change naming pattern for files
+        templatePath: ./Templates/v2/Swift/Entity.txt
         destinationPath: ./trash/Sources/Models/{name}
 
     # We use it to colelct analytics about SurfGen usage inside our company.
