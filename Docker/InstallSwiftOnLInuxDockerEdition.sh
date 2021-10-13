@@ -9,13 +9,9 @@ dependencies=(
 	"libsqlite3-0"
 	"libxml2"
 	"pkg-config"
+	"wget"
 	"tzdata"
-    "wget"
 	"zlib1g-dev")
-
-sudo apt-get update
-sudo apt-get install -y git
-sudo apt-get install -y lsb-core
 
 version=$(lsb_release -rs | cut -c1-2)
 
@@ -32,9 +28,9 @@ case "$version" in
 esac
 
 echo "Installing dependencies:"
-sudo apt-get update
+apt-get update
 for dep in ${dependencies[*]}; do
-	sudo apt-get install $dep
+	apt-get install -y $dep
 done
 
 echo "Downloading Swift:"
@@ -44,10 +40,18 @@ wget -c -O "swift.tar.gz" "$swift_link"
 mkdir "swift"
 tar -C "swift" -xvf "swift.tar.gz" --strip-components 1
 rm -f swift.tar.gz
-sudo mv ./swift /usr/share/swift
+mv ./swift /usr/share/swift
 
 printf "\nexport PATH=\"/usr/share/swift/usr/bin:\$PATH\"\n" >> ~/.bashrc
 
 echo "Swift is installed at /usr/share/swift!"
 echo "Run 'swift --version' to check if Swift is installed correctly"
 echo "Close and reopen terminal to continue..."
+
+source ~/.bashrc
+
+export PATH="/usr/share/swift/usr/bin:$PATH" 
+
+swift --version
+
+# make executable
