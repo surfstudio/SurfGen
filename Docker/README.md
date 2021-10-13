@@ -1,6 +1,6 @@
 # Test Build On Linux
 
-There ypu can find docker environent to test build in linux
+There you can find a docker environment to test build on linux
 
 There are:
 - `BaseImage` - image with swift (installed by SurfGen's script)
