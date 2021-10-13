@@ -25,6 +25,6 @@ let version = "1.0.1"
 let cli = CLI(name: "surfgen",
               version: version,
               description: "surfgen code generator",
-              commands: [LintingCommand(), GenerationCommand()])
+              commands: [LintingCommand(), GenerationCommand(), CreateConfigCommand()])
 
 _ = cli.goAndExit()

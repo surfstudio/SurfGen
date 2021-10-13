@@ -10,15 +10,11 @@ var testTargets: [Target] = [
     ),
     .testTarget(
         name: "PipelinesTests",
-        dependencies: ["Pipelines", "CodeGenerator", "Common", "ReferenceExtractor", "GASTBuilder", "UtilsForTesting"]
+        dependencies: ["Pipelines", "CodeGenerator", "Common", "ReferenceExtractor", "GASTBuilder", "UtilsForTesting", "PipelinesCLI"]
     ),
     .testTarget(
         name: "CodeGeneratorTests",
         dependencies: ["Pipelines", "CodeGenerator", "Common", "ReferenceExtractor", "GASTBuilder", "UtilsForTesting"]
-    ),
-    .testTarget(
-        name: "OperationsTests",
-        dependencies: ["Operations"]
     )
 ]
 
