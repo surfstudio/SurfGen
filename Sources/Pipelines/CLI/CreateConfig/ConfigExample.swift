@@ -67,7 +67,7 @@ public enum ConfigTemplates {
         templatePath: ./Templates/v2/Swift/Entity.txt
         destinationPath: ./trash/Sources/Models/{name}
 
-    # We use it to colelct analytics about SurfGen usage inside our company.
+    # We use it to collect analytics about SurfGen usage inside our company.
     # You can set it to gether the sae analytics for ypur company or just delete it from config
     analytcsConfig:
         logstashEnpointURI: http://127.0.0.1:6644
