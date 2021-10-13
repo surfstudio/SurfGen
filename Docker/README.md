@@ -14,4 +14,4 @@ How to use it:
 
 Profit.
 
-If ypu haven't ever work with docker - don't touch content of files and ask somebody in Issues. Or find out what is that Docker :)
+If you haven't ever worked with docker - don't touch content of files and ask somebody in Issues. Or find out what is that Docker :)
