@@ -25,7 +25,7 @@ In SurfGen you determine the result platform and language by templates you give 
 SurfGen can be run on:
 
 - MacOS
-- Ubuntu (look [this script](InstallSwiftOnLinux.sh))
+- Ubuntu
 - On Windows (through WSL)
 
 ## Templates
@@ -39,6 +39,8 @@ At this moment we have:
 To create your own templates use [https://stencil.fuller.li](https://stencil.fuller.li)
 
 ## Installation
+
+> If you want to build it on Ubuntu beforehand you need to configure envoronment or just install Swift by our [bash script](InstallSwiftOnLinux.sh)
 
 Just add next snippet to your Podfile
 ```
