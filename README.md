@@ -170,7 +170,7 @@ If `nullable: true` then the property will be `nullable`
 
 **By default SurfGen use old strategy**
 
-We do it in terms of backward compatibility, but we will change default haaviour in next major release.
+We do it in terms of backward compatibility, but we will change default behavior in next major release.
 
 Not if you want to use the new strategy you need to write it in root of your generation config:
 
@@ -213,7 +213,7 @@ prefixesToCutDownInServiceNames:
 - We don't support key `not`
 - We don't support in-place schema declration (when you don't create a `components/schemas/Object` but you write schema just in place where you use it (for example in response))
 - We don't support groups (oneOf, allOf, anyOf) which are include arrays
-- We don't support arrays whose item's type is aray (like arrays of arrays)
+- We don't support arrays whose item's type is array (like arrays of arrays)
 
 ... and may be we forgot something ...
 
