@@ -36,7 +36,7 @@ public final class CreateConfigCommand: Command {
     public func execute() throws {
 
         guard let typeValue = self.typeFlag.value else {
-            self.loger.fatal("--type paraeter wan't set")
+            self.loger.fatal("--type parameter wan't set")
             return
         }
 

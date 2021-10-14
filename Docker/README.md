@@ -1,6 +1,6 @@
 # Test Build On Linux
 
-There ypu can find docker environent to test build in linux
+There you can find a docker environment to test build on linux
 
 There are:
 - `BaseImage` - image with swift (installed by SurfGen's script)
@@ -14,4 +14,4 @@ How to use it:
 
 Profit.
 
-If ypu haven't ever work with docker - don't touch content of files and ask somebody in Issues. Or find out what is that Docker :)
+If you haven't ever worked with docker - don't touch content of files and ask somebody in Issues. Or find out what is that Docker :)
