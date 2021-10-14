@@ -170,7 +170,7 @@ If `nullable: true` then the property will be `nullable`
 
 **By default SurfGen use old strategy**
 
-We do it in terms of backward compatibility, but we will change default haaviour in next major release.
+We do it in terms of backward compatibility, but we will change default behavior in next major release.
 
 Not if you want to use the new strategy you need to write it in root of your generation config:
 
