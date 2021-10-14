@@ -172,7 +172,7 @@ If `nullable: true` then the property will be `nullable`
 
 We do it in terms of backward compatibility, but we will change default behavior in next major release.
 
-Not if you want to use the new strategy you need to write it in root of your generation config:
+Now if you want to use the new strategy you need to write it in root of your generator's config:
 
 ```Yaml
 
