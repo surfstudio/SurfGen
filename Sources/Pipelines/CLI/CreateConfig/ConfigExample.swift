@@ -25,7 +25,7 @@ public enum ConfigTemplates {
       - type: service
         nameSuffix: Service
         fileExtension: ${fileExtension}
-        templatePath: ./Templates/v2/Swift/Service.txt
+        templatePath: ./Templates/v2/Swift/Service.stencil
         destinationPath: ./trash/Sources/Services/{name}
 
     # This template will generate Implementation for service
@@ -33,7 +33,7 @@ public enum ConfigTemplates {
       - type: service
         nameSuffix: Service
         fileExtension: ${fileExtension}
-        templatePath: ./Templates/v2/Swift/NetworkService.txt
+        templatePath: ./Templates/v2/Swift/NetworkService.stencil
         destinationPath: ./trash/Sources/Services/{name}
 
     # This template will generate Business Model
@@ -41,7 +41,7 @@ public enum ConfigTemplates {
       - type: model
         nameSuffix: Entity
         fileExtension: ${fileExtension}
-        templatePath: ./Templates/v2/Swift/Entity.txt
+        templatePath: ./Templates/v2/Swift/Entity.stencil
         destinationPath: ./trash/Sources/Models/{name}
 
     # This template will generate Plain Model (for network communication)
@@ -49,14 +49,14 @@ public enum ConfigTemplates {
       - type: model
         nameSuffix: Entry
         fileExtension: ${fileExtension}
-        templatePath: ./Templates/v2/Swift/Entry.txt
+        templatePath: ./Templates/v2/Swift/Entry.stencil
         destinationPath: ./trash/Sources/Models/{name}
 
     # This template will generate alias on other types
 
       - type: typealias
         fileExtension: ${fileExtension}
-        templatePath: ./Templates/v2/Swift/Typealias.txt
+        templatePath: ./Templates/v2/Swift/Typealias.stencil
         destinationPath: ./trash/Sources/Aliases/{name}
 
     # This template will generate enum
@@ -64,7 +64,7 @@ public enum ConfigTemplates {
       - type: enum
         fileExtension: ${fileExtension}
         fileNameCase: snakeCase # ATTENTION! Just for example that you can change naming pattern for files
-        templatePath: ./Templates/v2/Swift/Entity.txt
+        templatePath: ./Templates/v2/Swift/Entity.stencil
         destinationPath: ./trash/Sources/Models/{name}
 
     # We use it to collect analytics about SurfGen usage inside our company.

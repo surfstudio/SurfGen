@@ -14,38 +14,38 @@ templates:
   - type: service
     nameSuffix: Service
     fileExtension: swift
-    templatePath: ./Templates/Swift/Service.txt
-    destinationPath: ./project/Sources/Services/{name}
+    templatePath: ./Templates/v2/Swift/Service.stencil
+    destinationPath: ./trash/Sources/Services/{name}
 
 # This template will generate Implementation for service
 
   - type: service
     nameSuffix: Service
     fileExtension: swift
-    templatePath: ./Templates/Swift/NetworkService.txt
-    destinationPath: ./project/Sources/Services/{name}
+    templatePath: ./Templates/v2/Swift/NetworkService.stencil
+    destinationPath: ./trash/Sources/Services/{name}
 
 # This template will generate Business Model
 
   - type: model
     nameSuffix: Entity
     fileExtension: swift
-    templatePath: ./Templates/Swift/Entity.txt
+    templatePath: ./Templates/v2/Swift/Entity.stencil
     destinationPath: ./trash/Sources/Models/{name}
 
 # This template will generate Plain Model (for network communication)
 
   - type: model
-    nameSuffix: Entity
+    nameSuffix: Entry
     fileExtension: swift
-    templatePath: ./Templates/Swift/Entry.txt
+    templatePath: ./Templates/v2/Swift/Entry.stencil
     destinationPath: ./trash/Sources/Models/{name}
 
 # This template will generate alias on other types
 
   - type: typealias
     fileExtension: swift
-    templatePath: ./Templates/Swift/Typealias.txt
+    templatePath: ./Templates/v2/Swift/Typealias.stencil
     destinationPath: ./trash/Sources/Aliases/{name}
 
 # This template will generate enum
@@ -53,11 +53,11 @@ templates:
   - type: enum
     fileExtension: swift
     fileNameCase: snakeCase # ATTENTION! Just for example that you can change naming pattern for files
-    templatePath: ./Templates/Swift/Entity.txt
+    templatePath: ./Templates/v2/Swift/Entity.stencil
     destinationPath: ./trash/Sources/Models/{name}
 
 # We use it to collect analytics about SurfGen usage inside our company.
-# You can set it together with the same analytics for your company or just delete it from config
+# You can set it to gather the analytics for your company or just delete it from config
 analytcsConfig:
     logstashEnpointURI: http://127.0.0.1:6644
     payload:
