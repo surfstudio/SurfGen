@@ -40,7 +40,7 @@ To create your own templates use [https://stencil.fuller.li](https://stencil.ful
 
 ## Installation
 
-> If you want to build it on Ubuntu beforehand you need to configure envoronment or just install Swift by our [bash script](InstallSwiftOnLinux.sh)
+> If you want to build it on Ubuntu beforehand you need to configure environment or just install Swift by our [bash script](InstallSwiftOnLinux.sh)
 
 Just add next snippet to your Podfile
 ```
