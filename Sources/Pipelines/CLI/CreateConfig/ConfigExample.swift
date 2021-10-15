@@ -27,7 +27,7 @@ public enum ConfigTemplates {
         nameSuffix: Service
         fileExtension: ${fileExtension}
         templatePath: ./Templates/v2/Swift/Service.stencil
-        destinationPath: ./trash/Sources/Services/{name}
+        destinationPath: ./tmp/Sources/Services/{name}
 
     # This template will generate Implementation for service
 
@@ -35,7 +35,7 @@ public enum ConfigTemplates {
         nameSuffix: Service
         fileExtension: ${fileExtension}
         templatePath: ./Templates/v2/Swift/NetworkService.stencil
-        destinationPath: ./trash/Sources/Services/{name}
+        destinationPath: ./tmp/Sources/Services/{name}
 
     # This template will generate Business Model
 
@@ -43,7 +43,7 @@ public enum ConfigTemplates {
         nameSuffix: Entity
         fileExtension: ${fileExtension}
         templatePath: ./Templates/v2/Swift/Entity.stencil
-        destinationPath: ./trash/Sources/Models/{name}
+        destinationPath: ./tmp/Sources/Models/{name}
 
     # This template will generate Plain Model (for network communication)
 
@@ -51,14 +51,14 @@ public enum ConfigTemplates {
         nameSuffix: Entry
         fileExtension: ${fileExtension}
         templatePath: ./Templates/v2/Swift/Entry.stencil
-        destinationPath: ./trash/Sources/Models/{name}
+        destinationPath: ./tmp/Sources/Models/{name}
 
     # This template will generate alias on other types
 
       - type: typealias
         fileExtension: ${fileExtension}
         templatePath: ./Templates/v2/Swift/Typealias.stencil
-        destinationPath: ./trash/Sources/Aliases/{name}
+        destinationPath: ./tmp/Sources/Aliases/{name}
 
     # This template will generate enum
 
@@ -66,7 +66,7 @@ public enum ConfigTemplates {
         fileExtension: ${fileExtension}
         fileNameCase: snakeCase # ATTENTION! Just for example that you can change naming pattern for files
         templatePath: ./Templates/v2/Swift/Entity.stencil
-        destinationPath: ./trash/Sources/Models/{name}
+        destinationPath: ./tmp/Sources/Models/{name}
 
     # We use it to collect analytics about SurfGen usage inside our company.
     # You can set it to gather the analytics for your company or just delete it from config
