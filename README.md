@@ -65,7 +65,7 @@ SurfGen currently has 3 workflows:
 
 ### Create-Config command
 
-Use it to generate config stub with marks and comment. Then you can change it manyally to your needs
+Use it to generate config stub with marks and comment. Then you can change it manually to your needs
 ```sh
 SurfGen create-config -f swift -t generator
 ```
