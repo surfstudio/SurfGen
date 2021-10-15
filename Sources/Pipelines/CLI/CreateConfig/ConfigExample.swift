@@ -14,7 +14,8 @@ public enum ConfigTemplates {
     # for more info look at https://github.com/surfstudio/SurfGen#nullability
     useNewNullableDeterminationStrategy: true
 
-    # Will remove listed prefixes from URIs in generated code
+    # Will remove listed prefixes from method names
+    # for detais look at https://github.com/surfstudio/SurfGen#prefix-cutting
     prefixesToCutDownInServiceNames:
       - "/api/v1"
 

@@ -152,7 +152,7 @@ analytcsConfig:
         project: Test
 ```
 
-We use this setting in our projects just to understand how good SurfGen works. You can just delete it.
+We use this setting to collect usage analytics (on out project inside out company). You can just delete it or configure for your own analytics.
 
 ## Supported features
 
@@ -164,9 +164,7 @@ We support properties nullability by two strategies
 
 Old strategy is based on `required` property of `schema` and we use it to determine if property nullable or not (if property is listed in `required` then it isn't nullable)
 
-But also we have a new strategy that is based on `nullable` field. And if  `nullable: false` then the property will not be nullable. Also property won't be nullable if field `nullable` wasn't specified.
-
-If `nullable: true` then the property will be `nullable`
+But also we have a new strategy that is based on `nullable` field. And if  `nullable: false` then the property will not be nullable. Also property won't be nullable if field `nullable` wasn't specified. If `nullable: true` then the property will be `nullable`
 
 **By default SurfGen use old strategy**
 
@@ -186,7 +184,7 @@ analyticsConfig:
 
 ### Prefix Cutting
 
-We can cut prefixes from URI in generated files. For example we have endpoints with this URIs:
+We can cut URI prefixed from method names in generated files. For example we have endpoints with this URIs:
 ```
 /api/v1/auth
 /api/v2/auth
@@ -200,7 +198,7 @@ func apiv2Auth() {...}
 func apitestAuth() {...}
 ```
 
-And we want to handle base path of URL manually so to cut those prefixes we should define `prefixesToCutDownInServiceNames` in generator config:
+So to avoid it we should define `prefixesToCutDownInServiceNames` in generator config:
 ```
 prefixesToCutDownInServiceNames:
     - /api/v1
