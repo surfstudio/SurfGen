@@ -73,7 +73,7 @@ SurfGen create-config -f swift -t generator
 | Parameter | Description |
 |---------|---------------|
 | `--file-ext` or `-f` | Value for property `fileExtension` in config |
-| `--type` or `-t` | Type of config. Must be `linter` or `generator` |
+| `--type` or `-t` | Type of config. Must be `linter` or `generator`. **Required** |
 
 
 ### Lint command
@@ -88,7 +88,7 @@ where `pathToSpec` is a path either to one file in OpenAPI spec or to the direct
 
 | Parameter | Description |
 |---------|---------------|
-| `--config` or `-c` | Path to config file |
+| `--config` or `-c` | Path to config file. **Required**|
 | `--verbose` or `-v` | Prints `DEBUG` logs |
 
 
@@ -118,10 +118,10 @@ where `pathToSpec` is a path to one file in OpenAPI spec **which describes servi
 
 | Parameter | Description |
 |---------|---------------|
-| `--config` or `-c` | Path to config file |
+| `--config` or `-c` | Path to config file. **Required** |
 | `--verbose` or `-v` | Prints `DEBUG` logs |
-| `--name` or `-n` | This name will be used for service which you want to generate. So models have their own names, but HTTP enpoint don't you need specify a name for you service|
-| `--rewrite` or `-r` | If set wil rewrite old files by new ones. When SurfGen generate file it creates a name for file. If file with this name adlready exists then SurfGen will rewrite it |
+| `--name` or `-n` | This name will be used for service which you want to generate. So models have their own names, but HTTP enpoint don't you need specify a name for you service. **Required**|
+| `--rewrite` or `-r` | If set wil rewrite old files by new ones. When SurfGen generate file it creates a name for file. If file with this name adlready exists then SurfGen will rewrite it. |
 
 #### Generator config
 
