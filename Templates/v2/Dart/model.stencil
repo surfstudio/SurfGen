@@ -1,12 +1,15 @@
-part '{{ model.name|camelCaseToSnakeCase  }}.g.dart'
 {% for line in model.description|splitLines %}
 /// {{ line }}{% endfor %}
-@JsonSerializable()
-class {{ model.name }} {{ '{' }}{#
-	#}{% for property in model.properties %}
+class {{ model.name }} {
+    {{ model.name }}({
+		{% for property in model.properties %}this.{{ property.name }},{% if not forloop.last %}
+		{% endif %}{% endfor %}
+	});
+
+    {% for property in model.properties %}
 	{% for line in property.description|splitLines %}
 	/// {{ line }}{% endfor %}
-	{% if property.typeModel.isArray %}List<{% endif %}{#
+	final {% if property.typeModel.isArray %}List<{% endif %}{#
 	#}{% if property.typeModel.name == "integer" or property.typeModel.aliasTypeName == "integer" %}int{#
     #}{% elif property.typeModel.name == "number" or property.typeModel.aliasTypeName == "number" %}double{#
     #}{% elif property.typeModel.name == "string" or property.typeModel.aliasTypeName == "string" %}String{#
@@ -14,12 +17,4 @@ class {{ model.name }} {{ '{' }}{#
     #}{% else %}{{ property.typeModel.name }}{% endif %}{#
     #}{% if property.typeModel.isArray %}>{% endif %}{#
 	#} {{ property.name }};{% endfor %}
-
-	{{ model.name }}({
-		{% for property in model.properties %}this.{{ property.name }},{% if not forloop.last %}
-		{% endif %}{% endfor %}
-	});
-
-	factory {{ model.name }}.fromJson(Map<String, dynamic> json) => _${{ model.name }}FromJson(json);
-	Map<String, dynamic> toJson() => _${{ model.name }}ToJson(this);
 }
