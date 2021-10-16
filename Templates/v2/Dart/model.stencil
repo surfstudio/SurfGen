@@ -1,12 +1,7 @@
 {% for line in model.description|splitLines %}
 /// {{ line }}{% endfor %}
-class {{ model.name }} {
-    {{ model.name }}({
-		{% for property in model.properties %}this.{{ property.name }},{% if not forloop.last %}
-		{% endif %}{% endfor %}
-	});
-
-    {% for property in model.properties %}
+class {{ model.name }}{{ '{' }}{#
+	#}{% for property in model.properties %}
 	{% for line in property.description|splitLines %}
 	/// {{ line }}{% endfor %}
 	final {% if property.typeModel.isArray %}List<{% endif %}{#
@@ -16,5 +11,10 @@ class {{ model.name }} {
     #}{% elif property.typeModel.name == "boolean" or property.typeModel.aliasTypeName == "boolean" %}bool{#
     #}{% else %}{{ property.typeModel.name }}{% endif %}{#
     #}{% if property.typeModel.isArray %}>{% endif %}{#
-	#} {{ property.name }};{% endfor %}
+	#}{% if property.isNullable %}?{% endif %} {{ property.name|snakeCaseToCamelCase }};{% endfor %}
+
+	{{ model.name }}({
+		{% for property in model.properties %}{% if property.isNullable != true %}required {% endif %}this.{{ property.name|snakeCaseToCamelCase }},{% if not forloop.last %}
+		{% endif %}{% endfor %}
+	});
 }
