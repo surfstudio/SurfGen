@@ -1,0 +1,8 @@
+analytcsConfig:
+  logstashEnpointURI: http://logs.ps.surfstudio.ru
+  payload:
+    project: Test
+
+# List of files (not directories) which must be excluded from linting
+exclude:
+  - "./api/auth/api.yaml"

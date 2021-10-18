@@ -1,0 +1,24 @@
+
+import NodeKit
+
+public struct {{ model.name }}Entry: Codable {
+
+    // MARK: - Public Properties
+
+{% for property in model.properties %}    public let {{ property.name }}: {#
+#}{% if property.typeModel.isArray %}[{% endif %}{#
+#}{% if property.typeModel.name == "integer" %}Int{#
+#}{% elif property.typeModel.name == "number" %}Double{#
+#}{% elif property.typeModel.name == "string" %}String{#
+#}{% elif property.typeModel.name == "boolean" %}Bool{#
+#}{% else %}{{ property.typeModel.name }}{% if property.typeModel.isObject %}Entry{% endif %}{% endif %}{#
+#}{% if property.typeModel.isArray %}]{% endif %}{#
+#}{% if property.isNullable %}?{% endif %}
+{% endfor %}
+}
+
+// MARK: - RawMappable
+
+extension {{ model.name }}Entry: RawMappable {
+    public typealias Raw = Json
+}

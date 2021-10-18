@@ -1,0 +1,15 @@
+FROM ubuntu:18.04
+
+RUN apt-get update
+RUN apt-get install -y git
+RUN apt-get install -y lsb-core
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+WORKDIR /cse
+
+COPY InstallSwiftOnLInuxDockerEdition.sh /cse/fk.sh
+
+RUN /bin/bash fk.sh
+
+
