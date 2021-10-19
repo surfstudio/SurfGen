@@ -70,25 +70,5 @@ public struct OperationModel: Encodable {
         self.parameters = parameters
         self.responses = responses
         self.requestModel = requestModel
-
-//        let allParameters = (parameters ?? [])
-//            .map { $0.value }
-//            .sorted { $0.name < $1.name }
-//        self.pathParameters = allParameters.filter { $0.location == .path }
-//        self.queryParameters = allParameters.filter { $0.location == .query }
-
-//        let request = requestModel?.value.content.first
-//        self.requestGenerationModel = request.map { DataGenerationModel(dataModel: $0, statusCode: <#String?#>) }
-//
-//        let response = responses?.first { $0.value.key.isSuccessStatusCode }?.value.values.first
-//        self.responseGenerationModel = response.map { DataGenerationModel(dataModel: $0) }
     }
 }
-
-//extension OperationModel {
-//
-//    var codingKeys: [String] {
-//        return queryParameters.map { $0.name }
-//    }
-//
-//}

@@ -49,10 +49,3 @@ public struct PathModel: Encodable {
     }
     
 }
-
-//extension PathModel {
-//
-//    var codingKeys: [String] {
-//        return operations.flatMap { $0.codingKeys }
-//    }
-//}
