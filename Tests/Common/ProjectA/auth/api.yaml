@@ -29,4 +29,22 @@ paths:
             
         default:
           $ref: "../common/errors.yaml#/components/responses/ApiErrorResponse"
+
+    /api/v1.1/superAuth:
+    get:
+      responses:
+        '200':
+          description: todo
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/AuthResponse"
+    delete:
+      responses:
+        '204':
+          description: todo
+    put:
+      responses:
+        '201':
+          description: todo
         

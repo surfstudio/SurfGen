@@ -43,6 +43,12 @@ import Foundation
 ///                 $ref: "#components/schemas/DataGenerationModel"
 /// ```
 public struct OperationGenerationModel: Encodable {
+
+    public struct Keyed<T: Encodable>: Encodable {
+        let key: String
+        let value: T?
+    }
+
     /// http method string representation
     ///
     /// For example `GET`
@@ -56,12 +62,12 @@ public struct OperationGenerationModel: Encodable {
     public let responses: [Reference<ResponseModel>]?
     public let requestModel: Reference<RequestModel>?
 
-    let pathParameters: [ParameterModel]
-    let queryParameters: [ParameterModel]
-    let requestGenerationModel: DataGenerationModel?
-    let responseGenerationModel: DataGenerationModel?
+    public let pathParameters: [ParameterModel]
+    public let queryParameters: [ParameterModel]
+    public let requestGenerationModel: DataGenerationModel?
+    public let responseGenerationModel: Keyed<DataGenerationModel>?
 
-    let allGenerationResponses: [ResponseGenerationModel]?
+    public let allGenerationResponses: [ResponseGenerationModel]?
 
     init(operationModel: OperationModel) {
         self.httpMethod = operationModel.httpMethod
@@ -79,19 +85,25 @@ public struct OperationGenerationModel: Encodable {
         self.queryParameters = allParameters.filter { $0.location == .query }
 
         let request = operationModel.requestModel?.value.content.first
-        self.requestGenerationModel = request.map { DataGenerationModel(dataModel: $0, key: nil) }
+        self.requestGenerationModel = request.map { DataGenerationModel(dataModel: $0) }
 
         let response = operationModel.responses?.first { $0.value.key.isSuccessStatusCode }?.value
-        
-        self.responseGenerationModel = response?.values.first
-            .map { DataGenerationModel(dataModel: $0, key: response?.key) }
+
+        if let response = response {
+            self.responseGenerationModel = .init(
+                key: response.key,
+                value: response.values.first.map { DataGenerationModel(dataModel: $0) }
+            )
+        } else {
+            self.responseGenerationModel = nil
+        }
 
         self.allGenerationResponses = self.responses?
             .map { $0.value }
             .map { response in
                 ResponseGenerationModel(
                     key: response.key,
-                    responses: response.values.map { DataGenerationModel(dataModel: $0, key: response.key) }
+                    responses: response.values.map { DataGenerationModel(dataModel: $0) }
                 )
             }
     }

@@ -38,11 +38,11 @@ public class {{ service.name }}NetworkService: {{ service.name }}Service {
         #}{% if operation.requestGenerationModel.isTypeArray %}[{% endif %}{{ requestModelName }}{#
     #}{% if operation.requestGenerationModel.isTypeObject %}Entity{% endif %}{#
     #}{% if operation.requestGenerationModel.isTypeArray %}]{% endif %}{#
-    #}{% if not operation.requestModel.isRequired %}?{% endif %}) -> Observer<{% if operation.responseGenerationModel %}{#
-    #}{% if operation.responseGenerationModel.isTypeArray %}[{% endif %}{#
-    #}{% for responseName in operation.responseGenerationModel.typeNames %}{{ responseName }}{% endfor %}{#
-    #}{% if operation.responseGenerationModel.isTypeObject %}Entity{% endif %}{#
-    #}{% if operation.responseGenerationModel.isTypeArray %}]{% endif %}{#
+    #}{% if not operation.requestModel.isRequired %}?{% endif %}) -> Observer<{% if operation.responseGenerationModel.value %}{#
+    #}{% if operation.responseGenerationModel.value.isTypeArray %}[{% endif %}{#
+    #}{% for responseName in operation.responseGenerationModel.value.typeNames %}{{ responseName }}{% endfor %}{#
+    #}{% if operation.responseGenerationModel.value.isTypeObject %}Entity{% endif %}{#
+    #}{% if operation.responseGenerationModel.value.isTypeArray %}]{% endif %}{#
     #}{% else %}Void{% endif %}> {
         return builder{% if operation.queryParameters %}
             .set(query: [{% for parameter in operation.queryParameters %}{#
@@ -68,11 +68,11 @@ public class {{ service.name }}NetworkService: {{ service.name }}Service {
     #}{% else %}{{ parameter.typeModel.name }}{% if parameter.typeModel.isObject %}Entity{% endif %}{% endif %}{#
     #}{% if parameter.typeModel.isArray %}]{% endif %}{#
     #}{% if not parameter.isRequired %}?{% endif %}{#
-    #}{% if not forloop.last %}, {% endif %}{% endfor %}) -> Observer<{% if operation.responseGenerationModel %}{#
-    #}{% if operation.responseGenerationModel.isTypeArray %}[{% endif %}{#
-    #}{% for responseName in operation.responseGenerationModel.typeNames%}{{ responseName }}{% endfor %}{#
-    #}{% if operation.responseGenerationModel.isTypeObject %}Entity{% endif %}{#
-    #}{% if operation.responseGenerationModel.isTypeArray %}]{% endif %}{#
+    #}{% if not forloop.last %}, {% endif %}{% endfor %}) -> Observer<{% if operation.responseGenerationModel.value %}{#
+    #}{% if operation.responseGenerationModel.value.isTypeArray %}[{% endif %}{#
+    #}{% for responseName in operation.responseGenerationModel.value.typeNames%}{{ responseName }}{% endfor %}{#
+    #}{% if operation.responseGenerationModel.value.isTypeObject %}Entity{% endif %}{#
+    #}{% if operation.responseGenerationModel.value.isTypeArray %}]{% endif %}{#
     #}{% else %}Void{% endif %}> {
         return builder{% if operation.queryParameters %}
             .set(query: [{% for parameter in operation.queryParameters %}{#
