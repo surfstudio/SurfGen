@@ -1,0 +1,6 @@
+package ru.surfgen.android.i_network.urls
+
+object {{ service.name }}Urls {
+	{% for path in service.paths %}const val {{ path.name|camelCaseToCaps }} = "{{ path.path }}"{% if not forloop.last %}
+	{% endif %}{% endfor %}
+}

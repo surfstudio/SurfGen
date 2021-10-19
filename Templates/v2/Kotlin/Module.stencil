@@ -1,4 +1,6 @@
+package ru.surfgen.android.i_network.di
 
+import ru.surfgen.android.i_network.api.{{ service.name }}Api
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

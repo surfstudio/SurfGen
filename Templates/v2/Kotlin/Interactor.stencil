@@ -1,19 +1,20 @@
+package ru.surfgen.android.i_network.repo
 
+import ru.surfgen.android.domain.entity.*
+import ru.surfgen.android.i_network.api.{{ service.name }}Api
+import ru.surfgen.android.i_network.repo.{{ service.name }}Repository
+import ru.surfgen.android.i_network.entry.*
 import io.reactivex.Completable
 import io.reactivex.Single
-import ru.surfstudio.android.network.transform
-import ru.surfstudio.android.network.transformCollection
+import ru.surfstudio.android.dagger.scope.PerApplication
 import javax.inject.Inject
 
 @PerApplication
-class {{ service.name }}Repository @Inject constructor(
-	private val {{ service.name|lowercaseFirstLetter }}Api: {{ service.name }}Api 
+class {{ service.name }}Interactor @Inject constructor(
+	private val {{ service.name|lowercaseFirstLetter }}Repository: {{ service.name }}Repository 
 ) { {% for path in service.paths %}{% for operation in path.operations %}{% for requestModelName in operation.requestGenerationModel.typeNames %}
-	{% if operation.summary or operation.description %}/**
-     {% for line in operation.summary|splitLines %}* {{ line }}
-     {% endfor %}{% for line in operation.description|splitLines %}* {{ line }}
-     {% endfor %}*/
-    {% endif %}fun {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}{#
+    /** @see [{{ service.name }}Api.{{ path.name }}] */
+    fun {{ path.name }}{#
 	#}({% for parameter in operation.pathParameters %}
     	{{ parameter.name|snakeCaseToCamelCase }}: String,{% endfor %}{#
     	#}{% for parameter in operation.queryParameters %}
@@ -28,10 +29,15 @@ class {{ service.name }}Repository @Inject constructor(
             #}{% if not parameter.isRequired %}?{% endif %},{% endfor %}{% if operation.parameters.count > 0 %}
     	{% endif %}{{ requestModelName|lowercaseFirstLetter }}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}: {#
         #}{% if operation.requestGenerationModel.isTypeArray %}List<{% endif %}{{ requestModelName }}{#
-    	#}{% if operation.requestGenerationModel.isTypeArray %}>{% endif %}{#
+    	#}{% if operation.requestGenerationModel.isTypeArray %}>{% endif %}Entry{#
     	#}{% if not operation.requestModel.isRequired %}?{% endif %}{% if operation.parameters.count > 0 %}
-    {% endif %}): Single</* Domain Model Name */> =
-    	{{ service.name|lowercaseFirstLetter }}Api.{{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}{#
+    {% endif %}): {% if operation.responseGenerationModel.value %}{#
+        #}{% if operation.responseGenerationModel.value.isTypeArray %}[{% endif %}{#
+        #}{% for responseName in operation.responseGenerationModel.value.typeNames %}Single<{{ responseName }}{% endfor %}{#
+        #}{% if operation.responseGenerationModel.value.isTypeObject %}Entity>{% endif %}{#
+        #}{% if operation.responseGenerationModel.value.isTypeArray %}]{% endif %}{#
+        #}{% elif operation.responseGenerationModel.key == "201" %}Single<Unit>{% else %}Completable{% endif %} =
+    	{{ service.name|lowercaseFirstLetter }}Repository.{{ path.name }}{#
     	#}({% for parameter in operation.pathParameters %}
 	    	{{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }},{% endfor %}{#
 	    	#}{% for parameter in operation.queryParameters %}
@@ -41,13 +47,10 @@ class {{ service.name }}Repository @Inject constructor(
             #}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}{#
 	    	#} = {{ requestModelName|lowercaseFirstLetter }}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}{#
             #}{% if operation.parameters.count > 0 %}
-	    {% endif %}).transform{% if operation.responseGenerationModel.isTypeArray %}Collection{% endif %}()
+	    {% endif %})
 	{% empty %}
-    {% if operation.summary or operation.description %}/**
-     {% for line in operation.summary|splitLines %}* {{ line }}
-     {% endfor %}{% for line in operation.description|splitLines %}* {{ line }}
-     {% endfor %}*/
-    {% endif %}fun {{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}{#
+    /** @see [{{ service.name }}Api.{{ path.name }}] */
+    fun {{ path.name }}{#
     #}({% for parameter in operation.pathParameters %}{% if operation.parameters.count > 1 %}
         {% endif %}{{ parameter.name|snakeCaseToCamelCase }}: String{#
         #}{% if not forloop.last or operation.queryParameters %},{% elif operation.parameters.count > 1 %}
@@ -63,8 +66,13 @@ class {{ service.name }}Repository @Inject constructor(
             #}{% if parameter.typeModel.isArray %}>{% endif %}{#
             #}{% if not parameter.isRequired %}?{% endif %}{#
             #}{% if not forloop.last %},{% elif operation.parameters.count > 1 %}
-    {% endif %}{% endfor %}): Single</* Domain Model Name */> =
-        {{ service.name|lowercaseFirstLetter }}Api.{{ operation.httpMethod }}{{ path.name|capitalizeFirstLetter }}{#
+    {% endif %}{% endfor %}): {% if operation.responseGenerationModel.value %}{#
+        #}{% if operation.responseGenerationModel.value.isTypeArray %}[{% endif %}{#
+        #}{% for responseName in operation.responseGenerationModel.value.typeNames %}Single<{{ responseName }}{% endfor %}{#
+        #}{% if operation.responseGenerationModel.value.isTypeObject %}Entity>{% endif %}{#
+        #}{% if operation.responseGenerationModel.value.isTypeArray %}]{% endif %}{#
+        #}{% elif operation.responseGenerationModel.key == "201" %}Single<Unit>{% else %}Completable{% endif %} =
+        {{ service.name|lowercaseFirstLetter }}Repository.{{ path.name }}{#
         #}({% for parameter in operation.pathParameters %}{% if operation.parameters.count > 1 %}
             {% endif %}{{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }}{#
             #}{% if not forloop.last or operation.queryParameters %},{% elif operation.parameters.count > 1 %}
@@ -72,7 +80,6 @@ class {{ service.name }}Repository @Inject constructor(
             #}{% for parameter in operation.queryParameters %}{% if operation.parameters.count > 1 %}
             {% endif %}{{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }}{#
             #}{% if not forloop.last %},{% elif operation.parameters.count > 1 %}
-        {% endif %}{% endfor %}{#
-        #}).transform{% if operation.responseGenerationModel.isTypeArray %}Collection{% endif %}()
+        {% endif %}{% endfor %})
     {% endfor %}{% endfor %}{% endfor %}
 }
