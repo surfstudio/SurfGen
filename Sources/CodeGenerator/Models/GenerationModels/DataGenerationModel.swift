@@ -13,11 +13,14 @@ public struct DataGenerationModel: Encodable {
     public let typeNames: [String]
     public let isTypeArray: Bool
     public let isTypeObject: Bool
+    /// Key is a httpStatus code ot any other key from OpenAPI (default for example)
+    public let key: String?
 
-    init(dataModel: DataModel) {
-        encoding = dataModel.mediaType
-        typeNames = dataModel.type.nameOptions
-        isTypeArray = dataModel.type.isArray
-        isTypeObject = dataModel.type.isObject
+    init(dataModel: DataModel, key: String?) {
+        self.encoding = dataModel.mediaType
+        self.typeNames = dataModel.type.nameOptions
+        self.isTypeArray = dataModel.type.isArray
+        self.isTypeObject = dataModel.type.isObject
+        self.key = key
     }
 }

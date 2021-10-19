@@ -54,8 +54,17 @@ let description: String? // Verbose explanation of the operation behavior
 let pathParameters: [ParameterModel] // Parameters, located in path string
 let queryParameters: [ParameterModel] // Parameters, located in query
 let requestGenerationModel: DataGenerationModel? // Model, used as request body
-let responseGenerationModel: DataGenerationModel? // Model, used as response body
+let responseGenerationModel: DataGenerationModel? // Model, used as response body. Contains body with first defined key
+let allGenerationResponses: [ResponseGenerationModel]? //  Contains all responses from this operation
 ```
+
+### Response Genration Model
+
+```Swift
+let key: String // Contains http status code or `default` string. It's a key from response definition in OpenAPI (same as is DataGenerationModel)
+let responses: [DataGenerationModel] // All response' bodies from specific operation grouped by `Key` (by status code, in other words)
+```
+
 
 ### Parameter model
 
@@ -82,10 +91,12 @@ let aliasTypeName: String? // If type is alias of primitive type, this is the re
 ### DataGenerationModel
 
 ```swift
+
 let encoding: String // Content encoding, like "application/json"
 let typeNames: [String] // List of model names or plain type names, which can be in content body. Has multiple elements only in case of 'oneOf' group in content body description
 let isTypeArray: Bool // True if type is array of some type
 let isTypeObject: Bool // True if type is a ref to model or array with ref to model 
+let key: String // Contains http status code or `default` string. It's a key from response definition in OpenAPI
 ```
 
 

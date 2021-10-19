@@ -42,61 +42,6 @@ import GASTTree
 ///              schema:
 ///                $ref: "models.yaml#/components/schemas/PaymentDetailsResponse"
 /// ```
-///
-/// ## Serialization schema
-///
-/// ```YAML
-///
-/// ParametersRef:
-///     type: object
-///     properties:
-///         isReference:
-///             type: bool
-///         value:
-///             type:
-///                 $ref: "parameter_model.yaml#/components/schemas/ParameterModel"
-///
-/// ResponseModelRef:
-///     type: object
-///     properties:
-///         isReference:
-///             type: bool
-///         value:
-///             type:
-///                 $ref: "response_model.yaml#/components/schemas/ResponseModel"
-///
-/// RequestModelRef:
-///     type: object
-///     properties:
-///         isReference:
-///             type: bool
-///         value:
-///             type:
-///                 $ref: "request_model.yaml#/components/schemas/RequestModel"
-///
-/// OperationModel:
-///     type: object
-///     properties:
-///         httpMethod:
-///             type: string
-///         description:
-///             type: string
-///             nullable: true
-///         parameters:
-///             nullable: true
-///             type: array
-///             items:
-///                 $ref: "#components/schemas/ParametersRef"
-///         responses:
-///             nullable: true
-///             type: array
-///             items:
-///                 $ref: "#components/schemas/ResponseModelRef"
-///         responses:
-///             nullable: true
-///             type:
-///                 $ref: "#components/schemas/ResponseModelRef"
-/// ```
 public struct OperationModel: Encodable {
 
     /// http method string representation
@@ -112,11 +57,6 @@ public struct OperationModel: Encodable {
     public let responses: [Reference<ResponseModel>]?
     public let requestModel: Reference<RequestModel>?
 
-    let pathParameters: [ParameterModel]
-    let queryParameters: [ParameterModel]
-    let requestGenerationModel: DataGenerationModel?
-    let responseGenerationModel: DataGenerationModel?
-
     init(httpMethod: String,
          summary: String?,
          description: String?,
@@ -131,24 +71,24 @@ public struct OperationModel: Encodable {
         self.responses = responses
         self.requestModel = requestModel
 
-        let allParameters = (parameters ?? [])
-            .map { $0.value }
-            .sorted { $0.name < $1.name }
-        self.pathParameters = allParameters.filter { $0.location == .path }
-        self.queryParameters = allParameters.filter { $0.location == .query }
+//        let allParameters = (parameters ?? [])
+//            .map { $0.value }
+//            .sorted { $0.name < $1.name }
+//        self.pathParameters = allParameters.filter { $0.location == .path }
+//        self.queryParameters = allParameters.filter { $0.location == .query }
 
-        let request = requestModel?.value.content.first
-        self.requestGenerationModel = request.map { DataGenerationModel(dataModel: $0) }
-
-        let response = responses?.first { $0.value.key.isSuccessStatusCode }?.value.values.first
-        self.responseGenerationModel = response.map { DataGenerationModel(dataModel: $0) }
+//        let request = requestModel?.value.content.first
+//        self.requestGenerationModel = request.map { DataGenerationModel(dataModel: $0, statusCode: <#String?#>) }
+//
+//        let response = responses?.first { $0.value.key.isSuccessStatusCode }?.value.values.first
+//        self.responseGenerationModel = response.map { DataGenerationModel(dataModel: $0) }
     }
 }
 
-extension OperationModel {
-
-    var codingKeys: [String] {
-        return queryParameters.map { $0.name }
-    }
-    
-}
+//extension OperationModel {
+//
+//    var codingKeys: [String] {
+//        return queryParameters.map { $0.name }
+//    }
+//
+//}

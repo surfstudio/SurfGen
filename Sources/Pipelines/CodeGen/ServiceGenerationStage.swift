@@ -48,20 +48,25 @@ public struct ServiceGenerationStage: PipelineStage {
         
         guard
             compact.count == 1,
-            var servicePaths = compact.first
+            let servicePaths = compact.first
         else {
             throw CommonError(message: "We expect only one service to generate, but got \(compact.count)")
         }
 
+        var generatorServicePaths = servicePaths.map { PathGenerationModel(pathModel: $0) }
+
         if let prefixCutter = self.prefixCutter {
-            servicePaths = servicePaths.map { item in
+            generatorServicePaths = generatorServicePaths.map { item in
                 var mutable = item
                 mutable.name = prefixCutter.Run(urlToCut: item.path)?.pathName ?? item.name
                 return mutable
             }
         }
 
-        let serviceGenerationModel = ServiceGenerationModel(name: serviceName, paths: servicePaths)
+        let serviceGenerationModel = ServiceGenerationModel(
+            name: serviceName,
+            paths: generatorServicePaths
+        )
         
         let schemaModels = modelExtractor.extractModels(from: serviceGenerationModel)
         

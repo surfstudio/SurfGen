@@ -21,7 +21,7 @@ templates:
 # This template will generate Implementation for service
 
   - type: service
-    nameSuffix: Service
+    nameSuffix: NetworkService
     fileExtension: swift
     templatePath: ./Templates/v2/Swift/NetworkService.stencil
     destinationPath: ./tmp/Sources/Services/{name}

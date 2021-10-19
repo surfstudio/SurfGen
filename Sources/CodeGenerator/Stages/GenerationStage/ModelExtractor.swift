@@ -125,19 +125,36 @@ private extension ResponseModel {
     }
 }
 
-private extension OperationModel {
-    
+//private extension OperationModel {
+//
+//    func extractModels() -> [SchemaGenerationModel] {
+//        return
+//            (parameters ?? []).flatMap { $0.value.extractModels() }
+//            + (responses ?? []).flatMap { $0.value.extractModels() }
+//            + (requestModel?.value.extractModels() ?? [])
+//    }
+//}
+//
+//private extension PathModel {
+//
+//    func extractModels() -> [SchemaGenerationModel] {
+//        return operations.flatMap { $0.extractModels() }
+//    }
+//}
+
+private extension PathGenerationModel {
+
+    func extractModels() -> [SchemaGenerationModel] {
+        return operations.flatMap { $0.extractModels() }
+    }
+}
+
+private extension OperationGenerationModel {
+
     func extractModels() -> [SchemaGenerationModel] {
         return
             (parameters ?? []).flatMap { $0.value.extractModels() }
             + (responses ?? []).flatMap { $0.value.extractModels() }
             + (requestModel?.value.extractModels() ?? [])
-    }
-}
-
-private extension PathModel {
-    
-    func extractModels() -> [SchemaGenerationModel] {
-        return operations.flatMap { $0.extractModels() }
     }
 }
