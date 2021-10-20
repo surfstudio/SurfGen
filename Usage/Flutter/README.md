@@ -10,7 +10,7 @@ This folder contains best practices, guides and some utils for Dart which are ve
 
 By the [bash script ExportModelsGenerator](./ExportModelsGenerator.sh) you can create a file, which will export all DTO (or whatever you want). 
 
-This script have 2 arguments:
+This script has 2 arguments:
 1. Path to directory with files which should be exported in umbrella
 2. Path to Umbrella file
 
