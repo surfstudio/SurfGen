@@ -5,6 +5,8 @@ nameOfTheUmbrella=$2
 
 fileNames=()
 
+filter=".g.dart"
+
 # remove old umbrella file
 # to exclude it from file reading (the simpliest way)
 
@@ -16,7 +18,9 @@ rm -f $nameOfTheUmbrella
 for file in ${pathToDTOFolder}/*
 do
     nameAndExt=${file##*/}
-    fileNames+=($nameAndExt)
+    if [[ "$nameAndExt" != *"$filter"* ]]; then
+        fileNames+=($nameAndExt)  
+    fi
 done
 
 # write new umbrella
@@ -26,8 +30,3 @@ do
     name=${value%.*}
     echo "export '$value';" >> $nameOfTheUmbrella
 done
-
-# for value in "${fileNames[@]}"
-# do
-#      echo $value
-# done
