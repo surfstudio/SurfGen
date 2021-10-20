@@ -16,7 +16,6 @@ import XCTest
 /// Cases:
 ///
 /// - Sample service spec is generated correctly
-
 class EndToEndTests: XCTestCase {
 
     func testSampleServiceSpecIsGeneratedCorrectly() throws {
@@ -52,9 +51,23 @@ class EndToEndTests: XCTestCase {
         XCTAssertEqual(expectedFiles.map { $0.lastComponent },
                        generatedFiles.map { $0.lastComponent })
 
-        // File contents are equal
-        XCTAssertEqual(try expectedFiles.map { try $0.read() },
-                       try generatedFiles.map { try $0.read() })
+
+        for i in 0..<expectedFiles.count {
+            // File contents are equal
+
+
+
+            let exp = try expectedFiles[i].read()
+            let ideal = try generatedFiles[i].read()
+
+            if !exp.elementsEqual(ideal) {
+                print(expectedFiles[i])
+                print(generatedFiles[i])
+                print(String(data: exp, encoding: .utf8)!.difference(from: String(data: ideal, encoding: .utf8)!))
+            }
+
+            XCTAssertEqual(exp, ideal)
+        }
 
         // Cleanup
 

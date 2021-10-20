@@ -349,4 +349,24 @@ enum ServiceUseCasesTestsYamls {
                 cycle:
                     $ref: "#/components/schemas/CycledA"
 """.data(using: .utf8)!
+
+    static var responseEmptyBodyCreated = """
+    paths:
+      /messages:
+        get:
+          summary: Список сообщений пользователя. Тут приходят полные сообщения (вместе с детальным представлением)
+          responses:
+            "201":
+                description: todo
+""".data(using: .utf8)!
+
+    static var responseEmptyBodyNoContent = """
+    paths:
+      /messages:
+        get:
+          summary: Список сообщений пользователя. Тут приходят полные сообщения (вместе с детальным представлением)
+          responses:
+            "204":
+                description: todo
+""".data(using: .utf8)!
 }

@@ -38,64 +38,14 @@ import Foundation
 ///             schema:
 ///               $ref: "models.yaml#/components/schemas/UserContactInfo"
 /// ```
-///
-/// ## Serialization schema
-///
-/// ```YAML
-///
-/// Type:
-///     type: string
-///     enum: ['object', 'group']
-///
-/// SchemaGroupType:
-///     type: string
-///     enum: ['oneOf', 'onyOf', 'allOf']
-///
-/// PossibleType:
-///     type: object
-///     properties:
-///         type:
-///             type:
-///                 $ref: "#/components/schemas/Type"
-///         value:
-///             type:
-///                 schema:
-///                     oneOf:
-///                         - $ref: "schema_object_model.yaml#/component/schemas/SchemaObjectModel"
-///                         - $ref: "schema_group_model.yaml#/component/schemas/SchemaGroupModel"
-///
-/// PathModel:
-///     type: object
-///     prperties:
-///         path:
-///             type: string
-///         operations:
-///             type: array
-///             items:
-///                 $ref: "operation_model.yaml#/components/schemas/OperationModel"
-/// ```
 public struct PathModel: Encodable {
     /// URI template
     public let path: String
     public let operations: [OperationModel]
-    // TODO - create new model for code gen
-    public var name: String
-    let pathWithSeparatedParameters: String
-    let parameters: [ParameterModel]
 
     public init(path: String, operations: [OperationModel]) {
         self.path = path
         self.operations = operations.sorted { $0.httpMethod < $1.httpMethod }
-        self.name = path.pathName
-        self.pathWithSeparatedParameters = path.pathWithSeparatedParameters
-        self.parameters = operations[0].pathParameters
     }
     
-}
-
-extension PathModel {
-
-    var codingKeys: [String] {
-        return operations.flatMap { $0.codingKeys }
-    }
 }

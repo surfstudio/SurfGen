@@ -11,10 +11,10 @@ import Foundation
 public struct ServiceGenerationModel {
 
     public let name: String
-    public let paths: [PathModel]
+    public let paths: [PathGenerationModel]
     public let codingKeys: [String]
 
-    public init(name: String, paths: [PathModel]) {
+    public init(name: String, paths: [PathGenerationModel]) {
         self.name = name
         self.paths = paths.sorted { $0.name < $1.name }
         self.codingKeys = paths

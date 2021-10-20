@@ -15,9 +15,9 @@ public struct DataGenerationModel: Encodable {
     public let isTypeObject: Bool
 
     init(dataModel: DataModel) {
-        encoding = dataModel.mediaType
-        typeNames = dataModel.type.nameOptions
-        isTypeArray = dataModel.type.isArray
-        isTypeObject = dataModel.type.isObject
+        self.encoding = dataModel.mediaType
+        self.typeNames = dataModel.type.nameOptions
+        self.isTypeArray = dataModel.type.isArray
+        self.isTypeObject = dataModel.type.isObject
     }
 }

@@ -32,7 +32,7 @@ public enum ConfigTemplates {
     # This template will generate Implementation for service
 
       - type: service
-        nameSuffix: Service
+        nameSuffix: NetworkService
         fileExtension: ${fileExtension}
         templatePath: ./Templates/v2/Swift/NetworkService.stencil
         destinationPath: ./tmp/Sources/Services/{name}

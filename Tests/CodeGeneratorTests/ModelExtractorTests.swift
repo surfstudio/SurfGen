@@ -27,7 +27,10 @@ class ModelExtractorTests: XCTestCase {
             serviceModel = $0.filter { $0.count != 0 }.first!
         }.build().run(with: specUrl)
 
-        let generationModel = ServiceGenerationModel(name: "", paths: serviceModel)
+        let generationModel = ServiceGenerationModel(
+            name: "",
+            paths: serviceModel.map { PathGenerationModel(pathModel: $0) }
+        )
         let modelExtractor = ModelExtractor()
 
         let expectedNames = Set([
