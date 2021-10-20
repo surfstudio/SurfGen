@@ -20,7 +20,11 @@ This script has 2 arguments:
 2. Script reads all files in directory (by first arg)
 3. Script extract `filename.ext` from filepathes in the directory
 4. Script create new umbrella (by second arg)
-5. Script write each `filename.ext` with template `export 'filename.ext';` to umbrella
+1. Script removes file by Umbrella path (by second arg)
+2. Script reads all files in directory (by first arg)
+3. Script extracts `filename.ext` from filepathes in the directory
+4. Script creates new umbrella (by second arg)
+5. Script writes each `filename.ext` with template `export 'filename.ext';` to umbrella
 
 
 For example lets assume that we have 
