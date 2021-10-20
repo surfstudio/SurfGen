@@ -61,6 +61,54 @@ extension String {
             .lowercaseFirstLetter()
     }
 
+    /// Firstly check that this string contains only uppercased characters
+    /// If it is - call `upperCaseToCamelCase()`
+    /// If it isn't - return this string without changes - useful for chaining different operators without explicit conditions
+    public func upperCaseToCamelCaseOrSelf() -> Self {
+
+        let letters = self.replacingOccurrences(of: "_", with: "")
+
+        let checkResult = letters.allSatisfy { c in
+            c.isUppercase
+        }
+
+        guard checkResult else {
+            return self
+        }
+
+        return upperCaseToCamelCase()
+    }
+
+
+    /// Transforms UpperCased string to lower CamelCased
+    /// For example:
+    /// FIRST_SECOND_THRID -> firstsecondThird
+    /// - seeAlso: `upperCaseToCamelCaseOrSelf()`
+    public func upperCaseToCamelCase() -> String {
+
+        // FIRST_SECOND_THIRD -> FIRST + SECOND + THIRD
+        let separated = self.split(separator: "_")
+
+        // if after separation we have empty array then we have to return somethis which looks like error :D
+        guard let first = separated.first else {
+            return "!!!!! SOMETHING WENT WRONG WITH \(#function) string is empty"
+        }
+
+        // Take first part and make it lovercased
+        // FIRST -> first (to make firstSecondThird later)
+
+        let firstLowercased = first.lowercased()
+
+        // other elements should me lowercased with wirst capitalized letter
+        // SECOND + THIRD -> Second + Third
+        var other = separated.dropFirst().map { $0.lowercased().capitalizingFirstLetter() }
+
+        // make first + Second + Third
+        other.insert(firstLowercased, at: 0)
+
+        return other.joined()
+    }
+
     /// Turns camelCase into snake_case
     public func camelCaseToSnakeCase() -> String {
         return self
