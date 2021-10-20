@@ -1,6 +1,6 @@
 # Dart usage
 
-This folder contains best practices, guides and some utils for Dart which is very useful with SurfGen
+This folder contains best practices, guides and some utils for Dart which are very useful with SurfGen
 
 # Usage guide
 
