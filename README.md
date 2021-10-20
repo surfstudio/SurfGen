@@ -34,7 +34,7 @@ At this moment we have:
 
 - iOS
 - Android
-- Flutter
+- Flutter (See [Usage](./Usage/Flutter))
 
 To create your own templates use [https://stencil.fuller.li](https://stencil.fuller.li)
 
