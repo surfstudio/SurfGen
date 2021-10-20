@@ -22,6 +22,7 @@ jobs:
     - uses: sersoft-gmbh/swifty-linux-action@v1
       with: 
         release-version: 5.3.3
+    - uses: actions/checkout@v2
     - name: Build
       run: swift build -v
     - name: Run tests
