@@ -14,7 +14,7 @@ This script have 2 arguments:
 1. Path to directory with files which should be exported in umbrella
 2. Path to Umbrella file
 
-**How does it works**
+**How it works**
 
 1. Script remove file by Ubrella path (by second arg)
 2. Script reads all files in directory (by first arg)
