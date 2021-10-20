@@ -1,6 +1,6 @@
 # Dart usage
 
-This folder contains best practices, guides and some utils for Dart which is very useful with SurfGen
+This folder contains best practices, guides and some utils for Dart which are very useful with SurfGen
 
 # Usage guide
 
@@ -10,17 +10,21 @@ This folder contains best practices, guides and some utils for Dart which is ver
 
 By the [bash script ExportModelsGenerator](./ExportModelsGenerator.sh) you can create a file, which will export all DTO (or whatever you want). 
 
-This script have 2 arguments:
+This script has 2 arguments:
 1. Path to directory with files which should be exported in umbrella
 2. Path to Umbrella file
 
-**How does it works**
+**How it works**
 
 1. Script remove file by Ubrella path (by second arg)
 2. Script reads all files in directory (by first arg)
 3. Script extract `filename.ext` from filepathes in the directory
 4. Script create new umbrella (by second arg)
-5. Script write each `filename.ext` with template `export 'filename.ext';` to umbrella
+1. Script removes file by Umbrella path (by second arg)
+2. Script reads all files in directory (by first arg)
+3. Script extracts `filename.ext` from filepathes in the directory
+4. Script creates new umbrella (by second arg)
+5. Script writes each `filename.ext` with template `export 'filename.ext';` to umbrella
 
 
 For example lets assume that we have 

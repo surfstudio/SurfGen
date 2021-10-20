@@ -12,7 +12,7 @@ filter=".g.dart"
 
 rm -f $nameOfTheUmbrella
 
-# Rad all files from directory with DTO models
+# Read all files from directory with DTO models
 # and save their names (with extensions) into `fileNames` array
 
 for file in ${pathToDTOFolder}/*
