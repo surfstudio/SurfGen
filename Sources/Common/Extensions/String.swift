@@ -94,7 +94,7 @@ extension String {
             return "!!!!! SOMETHING WENT WRONG WITH \(#function) string is empty"
         }
 
-        // Take first part and make it lovercased
+        // Take first part and make it lowercased
         // FIRST -> first (to make firstSecondThird later)
 
         let firstLowercased = first.lowercased()
