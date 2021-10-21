@@ -33,7 +33,7 @@ SurfGen can be run on:
 At this moment we have:
 
 - iOS
-- Android
+- [Android](Templates/v2/Kotlin/README.md)
 - Flutter
 
 To create your own templates use [https://stencil.fuller.li](https://stencil.fuller.li)
