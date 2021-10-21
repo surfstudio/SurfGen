@@ -66,6 +66,14 @@ public class DefaultTemplateFiller: TemplateFiller {
             $0.split(separator: "\n")
         }
 
+        templateExtension.registerStringFilter("upperCaseToCamelCase") {
+            $0.upperCaseToCamelCase()
+        }
+
+        templateExtension.registerStringFilter("upperCaseToCamelCaseOrSelf") {
+            $0.upperCaseToCamelCaseOrSelf()
+        }
+
         return templateExtension
     }
 }

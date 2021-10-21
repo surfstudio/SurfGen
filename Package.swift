@@ -15,6 +15,10 @@ var testTargets: [Target] = [
     .testTarget(
         name: "CodeGeneratorTests",
         dependencies: ["Pipelines", "CodeGenerator", "Common", "ReferenceExtractor", "GASTBuilder", "UtilsForTesting"]
+    ),
+    .testTarget(
+        name: "CommonTests",
+        dependencies: ["Common"]
     )
 ]
 
