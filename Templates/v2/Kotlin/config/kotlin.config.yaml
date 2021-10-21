@@ -1,0 +1,66 @@
+useNewNullableDeterminationStrategy: true
+
+prefixesToCutDownInServiceNames:
+  - /api/v1.1
+  - /api/1.1
+
+analytcsConfig:
+  logstashEnpointURI: http://logs.ps.surfstudio.ru
+  payload:
+    project: TEST
+
+templates:
+  # Generate Retrofit interface for each service endpoint
+  - type: service
+    nameSuffix: Api
+    fileExtension: kt
+    templatePath: ./Templates/Kotlin/Api.stencil
+    destinationPath: ./i_network/src/main/java/ru/surfgen/android/i_network/generated/api
+
+  # Generate kotlin enum
+  - type: enum
+    fileExtension: kt
+    templatePath: ./Templates/Kotlin/Enum.stencil
+    destinationPath: ./domain/src/main/kotlin/ru/surfgen/android/domain/entity
+
+  # Generate service mapping model
+  - type: model
+    nameSuffix: Entry
+    fileExtension: kt
+    templatePath: ./Templates/Kotlin/Entry.stencil
+    destinationPath: ./i_network/src/main/java/ru/surfgen/android/i_network/generated/entry
+
+  # Generate domain mapping model
+  - type: model
+    nameSuffix: Entity
+    fileExtension: kt
+    templatePath: ./Templates/Kotlin/Entity.stencil
+    destinationPath: ./domain/src/main/kotlin/ru/surfgen/android/domain/entity
+
+  # Generate module which provides Retrofit interface using Dagger DI
+  - type: service
+    nameSuffix: Module
+    fileExtension: kt
+    templatePath: ./Templates/Kotlin/Module.stencil
+    destinationPath: ./i_network/src/main/java/ru/surfgen/android/i_network/generated/di
+
+  # Generate repository which calls api methods
+  - type: service
+    nameSuffix: Repository
+    fileExtension: kt
+    templatePath: ./Templates/Kotlin/Repository.stencil
+    destinationPath: ./i_network/src/main/java/ru/surfgen/android/i_network/generated/repo
+
+  # Generate interactor which calls repository's methods
+  - type: service
+    nameSuffix: Interactor
+    fileExtension: kt
+    templatePath: ./Templates/Kotlin/Interactor.stencil
+    destinationPath: ./i_network/src/main/java/ru/surfgen/android/i_network/generated/interactor
+
+  # Generate kotlin object with urls for a given service
+  - type: service
+    nameSuffix: Urls
+    fileExtension: kt
+    templatePath: ./Templates/Kotlin/Urls.stencil
+    destinationPath: ./i_network/src/main/java/ru/surfgen/android/i_network/generated/urls
