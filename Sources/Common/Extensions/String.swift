@@ -99,7 +99,7 @@ extension String {
 
         let firstLowercased = first.lowercased()
 
-        // other elements should me lowercased with wirst capitalized letter
+        // other elements should be lowercased with first capitalized letter
         // SECOND + THIRD -> Second + Third
         var other = separated.dropFirst().map { $0.lowercased().capitalizingFirstLetter() }
 
