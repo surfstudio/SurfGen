@@ -72,6 +72,7 @@ public struct AnyGASTBuilder: GASTBuilder {
             parameters: parameters,
             services: services,
             requestBodies: requestBodies,
-            responses: responses)
+            responses: responses
+        )
     }
 }
