@@ -82,7 +82,7 @@ extension String {
 
     /// Transforms UpperCased string to lower CamelCased
     /// For example:
-    /// FIRST_SECOND_THRID -> firstsecondThird
+    /// FIRST_SECOND_THRID -> firstSecondThird
     /// - seeAlso: `upperCaseToCamelCaseOrSelf()`
     public func upperCaseToCamelCase() -> String {
 
