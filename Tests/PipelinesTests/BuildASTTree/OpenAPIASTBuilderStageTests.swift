@@ -10,12 +10,13 @@ import XCTest
 import Pipelines
 import Common
 import UtilsForTesting
+import ASTTree
 
 /// Cases:
 /// 1. Empty input leads to empty result
 /// 2. Structure of result object is similar to structure of input objects
 /// 3. If there is no file by the path then an error will be throwed
-final class OpenAPIASTBuilderTests: XCTestCase {
+final class OpenAPIASTBuilderStageTests: XCTestCase {
 
 
     /// 1. Empty input leads to empty result
@@ -26,7 +27,7 @@ final class OpenAPIASTBuilderTests: XCTestCase {
         let nextStub = AnyPipelineStageStub<[OpenAPIASTTree]>()
 
         let data = [Dependency]()
-        let stage = OpenAPIASTBuilder(fileProvider: fileProviderStub, next: nextStub.erase())
+        let stage = OpenAPIASTBuilderStage(fileProvider: fileProviderStub, next: nextStub.erase())
 
         // Act
 
@@ -78,7 +79,7 @@ final class OpenAPIASTBuilderTests: XCTestCase {
             ])
         ]
 
-        let stage = OpenAPIASTBuilder(fileProvider: fileProviderStub, next: nextStub.erase())
+        let stage = OpenAPIASTBuilderStage(fileProvider: fileProviderStub, next: nextStub.erase())
 
 
         // Act
@@ -147,7 +148,7 @@ final class OpenAPIASTBuilderTests: XCTestCase {
             ]),
         ]
 
-        let stage = OpenAPIASTBuilder(fileProvider: fileProviderStub, next: nextStub.erase())
+        let stage = OpenAPIASTBuilderStage(fileProvider: fileProviderStub, next: nextStub.erase())
 
         // Act - Assert
 

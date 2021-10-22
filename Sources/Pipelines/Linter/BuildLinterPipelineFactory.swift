@@ -40,21 +40,24 @@ public struct BuildLinterPipelineFactory {
             log: log,
             next: DirRefExtractor(
                 refExtractorProvider: provider,
-                next: BuildGastTreeParseDependenciesSatage(
-                    builder: AnyGASTBuilder(
-                        fileProvider: FileManager.default,
-                        schemaBuilder: schemaBuilder,
-                        parameterBuilder: parameterBuilder,
-                        serviceBuilder: serviceBuilder,
-                        responsesBuilder: responsesBuilder,
-                        requestBodiesBuilder: requestBodiesBuilder),
-                    next: InitCodeGenerationStage(
-                        parserStage: .init(
-                            next: SwaggerCorrectorStage(
-                                corrector: SwaggerCorrector(logger: log)
-                            ).erase(),
-                            parser: buildParser()
-                        )
+                next: OpenAPIASTBuilderStage(
+                    fileProvider: FileManager.default,
+                    next: BuildGastTreeParseDependenciesSatage(
+                        builder: AnyGASTBuilder(
+                            fileProvider: FileManager.default,
+                            schemaBuilder: schemaBuilder,
+                            parameterBuilder: parameterBuilder,
+                            serviceBuilder: serviceBuilder,
+                            responsesBuilder: responsesBuilder,
+                            requestBodiesBuilder: requestBodiesBuilder),
+                        next: InitCodeGenerationStage(
+                            parserStage: .init(
+                                next: SwaggerCorrectorStage(
+                                    corrector: SwaggerCorrector(logger: log)
+                                ).erase(),
+                                parser: buildParser()
+                            )
+                        ).erase()
                     ).erase()
                 ).erase()
             ).erase()

@@ -2,12 +2,12 @@
 //  OpenAPIASTTree.swift
 //  
 //
-//  Created by Александр Кравченков on 21.10.2021.
+//  Created by Александр Кравченков on 22.10.2021.
 //
 
 import Foundation
-import Swagger
 import Common
+import Swagger
 
 /// Contains parsed OpenAPI specifications with path to their files
 public struct OpenAPIASTTree {
@@ -16,4 +16,10 @@ public struct OpenAPIASTTree {
     /// AST of the current OpenAPI file
     public let currentTree: SwaggerSpec
     public let rawDependency: Dependency
+
+    public init(dependencies: [String: SwaggerSpec], currentTree: SwaggerSpec, rawDependency: Dependency) {
+        self.dependencies = dependencies
+        self.currentTree = currentTree
+        self.rawDependency = rawDependency
+    }
 }

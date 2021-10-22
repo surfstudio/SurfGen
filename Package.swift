@@ -10,7 +10,7 @@ var testTargets: [Target] = [
     ),
     .testTarget(
         name: "PipelinesTests",
-        dependencies: ["Pipelines", "CodeGenerator", "Common", "ReferenceExtractor", "GASTBuilder", "UtilsForTesting", "PipelinesCLI"]
+        dependencies: ["Pipelines", "CodeGenerator", "Common", "ReferenceExtractor", "GASTBuilder", "UtilsForTesting", "PipelinesCLI", "ASTTree"]
     ),
     .testTarget(
         name: "CodeGeneratorTests",
@@ -40,6 +40,10 @@ let package = Package(
 
         // MARK: -- Shared
 
+        .library(
+            name: "ASTTree",
+            targets: ["ASTTree"]
+        ),
         .library(
             name: "GASTTree",
             targets: ["GASTTree"]
@@ -133,6 +137,14 @@ let package = Package(
             name: "GASTTree",
             dependencies: [
                 "Swagger", 
+                "Common",
+                "ASTTree"
+            ]
+        ),
+        .target(
+            name: "ASTTree",
+            dependencies: [
+                "Swagger",
                 "Common"
             ]
         ),

@@ -1,6 +1,6 @@
 //
 //  OpenAPIASTBuilder.swift
-//  
+//
 //
 //  Created by Александр Кравченков on 21.10.2021.
 //
@@ -8,11 +8,12 @@
 import Foundation
 import Common
 import Swagger
+import ASTTree
 
 /// Reads all YAML files from dependencies array and parse them to Swagger AST Tree
 /// Then you can do with this AST whatever you want
 /// - SeeAlso: `OpenAPIASTTree`
-public struct OpenAPIASTBuilder: PipelineStage {
+public struct OpenAPIASTBuilderStage: PipelineStage {
 
     public typealias Input = [Dependency]
 

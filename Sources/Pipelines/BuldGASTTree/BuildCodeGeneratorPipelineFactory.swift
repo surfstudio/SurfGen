@@ -41,40 +41,43 @@ public struct BuildCodeGeneratorPipelineFactory {
             requestBodyBuilder: requestBodiesBuilder,
             responseBuilder: responsesBuilder
         )
-        
+
         let templateFiller = DefaultTemplateFiller()
         let modelExtractor = ModelExtractor()
 
         return .init(
             refExtractorProvider: self.provider(str:),
-            next: .init(
-                builder: AnyGASTBuilder(
-                    fileProvider: FileManager.default,
-                    schemaBuilder: schemaBuilder,
-                    parameterBuilder: parameterBuilder,
-                    serviceBuilder: serviceBuilder,
-                    responsesBuilder: responsesBuilder,
-                    requestBodiesBuilder: requestBodiesBuilder),
-                next: InitCodeGenerationStage(
-                    parserStage: .init(
-                        next: SwaggerCorrectorStage(
-                            corrector: SwaggerCorrector(logger: logger),
-                            next: ServiceGenerationStage(
-                                next: FileWriterStage(
-                                    needRewriteExistingFiles: needRewriteExistingFiles,
-                                    logger: logger
-                                ).erase(),
-                                templates: templates,
-                                serviceName: serviceName,
-                                templateFiller: templateFiller,
-                                modelExtractor: modelExtractor,
-                                prefixCutter: prefixCutter
-                            ).erase()
-                        ).erase(),
-                        parser: buildParser()
-                    )
+            next: OpenAPIASTBuilderStage(
+                fileProvider: FileManager.default,
+                next: BuildGastTreeParseDependenciesSatage(
+                    builder: AnyGASTBuilder(
+                        fileProvider: FileManager.default,
+                        schemaBuilder: schemaBuilder,
+                        parameterBuilder: parameterBuilder,
+                        serviceBuilder: serviceBuilder,
+                        responsesBuilder: responsesBuilder,
+                        requestBodiesBuilder: requestBodiesBuilder),
+                    next: InitCodeGenerationStage(
+                        parserStage: .init(
+                            next: SwaggerCorrectorStage(
+                                corrector: SwaggerCorrector(logger: logger),
+                                next: ServiceGenerationStage(
+                                    next: FileWriterStage(
+                                        needRewriteExistingFiles: needRewriteExistingFiles,
+                                        logger: logger
+                                    ).erase(),
+                                    templates: templates,
+                                    serviceName: serviceName,
+                                    templateFiller: templateFiller,
+                                    modelExtractor: modelExtractor,
+                                    prefixCutter: prefixCutter
+                                ).erase()
+                            ).erase(),
+                            parser: buildParser()
+                        )
+                    ).erase()
                 ).erase()
-            )
+            ).erase()
         )
     }
 

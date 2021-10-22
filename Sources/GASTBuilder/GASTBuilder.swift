@@ -9,10 +9,12 @@ import Foundation
 import Swagger
 import Common
 import GASTTree
+import ASTTree
+
 
 /// Just an interface for any `GAST` builder
 public protocol GASTBuilder {
-    func build(filePath: String) throws -> RootNode
+    func build(astTree: OpenAPIASTTree) throws -> RootNode
 }
 
 /// Parse `API specification` to `OpenAPI-AST` then build the `GAST` from it.
@@ -46,26 +48,32 @@ public struct AnyGASTBuilder: GASTBuilder {
     }
 
     /// Create GAST from spec file
-    public func build(filePath: String) throws -> RootNode {
+    public func build(astTree: OpenAPIASTTree) throws -> RootNode {
 
-        let fileContent = try fileProvider.readTextFile(at: filePath)
+        let schemas = try wrap(
+            self.schemaBuilder.build(schemas: astTree.currentTree.components.schemas),
+            message: "While parsing schemas for specification at path: \(astTree.rawDependency.pathToCurrentFile)"
+        )
 
-        let spec = try wrap(SwaggerSpec(string: fileContent),
-                            message: "Error occured while parsing spec at path \(filePath)")
+        let parameters = try wrap(
+            self.parameterBuilder.build(parameters: astTree.currentTree.components.parameters),
+            message: "While parsing parameters for specification at path: \(astTree.rawDependency.pathToCurrentFile)"
+        )
 
-        let schemas = try wrap(self.schemaBuilder.build(schemas: spec.components.schemas), message: "While parsing schemas for specification at path: \(filePath)")
+        let services = try wrap(
+            self.serviceBuilder.build(paths: astTree.currentTree.paths),
+            message: "While parsing services for specification at path: \(astTree.rawDependency.pathToCurrentFile)"
+        )
 
-        let parameters = try wrap(self.parameterBuilder.build(parameters: spec.components.parameters),
-                                  message: "While parsing parameters for specification at path: \(filePath)")
+        let responses = try wrap(
+            self.responsesBuilder.build(responses: astTree.currentTree.components.responses),
+            message: "While parsing responses for specification at path: \(astTree.rawDependency.pathToCurrentFile)"
+        )
 
-        let services = try wrap(self.serviceBuilder.build(paths: spec.paths),
-                                message: "While parsing services for specification at path: \(filePath)")
-
-        let responses = try wrap(self.responsesBuilder.build(responses: spec.components.responses),
-                                 message: "While parsing responses for specification at path: \(filePath)")
-
-        let requestBodies = try wrap(self.requestBodiesBuilder.build(requestBodies:spec.components.requestBodies),
-                                 message: "While parsing responses for specification at path: \(filePath)")
+        let requestBodies = try wrap(
+            self.requestBodiesBuilder.build(requestBodies: astTree.currentTree.components.requestBodies),
+            message: "While parsing responses for specification at path: \(astTree.rawDependency.pathToCurrentFile)"
+        )
 
         return .init(
             schemas: schemas,
