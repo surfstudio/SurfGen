@@ -75,28 +75,6 @@ public struct ASTNodeExcluder {
         return mutCopy
     }
 
-    func unwrapExcludeReferences(from refs: Set<String>) throws -> [ExcludePathAndRef] {
-        return try refs.map { val in
-            let splited = val.split(separator: "#").map { String($0) }
-
-            if splited.count != 2 {
-                throw CommonError(message: "Exclude reference \(val) couldn't be splitted by `#` path and ref parts")
-            }
-
-            guard let url = URL(string: splited[0]) else {
-                throw CommonError(message: "Couldn't create URI from path \(splited[0]) in reference \(val)")
-            }
-
-            return (url.absoluteString, splited[1])
-        }
-    }
-
-    func findTree(by path: String, in forest: [OpenAPIASTTree]) -> OpenAPIASTTree? {
-        return forest.first { tree in
-            return tree.rawDependency.pathToCurrentFile == path
-        }
-    }
-
     func runExclusion(tree: OpenAPIASTTree, ref: String) throws -> OpenAPIASTTree {
 
         let paths = ref.split(separator: "/").map { String($0) }
@@ -120,7 +98,11 @@ public struct ASTNodeExcluder {
             throw CommonError(message: "Component \(paths[0]) in ref \(ref) is unsupported or unknown")
         }
     }
+}
 
+// MARK: - Remove Components
+
+private extension ASTNodeExcluder {
     func removeComponent(tree: OpenAPIASTTree,
                          wholeRef: String,
                          currentComponent: String,
@@ -210,7 +192,45 @@ public struct ASTNodeExcluder {
             throw CommonError(message: "Component \(currentComponent) in ref \(wholeRef) is unsupported or unknown")
         }
     }
+}
 
+
+// MARK: - Remove Pathes
+
+private extension ASTNodeExcluder {
+    func removePath(tree: OpenAPIASTTree, pathString: String) throws -> OpenAPIASTTree {
+
+        var mutTree = tree
+
+        let splited = pathString.split(separator: "~")
+
+        guard let pathIndex = mutTree.currentTree.paths.firstIndex(where: { $0.path == splited[0] }) else {
+            throw CommonError(message: "Path with URI \(splited[0]) wasn't found in tree from file \(tree.rawDependency.pathToCurrentFile)")
+        }
+
+        guard
+            splited.count == 2
+        else {
+            self.logger?.info("Removed whole path \(splited[0]) from \(tree.rawDependency.pathToCurrentFile)")
+            mutTree.currentTree.paths.remove(at: pathIndex)
+            return mutTree
+        }
+
+        guard let operationIndex = mutTree.currentTree.paths[pathIndex].operations.firstIndex(where: { $0.method.rawValue == splited[1] }) else {
+            throw CommonError(message: "Operation with method \(splited[1]) at path with \(splited[0]) wasn't found in tree from file \(tree.rawDependency.pathToCurrentFile)")
+        }
+
+        mutTree.currentTree.paths[pathIndex].operations.remove(at: operationIndex)
+
+        self.logger?.info("Removed method \(splited[1]) from path \(splited[0]) from file \(tree.rawDependency.pathToCurrentFile)")
+
+        return mutTree
+    }
+}
+
+// MARK: - Replace References
+
+private extension ASTNodeExcluder {
     /// Traverse the whole `tree` and replace all references `path#ref` on `Constants.ASTNodeReference.todo`
     /// - Parameters:
     ///     - tree: Tree for recursive traversing
@@ -238,20 +258,6 @@ public struct ASTNodeExcluder {
         mutableTree.currentTree.components = mutableCmponents
 
         return fixDependencies(in: mutableTree, ref: ref, path: path)
-    }
-
-    func fixDependencies(in tree: OpenAPIASTTree, ref: String, path: String) -> OpenAPIASTTree {
-        guard
-            let dependencyPath = tree.rawDependency.dependecies[ref],
-            dependencyPath == path
-        else {
-            return tree
-        }
-
-        var mutableTree = tree
-
-        mutableTree.rawDependency.dependecies.removeValue(forKey: ref)
-        return mutableTree
     }
 
     func processSchema(schema: Schema, tree: OpenAPIASTTree, ref: String, path: String) throws -> Schema {
@@ -324,7 +330,11 @@ public struct ASTNodeExcluder {
             return schema
         }
     }
+}
 
+// MARK: - Helpers
+
+private extension ASTNodeExcluder {
     func isNeedToReplaceReference(refToReplace: String, tree: OpenAPIASTTree, ref: String, path: String) throws  -> Bool {
         let splited = refToReplace.split(separator: "#").map { String($0) }
 
@@ -350,32 +360,39 @@ public struct ASTNodeExcluder {
         return tree.rawDependency.pathToCurrentFile == path
     }
 
-    func removePath(tree: OpenAPIASTTree, pathString: String) throws -> OpenAPIASTTree {
-
-        var mutTree = tree
-
-        let splited = pathString.split(separator: "~")
-
-        guard let pathIndex = mutTree.currentTree.paths.firstIndex(where: { $0.path == splited[0] }) else {
-            throw CommonError(message: "Path with URI \(splited[0]) wasn't found in tree from file \(tree.rawDependency.pathToCurrentFile)")
+    func findTree(by path: String, in forest: [OpenAPIASTTree]) -> OpenAPIASTTree? {
+        return forest.first { tree in
+            return tree.rawDependency.pathToCurrentFile == path
         }
+    }
 
+    func unwrapExcludeReferences(from refs: Set<String>) throws -> [ExcludePathAndRef] {
+        return try refs.map { val in
+            let splited = val.split(separator: "#").map { String($0) }
+
+            if splited.count != 2 {
+                throw CommonError(message: "Exclude reference \(val) couldn't be splitted by `#` path and ref parts")
+            }
+
+            guard let url = URL(string: splited[0]) else {
+                throw CommonError(message: "Couldn't create URI from path \(splited[0]) in reference \(val)")
+            }
+
+            return (url.absoluteString, splited[1])
+        }
+    }
+
+    func fixDependencies(in tree: OpenAPIASTTree, ref: String, path: String) -> OpenAPIASTTree {
         guard
-            splited.count == 2
+            let dependencyPath = tree.rawDependency.dependecies[ref],
+            dependencyPath == path
         else {
-            self.logger?.info("Removed whole path \(splited[0]) from \(tree.rawDependency.pathToCurrentFile)")
-            mutTree.currentTree.paths.remove(at: pathIndex)
-            return mutTree
+            return tree
         }
 
-        guard let operationIndex = mutTree.currentTree.paths[pathIndex].operations.firstIndex(where: { $0.method.rawValue == splited[1] }) else {
-            throw CommonError(message: "Operation with method \(splited[1]) at path with \(splited[0]) wasn't found in tree from file \(tree.rawDependency.pathToCurrentFile)")
-        }
+        var mutableTree = tree
 
-        mutTree.currentTree.paths[pathIndex].operations.remove(at: operationIndex)
-
-        self.logger?.info("Removed method \(splited[1]) from path \(splited[0]) from file \(tree.rawDependency.pathToCurrentFile)")
-
-        return mutTree
+        mutableTree.rawDependency.dependecies.removeValue(forKey: ref)
+        return mutableTree
     }
 }
