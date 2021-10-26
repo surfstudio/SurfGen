@@ -132,7 +132,7 @@ where `pathToSpec` is a path to one file in OpenAPI spec **which describes servi
 | `templates`| Contains array of structures called `Tenpmlate` |
 | `prefixesToCutDownInServiceNames` | See [Prefix Cutting](#prefix-cutting)|
 | `useNewNullableDeterminationStrategy` | See [Nullability](#nullability) |
-| `exludedNodes` | See [NodesCutting](#nodes-cutting) |
+| `exludedNodes` | See [NodesCutting](#node-cutting) |
 
 ## Editing templates
 
