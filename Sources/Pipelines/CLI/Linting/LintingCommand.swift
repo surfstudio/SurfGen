@@ -29,8 +29,15 @@ public class LintingCommand: Command {
 
         self.loger = self.initLoger(config: config)
 
+        var rawAstNodesToExclude = config.exludedNodes ?? []
+
+        Utils.Urls.validateAstNodePathesAndExistIfError(pathes: rawAstNodesToExclude, loger: self.loger)
+
+        rawAstNodesToExclude = Utils.Urls.addForwardingSlashIfNeeded(urls: rawAstNodesToExclude)
+
         let pipeline = BuildLinterPipelineFactory.build(
-            filesToIgnore: try self.makeUrlsAbsolute(urls: config.exclude ?? []),
+            filesToIgnore: try Utils.Urls.makeUrlsAbsolute(urls: config.exclude ?? []),
+            astNodesToExclude: try Utils.Urls.makeAstNodeRefsAbsolute(refs: rawAstNodesToExclude),
             log: self.loger
         )
 
@@ -64,16 +71,6 @@ public class LintingCommand: Command {
         }
 
         return .init(exclude: [])
-    }
-
-    func makeUrlsAbsolute(urls: [String]) throws -> Set<String> {
-        let path = FileManager.default.currentDirectoryPath
-
-        let result = try urls.map {
-            try (path + $0).normalized()
-        }
-
-        return Set(result)
     }
 }
 

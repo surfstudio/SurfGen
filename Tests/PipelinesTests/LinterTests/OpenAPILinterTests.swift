@@ -114,7 +114,7 @@ public final class OpenAPILinterTests: XCTestCase {
             .appendingPathComponent("ModelWithEmbededEnum.yaml")
 
 
-        let linter = BuildLinterPipelineFactory.build(filesToIgnore: [], log: DefaultLogger.verbose)
+        let linter = BuildLinterPipelineFactory.build(filesToIgnore: [], astNodesToExclude: [], log: DefaultLogger.verbose)
 
         // Act - Assert
 

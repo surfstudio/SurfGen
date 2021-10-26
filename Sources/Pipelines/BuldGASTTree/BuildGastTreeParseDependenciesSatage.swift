@@ -24,7 +24,6 @@ public struct BuildGastTreeParseDependenciesSatage: PipelineStage {
 
     public func run(with input: [OpenAPIASTTree]) throws {
 
-
         let arr = try input.map { astTree -> DependencyWithTree in
             let root = try wrap(self.builder.build(astTree: astTree),
                                 message: "Error occured in stage `Build GAST for dependencies`")

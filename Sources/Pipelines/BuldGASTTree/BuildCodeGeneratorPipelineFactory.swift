@@ -11,6 +11,7 @@ import ReferenceExtractor
 import GASTBuilder
 import CodeGenerator
 import Operations
+import ASTTree
 
 /// Configures pipeline for code generator
 public struct BuildCodeGeneratorPipelineFactory {
@@ -23,11 +24,13 @@ public struct BuildCodeGeneratorPipelineFactory {
     }
 
     public static func build(templates: [Template],
+                             astNodesToExclude: Set<String>,
                              serviceName: String,
                              needRewriteExistingFiles: Bool = false,
                              useNewNullableDefinitionStartegy: Bool,
                              prefixCutter: PrefixCutter? = nil,
                              logger: Loger? = nil) -> BuildGASTTreeEntryPoint {
+
         let schemaBuilder = AnySchemaBuilder(useNewNullableDeterminationStrategy: useNewNullableDefinitionStartegy)
 
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
@@ -49,32 +52,36 @@ public struct BuildCodeGeneratorPipelineFactory {
             refExtractorProvider: self.provider(str:),
             next: OpenAPIASTBuilderStage(
                 fileProvider: FileManager.default,
-                next: BuildGastTreeParseDependenciesSatage(
-                    builder: AnyGASTBuilder(
-                        fileProvider: FileManager.default,
-                        schemaBuilder: schemaBuilder,
-                        parameterBuilder: parameterBuilder,
-                        serviceBuilder: serviceBuilder,
-                        responsesBuilder: responsesBuilder,
-                        requestBodiesBuilder: requestBodiesBuilder),
-                    next: InitCodeGenerationStage(
-                        parserStage: .init(
-                            next: SwaggerCorrectorStage(
-                                corrector: SwaggerCorrector(logger: logger),
-                                next: ServiceGenerationStage(
-                                    next: FileWriterStage(
-                                        needRewriteExistingFiles: needRewriteExistingFiles,
-                                        logger: logger
-                                    ).erase(),
-                                    templates: templates,
-                                    serviceName: serviceName,
-                                    templateFiller: templateFiller,
-                                    modelExtractor: modelExtractor,
-                                    prefixCutter: prefixCutter
-                                ).erase()
-                            ).erase(),
-                            parser: buildParser()
-                        )
+                next: OpenAPIASTExcludingStage(
+                    excluder: ASTNodeExcluder(logger: logger),
+                    excludeList: astNodesToExclude,
+                    next: BuildGastTreeParseDependenciesSatage(
+                        builder: AnyGASTBuilder(
+                            fileProvider: FileManager.default,
+                            schemaBuilder: schemaBuilder,
+                            parameterBuilder: parameterBuilder,
+                            serviceBuilder: serviceBuilder,
+                            responsesBuilder: responsesBuilder,
+                            requestBodiesBuilder: requestBodiesBuilder),
+                        next: InitCodeGenerationStage(
+                            parserStage: .init(
+                                next: SwaggerCorrectorStage(
+                                    corrector: SwaggerCorrector(logger: logger),
+                                    next: ServiceGenerationStage(
+                                        next: FileWriterStage(
+                                            needRewriteExistingFiles: needRewriteExistingFiles,
+                                            logger: logger
+                                        ).erase(),
+                                        templates: templates,
+                                        serviceName: serviceName,
+                                        templateFiller: templateFiller,
+                                        modelExtractor: modelExtractor,
+                                        prefixCutter: prefixCutter
+                                    ).erase()
+                                ).erase(),
+                                parser: buildParser()
+                            )
+                        ).erase()
                     ).erase()
                 ).erase()
             ).erase()

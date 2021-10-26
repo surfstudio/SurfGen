@@ -1,0 +1,51 @@
+components:
+  schemas:
+
+    AuthGrantType:
+      type: string
+      enum: [password, refresh_token]
+      description: > 
+        description: > Перечисление используемых в МП типов запросов авторизации. 
+        * `password` - используется во время авторизации по логину и паролю
+        * `refresh_token` - используется во время обновления `AccessToken`-а через `RefreshToken`
+
+    AuthRequest:
+      description: Содержит все данные, необходимые для авторизации по логину и паролю
+      type: object
+      properties:
+        grant_type:
+          $ref: "#/components/schemas/AuthGrantType"
+        username:
+          type: string
+          description: "То, что используется как логин пользователя (телефон, номер договора, whatever)"
+        password:
+          type: string
+
+    SilentAuthRequest:
+      description: Запрос для обновления AccessToken-а
+      type: object
+      properties:
+        grant_type:
+          $ref: "#/components/schemas/AuthGrantType"
+        refresh_token:
+          type: string
+
+    AuthResponse:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+        user_id:
+          type: string
+        is_first_enter:
+          type: boolean
+          description: True если это первый вход. Тогда мы должны будем запросить оферту.
+        isNeedAccept:
+          type: boolean
+          description: если true, то необходимо запрашивать акцепт, не смотрим на isFirstEnter
+        bad:
+          $ref: "#/components/schemas/BadModel"
+    
+
+    BadModel:
+      type: any

@@ -132,6 +132,7 @@ where `pathToSpec` is a path to one file in OpenAPI spec **which describes servi
 | `templates`| Contains array of structures called `Tenpmlate` |
 | `prefixesToCutDownInServiceNames` | See [Prefix Cutting](#prefix-cutting)|
 | `useNewNullableDeterminationStrategy` | See [Nullability](#nullability) |
+| `exludedNodes` | See [NodesCutting](#nodes-cutting) |
 
 ## Editing templates
 
@@ -205,6 +206,40 @@ prefixesToCutDownInServiceNames:
     - /api/v2
     - /api/test
 ```
+
+### Node Cutting
+
+SurfGen have an ability to cut specific OpenAPI node at run-time.
+
+If you want to exclude some model or method from linting or generation you can utilize this functionality
+
+```Yaml
+exludedNodes:
+    - "Tests/Common/NodeExcluding/models.yaml#/components/schemas/BadModel"
+    - "Tests/Common/NodeExcluding/api.yaml#/paths/api/v1.1/superAuth~delete"
+```
+This comfiguration will remove model `/components/schemas/BadModel` which is located in file `./Tests/Common/NodeExcluding/models.yaml`
+
+And will remove operation `delete` from path `/api/v1.1/superAuth` which is located in file  `./Tests/Common/NodeExcluding/api.yaml`
+
+**!!! WARNING !!!**
+
+**Path to file must by relative to SurfGen execution directory**
+
+You can remove by this way leaf nodes like:
+- /components/schemas/*
+- /components/parameters/*
+- /components/header/*
+- /components/responses/*
+- /components/requestBodies/*
+- /paths/*
+
+To exclude specific operation you can write something like `/paths/api/v1.1/auth~post`
+
+Where:
+- `paths` - constant from OpenAPI specification
+- `/api/v1.1/auth` - method URI (just like in scpecification)
+- `post` - operation (you can skip it to remove whole method). Symbol ~ is used to mark specific operation.
 
 ## Unsupported OpenAPI features
 

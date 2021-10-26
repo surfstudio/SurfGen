@@ -10,6 +10,7 @@ import ReferenceExtractor
 import GASTBuilder
 import CodeGenerator
 import Common
+import ASTTree
 
 /// Configures pipeline for liniting
 public struct BuildLinterPipelineFactory {
@@ -21,7 +22,7 @@ public struct BuildLinterPipelineFactory {
         )
     }
 
-    public static func build(filesToIgnore: Set<String>, log: Loger) -> OpenAPILinter {
+    public static func build(filesToIgnore: Set<String>, astNodesToExclude: Set<String>, log: Loger) -> OpenAPILinter {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
         let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder)
@@ -42,21 +43,25 @@ public struct BuildLinterPipelineFactory {
                 refExtractorProvider: provider,
                 next: OpenAPIASTBuilderStage(
                     fileProvider: FileManager.default,
-                    next: BuildGastTreeParseDependenciesSatage(
-                        builder: AnyGASTBuilder(
-                            fileProvider: FileManager.default,
-                            schemaBuilder: schemaBuilder,
-                            parameterBuilder: parameterBuilder,
-                            serviceBuilder: serviceBuilder,
-                            responsesBuilder: responsesBuilder,
-                            requestBodiesBuilder: requestBodiesBuilder),
-                        next: InitCodeGenerationStage(
-                            parserStage: .init(
-                                next: SwaggerCorrectorStage(
-                                    corrector: SwaggerCorrector(logger: log)
-                                ).erase(),
-                                parser: buildParser()
-                            )
+                    next: OpenAPIASTExcludingStage(
+                        excluder: ASTNodeExcluder(logger: log),
+                        excludeList: astNodesToExclude,
+                        next: BuildGastTreeParseDependenciesSatage(
+                            builder: AnyGASTBuilder(
+                                fileProvider: FileManager.default,
+                                schemaBuilder: schemaBuilder,
+                                parameterBuilder: parameterBuilder,
+                                serviceBuilder: serviceBuilder,
+                                responsesBuilder: responsesBuilder,
+                                requestBodiesBuilder: requestBodiesBuilder),
+                            next: InitCodeGenerationStage(
+                                parserStage: .init(
+                                    next: SwaggerCorrectorStage(
+                                        corrector: SwaggerCorrector(logger: log)
+                                    ).erase(),
+                                    parser: buildParser()
+                                )
+                            ).erase()
                         ).erase()
                     ).erase()
                 ).erase()

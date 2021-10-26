@@ -38,8 +38,12 @@ class EndToEndTests: XCTestCase {
 
         // Act
 
-        try BuildCodeGeneratorPipelineFactory.build(templates: templateModels, serviceName: "Promotions", useNewNullableDefinitionStartegy: false)
-            .run(with: specUrl)
+        try BuildCodeGeneratorPipelineFactory.build(
+            templates: templateModels,
+            astNodesToExclude: [],
+            serviceName: "Promotions",
+            useNewNullableDefinitionStartegy: false
+        ).run(with: specUrl)
 
         let generatedFiles = try Path(testOutputPath).children()
             .filter { $0.isResultFile }

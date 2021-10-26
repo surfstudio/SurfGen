@@ -15,13 +15,17 @@ var testTargets: [Target] = [
     .testTarget(
         name: "CodeGeneratorTests",
         dependencies: ["Pipelines", "CodeGenerator", "Common", "ReferenceExtractor", "GASTBuilder", "UtilsForTesting"]
+    ),
+    .testTarget(
+        name: "ASTTreeTree",
+        dependencies: ["Pipelines", "ASTTree", "Common", "ReferenceExtractor", "UtilsForTesting"]
     )
 ]
 
 var dependencies: [PackageDescription.Package.Dependency] = [
     // because SPM cant resolve it by their own ((((:
     // .package(url: "https://github.com/kylef/PathKit.git", from: "0.9.0"),
-    .package(url: "https://github.com/LastSprint/SwagGen", .revision("18ec072e675252e73f17174b56edd971d9b7a4b0")),
+    .package(url: "https://github.com/LastSprint/SwagGen", .revision("db868b9ea47751424b58e7a1a3f2ae0b7145cd07")),
     .package(url: "https://github.com/stencilproject/Stencil", from: "0.14.1"),
     .package(url: "https://github.com/jakeheis/SwiftCLI", from: "6.0.3"),
     .package(url: "https://github.com/onevcat/Rainbow", from: "3.1.5"),

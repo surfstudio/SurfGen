@@ -90,6 +90,10 @@ public class Resolver {
 
     public func resolveSchema(ref: String, node: DependencyWithTree, other: [DependencyWithTree]) throws -> SchemaType {
 
+        if let schema = self.tryResolveSurfGenReference(ref: ref) {
+            return schema
+        }
+
         let intRef = Ref(pathToFile: node.dependency.pathToCurrentFile, refValue: ref)
 
         let fromStack = refStack
@@ -132,7 +136,6 @@ public class Resolver {
             self.refStack.removeLast()
             return res
         case .reference(let ref):
-            print()
             let res = try resolveSchema(ref: ref, node: node, other: other)
             self.refStack.removeLast()
             return res
@@ -266,5 +269,15 @@ public class Resolver {
         }()
 
         return .init(name: arr.name, itemsType: value)
+    }
+}
+
+private extension Resolver {
+    func tryResolveSurfGenReference(ref: String) -> SchemaType? {
+        switch ref {
+        case Common.Constants.ASTNodeReference.todo:
+            return .alias(.init(name: "TODO", type: .string))
+        default: return nil
+        }
     }
 }
