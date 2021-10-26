@@ -31,7 +31,7 @@ class {{ service.name }}Repository @Inject constructor(
     	{% endif %}{{ requestModelName|lowercaseFirstLetter }}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}: {#
         #}{% if operation.requestGenerationModel.isTypeArray %}List<{% endif %}{{ requestModelName }}{#
     	#}{% if operation.requestGenerationModel.isTypeArray %}>{% endif %}Entry{#
-    	#}{% if not operation.requestModel.isRequired %}?{% endif %}{% if operation.parameters.count > 0 %}
+    	#}{% if not operation.requestGenerationModel.isRequired %}?{% endif %}{% if operation.parameters.count > 0 %}
     {% endif %}): {% if operation.responseGenerationModel.value %}{#
         #}{% if operation.responseGenerationModel.value.isTypeArray %}[{% endif %}{#
         #}{% for responseName in operation.responseGenerationModel.value.typeNames %}Single<{{ responseName }}{% endfor %}{#

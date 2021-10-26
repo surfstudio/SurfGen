@@ -28,7 +28,7 @@ interface {{ service.name }}Api {
     	@Body {{ requestModelName|lowercaseFirstLetter }}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}{#
         #}: {% if operation.requestGenerationModel.isTypeArray %}List<{% endif %}{{ requestModelName }}{#
         #}{% if operation.requestGenerationModel.isTypeArray %}>{% endif %}Entry{#
-        #}{% if not operation.requestModel.isRequired %}?{% endif %}
+        #}{% if not operation.requestGenerationModel.isRequired %}?{% endif %}
     ): {% if operation.responseGenerationModel.value %}Single<{#
         #}{% if operation.responseGenerationModel.value.isTypeArray %}List<{% endif %}{#
         #}{{ operation.responseGenerationModel.value.typeNames|join }}{#
