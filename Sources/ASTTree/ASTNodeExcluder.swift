@@ -237,6 +237,268 @@ private extension ASTNodeExcluder {
     ///     - ref: Right part of the OpenAPI reference. A reference from excluding list
     ///     - path: Ligt paty o
     func replaceReference(in tree: OpenAPIASTTree, ref: String, path: String) throws -> OpenAPIASTTree {
+        var mutableTree = tree
+
+        mutableTree = try wrap(
+            self.replaceReferenceInSchemas(tree: tree, ref: ref, path: path),
+            message: "While replacing references in schemas"
+        )
+
+        mutableTree = try wrap(
+            self.replaceReferencesInPathes(tree: mutableTree, ref: ref, path: path),
+            message: "While replacing references in schemas"
+        )
+
+        return fixDependencies(in: mutableTree, ref: ref, path: path)
+    }
+
+    func replaceReferencesInPathes(tree: OpenAPIASTTree, ref: String, path: String) throws -> OpenAPIASTTree {
+
+        var mutableCmponents = tree.currentTree.paths
+
+        for i in 0..<mutableCmponents.count {
+
+            var cmp = mutableCmponents[i]
+
+            cmp.parameters = try wrap(
+                self.replaceReferenceInParameters(params: cmp.parameters, tree: tree, ref: ref, path: path),
+                message: "While replacing parameters in \(cmp.path)"
+            )
+
+            cmp.operations = try wrap(
+                self.replaceReferenceInOperation(operations: cmp.operations, tree: tree, ref: ref, path: path),
+                message: "While replacing operations in \(cmp.path)"
+            )
+
+            mutableCmponents[i] = cmp
+        }
+
+        var mutableTree = tree
+
+        mutableTree.currentTree.paths = mutableCmponents
+
+        return mutableTree
+    }
+
+    func replaceReferenceInOperation(
+        operations: [Swagger.Operation],
+        tree: OpenAPIASTTree,
+        ref: String,
+        path: String) throws -> [Swagger.Operation] {
+
+            var mutableOperations = operations
+
+            for j in 0..<mutableOperations.count {
+                var mutableOperation = mutableOperations[j]
+
+                let pathParams = try wrap(
+                    self.replaceReferenceInParameters(params: mutableOperation.pathParameters, tree: tree, ref: ref, path: path),
+                    message: "While replacing reference in parameter \(mutableOperation.method)"
+                )
+
+                let queryParams = try wrap(
+                    self.replaceReferenceInParameters(params: mutableOperation.operationParameters, tree: tree, ref: ref, path: path),
+                    message: "While replacing reference in parameter \(mutableOperation.method)"
+                )
+
+                mutableOperation.pathParameters = pathParams
+                mutableOperation.operationParameters = queryParams
+
+                mutableOperation.responses = try wrap(
+                    self.replaceReferenceIn(responses: mutableOperation.responses, tree: tree, ref: ref, path: path),
+                    message: "While replacing reference in responses in \(mutableOperation.method)"
+                )
+
+                if let defResp = mutableOperation.defaultResponse {
+                    mutableOperation.defaultResponse = try wrap(
+                        self.replaceReferenceIn(responses: [.init(statusCode: nil, response: defResp)], tree: tree, ref: ref, path: path).first?.response,
+                        message: "While replacing reference in responses in \(mutableOperation.method)"
+                    )
+                }
+
+                if let reqBody = mutableOperation.requestBody {
+                    mutableOperation.requestBody = try wrap(
+                        self.replaceReferenceIn(requestBody: reqBody, tree: tree, ref: ref, path: path),
+                        message: "While replacing reference in requestBody in \(mutableOperation.method)"
+                    )
+                }
+
+                mutableOperations[j] = mutableOperation
+            }
+
+            return mutableOperations
+    }
+
+    func replaceReferenceIn(
+        requestBody: PossibleReference<RequestBody>,
+        tree: OpenAPIASTTree,
+        ref: String,
+        path: String) throws -> PossibleReference<RequestBody> {
+
+            switch requestBody {
+
+            case .reference(let val):
+                let flag = try self.isNeedToReplaceReference(refToReplace: val.rawValue, tree: tree, ref: ref, path: path)
+
+                guard flag else {
+                    return requestBody
+                }
+
+                return .reference(.init(Constants.ASTNodeReference.todo))
+            case .value(var val):
+                val.content = try self.replaceReferenceIn(content: val.content, tree: tree, ref: ref, path: path)
+                return .value(val)
+            }
+    }
+
+    func replaceReferenceIn(
+        responses: [OperationResponse],
+        tree: OpenAPIASTTree,
+        ref: String,
+        path: String) throws -> [OperationResponse] {
+            var mutableResponses = responses
+
+            for i in 0..<mutableResponses.count {
+
+                var mutableResp = mutableResponses[i]
+
+                switch mutableResp.response {
+                case .reference(let val):
+                    let flag = try wrap(
+                        self.isNeedToReplaceReference(refToReplace: val.rawValue, tree: tree, ref: ref, path: path),
+                            message: "While replacing reference in response with code \(mutableResp.statusCode ?? 0)"
+                    )
+
+                    guard flag else {
+                        continue
+                    }
+
+                    mutableResp.response = .reference(.init(Constants.ASTNodeReference.todo))
+                    mutableResponses[i] = mutableResp
+                case .value(var val):
+                    val.headers = try wrap(
+                        self.raplceReferenceIn(headers: val.headers, tree: tree, ref: ref, path: path),
+                        message: "While replacing reference in response with code \(mutableResp.statusCode ?? 0)"
+                    )
+
+                    if let cnt = val.content {
+                        val.content = try wrap(
+                            self.replaceReferenceIn(content: cnt, tree: tree, ref: ref, path: path),
+                            message: "While replacing reference in response with code \(mutableResp.statusCode ?? 0)"
+                        )
+                    }
+
+                    mutableResp.response = .value(val)
+                    mutableResponses[i] = mutableResp
+                }
+            }
+
+            return mutableResponses
+    }
+
+    func replaceReferenceIn(
+        content: Content,
+        tree: OpenAPIASTTree,
+        ref: String,
+        path: String) throws -> Content {
+
+            var mutContent = content
+
+            for key in mutContent.mediaItems.keys {
+
+                guard var item = mutContent.mediaItems[key] else {
+                    continue
+                }
+
+                item.schema = try wrap(
+                    self.processSchema(schema: item.schema, tree: tree, ref: ref, path: path),
+                    message: "While replacing reference in media item \(key)"
+                )
+
+                mutContent.mediaItems[key] = item
+
+            }
+
+            return mutContent
+    }
+
+    func raplceReferenceIn(
+        headers: [String: PossibleReference<Header>],
+        tree: OpenAPIASTTree,
+        ref: String,
+        path: String) throws -> [String: PossibleReference<Header>] {
+
+            var mutHeaders = headers
+
+            for key in headers.keys {
+
+                guard let header = headers[key] else { continue }
+
+                switch header {
+                case .reference(let val):
+                    let flag = try wrap(
+                        self.isNeedToReplaceReference(refToReplace: val.rawValue, tree: tree, ref: ref, path: path),
+                        message: "While replacing reference in header \(key.key)"
+                    )
+
+                    guard flag else {
+                        continue
+                    }
+
+                    mutHeaders[key] = .reference(.init(Constants.ASTNodeReference.todo))
+                case .value(var val):
+                    let schema = try wrap(
+                        self.processSchema(schema: val.schema.schema, tree: tree, ref: ref, path: path),
+                        message: "While replacing reference in header \(key)"
+                    )
+
+                    val.schema.schema = schema
+                    mutHeaders[key] = .value(val)
+                }
+            }
+
+            return mutHeaders
+    }
+
+    func replaceReferenceInParameters(
+        params: [PossibleReference<Parameter>],
+        tree: OpenAPIASTTree,
+        ref: String,
+        path: String) throws -> [PossibleReference<Parameter>] {
+
+            var mutableParams = params
+
+            for j in 0..<mutableParams.count {
+                let parameter = mutableParams[j]
+
+                switch parameter {
+                case .reference(let val):
+                    let flag = try self.isNeedToReplaceReference(refToReplace: val.rawValue, tree: tree, ref: ref, path: path)
+
+                    guard flag else { continue }
+
+                    mutableParams[j] = .reference(.init(Constants.ASTNodeReference.todo))
+                case .value(var paramVal):
+
+                    switch paramVal.type {
+                    case .content:
+                        continue
+                    case .schema(var val):
+                        let res = try self.processSchema(schema: val.schema, tree: tree, ref: ref, path: path)
+                        val.schema = res
+
+                        paramVal.type = .schema(val)
+
+                        mutableParams[j] = .value(paramVal)
+                    }
+
+                }
+            }
+
+            return mutableParams
+    }
+
+    func replaceReferenceInSchemas(tree: OpenAPIASTTree, ref: String, path: String) throws -> OpenAPIASTTree {
         var mutableCmponents = tree.currentTree.components
 
         for i in 0..<mutableCmponents.schemas.count {
@@ -257,7 +519,7 @@ private extension ASTNodeExcluder {
 
         mutableTree.currentTree.components = mutableCmponents
 
-        return fixDependencies(in: mutableTree, ref: ref, path: path)
+        return mutableTree
     }
 
     func processSchema(schema: Schema, tree: OpenAPIASTTree, ref: String, path: String) throws -> Schema {
