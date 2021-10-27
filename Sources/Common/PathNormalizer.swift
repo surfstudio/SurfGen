@@ -2,7 +2,7 @@
 //  PathNormalizer.swift
 //  
 //
-//  Created by Александр Кравченков on 25.10.2021.
+//  Created by Александр Кравченков on 14.12.2020.
 //
 
 import Foundation
