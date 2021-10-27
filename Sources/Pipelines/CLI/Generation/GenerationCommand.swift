@@ -73,11 +73,10 @@ public class GenerationCommand: Command {
                                                                prefixCutter: prefixCutter,
                                                                logger: self.loger)
 
-        var path = specPath.value.hasPrefix("/") ? specPath.value : "/" + specPath.value
-        path = try Utils.Urls.makeUrlAbsolute(url: path)
+        let path = try Utils.Urls.makeUrlAbsoluteIfNeeded(url: specPath.value)
 
         guard let specUrl = URL(string: path) else {
-            self.loger.fatal("Invalid path to root spec: \(specPath.value)")
+            self.loger.fatal("Invalid path to root spec: \(path)")
             exit(-1)
         }
 

@@ -12,6 +12,11 @@ public enum Utils {
     
     public enum Urls {
 
+        /// Just like `makeUrlAbsolute` but firstly checks that url has `/` prefix
+        public static func makeUrlAbsoluteIfNeeded(url: String) throws -> String {
+            return url.hasPrefix("/") ? try url.normalized(): try makeUrlAbsolute(url: "/" + url)
+        }
+
         /// Gets relative url like `common/auth/api.yaml`
         /// Reads current execution directory
         /// And then concates them
@@ -24,7 +29,7 @@ public enum Utils {
 
         /// Calls `makeUrlAbsolute`
         public static func makeUrlsAbsolute(urls: [String]) throws -> Set<String> {
-            return .init(try urls.map { try makeUrlAbsolute(url: $0) })
+            return .init(try urls.map { try makeUrlAbsoluteIfNeeded(url: $0) })
         }
 
         /// Awaits string in format `path/to/yaml/file#/components/schemas/smt`
