@@ -86,7 +86,7 @@ public struct OperationGenerationModel: Encodable {
 
         let request = operationModel.requestModel?.value
         self.requestGenerationModel = request?.content.first.map {
-            DataGenerationModel(dataModel: $0, isRequired: request?.isRequired ?? true)
+            DataGenerationModel(dataModel: $0, isRequired: request?.isRequired ?? false)
         }
 
         let response = operationModel.responses?.first { $0.value.key.isSuccessStatusCode }?.value
