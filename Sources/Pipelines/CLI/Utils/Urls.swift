@@ -16,7 +16,7 @@ public enum Utils {
         /// Reads current execution directory
         /// And then concates them
         ///
-        /// After that normilize result (to solve case when `url = "../../common..."`
+        /// After that normalize result (to solve case when `url = "../../common..."`
         public static func makeUrlAbsolute(url: String) throws -> String {
             let path = FileManager.default.currentDirectoryPath
             return try (path + url).normalized()
