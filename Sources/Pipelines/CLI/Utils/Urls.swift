@@ -41,7 +41,7 @@ public enum Utils {
                 throw CommonError(message: "Path to AST node must have 2 part devided by #. But we got this -> \(ref)")
             }
 
-            splited[0] = try wrap(makeUrlAbsolute(url: splited[0]), message: "While processing pathes to AST Nodes. Error occured on \(ref)")
+            splited[0] = try wrap(makeUrlAbsoluteIfNeeded(url: splited[0]), message: "While processing pathes to AST Nodes. Error occured on \(ref)")
 
             return splited.joined(separator: "#")
         }
