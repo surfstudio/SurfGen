@@ -222,10 +222,6 @@ This comfiguration will remove model `/components/schemas/BadModel` which is loc
 
 And will remove operation `delete` from path `/api/v1.1/superAuth` which is located in file  `./Tests/Common/NodeExcluding/api.yaml`
 
-**!!! WARNING !!!**
-
-**Path to file must by relative to SurfGen execution directory**
-
 You can remove by this way leaf nodes like:
 - /components/schemas/*
 - /components/parameters/*

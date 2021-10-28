@@ -12,8 +12,6 @@ exclude:
 #
 # At run time. It doesn't touch real files
 #
-#  !!! WARNING !!!
-# Path to file must by relative to SurfGen execution directory
 # You can remove by this leaf nodes like:
 # - /components/schemas/*
 # - /components/parameters/*
@@ -30,3 +28,4 @@ exclude:
 # - `post` - operation (you can skip it to remove whole method). Symbol ~ is used to mark specific operation.
 exludedNodes:
   - "Tests/Common/NodeExcluding/models.yaml#/components/schemas/BadModel"
+  - "Tests/Common/NodeExcluding/api.yaml#/paths/api/v1.1/superAuth~delete"

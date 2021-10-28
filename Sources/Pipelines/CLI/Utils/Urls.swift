@@ -33,7 +33,7 @@ public enum Utils {
         }
 
         /// Awaits string in format `path/to/yaml/file#/components/schemas/smt`
-        /// Consider that `path/to/yaml/file` is relative path (relative to current execution place)
+        /// Path could be absolute
         public static func makeAstNodeRefAbsolute(ref: String) throws -> String {
             var splited = ref.split(separator: "#").map { String($0) }
 

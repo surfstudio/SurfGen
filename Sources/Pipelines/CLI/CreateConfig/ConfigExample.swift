@@ -26,8 +26,6 @@ public enum ConfigTemplates {
     #
     # In generated code all referenes to removed nodes will be generated as `TODO` string
     #
-    #  !!! WARNING !!!
-    # Path to file must by relative to SurfGen execution directory
     # You can remove by this leaf nodes like:
     # - /components/schemas/*
     # - /components/parameters/*
@@ -118,8 +116,6 @@ public enum ConfigTemplates {
     #
     # At run time. It doesn't touch real files
     #
-    #  !!! WARNING !!!
-    # Path to file must by relative to SurfGen execution directory
     # You can remove by this leaf nodes like:
     # - /components/schemas/*
     # - /components/parameters/*

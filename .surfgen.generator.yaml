@@ -15,8 +15,6 @@ prefixesToCutDownInServiceNames:
 #
 # In generated code all referenes to removed nodes will be generated as `TODO` string
 #
-#  !!! WARNING !!!
-# Path to file must by relative to SurfGen execution directory
 # You can remove by this leaf nodes like:
 # - /components/schemas/*
 # - /components/parameters/*
