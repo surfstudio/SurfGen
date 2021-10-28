@@ -27,7 +27,7 @@ paths:
               schema:
                 $ref: "models.yaml#/components/schemas/AuthResponse"
 
-  /api/v1.1/kek:
+  /api/v1.1/superAuth:
     get:
       responses:
         '200':
@@ -35,7 +35,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "models.yaml#/components/schemas/BadModel"
+                $ref: "models.yaml#/components/schemas/AuthResponse"
     delete:
       responses:
         '204':
