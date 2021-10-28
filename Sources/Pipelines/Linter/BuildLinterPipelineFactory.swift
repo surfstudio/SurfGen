@@ -53,7 +53,7 @@ public struct BuildLinterPipelineFactory {
                             next: SwaggerCorrectorStage(
                                 corrector: SwaggerCorrector(logger: log)
                             ).erase(),
-                            parser: buildParser()
+                            parser: buildParser(logger: log)
                         )
                     ).erase()
                 ).erase()
@@ -61,17 +61,24 @@ public struct BuildLinterPipelineFactory {
         )
     }
 
-    static func buildParser() -> TreeParser {
+    static func buildParser(logger: Loger?) -> TreeParser {
 
-        let arrayParser = AnyArrayParser()
-        let groupParser = AnyGroupParser()
+        let resolver = Resolver(logger: logger)
+
+        let arrayParser = AnyArrayParser(resolver: resolver)
+        let groupParser = AnyGroupParser(resolver: resolver)
 
         let mediaTypeParser = AnyMediaTypeParser(arrayParser: arrayParser,
-                                                 groupParser: groupParser)
-        let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser)
-        let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser)
+                                                 groupParser: groupParser,
+                                                 resolver: resolver)
+        let parametersParser = ParametersTreeParser(array: arrayParser,
+                                                    resolver: resolver)
+        let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser,
+                                                  resolver: resolver)
+        let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser,
+                                                 resolver: resolver)
 
-        return .init(parametersParser: .init(array: arrayParser),
+        return .init(parametersParser: parametersParser,
                      requestBodyParser: requestBodyParser,
                      responsesParser: responsesParser)
     }

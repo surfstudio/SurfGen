@@ -20,9 +20,13 @@ public struct AnyMediaTypeParser: MediaTypeParser {
     public let arrayParser: ArrayParser
     public let groupParser: AnyGroupParser
 
-    public init(arrayParser: ArrayParser, groupParser: AnyGroupParser) {
+    private let resolver: Resolver
+
+    public init(arrayParser: ArrayParser,
+                groupParser: AnyGroupParser, resolver: Resolver) {
         self.arrayParser = arrayParser
         self.groupParser = groupParser
+        self.resolver = resolver
     }
 
     public func parse(mediaType: MediaTypeObjectNode,
@@ -63,7 +67,7 @@ public struct AnyMediaTypeParser: MediaTypeParser {
 
     func parse(ref: String, current: DependencyWithTree, other: [DependencyWithTree]) throws -> DataModel.PossibleType {
         let schemaType = try wrap(
-            Resolver().resolveSchema(ref: ref, node: current, other: other),
+            resolver.resolveSchema(ref: ref, node: current, other: other),
             message: "While resolving \(ref) at file \(current.dependency.pathToCurrentFile)"
         )
 

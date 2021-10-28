@@ -17,15 +17,19 @@ import Common
 /// **ISN'T THREAD SAFE**
 public class Resolver {
 
-    struct Ref {
+    struct Ref: Equatable {
         let pathToFile: String
         let refValue: String
     }
 
+    private let logger: Loger?
+
     private var refStack = [Ref]()
     private var resolvedObjects = [String: SchemaObjectNode]()
 
-    public init() { }
+    public init(logger: Loger? = nil) {
+        self.logger = logger
+    }
 
     public func resolveParameter(ref: String, node: DependencyWithTree, other: [DependencyWithTree]) throws -> ParameterModel {
 
@@ -33,15 +37,8 @@ public class Resolver {
 
         let intRef = Ref(pathToFile: node.dependency.pathToCurrentFile, refValue: ref)
 
-        let fromStack = refStack
-            .filter { $0.pathToFile == node.dependency.pathToCurrentFile }
-            .first { $0.refValue == ref }
-
-        guard fromStack == nil else {
-
-            let stack = self.refStack.reduce("", { $0 + "--> \($1.pathToFile) : \($1.refValue)" })
-
-            throw CommonError(message: "There is a reference cycle which is found for reference \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(stack)")
+        guard !refStack.contains(intRef) else {
+            throw CommonError(message: "There is a reference cycle which is found for reference \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(buildDebugDescription(for: refStack))")
         }
 
         refStack.append(intRef)
@@ -53,7 +50,6 @@ public class Resolver {
         if res.count == 2 {
             let dep = try self.resolveRefToAnotherFile(ref: ref, node: node, other: other)
             let res =  try self.resolveParameter(ref: "#\(res[1])", node: dep, other: other)
-            self.refStack.removeLast()
             return res
         }
 
@@ -94,18 +90,14 @@ public class Resolver {
 
         let intRef = Ref(pathToFile: node.dependency.pathToCurrentFile, refValue: ref)
 
-        if let fromStack = refStack
-            .filter({ $0.pathToFile == node.dependency.pathToCurrentFile })
-            .first(where: { $0.refValue == ref }) {
-
-                guard let resolvedObject = resolvedObjects[fromStack.refValue] else {
-                    let stack = self.refStack.reduce("", { $0 + "--> \($1.pathToFile) : \($1.refValue) " })
-
-                    throw CommonError(message: "Could not restore reference cycle for \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(stack)")
-                }
-
-                return try useAlreadyResolved(object: resolvedObject)
+        if refStack.contains(intRef) {
+            guard let resolvedObject = resolvedObjects[intRef.refValue] else {
+                throw CommonError(message: "Could not restore reference cycle for \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(buildDebugDescription(for: refStack))")
             }
+
+            logger?.warning("Reference cycle was detected in \(node.dependency.pathToCurrentFile). Make sure it is expected and really reasonable with your project's business logic. Cycle description:\n\t\t\(buildCycleDebugDescription(for: intRef))")
+            return try useAlreadyResolved(object: resolvedObject)
+        }
 
         refStack.append(intRef)
         defer {
@@ -273,6 +265,23 @@ public class Resolver {
         default:
             throw CommonError(message: "Restoring reference cycles is supported only for objects and groups, \(object.next) cannot form a cycle")
         }
+    }
+
+}
+
+// MARK: - Debug message builders
+
+private extension Resolver {
+
+    func buildCycleDebugDescription(for cycledRef: Ref) -> String {
+        guard let cycledRefIndex = refStack.firstIndex(of: cycledRef) else {
+            return ""
+        }
+        return buildDebugDescription(for: refStack[cycledRefIndex...] + [cycledRef])
+    }
+
+    func buildDebugDescription(for referenceStack: [Ref]) -> String {
+        return referenceStack.reduce("", { $0 + "--> \($1.pathToFile) : \($1.refValue) " })
     }
 
 }

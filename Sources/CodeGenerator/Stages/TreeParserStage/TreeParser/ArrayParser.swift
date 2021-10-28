@@ -21,7 +21,11 @@ public protocol ArrayParser {
 
 public struct AnyArrayParser: ArrayParser {
 
-    public init() { }
+    private let resolver: Resolver
+
+    public init(resolver: Resolver) {
+        self.resolver = resolver
+    }
 
     public func parse(array: SchemaArrayNode,
                       current: DependencyWithTree,
@@ -50,7 +54,7 @@ public struct AnyArrayParser: ArrayParser {
             return .primitive(val.type)
         case .reference(let val):
             let schemaType = try wrap(
-                Resolver().resolveSchema(ref: val, node: current, other: other),
+                resolver.resolveSchema(ref: val, node: current, other: other),
                 message: "While resolving \(val) at file \(current.dependency.pathToCurrentFile)"
             )
 
