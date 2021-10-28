@@ -42,7 +42,7 @@ public struct SchemaObjectModel: Encodable {
     public let properties: [PropertyModel]
     public let description: String?
 
-    public init(name: String, properties: [PropertyModel], description: String?) {
+    public init(name: String, properties: [PropertyModel] = [], description: String? = nil) {
         self.name = name
         self.properties = properties
         self.description = description

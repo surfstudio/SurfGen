@@ -22,7 +22,8 @@ public class Resolver {
         let refValue: String
     }
 
-    var refStack = [Ref]()
+    private var refStack = [Ref]()
+    private var resolvedObjects = [String: SchemaObjectNode]()
 
     public init() { }
 
@@ -43,7 +44,11 @@ public class Resolver {
             throw CommonError(message: "There is a reference cycle which is found for reference \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(stack)")
         }
 
-        self.refStack.append(intRef)
+        refStack.append(intRef)
+        defer {
+            refStack.removeLast()
+        }
+        
 
         if res.count == 2 {
             let dep = try self.resolveRefToAnotherFile(ref: ref, node: node, other: other)
@@ -62,7 +67,6 @@ public class Resolver {
         case .group:
             throw CommonError(message: "Parameter \(resolved.name) from file '\(node.dependency.pathToCurrentFile) contains group definition in type. This is unsupported.")
         case .simple(let simple):
-            self.refStack.removeLast()
             return .init(componentName: resolved.componentName,
                          name: resolved.name,
                          location: resolved.location,
@@ -70,7 +74,6 @@ public class Resolver {
                          description: resolved.description,
                          isRequired: resolved.isRequired)
         case .reference(let newRef):
-            self.refStack.removeLast()
             return .init(componentName: resolved.componentName,
                          name: resolved.name,
                          location: resolved.location,
@@ -78,7 +81,6 @@ public class Resolver {
                          description: resolved.description,
                          isRequired: resolved.isRequired)
         case .array(let arr):
-            self.refStack.removeLast()
             return .init(componentName: resolved.componentName,
                          name: resolved.name,
                          location: resolved.location,
@@ -92,58 +94,52 @@ public class Resolver {
 
         let intRef = Ref(pathToFile: node.dependency.pathToCurrentFile, refValue: ref)
 
-        let fromStack = refStack
-            .filter { $0.pathToFile == node.dependency.pathToCurrentFile }
-            .first { $0.refValue == ref }
+        if let fromStack = refStack
+            .filter({ $0.pathToFile == node.dependency.pathToCurrentFile })
+            .first(where: { $0.refValue == ref }) {
 
-        guard fromStack == nil else {
+                guard let resolvedObject = resolvedObjects[fromStack.refValue] else {
+                    let stack = self.refStack.reduce("", { $0 + "--> \($1.pathToFile) : \($1.refValue) " })
 
-            let stack = self.refStack.reduce("", { $0 + "--> \($1.pathToFile) : \($1.refValue) " })
+                    throw CommonError(message: "Could not restore reference cycle for \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(stack)")
+                }
 
-            throw CommonError(message: "There is a reference cycle which is found for reference \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(stack)")
+                return try useAlreadyResolved(object: resolvedObject)
+            }
+
+        refStack.append(intRef)
+        defer {
+            refStack.removeLast()
         }
-
-        self.refStack.append(intRef)
 
         let res = ref.split(separator: "#")
 
         if res.count == 2 {
             let res = try wrap(self.resolveAnotherFile(ref: ref, node: node, other: other),
                                message: "While resolving \(ref)")
-            self.refStack.removeLast()
             return res
         }
 
         let resolved: SchemaObjectNode = try wrap(node.tree.resolve(reference: String(ref)),
                                                   message: "While resolving \(ref) in \(node.dependency.pathToCurrentFile)")
+        resolvedObjects[ref] = resolved
 
         switch resolved.next {
         case .enum(let val):
             guard let type = PrimitiveType(rawValue: val.type) else {
                 throw CommonError(message: "Enum \(val.name) contains type which is not primitive -- \(val.type)")
             }
-            self.refStack.removeLast()
             return .enum(.init(name: val.name, cases: val.cases, type: type, description: val.description))
         case .simple(let val):
-            self.refStack.removeLast()
             return .alias(.init(name: val.name, type: val.type))
         case .object(let val):
-            let res = try self.resolveObject(val: val, node: node, other: other)
-            self.refStack.removeLast()
-            return res
+            return try self.resolveObject(val: val, node: node, other: other)
         case .reference(let ref):
-            print()
-            let res = try resolveSchema(ref: ref, node: node, other: other)
-            self.refStack.removeLast()
-            return res
+            return try resolveSchema(ref: ref, node: node, other: other)
         case .array(let arr):
-            let res = SchemaType.array(try self.resolve(arr: arr, node: node, other: other))
-            self.refStack.removeLast()
-            return res
+            return SchemaType.array(try self.resolve(arr: arr, node: node, other: other))
         case .group(let val):
-            let res = try self.resolve(group: val, node: node, other: other)
-            self.refStack.removeLast()
-            return res
+            return try self.resolve(group: val, node: node, other: other)
         }
     }
 
@@ -267,4 +263,16 @@ public class Resolver {
 
         return .init(name: arr.name, itemsType: value)
     }
+
+    private func useAlreadyResolved(object: SchemaObjectNode) throws -> SchemaType {
+        switch object.next {
+        case .object(let model):
+            return .object(.init(name: model.name))
+        case .group(let group):
+            return .group(.init(name: group.name, type: group.type))
+        default:
+            throw CommonError(message: "Restoring reference cycles is supported only for objects and groups, \(object.next) cannot form a cycle")
+        }
+    }
+
 }
