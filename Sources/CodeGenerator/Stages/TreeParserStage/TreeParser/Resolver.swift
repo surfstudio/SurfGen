@@ -11,7 +11,7 @@ import Common
 
 /// This class can resolve references
 /// It can resolve local references and references to another files
-/// It can determine referece cycles and throw error with call stack
+/// It can determine referece cycles and handle them by replacing reference to already resolved schema with its name
 ///
 /// **WARNING**
 /// **ISN'T THREAD SAFE**
