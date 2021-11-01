@@ -65,16 +65,19 @@ public struct StubGASTTreeFactory {
 
         return .init(
             refExtractorProvider: self.provider(str:),
-            next: .init(
-                builder: AnyGASTBuilder(
-                    fileProvider: fileProvider,
-                    schemaBuilder: schemaBuilder,
-                    parameterBuilder: parameterBuilder,
-                    serviceBuilder: serviceBuilder,
-                    responsesBuilder: responsesBuilder,
-                    requestBodiesBuilder: requestBodiesBuilder),
-                next: initStage
-            )
+            next: OpenAPIASTBuilderStage(
+                fileProvider: self.fileProvider,
+                next: BuildGastTreeParseDependenciesSatage(
+                    builder: AnyGASTBuilder(
+                        fileProvider: fileProvider,
+                        schemaBuilder: schemaBuilder,
+                        parameterBuilder: parameterBuilder,
+                        serviceBuilder: serviceBuilder,
+                        responsesBuilder: responsesBuilder,
+                        requestBodiesBuilder: requestBodiesBuilder),
+                    next: initStage
+                ).erase()
+            ).erase()
         )
     }
 

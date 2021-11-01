@@ -1,0 +1,47 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+  contact:
+    name: Кравченков Александр
+    email: kravchenkov@surfstudio.ru
+
+paths:
+
+  /api/v1.1/auth:
+    post:
+      summary: Метод для отправки логина и пароля на сервер. Первый фактор авторизации.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "models.yaml#/components/schemas/AuthRequest"
+                - $ref: "models.yaml#/components/schemas/SilentAuthRequest"
+      responses:
+        "200":
+          description: "Успех"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/AuthResponse"
+
+  /api/v1.1/superAuth:
+    get:
+      responses:
+        '200':
+          description: todo
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/AuthResponse"
+    delete:
+      responses:
+        '204':
+          description: todo
+    put:
+      responses:
+        '201':
+          description: todo
+        

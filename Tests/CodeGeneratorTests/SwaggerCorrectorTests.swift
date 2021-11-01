@@ -13,7 +13,7 @@ import CodeGenerator
 class SwaggerCorrectorTests: XCTestCase {
 
     /// Checks that if path is already valid, corrector lefts it unchanged
-    func correctPathIsLeftUnchanged() {
+    func testCorrectPathIsLeftUnchanged() {
         // Arrange
 
         let correctPath = "/billings/service/{serviceId}"
@@ -29,7 +29,7 @@ class SwaggerCorrectorTests: XCTestCase {
     }
 
     /// Checks that if path contains query string, it is cut off
-    func pathWithQueryStringIsRecognizedAndFixed() {
+    func testPathWithQueryStringIsRecognizedAndFixed() {
         // Arrange
 
         let pathWithQueryString = "/billings/service?serviceId={serviceId}"
