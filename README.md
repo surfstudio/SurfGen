@@ -234,7 +234,7 @@ To exclude specific operation you can write something like `/paths/api/v1.1/auth
 
 Where:
 - `paths` - constant from OpenAPI specification
-- `/api/v1.1/auth` - method URI (just like in scpecification)
+- `/api/v1.1/auth` - method URI (just like in specification)
 - `post` - operation (you can skip it to remove whole method). Symbol ~ is used to mark specific operation.
 
 ## Unsupported OpenAPI features
