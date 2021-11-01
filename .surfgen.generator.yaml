@@ -13,7 +13,7 @@ prefixesToCutDownInServiceNames:
 #
 # At run time. It doesn't touch real files
 #
-# In generated code all referenes to removed nodes will be generated as `TODO` string
+# In generated code all referenсes to removed nodes will be generated as `TODO` string
 #
 # You can remove by this leaf nodes like:
 # - /components/schemas/*
