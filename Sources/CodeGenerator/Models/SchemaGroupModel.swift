@@ -76,7 +76,7 @@ public struct SchemaGroupModel: Encodable {
     public let references: [PossibleType]
     public let type: SchemaGroupType
 
-    public init(name: String, references: [PossibleType] = [], type: SchemaGroupType) {
+    public init(name: String, references: [PossibleType], type: SchemaGroupType) {
         self.name = name
         self.references = references
         self.type = type

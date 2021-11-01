@@ -92,7 +92,7 @@ public class Resolver {
 
         if refStack.contains(intRef) {
             guard let resolvedObject = resolvedObjects[intRef.refValue] else {
-                throw CommonError(message: "Could not restore reference cycle for \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(buildDebugDescription(for: refStack))")
+                throw CommonError(message: "Could not resolve reference cycle for \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(buildDebugDescription(for: refStack))")
             }
 
             logger?.warning("Reference cycle was detected in \(node.dependency.pathToCurrentFile). Make sure it is expected and really reasonable with your project's business logic. Cycle description:\n\t\t\(buildCycleDebugDescription(for: intRef))")
@@ -259,9 +259,9 @@ public class Resolver {
     private func useAlreadyResolved(object: SchemaObjectNode) throws -> SchemaType {
         switch object.next {
         case .object(let model):
-            return .object(.init(name: model.name))
+            return .object(.init(name: model.name, properties: [], description: nil))
         case .group(let group):
-            return .group(.init(name: group.name, type: group.type))
+            return .group(.init(name: group.name, references: [], type: group.type))
         default:
             throw CommonError(message: "Restoring reference cycles is supported only for objects and groups, \(object.next) cannot form a cycle")
         }

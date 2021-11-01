@@ -23,7 +23,8 @@ public struct AnyMediaTypeParser: MediaTypeParser {
     private let resolver: Resolver
 
     public init(arrayParser: ArrayParser,
-                groupParser: AnyGroupParser, resolver: Resolver) {
+                groupParser: AnyGroupParser,
+                resolver: Resolver) {
         self.arrayParser = arrayParser
         self.groupParser = groupParser
         self.resolver = resolver
