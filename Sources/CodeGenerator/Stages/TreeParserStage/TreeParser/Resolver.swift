@@ -9,7 +9,7 @@ import Foundation
 import GASTTree
 import Common
 
-/// This class can resolve references
+/// This class can resolve references - replace reference to `Schema` with  `Schema` itself
 /// It can resolve local references and references to another files
 /// It can determine referece cycles and handle them by replacing reference to already resolved schema with its name
 ///

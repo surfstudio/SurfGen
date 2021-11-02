@@ -21,49 +21,60 @@ In terms of this class there are some definitions:
 > If you want more information about global references - you should look at `PathNormalizerTests.swift`
 
 This class do:
-1. Determie what type a reference is - `local` or `global`
+1. Determine what type reference is - `local` or `global`
 2. If reference is `local` then `resolver` will just call `resolve` for current `GAST` -- so it just search for referenced object in this tree
 3. If reference is `global`
-    1. Search for the tree which is referenced. For example if we have `$ref: "../models.yaml#/components/schemas/Object"` which is declared in file at path `/user/repo/project/swagger/controllers/catalog/api.yaml`. And while we parsing this file we find the `$ref`. And it means that we nned to search for the `GAST` tree which has the same file path (we have all GAST with their pathes in `DependencyWithTree` array). So now we have GAST which is located in `/user/repo/project/swagger/controllers/models.yaml` (because of `../` in `$ref`) or we have an error and the process will be terminated (:
+    1. Search for the tree which is referenced. For example if we have `$ref: "../models.yaml#/components/schemas/Object"` which is declared in file at path `/user/repo/project/swagger/controllers/catalog/api.yaml`. And while parsing this file we find the `$ref`. And it means that we need to search for the `GAST` tree which has the same file path (we have all GAST with their paths in `DependencyWithTree` array). So now we have GAST which is located in `/user/repo/project/swagger/controllers/models.yaml` (because of `../` in `$ref`) or we have an error and the process will be terminated (:
     2. After we get the specific tree we will make step `2` but especially for this tree.
-4. Thet we check. If resolved component has nested references (like when we has ref on Object which has property whose type is `$ref`...)
-5. If it is then we will continue from `1` step
-6. If it isn't then we ends resolving
+4. Then we check if resolved component has nested references (like when we has ref on Object which has property whose type is `$ref`...)
+5. If it has, we will continue from step `1`
+6. If it hasn't, we stop resolving
 
 **About refrence cycles**
 
 This the case:
 
 ```YAML
-
 schemas:
-
     CycledA:
-        type: object
-        properties:
-            cycle:
-                $ref: "#/components/schemas/CycledB"
+      type: object
+      properties:
+        cycle:
+          $ref: "#/components/schemas/CycledB"
 
     CycledB:
-        type: object
-        properties:
-            cycle:
-                $ref: "#/components/schemas/CycledA"
+      type: object
+      properties:
+        cycle:
+          $ref: "#/components/schemas/CycledA"
 ```
 
-Resolver can determine a situation such situations, but it can't resolve it. Because in code generation it's a cuncern. For example:
+Or: 
 
-```Swift
-struct A {
-    var b: B
-}
-
-struct B {
-    var a: A
-}
-
-A(b: B(a: A(b: B(.....))))
+```YAML
+schemas:
+    Category:
+      type: object
+      properties:
+        subcategories:
+          type: array
+          items:
+            $ref: "#/components/schemas/Category"
 ```
 
-And we think that situation like this is not the best situation. And can be a sign of design issue. Because of this at this moment SurfGen will throws an error if refrence cycle was found.
+`Resolver` keeps track of resolved objects.
+Resolved object is a structure describing reference and short model of object, which was found with this reference:
+```YAML
+ResolvedRef:
+  ref:
+    pathToFile: "models.yaml"
+    refValue: "#/components/schemas/CycledA"
+  objectNode:
+    name: "CycledA"
+```
 
+For example, in first case it will add `CycledA`, then `CycledB`.
+On the next iteration `Resolver` will see that reference `"#/components/schemas/CycledA"` is already in list of resolved objects.
+So instead of trying to resolve reference `"#/components/schemas/CycledA"` it will take already saved model from list.
+
+![Example Image](../../../../../Docs/referenceCycle.png)
