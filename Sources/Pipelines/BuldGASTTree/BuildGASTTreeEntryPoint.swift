@@ -20,9 +20,9 @@ extension BuildGASTTreeEntryPoint {
 public struct BuildGASTTreeEntryPoint {
 
     private let refExtractorProvider: ReferenceExtractorProvider
-    private let next: BuildGastTreeParseDependenciesSatage
+    private let next: AnyPipelineStage<[Dependency]>
 
-    public init(refExtractorProvider: @escaping ReferenceExtractorProvider, next: BuildGastTreeParseDependenciesSatage) {
+    public init(refExtractorProvider: @escaping ReferenceExtractorProvider, next: AnyPipelineStage<[Dependency]>) {
         self.refExtractorProvider = refExtractorProvider
         self.next = next
     }

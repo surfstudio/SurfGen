@@ -16,4 +16,5 @@ public struct LintingConfig: Decodable {
     var exclude: [String]?
 
     var analytcsConfig: AnalytcsConfig?
+    var exludedNodes: [String]?
 }

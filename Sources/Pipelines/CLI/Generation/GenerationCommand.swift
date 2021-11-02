@@ -59,15 +59,24 @@ public class GenerationCommand: Command {
             prefixCutter = PrefixCutter(prefixesToCut: Set(masks))
         }
 
+        var rawAstNodesToExclude = config.exludedNodes ?? []
+
+        Utils.Urls.validateAstNodePathesAndExistIfError(pathes: rawAstNodesToExclude, loger: self.loger)
+
+        rawAstNodesToExclude = Utils.Urls.addForwardingSlashIfNeeded(urls: rawAstNodesToExclude)
+
         let pipeline = BuildCodeGeneratorPipelineFactory.build(templates: config.templates,
+                                                               astNodesToExclude: try Utils.Urls.makeAstNodeRefsAbsolute(refs: rawAstNodesToExclude),
                                                                serviceName: serviceName,
                                                                needRewriteExistingFiles: rewrite.value,
                                                                useNewNullableDefinitionStartegy: config.useNewNullableDeterminationStrategy ?? false,
                                                                prefixCutter: prefixCutter,
                                                                logger: self.loger)
-        
-        guard let specUrl = URL(string: specPath.value) else {
-            self.loger.fatal("Invalid path to root spec: \(specPath.value)")
+
+        let path = try Utils.Urls.makeUrlAbsoluteIfNeeded(url: specPath.value)
+
+        guard let specUrl = URL(string: path) else {
+            self.loger.fatal("Invalid path to root spec: \(path)")
             exit(-1)
         }
 

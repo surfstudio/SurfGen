@@ -45,6 +45,7 @@ final class RealDataTests: XCTestCase {
                 try { () throws -> Void in
                     do {
                         _ = try BuildCodeGeneratorPipelineFactory.build(templates: [],
+                                                                        astNodesToExclude: [],
                                                                         serviceName: "",
                                                                         useNewNullableDefinitionStartegy: false).run(with: url)
                     } catch {

@@ -96,6 +96,10 @@ public class Resolver {
 
     public func resolveSchema(ref: String, node: DependencyWithTree, other: [DependencyWithTree]) throws -> SchemaType {
 
+        if let schema = self.tryResolveSurfGenReference(ref: ref) {
+            return schema
+        }
+
         let intRef = Ref(pathToFile: node.dependency.pathToCurrentFile, refValue: ref)
 
         if let alreadyResolvedRef = resolvedObjects.first(where: { $0.ref == intRef }) {
@@ -287,4 +291,14 @@ private extension Resolver {
         return referenceStack.reduce("", { $0 + "--> \($1.pathToFile) : \($1.refValue) " })
     }
 
+}
+
+private extension Resolver {
+    func tryResolveSurfGenReference(ref: String) -> SchemaType? {
+        switch ref {
+        case Common.Constants.ASTNodeReference.todo:
+            return .object(.init(name: "TODO", properties: [], description: nil))
+        default: return nil
+        }
+    }
 }

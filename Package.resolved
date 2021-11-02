@@ -38,15 +38,6 @@
         }
       },
       {
-        "package": "Rainbow",
-        "repositoryURL": "https://github.com/onevcat/Rainbow",
-        "state": {
-          "branch": null,
-          "revision": "626c3d4b6b55354b4af3aa309f998fae9b31a3d9",
-          "version": "3.2.0"
-        }
-      },
-      {
         "package": "ShellOut",
         "repositoryURL": "https://github.com/JohnSundell/ShellOut.git",
         "state": {
@@ -87,7 +78,7 @@
         "repositoryURL": "https://github.com/LastSprint/SwagGen",
         "state": {
           "branch": null,
-          "revision": "18ec072e675252e73f17174b56edd971d9b7a4b0",
+          "revision": "285ee89b027344520cbda903ea1c74bf0f9baac8",
           "version": null
         }
       },
