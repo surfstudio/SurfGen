@@ -22,10 +22,18 @@ public class Resolver {
         let refValue: String
     }
 
+    struct ResolvedRef: Equatable {
+        let ref: Ref
+        let objectNode: SchemaObjectNode
+
+        static func == (lhs: Resolver.ResolvedRef, rhs: Resolver.ResolvedRef) -> Bool {
+            return lhs.ref == rhs.ref
+        }
+    }
+
     private let logger: Loger?
 
-    private var refStack = [Ref]()
-    private var resolvedObjects = [String: SchemaObjectNode]()
+    private var resolvedObjects = [ResolvedRef]()
 
     public init(logger: Loger? = nil) {
         self.logger = logger
@@ -37,15 +45,10 @@ public class Resolver {
 
         let intRef = Ref(pathToFile: node.dependency.pathToCurrentFile, refValue: ref)
 
-        guard !refStack.contains(intRef) else {
+        guard !resolvedObjects.contains(where: { $0.ref == intRef }) else {
+            let refStack = resolvedObjects.map { $0.ref }
             throw CommonError(message: "There is a reference cycle which is found for reference \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(buildDebugDescription(for: refStack))")
         }
-
-        refStack.append(intRef)
-        defer {
-            refStack.removeLast()
-        }
-        
 
         if res.count == 2 {
             let dep = try self.resolveRefToAnotherFile(ref: ref, node: node, other: other)
@@ -54,6 +57,11 @@ public class Resolver {
         }
 
         let resolved: ParameterNode = try node.tree.resolve(reference: String(ref))
+
+        resolvedObjects.append(ResolvedRef(ref: intRef, objectNode: resolved.type.schema))
+        defer {
+            resolvedObjects.removeLast()
+        }
 
         switch resolved.type.schema.next {
         case .object:
@@ -90,18 +98,9 @@ public class Resolver {
 
         let intRef = Ref(pathToFile: node.dependency.pathToCurrentFile, refValue: ref)
 
-        if refStack.contains(intRef) {
-            guard let resolvedObject = resolvedObjects[intRef.refValue] else {
-                throw CommonError(message: "Could not resolve reference cycle for \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(buildDebugDescription(for: refStack))")
-            }
-
+        if let alreadyResolvedRef = resolvedObjects.first(where: { $0.ref == intRef }) {
             logger?.warning("Reference cycle was detected in \(node.dependency.pathToCurrentFile). Make sure it is expected and really reasonable with your project's business logic. Cycle description:\n\t\t\(buildCycleDebugDescription(for: intRef))")
-            return try useAlreadyResolved(object: resolvedObject)
-        }
-
-        refStack.append(intRef)
-        defer {
-            refStack.removeLast()
+            return try useAlreadyResolved(object: alreadyResolvedRef.objectNode)
         }
 
         let res = ref.split(separator: "#")
@@ -114,7 +113,10 @@ public class Resolver {
 
         let resolved: SchemaObjectNode = try wrap(node.tree.resolve(reference: String(ref)),
                                                   message: "While resolving \(ref) in \(node.dependency.pathToCurrentFile)")
-        resolvedObjects[ref] = resolved
+        resolvedObjects.append(ResolvedRef(ref: intRef, objectNode: resolved))
+        defer {
+            resolvedObjects.removeLast()
+        }
 
         switch resolved.next {
         case .enum(let val):
@@ -274,6 +276,7 @@ public class Resolver {
 private extension Resolver {
 
     func buildCycleDebugDescription(for cycledRef: Ref) -> String {
+        let refStack = resolvedObjects.map { $0.ref }
         guard let cycledRefIndex = refStack.firstIndex(of: cycledRef) else {
             return ""
         }
