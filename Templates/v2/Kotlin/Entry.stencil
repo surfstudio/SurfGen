@@ -5,7 +5,7 @@ import ru.surfgen.android.domain.entity.*
 import ru.surfgen.android.i_network.response.Transformable
 import ru.surfgen.android.i_network.response.extension.transformCollection
 
-/** Mapping-model [{{ model.name }}Entry] */
+/** Mapping-model [{{ model.name }}Entity] */
 data class {{ model.name }}Entry(
  	{% for property in model.properties %}@SerializedName("{{ property.name }}") val {{ property.name|snakeCaseToCamelCase }}: {#
     	#}{% if property.typeModel.isArray %}List<{% endif %}{#

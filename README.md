@@ -244,6 +244,17 @@ Where:
 - We don't support groups (oneOf, allOf, anyOf) which are include arrays
 - We don't support arrays whose item's type is array (like arrays of arrays)
 - We don't support cycled dependencies (A -> B -> C -> A)
+- We don't support references to operations:
+```
+paths:
+  /auth/login:
+    $ref: "./auth/auth_login.yml"
+```
+- We don't support references to list of models:
+```
+schemas:
+    $ref: "./definitions.yml"
+```
 
 ... and may be we forgot something ...
 
