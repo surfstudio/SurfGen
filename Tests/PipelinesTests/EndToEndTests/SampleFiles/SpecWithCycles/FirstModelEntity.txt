@@ -1,0 +1,28 @@
+
+import NodeKit
+
+public struct FirstModelEntity {
+
+    // MARK: - Public Properties
+
+    public let next: SecondModelEntity?
+
+    // MARK: - Initialization
+
+    public init(next: SecondModelEntity?) {
+        self.next = next
+    }
+
+}
+
+// MARK: - DTOConvertible
+
+extension FirstModelEntity: DTOConvertible {
+    public static func from(dto model: FirstModelEntry) throws -> FirstModelEntity {
+        return try .init(next: .from(dto: model.next))
+    }
+
+    public func toDTO() throws -> FirstModelEntry {
+        return try .init(next: next?.toDTO())
+    }
+}

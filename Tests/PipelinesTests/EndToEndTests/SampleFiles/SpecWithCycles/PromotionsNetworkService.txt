@@ -1,0 +1,24 @@
+//
+//  PromotionsNetworkService.swift
+//
+
+import NodeKit
+
+public class PromotionsNetworkService: PromotionsService {
+
+    // MARK: - Private Properties
+
+    private var builder: DefaultChain<PromotionsUrlRoute> {
+        return DefaultChain()
+    }
+
+    // MARK: - Public Methods
+
+    public func postAuth(firstModel: FirstModelEntity) -> Observer<CategoryEntity> {
+        return builder
+            .route(.post, .auth)
+            .build()
+            .process(firstModel)
+    }
+
+}

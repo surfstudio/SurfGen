@@ -13,8 +13,11 @@ public struct RequestBodyParser {
 
     public let mediaTypeParser: MediaTypeParser
 
-    public init(mediaTypeParser: MediaTypeParser) {
+    private let resolver: Resolver
+
+    public init(mediaTypeParser: MediaTypeParser, resolver: Resolver) {
         self.mediaTypeParser = mediaTypeParser
+        self.resolver = resolver
     }
 
     public func parse(requestBody: Referenced<RequestBodyNode>,
@@ -66,7 +69,7 @@ public struct RequestBodyParser {
 
         if splited.count == 2 {
             // it means that this is a ref to another file
-            dependency = try Resolver().resolveRefToAnotherFile(ref: ref, node: current, other: other)
+            dependency = try resolver.resolveRefToAnotherFile(ref: ref, node: current, other: other)
             refToResolve = "#\(splited[1])"
         }
 

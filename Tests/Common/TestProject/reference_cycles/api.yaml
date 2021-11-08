@@ -1,0 +1,22 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+
+paths:
+  /auth:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema:
+              $ref: "models.yaml#/components/schemas/FirstModel"
+      responses:
+        "200":
+          description: "Все ок"
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/Category"
+
