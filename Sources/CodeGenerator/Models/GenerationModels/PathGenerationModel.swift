@@ -25,7 +25,7 @@ public struct PathGenerationModel: Encodable {
             .map { OperationGenerationModel(operationModel: $0) }
         self.name = pathModel.path.pathName
         self.pathWithSeparatedParameters = pathModel.path.pathWithSeparatedParameters
-        self.parameters = operations[0].pathParameters
+        self.parameters = pathModel.parameters.map { $0.value }
     }
 
 }

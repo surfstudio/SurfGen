@@ -48,9 +48,13 @@ public struct AnyServiceBuilder: ServiceBuilder {
     /// Build all item which are under `paths:`
     public func build(paths: [Path]) throws -> [PathNode] {
         return try paths.map { path in
+            let parameters = try wrap(buildParameters(path.parameters),
+                                      message: "While parsing path paramters for \(path.path)")
             let operations = try wrap(self.build(operations: path.operations),
                                       message: "While parsing Path: \(path.path)")
-            return PathNode(path: path.path, operations: operations)
+            return PathNode(path: path.path,
+                            parameters: parameters,
+                            operations: operations)
         }
     }
 }
@@ -59,25 +63,7 @@ extension AnyServiceBuilder {
     func build(operations: [Swagger.Operation]) throws -> [OperationNode] {
         return try operations.map { operation in
 
-            let mapper = { (param: PossibleReference<Parameter>) -> Referenced<ParameterNode> in
-                switch param {
-                case .reference(let ref):
-                    return .ref(ref.rawValue)
-                case .value(let val):
-                    let params = try wrap(
-                        // TODO: - think about how to fix emty string
-                        self.parameterBuilder.build(parameters: [.init(name: "", value: val)]),
-                        message: "While parsing operation's parameter \(val.name)")
-
-                    guard params.count == 1 else {
-                        throw CommonError(message: "We had sent 1 parameter, and then got \(params.count). It's very strange. Plz contact mainteiners")
-                    }
-
-                    return .entity(params[0])
-                }
-            }
-
-            let params = try wrap(operation.parameters.map(mapper),
+            let params = try wrap(buildParameters(operation.parameters),
                                   message: "While parsing operation \(operation.method.rawValue)")
 
             let requestBody = try wrap(
@@ -94,6 +80,26 @@ extension AnyServiceBuilder {
                          parameters: params,
                          requestBody: requestBody,
                          responses: responses)
+        }
+    }
+
+    func buildParameters(_ parameters: [PossibleReference<Parameter>]) throws -> [Referenced<ParameterNode>] {
+        return try parameters.map {
+            switch $0 {
+            case .reference(let ref):
+                return .ref(ref.rawValue)
+            case .value(let val):
+                let params = try wrap(
+                    // TODO: - think about how to fix emty string
+                    self.parameterBuilder.build(parameters: [.init(name: "", value: val)]),
+                    message: "While parsing operation's parameter \(val.name)")
+
+                guard params.count == 1 else {
+                    throw CommonError(message: "We had sent 1 parameter, and then got \(params.count). It's very strange. Plz contact mainteiners")
+                }
+
+                return .entity(params[0])
+            }
         }
     }
 

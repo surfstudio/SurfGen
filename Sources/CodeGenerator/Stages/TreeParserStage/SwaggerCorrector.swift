@@ -33,4 +33,26 @@ public class SwaggerCorrector {
 
         return path
     }
+
+    /// Checks that `path` parameters are declared in `Path`, but not in `Operation`
+    /// If some are declared in `Operation`, gives warning and tries to fix it
+    /// See `ParameterTests` for details
+    /// See `SwaggerCorrectorTests` for example
+    public func correctPathParameters(for pathModel: PathModel) -> [Reference<ParameterModel>] {
+        let pathParameterNames = pathModel.parameters.map { $0.value.name }
+
+        for operation in pathModel.operations {
+            let operationPathParameters = operation.parameters?.filter { $0.value.location == .path } ?? []
+            let operationOnlyPathParameters = operationPathParameters.filter { !pathParameterNames.contains($0.value.name) }
+
+            guard operationOnlyPathParameters.isEmpty else {
+                for parameter in operationOnlyPathParameters {
+                    logger?.warning("Parameter \(parameter.value.name) for path \(pathModel.path) is declared inside Operation. Path parameters should be declared inside Path. Trying to fix...")
+                }
+                return operationPathParameters
+            }
+        }
+        return pathModel.parameters
+    }
+
 }
