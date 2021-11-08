@@ -9,22 +9,35 @@ import Foundation
 import GASTTree
 import Common
 
-/// This class can resolve references
+/// This class can resolve references - replace reference to `Schema` with  `Schema` itself
 /// It can resolve local references and references to another files
-/// It can determine referece cycles and throw error with call stack
+/// It can determine referece cycles and handle them by replacing reference to already resolved schema with its name
 ///
 /// **WARNING**
 /// **ISN'T THREAD SAFE**
 public class Resolver {
 
-    struct Ref {
+    struct Ref: Equatable {
         let pathToFile: String
         let refValue: String
     }
 
-    var refStack = [Ref]()
+    struct ResolvedRef: Equatable {
+        let ref: Ref
+        let objectNode: SchemaObjectNode
 
-    public init() { }
+        static func == (lhs: Resolver.ResolvedRef, rhs: Resolver.ResolvedRef) -> Bool {
+            return lhs.ref == rhs.ref
+        }
+    }
+
+    private let logger: Loger?
+
+    private var resolvedObjects = [ResolvedRef]()
+
+    public init(logger: Loger? = nil) {
+        self.logger = logger
+    }
 
     public func resolveParameter(ref: String, node: DependencyWithTree, other: [DependencyWithTree]) throws -> ParameterModel {
 
@@ -32,27 +45,23 @@ public class Resolver {
 
         let intRef = Ref(pathToFile: node.dependency.pathToCurrentFile, refValue: ref)
 
-        let fromStack = refStack
-            .filter { $0.pathToFile == node.dependency.pathToCurrentFile }
-            .first { $0.refValue == ref }
-
-        guard fromStack == nil else {
-
-            let stack = self.refStack.reduce("", { $0 + "--> \($1.pathToFile) : \($1.refValue)" })
-
-            throw CommonError(message: "There is a reference cycle which is found for reference \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(stack)")
+        guard !resolvedObjects.contains(where: { $0.ref == intRef }) else {
+            let refStack = resolvedObjects.map { $0.ref }
+            throw CommonError(message: "There is a reference cycle which is found for reference \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(buildDebugDescription(for: refStack))")
         }
-
-        self.refStack.append(intRef)
 
         if res.count == 2 {
             let dep = try self.resolveRefToAnotherFile(ref: ref, node: node, other: other)
             let res =  try self.resolveParameter(ref: "#\(res[1])", node: dep, other: other)
-            self.refStack.removeLast()
             return res
         }
 
         let resolved: ParameterNode = try node.tree.resolve(reference: String(ref))
+
+        resolvedObjects.append(ResolvedRef(ref: intRef, objectNode: resolved.type.schema))
+        defer {
+            resolvedObjects.removeLast()
+        }
 
         switch resolved.type.schema.next {
         case .object:
@@ -62,7 +71,6 @@ public class Resolver {
         case .group:
             throw CommonError(message: "Parameter \(resolved.name) from file '\(node.dependency.pathToCurrentFile) contains group definition in type. This is unsupported.")
         case .simple(let simple):
-            self.refStack.removeLast()
             return .init(componentName: resolved.componentName,
                          name: resolved.name,
                          location: resolved.location,
@@ -70,7 +78,6 @@ public class Resolver {
                          description: resolved.description,
                          isRequired: resolved.isRequired)
         case .reference(let newRef):
-            self.refStack.removeLast()
             return .init(componentName: resolved.componentName,
                          name: resolved.name,
                          location: resolved.location,
@@ -78,7 +85,6 @@ public class Resolver {
                          description: resolved.description,
                          isRequired: resolved.isRequired)
         case .array(let arr):
-            self.refStack.removeLast()
             return .init(componentName: resolved.componentName,
                          name: resolved.name,
                          location: resolved.location,
@@ -96,57 +102,42 @@ public class Resolver {
 
         let intRef = Ref(pathToFile: node.dependency.pathToCurrentFile, refValue: ref)
 
-        let fromStack = refStack
-            .filter { $0.pathToFile == node.dependency.pathToCurrentFile }
-            .first { $0.refValue == ref }
-
-        guard fromStack == nil else {
-
-            let stack = self.refStack.reduce("", { $0 + "--> \($1.pathToFile) : \($1.refValue) " })
-
-            throw CommonError(message: "There is a reference cycle which is found for reference \(ref) from file \(node.dependency.pathToCurrentFile)\n\tCallStack:\n\t\t\(stack)")
+        if let alreadyResolvedRef = resolvedObjects.first(where: { $0.ref == intRef }) {
+            logger?.warning("Reference cycle was detected in \(node.dependency.pathToCurrentFile). Make sure it is expected and really reasonable with your project's business logic. Cycle description:\n\t\t\(buildCycleDebugDescription(for: intRef))")
+            return try useAlreadyResolved(object: alreadyResolvedRef.objectNode)
         }
-
-        self.refStack.append(intRef)
 
         let res = ref.split(separator: "#")
 
         if res.count == 2 {
             let res = try wrap(self.resolveAnotherFile(ref: ref, node: node, other: other),
                                message: "While resolving \(ref)")
-            self.refStack.removeLast()
             return res
         }
 
         let resolved: SchemaObjectNode = try wrap(node.tree.resolve(reference: String(ref)),
                                                   message: "While resolving \(ref) in \(node.dependency.pathToCurrentFile)")
+        resolvedObjects.append(ResolvedRef(ref: intRef, objectNode: resolved))
+        defer {
+            resolvedObjects.removeLast()
+        }
 
         switch resolved.next {
         case .enum(let val):
             guard let type = PrimitiveType(rawValue: val.type) else {
                 throw CommonError(message: "Enum \(val.name) contains type which is not primitive -- \(val.type)")
             }
-            self.refStack.removeLast()
             return .enum(.init(name: val.name, cases: val.cases, type: type, description: val.description))
         case .simple(let val):
-            self.refStack.removeLast()
             return .alias(.init(name: val.name, type: val.type))
         case .object(let val):
-            let res = try self.resolveObject(val: val, node: node, other: other)
-            self.refStack.removeLast()
-            return res
+            return try self.resolveObject(val: val, node: node, other: other)
         case .reference(let ref):
-            let res = try resolveSchema(ref: ref, node: node, other: other)
-            self.refStack.removeLast()
-            return res
+            return try resolveSchema(ref: ref, node: node, other: other)
         case .array(let arr):
-            let res = SchemaType.array(try self.resolve(arr: arr, node: node, other: other))
-            self.refStack.removeLast()
-            return res
+            return SchemaType.array(try self.resolve(arr: arr, node: node, other: other))
         case .group(let val):
-            let res = try self.resolve(group: val, node: node, other: other)
-            self.refStack.removeLast()
-            return res
+            return try self.resolve(group: val, node: node, other: other)
         }
     }
 
@@ -270,6 +261,36 @@ public class Resolver {
 
         return .init(name: arr.name, itemsType: value)
     }
+
+    private func useAlreadyResolved(object: SchemaObjectNode) throws -> SchemaType {
+        switch object.next {
+        case .object(let model):
+            return .object(.init(name: model.name, properties: [], description: nil))
+        case .group(let group):
+            return .group(.init(name: group.name, references: [], type: group.type))
+        default:
+            throw CommonError(message: "Restoring reference cycles is supported only for objects and groups, \(object.next) cannot form a cycle")
+        }
+    }
+
+}
+
+// MARK: - Debug message builders
+
+private extension Resolver {
+
+    func buildCycleDebugDescription(for cycledRef: Ref) -> String {
+        let refStack = resolvedObjects.map { $0.ref }
+        guard let cycledRefIndex = refStack.firstIndex(of: cycledRef) else {
+            return ""
+        }
+        return buildDebugDescription(for: refStack[cycledRefIndex...] + [cycledRef])
+    }
+
+    func buildDebugDescription(for referenceStack: [Ref]) -> String {
+        return referenceStack.reduce("", { $0 + "--> \($1.pathToFile) : \($1.refValue) " })
+    }
+
 }
 
 private extension Resolver {

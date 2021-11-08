@@ -1,0 +1,28 @@
+
+import NodeKit
+
+public struct CategoryEntity {
+
+    // MARK: - Public Properties
+
+    public let subcategories: [CategoryEntity]?
+
+    // MARK: - Initialization
+
+    public init(subcategories: [CategoryEntity]?) {
+        self.subcategories = subcategories
+    }
+
+}
+
+// MARK: - DTOConvertible
+
+extension CategoryEntity: DTOConvertible {
+    public static func from(dto model: CategoryEntry) throws -> CategoryEntity {
+        return try .init(subcategories: .from(dto: model.subcategories))
+    }
+
+    public func toDTO() throws -> CategoryEntry {
+        return try .init(subcategories: subcategories?.toDTO())
+    }
+}

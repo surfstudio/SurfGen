@@ -260,28 +260,6 @@ final class ParametersTests: XCTestCase {
         }
     }
 
-    /// Params with ref on cycled objects will parsed
-    func testParamsWithRefOnCycledObjectsWillParsed() throws {
-        // Arrange
-
-        let pathToRoot = "/path/to/services.yaml"
-        let pathToModels = "/path/to/models.yaml"
-        let fileProvider = FileProviderStub()
-        fileProvider.isReadableFile = true
-        fileProvider.files = [
-            pathToRoot: ParametersTests.yamlParamsWithRefOnCycledObjectsWillParsed,
-            pathToModels: ParametersTests.yamlSeparatedModels
-        ]
-
-        let pipeline = StubGASTTreeFactory(fileProvider: fileProvider).build()
-
-        // Act-Assert
-
-        XCTAssertThrowsError(try pipeline.run(with: URL(string: pathToRoot)!)) { (err) in
-            print(err.localizedDescription)
-        }
-    }
-
     // MARK: - Service definition
 
     /// Params with ref on cycled objects will parsed

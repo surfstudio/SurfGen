@@ -1,0 +1,16 @@
+
+import NodeKit
+
+public struct CategoryEntry: Codable {
+
+    // MARK: - Public Properties
+
+    public let subcategories: [CategoryEntry]?
+
+}
+
+// MARK: - RawMappable
+
+extension CategoryEntry: RawMappable {
+    public typealias Raw = Json
+}

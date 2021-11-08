@@ -243,7 +243,6 @@ Where:
 - We don't support in-place schema declration (when you don't create a `components/schemas/Object` but you write schema just in place where you use it (for example in response))
 - We don't support groups (oneOf, allOf, anyOf) which are include arrays
 - We don't support arrays whose item's type is array (like arrays of arrays)
-- We don't support cycled dependencies (A -> B -> C -> A)
 
 ... and may be we forgot something ...
 

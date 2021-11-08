@@ -17,7 +17,11 @@ public protocol GroupParser {
 
 public struct AnyGroupParser: GroupParser {
 
-    public init() { }
+    private let resolver: Resolver
+
+    public init(resolver: Resolver) {
+        self.resolver = resolver
+    }
 
     public func parse(group: SchemaGroupNode,
                current: DependencyWithTree,
@@ -35,7 +39,7 @@ public struct AnyGroupParser: GroupParser {
                other: [DependencyWithTree]) throws -> SchemaGroupModel.PossibleType {
 
         let resolved = try wrap(
-            Resolver().resolveSchema(ref: reference, node: current, other: other),
+            resolver.resolveSchema(ref: reference, node: current, other: other),
             message: "While resolving \(reference) from \(current.dependency.pathToCurrentFile)"
         )
 
