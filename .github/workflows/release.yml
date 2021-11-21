@@ -3,11 +3,11 @@ name: "pre-release"
 on:
   push:
     tags:
-      - 'dev_*+'
+      - '[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
-  pre-release-on-mac:
-    name: "Pre Release For MacOS"
+  release-on-mac:
+    name: "Release For MacOS"
     runs-on: macos-latest
     
     steps:
@@ -25,7 +25,6 @@ jobs:
 
       - uses: "ncipollo/release-action@v1"
         with:
-          prerelease: true
           artifacts: "*.zip"
           token: ${{ secrets.RELEASE_TOKEN }}
           replacesArtifacts: true
@@ -33,8 +32,8 @@ jobs:
           tag: test
           allowUpdates: true
 
-  pre-release-on-linux:
-    name: "Pre Release For Ubuntu"
+  release-on-linux:
+    name: "Release For Ubuntu"
     runs-on: ubuntu-latest
 
     steps:
@@ -53,7 +52,6 @@ jobs:
 
       - uses: "ncipollo/release-action@v1"
         with:
-          prerelease: true
           artifacts: "*.zip"
           token: ${{ secrets.RELEASE_TOKEN }}
           replacesArtifacts: true
