@@ -148,7 +148,7 @@ final class EndtoEndTests: XCTestCase {
                 }
             }
         default:
-            XCTFail("Excpected object type but found \(modelToCheck.value.type)")
+            XCTFail("Excpected object type but found \(guardedModelToCheck.value.type)")
         }
 
     }
