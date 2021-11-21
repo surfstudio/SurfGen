@@ -130,12 +130,12 @@ final class EndtoEndTests: XCTestCase {
             .first(where: {$0.rawDependency.pathToCurrentFile == baseUrl.absoluteString })?
             .currentTree.components.schemas.first(where: { $0.name == "AuthResponse" })
 
-        guard let modelToCheck = modelToCheck else {
+        guard let guardedModelToCheck = modelToCheck else {
             XCTFail("AuthResponse not found")
             return
         }
 
-        switch modelToCheck.value.type {
+        switch guardedModelToCheck.value.type {
         case .object(let obj):
             obj.properties.forEach { prop in
                 guard propertiesToCheckOnReferenceReplacements.contains(prop.name) else { return }
