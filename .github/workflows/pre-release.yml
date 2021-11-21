@@ -29,6 +29,7 @@ jobs:
           token: ${{ secrets.RELEASE_TOKEN }}
           replacesArtifacts: true
           bodyFile: CHANGLELOG.md
+          tag: test
           allowUpdates: true
 
   pre-release-on-linux:
@@ -56,4 +57,5 @@ jobs:
           token: ${{ secrets.RELEASE_TOKEN }}
           replacesArtifacts: true
           bodyFile: CHANGLELOG.md
+          tag: test
           allowUpdates: true
