@@ -28,7 +28,7 @@ jobs:
           artifacts: "*.zip"
           token: ${{ secrets.RELEASE_TOKEN }}
           replacesArtifacts: true
-          bodyFile: CHANGLELOG.md
+          bodyFile: CHANGELOG.md
           tag: test
           allowUpdates: true
 
@@ -56,6 +56,6 @@ jobs:
           artifacts: "*.zip"
           token: ${{ secrets.RELEASE_TOKEN }}
           replacesArtifacts: true
-          bodyFile: CHANGLELOG.md
+          bodyFile: CHANGELOG.md
           tag: test
           allowUpdates: true
