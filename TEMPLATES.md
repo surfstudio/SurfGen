@@ -167,3 +167,5 @@ In addition to Stencil`s built-in filters we have some custom ones.
 - `camelCaseToCaps` Example: "`exampleText" -> "EXAMPLE_TEXT"`
 - `trim` Example: `"\n   exampleText       " -> "exampleText" `
 - `splitLines` Returns list of strings, made by splitting input string by "\n" symbol. Example: `"example\nstring" -> ["example", "string"]`
+- `upperCaseToCamelCase` Example: `"EXAMPLE_TEST" -> "exampleTest"`. For details see [tests](./Tests/CommonTests/ExtensionsTests/StringTests.swift)
+- `upperCaseToCamelCaseOrSelf` works just like previous BUT firstly check that string contains only uppercased letters (except `_`). And if it is - do `upperCaseToCamelCase`, otherwise returns string without changes. Useful for conditional filters pipelining

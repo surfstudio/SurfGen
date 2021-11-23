@@ -34,7 +34,7 @@ At this moment we have:
 
 - iOS
 - [Android](Templates/v2/Kotlin/README.md)
-- Flutter
+- Flutter (See [Usage](./Usage/Flutter))
 
 To create your own templates use [https://stencil.fuller.li](https://stencil.fuller.li)
 

@@ -17,6 +17,10 @@ var testTargets: [Target] = [
         dependencies: ["Pipelines", "CodeGenerator", "Common", "ReferenceExtractor", "GASTBuilder", "UtilsForTesting"]
     ),
     .testTarget(
+        name: "CommonTests",
+        dependencies: ["Common"]
+    ),
+    .testTarget(
         name: "ASTTreeTree",
         dependencies: ["Pipelines", "ASTTree", "Common", "ReferenceExtractor", "UtilsForTesting"]
     )
