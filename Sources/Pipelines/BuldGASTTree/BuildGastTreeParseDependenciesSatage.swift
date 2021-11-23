@@ -10,6 +10,7 @@ import GASTBuilder
 import Common
 import GASTTree
 import CodeGenerator
+import ASTTree
 
 public struct BuildGastTreeParseDependenciesSatage: PipelineStage {
 
@@ -21,15 +22,12 @@ public struct BuildGastTreeParseDependenciesSatage: PipelineStage {
         self.next = next
     }
 
-    public func run(with input: [Dependency]) throws {
+    public func run(with input: [OpenAPIASTTree]) throws {
 
-        var arr = [DependencyWithTree]()
-
-        try input.forEach { dependency in
-            let root = try wrap(self.builder.build(filePath: dependency.pathToCurrentFile),
+        let arr = try input.map { astTree -> DependencyWithTree in
+            let root = try wrap(self.builder.build(astTree: astTree),
                                 message: "Error occured in stage `Build GAST for dependencies`")
-            let dep = DependencyWithTree(dependency: dependency, tree: root)
-            arr.append(dep)
+            return DependencyWithTree(dependency: astTree.rawDependency, tree: root)
         }
 
         try self.next.run(with: arr)

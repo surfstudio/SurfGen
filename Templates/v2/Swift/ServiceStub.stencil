@@ -27,7 +27,7 @@ class {{ service.name }}ServiceStub: {{ service.name }}Service {
         #}{% if operation.requestGenerationModel.isTypeArray %}[{% endif %}{{ requestModelName }}{#
     #}{% if operation.requestGenerationModel.isTypeObject %}Entity{% endif %}{#
     #}{% if operation.requestGenerationModel.isTypeArray %}]{% endif %}{#
-    #}{% if not operation.requestModel.isRequired %}?{% endif %}) -> Observer<{% if operation.responseGenerationModel %}{#
+    #}{% if not operation.requestGenerationModel.isRequired %}?{% endif %}) -> Observer<{% if operation.responseGenerationModel %}{#
     #}{% if operation.responseGenerationModel.isTypeArray %}[{% endif %}{#
     #}{% for responseName in operation.responseGenerationModel.typeNames %}{{ responseName }}{% endfor %}{#
     #}{% if operation.responseGenerationModel.isTypeObject %}Entity{% endif %}{#

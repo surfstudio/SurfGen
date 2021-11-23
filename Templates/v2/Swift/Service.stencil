@@ -23,7 +23,7 @@ public protocol {{ service.name }}Service {
         #}{% if operation.requestGenerationModel.isTypeArray %}[{% endif %}{{ requestModelName }}{#
     #}{% if operation.requestGenerationModel.isTypeObject %}Entity{% endif %}{#
     #}{% if operation.requestGenerationModel.isTypeArray %}]{% endif %}{#
-    #}{% if not operation.requestModel.isRequired %}?{% endif %}) -> Observer<{% if operation.responseGenerationModel.value %}{#
+    #}{% if not operation.requestGenerationModel.isRequired %}?{% endif %}) -> Observer<{% if operation.responseGenerationModel.value %}{#
     #}{% if operation.responseGenerationModel.value.isTypeArray %}[{% endif %}{#
     #}{% for responseName in operation.responseGenerationModel.value.typeNames %}{{ responseName }}{% endfor %}{#
     #}{% if operation.responseGenerationModel.value.isTypeObject %}Entity{% endif %}{#

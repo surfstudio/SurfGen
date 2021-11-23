@@ -1,0 +1,28 @@
+components:
+  schemas:
+
+    FirstModel:
+      type: object
+      properties:
+        next:
+          $ref: "#/components/schemas/SecondModel"
+
+    SecondModel:
+      type: object
+      properties:
+        next:
+          $ref: "#/components/schemas/ThirdModel"
+
+    ThirdModel:
+      type: object
+      properties:
+        next:
+          $ref: "#/components/schemas/FirstModel"
+
+    Category:
+      type: object
+      properties:
+        subcategories:
+          type: array
+          items:
+            $ref: "#/components/schemas/Category"

@@ -18,4 +18,5 @@ public struct GenerationConfig: Decodable {
     public var analytcsConfig: AnalytcsConfig?
     public var prefixesToCutDownInServiceNames: [String]?
     public var useNewNullableDeterminationStrategy: Bool?
+    public var exludedNodes: [String]?
 }

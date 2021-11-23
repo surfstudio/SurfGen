@@ -13,8 +13,11 @@ public struct ParametersTreeParser {
 
     public let array: ArrayParser
 
-    public init(array: ArrayParser) {
+    private let resolver: Resolver
+
+    public init(array: ArrayParser, resolver: Resolver) {
         self.array = array
+        self.resolver = resolver
     }
 
     public func parse(parameter: Referenced<ParameterNode>, current: DependencyWithTree, other: [DependencyWithTree]) throws -> Reference<ParameterModel> {
@@ -22,7 +25,7 @@ public struct ParametersTreeParser {
         case .entity(let paramNode):
             return .notReference(try self.parse(parameter: paramNode, current: current, other: other))
         case .ref(let ref):
-            return .reference(try Resolver().resolveParameter(ref: ref, node: current, other: other))
+            return .reference(try resolver.resolveParameter(ref: ref, node: current, other: other))
         }
     }
 
@@ -54,7 +57,7 @@ public struct ParametersTreeParser {
             // so idk if we need it.
             return .primitive(primitive.type)
         case .reference(let ref):
-            return .reference(try Resolver().resolveSchema(ref: ref, node: current, other: other))
+            return .reference(try resolver.resolveSchema(ref: ref, node: current, other: other))
         case .array(let val):
             let arr = try self.array.parse(array: val, current: current, other: other)
             return .array(arr)

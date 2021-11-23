@@ -11,6 +11,7 @@ import ReferenceExtractor
 import GASTBuilder
 import CodeGenerator
 import Operations
+import ASTTree
 
 /// Configures pipeline for code generator
 public struct BuildCodeGeneratorPipelineFactory {
@@ -23,11 +24,13 @@ public struct BuildCodeGeneratorPipelineFactory {
     }
 
     public static func build(templates: [Template],
+                             astNodesToExclude: Set<String>,
                              serviceName: String,
                              needRewriteExistingFiles: Bool = false,
                              useNewNullableDefinitionStartegy: Bool,
                              prefixCutter: PrefixCutter? = nil,
                              logger: Loger? = nil) -> BuildGASTTreeEntryPoint {
+
         let schemaBuilder = AnySchemaBuilder(useNewNullableDeterminationStrategy: useNewNullableDefinitionStartegy)
 
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
@@ -41,54 +44,69 @@ public struct BuildCodeGeneratorPipelineFactory {
             requestBodyBuilder: requestBodiesBuilder,
             responseBuilder: responsesBuilder
         )
-        
+
         let templateFiller = DefaultTemplateFiller()
         let modelExtractor = ModelExtractor()
 
         return .init(
             refExtractorProvider: self.provider(str:),
-            next: .init(
-                builder: AnyGASTBuilder(
-                    fileProvider: FileManager.default,
-                    schemaBuilder: schemaBuilder,
-                    parameterBuilder: parameterBuilder,
-                    serviceBuilder: serviceBuilder,
-                    responsesBuilder: responsesBuilder,
-                    requestBodiesBuilder: requestBodiesBuilder),
-                next: InitCodeGenerationStage(
-                    parserStage: .init(
-                        next: SwaggerCorrectorStage(
-                            corrector: SwaggerCorrector(logger: logger),
-                            next: ServiceGenerationStage(
-                                next: FileWriterStage(
-                                    needRewriteExistingFiles: needRewriteExistingFiles,
-                                    logger: logger
+            next: OpenAPIASTBuilderStage(
+                fileProvider: FileManager.default,
+                next: OpenAPIASTExcludingStage(
+                    excluder: ASTNodeExcluder(logger: logger),
+                    excludeList: astNodesToExclude,
+                    next: BuildGastTreeParseDependenciesSatage(
+                        builder: AnyGASTBuilder(
+                            fileProvider: FileManager.default,
+                            schemaBuilder: schemaBuilder,
+                            parameterBuilder: parameterBuilder,
+                            serviceBuilder: serviceBuilder,
+                            responsesBuilder: responsesBuilder,
+                            requestBodiesBuilder: requestBodiesBuilder),
+                        next: InitCodeGenerationStage(
+                            parserStage: .init(
+                                next: SwaggerCorrectorStage(
+                                    corrector: SwaggerCorrector(logger: logger),
+                                    next: ServiceGenerationStage(
+                                        next: FileWriterStage(
+                                            needRewriteExistingFiles: needRewriteExistingFiles,
+                                            logger: logger
+                                        ).erase(),
+                                        templates: templates,
+                                        serviceName: serviceName,
+                                        templateFiller: templateFiller,
+                                        modelExtractor: modelExtractor,
+                                        prefixCutter: prefixCutter
+                                    ).erase()
                                 ).erase(),
-                                templates: templates,
-                                serviceName: serviceName,
-                                templateFiller: templateFiller,
-                                modelExtractor: modelExtractor,
-                                prefixCutter: prefixCutter
-                            ).erase()
-                        ).erase(),
-                        parser: buildParser()
-                    )
+                                parser: buildParser(logger: logger)
+                            )
+                        ).erase()
+                    ).erase()
                 ).erase()
-            )
+            ).erase()
         )
     }
 
-    static func buildParser() -> TreeParser {
+    static func buildParser(logger: Loger?) -> TreeParser {
 
-        let arrayParser = AnyArrayParser()
-        let groupParser = AnyGroupParser()
+        let resolver = Resolver(logger: logger)
+
+        let arrayParser = AnyArrayParser(resolver: resolver)
+        let groupParser = AnyGroupParser(resolver: resolver)
 
         let mediaTypeParser = AnyMediaTypeParser(arrayParser: arrayParser,
-                                                 groupParser: groupParser)
-        let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser)
-        let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser)
+                                                 groupParser: groupParser,
+                                                 resolver: resolver)
+        let parametersParser = ParametersTreeParser(array: arrayParser,
+                                                    resolver: resolver)
+        let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser,
+                                                  resolver: resolver)
+        let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser,
+                                                 resolver: resolver)
+        
 
-        return .init(parametersParser: .init(array: arrayParser),
+        return .init(parametersParser: parametersParser,
                      requestBodyParser: requestBodyParser,
                      responsesParser: responsesParser)
     }

@@ -1,5 +1,0 @@
-
-object {{ service.name }} {
-	{% for path in service.paths %}const val {{ path.name|camelCaseToCaps }} = "$WEB_API_URL{{ path.path }}"{% if not forloop.last %}
-	{% endif %}{% endfor %}
-}

@@ -1,0 +1,16 @@
+
+import NodeKit
+
+public struct SecondModelEntry: Codable {
+
+    // MARK: - Public Properties
+
+    public let next: ThirdModelEntry?
+
+}
+
+// MARK: - RawMappable
+
+extension SecondModelEntry: RawMappable {
+    public typealias Raw = Json
+}

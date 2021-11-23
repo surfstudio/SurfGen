@@ -1,0 +1,41 @@
+package ru.surfgen.android.i_network.entry
+
+import com.google.gson.annotations.SerializedName
+import ru.surfgen.android.domain.entity.*
+import ru.surfgen.android.i_network.response.Transformable
+import ru.surfgen.android.i_network.response.extension.transformCollection
+
+/** Mapping-model [{{ model.name }}Entity] */
+data class {{ model.name }}Entry(
+ 	{% for property in model.properties %}@SerializedName("{{ property.name }}") val {{ property.name|snakeCaseToCamelCase }}: {#
+    	#}{% if property.typeModel.isArray %}List<{% endif %}{#
+    	#}{% if property.typeModel.name == "integer" or property.typeModel.aliasTypeName == "integer" %}Int{#
+    	#}{% elif property.typeModel.name == "number" or property.typeModel.aliasTypeName == "number" %}Double{#
+    	#}{% elif property.typeModel.name == "string" or property.typeModel.aliasTypeName == "string" %}String{#
+    	#}{% elif property.typeModel.name == "boolean" or property.typeModel.aliasTypeName == "boolean" %}Boolean{#
+		#}{% elif not property.typeModel.isObject %}String{#
+		#}{% else %}{{ property.typeModel.name }}Entry{% endif %}{#
+    	#}{% if property.typeModel.isArray %}>{% endif %}{#
+    	#}{% if property.isNullable %}?{% endif %}{% if not forloop.last %},
+ 	{% endif %}{% endfor %}
+ ): Transformable<{{ model.name }}Entity> {
+
+	override fun transform() = {{ model.name }}Entity(
+		{% for property in model.properties %}{#
+			#}{{ property.name|snakeCaseToCamelCase }} = {#
+			#}{% if property.typeModel.name == "integer" or property.typeModel.aliasTypeName == "integer" or property.typeModel.name == "number" or property.typeModel.aliasTypeName == "number" or property.typeModel.name == "string" or property.typeModel.aliasTypeName == "string" or property.typeModel.name == "boolean" or property.typeModel.aliasTypeName == "boolean" or property.typeModel.isObject %}{#
+				#}{{ property.name|snakeCaseToCamelCase }}{#
+				#}{% if property.typeModel.isObject %}{#
+					#}{% if property.isNullable %}?{% endif %}{#
+					#}{% if property.typeModel.isArray %}.transformCollection(){#
+					#}{% else %}.transform(){% endif %}{#
+				#}{% endif %}{#
+			#}{% else %}{#
+				#}{% if property.typeModel.isArray %}{#
+				#}{{ property.name|snakeCaseToCamelCase }}{#
+				#}{% if property.isNullable %}?{% endif %}.mapNotNull { {{ property.typeModel.name }}.getBy(it) }{#
+				#}{% else %}{{ property.typeModel.name }}.getBy({{ property.name|snakeCaseToCamelCase }}){% endif %}{#
+			#}{% endif %}{% if not forloop.last %},
+		{% endif %}{% endfor %}
+	) 
+ }

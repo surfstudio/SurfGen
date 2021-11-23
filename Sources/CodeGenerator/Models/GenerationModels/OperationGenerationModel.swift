@@ -84,8 +84,10 @@ public struct OperationGenerationModel: Encodable {
         self.pathParameters = allParameters.filter { $0.location == .path }
         self.queryParameters = allParameters.filter { $0.location == .query }
 
-        let request = operationModel.requestModel?.value.content.first
-        self.requestGenerationModel = request.map { DataGenerationModel(dataModel: $0) }
+        let request = operationModel.requestModel?.value
+        self.requestGenerationModel = request?.content.first.map {
+            DataGenerationModel(dataModel: $0, isRequired: request?.isRequired ?? false)
+        }
 
         let response = operationModel.responses?.first { $0.value.key.isSuccessStatusCode }?.value
 

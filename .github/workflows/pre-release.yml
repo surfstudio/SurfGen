@@ -1,0 +1,60 @@
+name: "pre-release"
+
+on:
+  push:
+    tags:
+      - 'dev_*+'
+
+jobs:
+  pre-release-on-mac:
+    name: "Pre Release For MacOS"
+    runs-on: macos-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run tests
+        run: swift test -v
+      - name: Make Release Buid
+        run: make executable
+      - name: Archive
+        run: |
+          mv Binary surfgen
+          zip surfgen_macos_x64.zip surfgen
+          zip -r templates.zip Templates
+          
+
+      - uses: "ncipollo/release-action@v1"
+        with:
+          prerelease: true
+          artifacts: "*.zip"
+          token: ${{ secrets.RELEASE_TOKEN }}
+          replacesArtifacts: true
+          bodyFile: CHANGELOG.md
+          allowUpdates: true
+
+  pre-release-on-linux:
+    name: "Pre Release For Ubuntu"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: sersoft-gmbh/swifty-linux-action@v1
+        with: 
+          release-version: 5.3.3
+      - uses: actions/checkout@v2
+      - name: Run tests
+        run: swift test -v
+      - name: Make Release Buid
+        run: make executable
+      - name: Archive
+        run: |
+          mv Binary surfgen
+          zip surfgen_ubuntu_x64.zip surfgen
+
+      - uses: "ncipollo/release-action@v1"
+        with:
+          prerelease: true
+          artifacts: "*.zip"
+          token: ${{ secrets.RELEASE_TOKEN }}
+          replacesArtifacts: true
+          bodyFile: CHANGELOG.md
+          allowUpdates: true

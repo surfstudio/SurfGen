@@ -19,6 +19,31 @@ public enum ConfigTemplates {
     prefixesToCutDownInServiceNames:
       - "/api/v1"
 
+    # Will remove OpenAPI node by path /components/schemas/BadModel
+    # in file Tests/Common/NodeExcluding/models.yaml
+    #
+    # At run time. It doesn't touch real files
+    #
+    # In generated code all referenсes to removed nodes will be generated as `TODO` string
+    #
+    # You can remove by this leaf nodes like:
+    # - /components/schemas/*
+    # - /components/parameters/*
+    # - /components/header/*
+    # - /components/responses/*
+    # - /components/requestBodies/*
+    # - /paths/**/*
+    #
+    # To exclude specific operation you can write something like
+    # /paths/api/v1.1/auth~post
+    # Where:
+    # - `paths` - constant from OpenAPI specification
+    # - `/api/v1.1/auth` - method URI (just like in specification)
+    # - `post` - operation (you can skip it to remove whole method). Symbol ~ is used to mark specific operation.
+    exludedNodes:
+      - "Tests/Common/NodeExcluding/models.yaml#/components/schemas/BadModel"
+      - "Tests/Common/NodeExcluding/api.yaml#/paths/api/v1.1/superAuth~delete"
+
     templates:
 
     # This option will generate Interface (Protocol) for service
@@ -85,6 +110,29 @@ public enum ConfigTemplates {
     # List of files (not directories) which must be excluded from linting
     exclude:
       - "./api/auth/api.yaml"
+    
+    # Will remove OpenAPI node by path /components/schemas/BadModel
+    # in file Tests/Common/NodeExcluding/models.yaml
+    #
+    # At run time. It doesn't touch real files
+    #
+    # You can remove by this leaf nodes like:
+    # - /components/schemas/*
+    # - /components/parameters/*
+    # - /components/header/*
+    # - /components/responses/*
+    # - /components/requestBodies/*
+    # - /paths/**/*
+    #
+    # To exclude specific operation you can write something like
+    # /paths/api/v1.1/auth~post
+    # Where:
+    # - `paths` - constant from OpenAPI specification
+    # - `/api/v1.1/auth` - method URI (just like in specification)
+    # - `post` - operation (you can skip it to remove whole method). Symbol ~ is used to mark specific operation.
+    exludedNodes:
+      - "Tests/Common/NodeExcluding/models.yaml#/components/schemas/BadModel"
+      - "Tests/Common/NodeExcluding/api.yaml#/paths/api/v1.1/superAuth~delete"
     """
 
 }

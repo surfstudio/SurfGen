@@ -10,6 +10,7 @@ import ReferenceExtractor
 import GASTBuilder
 import CodeGenerator
 import Common
+import ASTTree
 
 /// Configures pipeline for liniting
 public struct BuildLinterPipelineFactory {
@@ -21,7 +22,7 @@ public struct BuildLinterPipelineFactory {
         )
     }
 
-    public static func build(filesToIgnore: Set<String>, log: Loger) -> OpenAPILinter {
+    public static func build(filesToIgnore: Set<String>, astNodesToExclude: Set<String>, log: Loger) -> OpenAPILinter {
         let schemaBuilder = AnySchemaBuilder()
         let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
         let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder)
@@ -40,38 +41,52 @@ public struct BuildLinterPipelineFactory {
             log: log,
             next: DirRefExtractor(
                 refExtractorProvider: provider,
-                next: BuildGastTreeParseDependenciesSatage(
-                    builder: AnyGASTBuilder(
-                        fileProvider: FileManager.default,
-                        schemaBuilder: schemaBuilder,
-                        parameterBuilder: parameterBuilder,
-                        serviceBuilder: serviceBuilder,
-                        responsesBuilder: responsesBuilder,
-                        requestBodiesBuilder: requestBodiesBuilder),
-                    next: InitCodeGenerationStage(
-                        parserStage: .init(
-                            next: SwaggerCorrectorStage(
-                                corrector: SwaggerCorrector(logger: log)
-                            ).erase(),
-                            parser: buildParser()
-                        )
+                next: OpenAPIASTBuilderStage(
+                    fileProvider: FileManager.default,
+                    next: OpenAPIASTExcludingStage(
+                        excluder: ASTNodeExcluder(logger: log),
+                        excludeList: astNodesToExclude,
+                        next: BuildGastTreeParseDependenciesSatage(
+                            builder: AnyGASTBuilder(
+                                fileProvider: FileManager.default,
+                                schemaBuilder: schemaBuilder,
+                                parameterBuilder: parameterBuilder,
+                                serviceBuilder: serviceBuilder,
+                                responsesBuilder: responsesBuilder,
+                                requestBodiesBuilder: requestBodiesBuilder),
+                            next: InitCodeGenerationStage(
+                                parserStage: .init(
+                                    next: SwaggerCorrectorStage(
+                                        corrector: SwaggerCorrector(logger: log)
+                                    ).erase(),
+                                    parser: buildParser(logger: log)
+                                )
+                            ).erase()
+                        ).erase()
                     ).erase()
                 ).erase()
             ).erase()
         )
     }
 
-    static func buildParser() -> TreeParser {
+    static func buildParser(logger: Loger?) -> TreeParser {
 
-        let arrayParser = AnyArrayParser()
-        let groupParser = AnyGroupParser()
+        let resolver = Resolver(logger: logger)
+
+        let arrayParser = AnyArrayParser(resolver: resolver)
+        let groupParser = AnyGroupParser(resolver: resolver)
 
         let mediaTypeParser = AnyMediaTypeParser(arrayParser: arrayParser,
-                                                 groupParser: groupParser)
-        let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser)
-        let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser)
+                                                 groupParser: groupParser,
+                                                 resolver: resolver)
+        let parametersParser = ParametersTreeParser(array: arrayParser,
+                                                    resolver: resolver)
+        let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser,
+                                                  resolver: resolver)
+        let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser,
+                                                 resolver: resolver)
 
-        return .init(parametersParser: .init(array: arrayParser),
+        return .init(parametersParser: parametersParser,
                      requestBodyParser: requestBodyParser,
                      responsesParser: responsesParser)
     }

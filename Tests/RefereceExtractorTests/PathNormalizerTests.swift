@@ -8,7 +8,7 @@
 import Foundation
 import XCTest
 
-@testable import ReferenceExtractor
+@testable import Common
 
 class PathNormalizerTests: XCTestCase {
 

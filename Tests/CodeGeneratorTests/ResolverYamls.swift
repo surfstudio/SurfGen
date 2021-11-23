@@ -166,5 +166,40 @@ enum ResolverYamls {
                         $ref: "models.yaml#/components/schemas/ConsultationInfoForPatient"
         """.data(using: .utf8)!
     }
+
+    // See https://github.com/surfstudio/SurfGen/issues/57
+    enum RecursiveModel {
+        public static var model = """
+        components:
+          schemas:
+
+            Category:
+              type: object
+              properties:
+                subcategories:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Category"
+
+    """.data(using: .utf8)!
+
+        public static var api = """
+        openapi: 3.0.2
+        info:
+          title: "API"
+          version: "1.0.0"
+          contact:
+
+        paths:
+          /categories:
+            get:
+              responses:
+                '200':
+                  content:
+                    application/json:
+                      schema:
+                        $ref: "models.yaml#/components/schemas/Category"
+        """.data(using: .utf8)!
+    }
     
 }

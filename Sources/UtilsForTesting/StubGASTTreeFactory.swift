@@ -65,35 +65,47 @@ public struct StubGASTTreeFactory {
 
         return .init(
             refExtractorProvider: self.provider(str:),
-            next: .init(
-                builder: AnyGASTBuilder(
-                    fileProvider: fileProvider,
-                    schemaBuilder: schemaBuilder,
-                    parameterBuilder: parameterBuilder,
-                    serviceBuilder: serviceBuilder,
-                    responsesBuilder: responsesBuilder,
-                    requestBodiesBuilder: requestBodiesBuilder),
-                next: initStage
-            )
+            next: OpenAPIASTBuilderStage(
+                fileProvider: self.fileProvider,
+                next: BuildGastTreeParseDependenciesSatage(
+                    builder: AnyGASTBuilder(
+                        fileProvider: fileProvider,
+                        schemaBuilder: schemaBuilder,
+                        parameterBuilder: parameterBuilder,
+                        serviceBuilder: serviceBuilder,
+                        responsesBuilder: responsesBuilder,
+                        requestBodiesBuilder: requestBodiesBuilder),
+                    next: initStage
+                ).erase()
+            ).erase()
         )
     }
 
     func buildParser(enableDisclarationChecking: Bool = false) -> TreeParser {
 
-        let arrayParser = AnyArrayParser()
-        let groupParser = AnyGroupParser()
+        let resolver = Resolver()
 
-        let mediaParser = AnyMediaTypeParser(arrayParser: arrayParser, groupParser: groupParser)
-        let mediaParserStub = AnyMediaTypeParserStub(arrayParser: arrayParser, groupParser: groupParser)
+        let arrayParser = AnyArrayParser(resolver: resolver)
+        let groupParser = AnyGroupParser(resolver: resolver)
+
+        let mediaParser = AnyMediaTypeParser(arrayParser: arrayParser,
+                                             groupParser: groupParser,
+                                             resolver: resolver)
+        let mediaParserStub = AnyMediaTypeParserStub(arrayParser: arrayParser,
+                                                     groupParser: groupParser)
 
         let mediaTypeParser: MediaTypeParser = enableDisclarationChecking ?
             mediaParser:
             mediaParserStub
 
-        let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser)
-        let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser)
+        let parametersParser = ParametersTreeParser(array: arrayParser,
+                                                    resolver: resolver)
+        let requestBodyParser = RequestBodyParser(mediaTypeParser: mediaTypeParser,
+                                                  resolver: resolver)
+        let responsesParser = ResponseBodyParser(mediaTypeParser: mediaTypeParser,
+                                                 resolver: resolver)
 
-        return .init(parametersParser: .init(array: arrayParser),
+        return .init(parametersParser: parametersParser,
                      requestBodyParser: requestBodyParser,
                      responsesParser: responsesParser)
     }
