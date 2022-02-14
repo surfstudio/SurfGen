@@ -51,7 +51,10 @@ public struct AnyGASTBuilder: GASTBuilder {
     public func build(astTree: OpenAPIASTTree) throws -> RootNode {
 
         let schemas = try wrap(
-            self.schemaBuilder.build(schemas: astTree.currentTree.components.schemas),
+            self.schemaBuilder.build(
+                schemas: astTree.currentTree.components.schemas,
+                apiDefinitionFileRef: astTree.rawDependency.pathToCurrentFile
+            ),
             message: "While parsing schemas for specification at path: \(astTree.rawDependency.pathToCurrentFile)"
         )
 

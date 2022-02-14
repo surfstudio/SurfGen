@@ -41,10 +41,17 @@ public struct SchemaObjectModel: Encodable {
     public let name: String
     public let properties: [PropertyModel]
     public let description: String?
+    public let apiDefinitionFileRef: String
 
-    public init(name: String, properties: [PropertyModel], description: String?) {
+    public init(
+        name: String,
+        properties: [PropertyModel],
+        description: String?,
+        apiDefinitionFileRef: String
+    ) {
         self.name = name
         self.properties = properties
         self.description = description
+        self.apiDefinitionFileRef = apiDefinitionFileRef
     }
 }

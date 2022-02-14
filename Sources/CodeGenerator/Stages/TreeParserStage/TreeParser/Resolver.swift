@@ -127,9 +127,9 @@ public class Resolver {
             guard let type = PrimitiveType(rawValue: val.type) else {
                 throw CommonError(message: "Enum \(val.name) contains type which is not primitive -- \(val.type)")
             }
-            return .enum(.init(name: val.name, cases: val.cases, type: type, description: val.description))
+            return .enum(.init(name: val.name, cases: val.cases, type: type, description: val.description, apiDefinitionFileRef: val.apiDefinitionFileRef))
         case .simple(let val):
-            return .alias(.init(name: val.name, type: val.type))
+            return .alias(.init(name: val.name, type: val.type, apiDefinitionFileRef: val.apiDefinitionFileRef))
         case .object(let val):
             return try self.resolveObject(val: val, node: node, other: other)
         case .reference(let ref):
@@ -203,7 +203,8 @@ public class Resolver {
 
         let res = SchemaObjectModel(name: val.name,
                                     properties: properties,
-                                    description: val.description)
+                                    description: val.description,
+                                    apiDefinitionFileRef: val.apiDefinitionFileRef)
 
         return .object(res)
     }
@@ -265,7 +266,7 @@ public class Resolver {
     private func useAlreadyResolved(object: SchemaObjectNode) throws -> SchemaType {
         switch object.next {
         case .object(let model):
-            return .object(.init(name: model.name, properties: [], description: nil))
+            return .object(.init(name: model.name, properties: [], description: nil, apiDefinitionFileRef: model.apiDefinitionFileRef))
         case .group(let group):
             return .group(.init(name: group.name, references: [], type: group.type))
         default:
@@ -297,7 +298,7 @@ private extension Resolver {
     func tryResolveSurfGenReference(ref: String) -> SchemaType? {
         switch ref {
         case Common.Constants.ASTNodeReference.todo:
-            return .object(.init(name: "TODO", properties: [], description: nil))
+            return .object(.init(name: "TODO", properties: [], description: nil, apiDefinitionFileRef: "STUB"))
         default: return nil
         }
     }

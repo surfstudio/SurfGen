@@ -9,13 +9,13 @@ import Foundation
 import CodeGenerator
 import Common
 
-class SwaggerCorrectorStage: PipelineStage {
+public class SwaggerCorrectorStage: PipelineStage {
 
     private let corrector: SwaggerCorrector
 
     var next: AnyPipelineStage<[[PathModel]]>?
 
-    init(corrector: SwaggerCorrector, next: AnyPipelineStage<[[PathModel]]>? = nil) {
+    public init(corrector: SwaggerCorrector, next: AnyPipelineStage<[[PathModel]]>? = nil) {
         self.corrector = corrector
         self.next = next
     }
@@ -27,7 +27,8 @@ class SwaggerCorrectorStage: PipelineStage {
     private func correctService(_ service: [PathModel]) -> [PathModel] {
         return service.map { path in
             return PathModel(path: corrector.correctPath(path.path),
-                             operations: path.operations)
+                             operations: path.operations,
+                             apiDefinitionFileRef: path.apiDefinitionFileRef)
         }
     }
 }

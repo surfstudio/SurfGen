@@ -15,13 +15,17 @@ public struct SchemaModelNode {
     public let name: String
     public let properties: [PropertyNode]
     public let description: String?
+    public let apiDefinitionFileRef: String
 
     public init(name: String,
                 properties: [PropertyNode],
-                description: String?) {
+                description: String?,
+                apiDefinitionFileRef: String
+    ) {
         self.name = name
         self.properties = properties
         self.description = description
+        self.apiDefinitionFileRef = apiDefinitionFileRef
     }
 }
 

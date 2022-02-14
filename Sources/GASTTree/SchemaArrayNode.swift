@@ -13,10 +13,12 @@ import Common
 public struct SchemaArrayNode {
     public let name: String
     public let type: SchemaObjectNode
+    public let apiDefinitionFileRef: String
 
-    public init(name: String, type: SchemaObjectNode) {
+    public init(name: String, type: SchemaObjectNode, apiDefinitionFileRef: String) {
         self.name = name
         self.type = type
+        self.apiDefinitionFileRef = apiDefinitionFileRef
     }
 }
 

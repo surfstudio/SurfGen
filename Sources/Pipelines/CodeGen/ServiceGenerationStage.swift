@@ -53,7 +53,7 @@ public struct ServiceGenerationStage: PipelineStage {
             throw CommonError(message: "We expect only one service to generate, but got \(compact.count)")
         }
 
-        var generatorServicePaths = servicePaths.map { PathGenerationModel(pathModel: $0) }
+        var generatorServicePaths = servicePaths.map { PathGenerationModel(pathModel: $0, apiDefinitionFileRef: $0.apiDefinitionFileRef) }
 
         if let prefixCutter = self.prefixCutter {
             generatorServicePaths = generatorServicePaths.map { item in

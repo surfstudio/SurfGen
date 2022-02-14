@@ -13,7 +13,7 @@ import GASTTree
 /// Just an interface for any GAST-Schema builder
 public protocol SchemaBuilder {
     /// Build all item which are under `schemas:`
-    func build(schemas: [ComponentObject<Schema>]) throws -> [SchemaObjectNode]
+    func build(schemas: [ComponentObject<Schema>], apiDefinitionFileRef: String) throws -> [SchemaObjectNode]
 }
 
 /// Default implementation of `schema` builder.
@@ -71,12 +71,15 @@ public struct AnySchemaBuilder: SchemaBuilder {
     }
 
     /// Build all item which are under `schemas:`
-    public func build(schemas: [ComponentObject<Schema>]) throws -> [SchemaObjectNode] {
+    public func build(schemas: [ComponentObject<Schema>], apiDefinitionFileRef: String) throws -> [SchemaObjectNode] {
         var result = [SchemaObjectNode]()
         for schema in schemas {
 
-            let model = try wrap(self.process(schema: schema),
-                                 message: "In the schema \(schema.name) where value type is \(schema.value.type.shortDescription)")
+            let model = try wrap(
+                self.process(
+                    schema: schema, apiDefinitionFileRef: apiDefinitionFileRef
+                ),
+             message: "In the schema \(schema.name) where value type is \(schema.value.type.shortDescription)")
 
             result.append(model)
         }
@@ -84,41 +87,41 @@ public struct AnySchemaBuilder: SchemaBuilder {
     }
 
     /// Build current `schemas` element
-    func process(schema: ComponentObject<Schema>) throws -> SchemaObjectNode {
+    func process(schema: ComponentObject<Schema>, apiDefinitionFileRef: String) throws -> SchemaObjectNode {
         switch schema.value.type {
         case .any:
             throw CommonError(message: "Now we can't process this type on this level of depth. You can create an Issue or add your vote to existed one")
         case .object(let obj):
-            let model = try self.build(object: obj, meta: schema.value.metadata, name: schema.name)
+            let model = try self.build(object: obj, meta: schema.value.metadata, name: schema.name, apiDefinitionFileRef: apiDefinitionFileRef)
             return .init(next: .object(model))
         case .string:
-            return try self.processString(schema: schema)
+            return try self.processString(schema: schema, apiDefinitionFileRef: apiDefinitionFileRef)
         case .array(let val):
-            let arr = try self.build(array: val, name: schema.name)
+            let arr = try self.build(array: val, name: schema.name, apiDefinitionFileRef: apiDefinitionFileRef)
             return .init(next: .array(arr))
         case .reference(let ref):
             return .init(next: .reference(ref.rawValue))
         case .group(let val):
             let node = try wrap(
-                self.build(group: val, name: schema.name),
+                self.build(group: val, name: schema.name, apiDefinitionFileRef: apiDefinitionFileRef),
                 message: "While parsing gorup \(schema.name)"
             )
             return .init(next: .group(node))
         case .number:
-            return .init(next: .simple(.init(name: schema.name, type: .number)))
+            return .init(next: .simple(.init(name: schema.name, type: .number, apiDefinitionFileRef: apiDefinitionFileRef)))
         case .integer:
-            return try self.processInteger(schema: schema)
+            return try self.processInteger(schema: schema, apiDefinitionFileRef: apiDefinitionFileRef)
         case .boolean:
-            return .init(next: .simple(.init(name: schema.name, type: .boolean)))
+            return .init(next: .simple(.init(name: schema.name, type: .boolean, apiDefinitionFileRef: apiDefinitionFileRef)))
         }
     }
 
     /// Handle component whose type is string
     /// Can create `primitive` or `enum`
-    func processString(schema: ComponentObject<Schema>) throws -> SchemaObjectNode {
+    func processString(schema: ComponentObject<Schema>, apiDefinitionFileRef: String) throws -> SchemaObjectNode {
 
         guard let enumValues = schema.value.metadata.enumValues else {
-            return .init(next: .simple(.init(name: schema.name, type: .string)))
+            return .init(next: .simple(.init(name: schema.name, type: .string, apiDefinitionFileRef: apiDefinitionFileRef)))
         }
 
         guard let stringCases = enumValues as? [String] else {
@@ -129,15 +132,16 @@ public struct AnySchemaBuilder: SchemaBuilder {
             type: PrimitiveType.string.rawValue,
             cases: stringCases,
             name: schema.name,
-            description: schema.value.metadata.description
+            description: schema.value.metadata.description,
+            apiDefinitionFileRef: apiDefinitionFileRef
         )
 
         return.init(next: .enum(model))
     }
 
-    func processInteger(schema: ComponentObject<Schema>) throws -> SchemaObjectNode {
+    func processInteger(schema: ComponentObject<Schema>, apiDefinitionFileRef: String) throws -> SchemaObjectNode {
         guard let enumValues = schema.value.metadata.enumValues else {
-            return .init(next: .simple(.init(name: schema.name, type: .integer)))
+            return .init(next: .simple(.init(name: schema.name, type: .integer, apiDefinitionFileRef: apiDefinitionFileRef)))
         }
 
         guard let intCases = enumValues as? [Int] else {
@@ -148,13 +152,14 @@ public struct AnySchemaBuilder: SchemaBuilder {
             type: PrimitiveType.integer.rawValue,
             cases: intCases.map { "\($0)" },
             name: schema.name,
-            description: schema.value.metadata.description
+            description: schema.value.metadata.description,
+            apiDefinitionFileRef: apiDefinitionFileRef
         )
 
         return.init(next: .enum(model))
     }
 
-    func build(object: ObjectSchema, meta: Metadata, name: String) throws -> SchemaModelNode {
+    func build(object: ObjectSchema, meta: Metadata, name: String, apiDefinitionFileRef: String) throws -> SchemaModelNode {
         let properties = try object.properties.map { property -> PropertyNode in
             let type = try wrap(property.schema.extractType(),
                                 message: "In object \(name), in property \(property.name)")
@@ -174,15 +179,15 @@ public struct AnySchemaBuilder: SchemaBuilder {
                                 nullable: isNullable)
         }
 
-        return SchemaModelNode(name: name, properties: properties, description: meta.description)
+        return SchemaModelNode(name: name, properties: properties, description: meta.description, apiDefinitionFileRef: apiDefinitionFileRef)
     }
 
-    func build(array: ArraySchema, name: String) throws -> SchemaArrayNode {
+    func build(array: ArraySchema, name: String, apiDefinitionFileRef: String) throws -> SchemaArrayNode {
 
         switch array.items {
         case .single(let val):
-            let type = try self.process(schema: .init(name: "", value: val))
-            return .init(name: name, type: type)
+            let type = try self.process(schema: .init(name: "", value: val), apiDefinitionFileRef: apiDefinitionFileRef)
+            return .init(name: name, type: type, apiDefinitionFileRef: apiDefinitionFileRef)
         case .multiple:
             throw CommonError(message: "At this moment SurfGen doesn't support multiple array items")
         }
@@ -190,7 +195,7 @@ public struct AnySchemaBuilder: SchemaBuilder {
 
     /// Build group node and validate group type
     /// For detail look at header
-    func build(group: GroupSchema, name: String) throws -> SchemaGroupNode {
+    func build(group: GroupSchema, name: String, apiDefinitionFileRef: String) throws -> SchemaGroupNode {
 
         let refs = try group.schemas.map { schema -> String in
             switch schema.type {
@@ -215,7 +220,7 @@ public struct AnySchemaBuilder: SchemaBuilder {
             }
         }
 
-        return .init(name: name, references: refs, type: group.type.gast)
+        return .init(name: name, references: refs, type: group.type.gast, apiDefinitionFileRef: apiDefinitionFileRef)
     }
 }
 

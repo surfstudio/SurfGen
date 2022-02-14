@@ -43,7 +43,7 @@ public struct AnyMediaTypesBuilder: MediaTypesBuilder {
     public func buildMediaItems(items: [String: MediaItem]) throws -> [MediaTypeObjectNode] {
         return try items.map { key, value -> MediaTypeObjectNode in
             let schema = try wrap(
-                self.schemaBuilder.build(schemas: [.init(name: "", value: value.schema)]),
+                self.schemaBuilder.build(schemas: [.init(name: "", value: value.schema)], apiDefinitionFileRef: "STUB"),
                 message: "While build body")
 
             guard schema.count == 1 else {

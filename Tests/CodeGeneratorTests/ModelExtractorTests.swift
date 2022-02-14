@@ -29,7 +29,7 @@ class ModelExtractorTests: XCTestCase {
 
         let generationModel = ServiceGenerationModel(
             name: "",
-            paths: serviceModel.map { PathGenerationModel(pathModel: $0) }
+            paths: serviceModel.map { PathGenerationModel(pathModel: $0, apiDefinitionFileRef: $0.apiDefinitionFileRef) }
         )
         let modelExtractor = ModelExtractor()
 
