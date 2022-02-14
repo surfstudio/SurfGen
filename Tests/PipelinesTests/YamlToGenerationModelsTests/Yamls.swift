@@ -8,6 +8,51 @@
 import Foundation
 
 extension ParametersTests {
+
+    /// Contains service `messages` with one operation `get`
+    /// Service has path parameter `id` with type `string`, it is declared in `Path`
+    static var yamlWithPathParametersInPathWillBeParsed = """
+    paths:
+      /messages/{id}:
+        parameters:
+          - name: id
+            required: true
+            in: path
+            schema:
+              type: string
+        get:
+          responses:
+            default:
+                description: "Все ок"
+                content:
+                    application/json:
+                        schema:
+                            type: integer
+
+""".data(using: .utf8)!
+
+    /// Contains service `messages` with one operation `get`
+    /// Service has path parameter `id` with type `string`, it is declared in `Operation`
+    static var yamlWithPathParametersInOperationWontBeParsed = """
+    paths:
+      /messages/{id}:
+        get:
+          parameters:
+            - name: id
+              required: true
+              in: path
+              schema:
+                type: string
+          responses:
+            default:
+                description: "Все ок"
+                content:
+                    application/json:
+                        schema:
+                            type: integer
+
+""".data(using: .utf8)!
+
     /// Contains service `messages` with one operation `get`
     /// And the operation contains two parameters `id2` and `id3` with `integer` and `string` types
     /// Each parameter is declared `in place`

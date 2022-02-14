@@ -41,10 +41,12 @@ import Foundation
 public struct PathModel: Encodable {
     /// URI template
     public let path: String
+    public let parameters: [Reference<ParameterModel>]
     public let operations: [OperationModel]
 
-    public init(path: String, operations: [OperationModel]) {
+    public init(path: String, parameters: [Reference<ParameterModel>], operations: [OperationModel]) {
         self.path = path
+        self.parameters = parameters
         self.operations = operations.sorted { $0.httpMethod < $1.httpMethod }
     }
     

@@ -25,9 +25,10 @@ class SwaggerCorrectorStage: PipelineStage {
     }
 
     private func correctService(_ service: [PathModel]) -> [PathModel] {
-        return service.map { path in
-            return PathModel(path: corrector.correctPath(path.path),
-                             operations: path.operations)
+        return service.map { pathModel in
+            return PathModel(path: corrector.correctPath(pathModel.path),
+                             parameters: corrector.correctPathParameters(for: pathModel),
+                             operations: pathModel.operations)
         }
     }
 }

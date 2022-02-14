@@ -22,6 +22,7 @@ import UtilsForTesting
 /// Cases:
 ///
 /// - Params definition:
+///     - Path params declared in `Path` will be parsed
 ///     - Params with primitive type with `in place declaration` will be parsed
 ///     - Params with ref in schema on enum will be parsed
 ///     - Params with ref in schema on object will be parsed
@@ -30,6 +31,7 @@ import UtilsForTesting
 ///     - Params with ref in schema on object with another ref will be parsed
 ///     - Params with ref on cycled objects will parsed
 ///
+///     - Path params declared in `Operation` won't  be parsed
 ///     - Params with schema definition won't be parsed
 ///     - Parameters with ref on another parameter won't be parsed
 ///
@@ -38,6 +40,68 @@ import UtilsForTesting
 final class ParametersTests: XCTestCase {
 
     // MARK: - Params definition
+
+    /// Path parameters declared inside `Path` will be parsed
+    func testPathParametersInPathWillBeParsed() throws {
+        // Arrange
+
+        let pathToRoot = "/path/to/services.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [pathToRoot: ParametersTests.yamlWithPathParametersInPathWillBeParsed]
+
+        var factory = StubGASTTreeFactory(fileProvider: fileProvider)
+
+        var result = [[PathModel]]()
+
+        factory.resultClosure = { (val: [[PathModel]]) throws -> Void in
+            result = val
+        }
+
+        let pipeline = factory.build()
+
+        // Act
+
+        try pipeline.run(with: URL(string: pathToRoot)!)
+        let pathParameters = result[0][0].parameters
+
+        // Assert
+
+        XCTAssertEqual(pathParameters.count, 1)
+
+        let firstParam = pathParameters.first(where: { $0.name == "id" })!
+
+        XCTAssertEqual(try firstParam.type().primitiveType(), .string)
+    }
+
+    /// Path parameters declared inside `Operation` won't be parsed
+    func testPathParametersInOperationWontBeParsed() throws {
+        // Arrange
+
+        let pathToRoot = "/path/to/services.yaml"
+        let fileProvider = FileProviderStub()
+        fileProvider.isReadableFile = true
+        fileProvider.files = [pathToRoot: ParametersTests.yamlWithPathParametersInOperationWontBeParsed]
+
+        var factory = StubGASTTreeFactory(fileProvider: fileProvider)
+
+        var result = [[PathModel]]()
+
+        factory.resultClosure = { (val: [[PathModel]]) throws -> Void in
+            result = val
+        }
+
+        let pipeline = factory.build()
+
+        // Act
+
+        try pipeline.run(with: URL(string: pathToRoot)!)
+        let pathParameters = result[0][0].parameters
+
+        // Assert
+
+        XCTAssertEqual(pathParameters.count, 0)
+    }
 
     /// Params with primitive type with `in place declaration` will be parsed
     func testWithPrimitiveTypeWillBeParsed() throws {
