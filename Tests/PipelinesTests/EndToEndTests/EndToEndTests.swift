@@ -42,6 +42,7 @@ class EndToEndTests: XCTestCase {
 
         try BuildCodeGeneratorPipelineFactory.build(
             templates: templateModels,
+            specificationRootPath: "",
             astNodesToExclude: [],
             serviceName: "Promotions",
             useNewNullableDefinitionStartegy: false
@@ -103,6 +104,7 @@ class EndToEndTests: XCTestCase {
 
         try BuildCodeGeneratorPipelineFactory
             .build(templates: templateModels,
+                   specificationRootPath: "",
                    astNodesToExclude: [],
                    serviceName: "Promotions",
                    useNewNullableDefinitionStartegy: false)

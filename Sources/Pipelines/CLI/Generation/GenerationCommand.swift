@@ -65,13 +65,16 @@ public class GenerationCommand: Command {
 
         rawAstNodesToExclude = Utils.Urls.addForwardingSlashIfNeeded(urls: rawAstNodesToExclude)
 
-        let pipeline = BuildCodeGeneratorPipelineFactory.build(templates: config.templates,
-                                                               astNodesToExclude: try Utils.Urls.makeAstNodeRefsAbsolute(refs: rawAstNodesToExclude),
-                                                               serviceName: serviceName,
-                                                               needRewriteExistingFiles: rewrite.value,
-                                                               useNewNullableDefinitionStartegy: config.useNewNullableDeterminationStrategy ?? false,
-                                                               prefixCutter: prefixCutter,
-                                                               logger: self.loger)
+        let pipeline = BuildCodeGeneratorPipelineFactory.build(
+            templates: config.templates,
+            specificationRootPath: config.specificationRootPath ?? "",
+            astNodesToExclude: try Utils.Urls.makeAstNodeRefsAbsolute(refs: rawAstNodesToExclude),
+            serviceName: serviceName,
+            needRewriteExistingFiles: rewrite.value,
+            useNewNullableDefinitionStartegy: config.useNewNullableDeterminationStrategy ?? false,
+            prefixCutter: prefixCutter,
+            logger: self.loger
+        )
 
         let path = try Utils.Urls.makeUrlAbsoluteIfNeeded(url: specPath.value)
 

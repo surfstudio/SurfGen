@@ -15,7 +15,7 @@ import Common
 /// The test checks if apiDefinitionFileRef is present for each response model
 class DataGenerationTest: XCTestCase {
     
-    func testDataGeneration() throws {
+    func testApiDefinitionFileRef() throws {
         // Arrange
 
         let testedApiUrl = "auth/api.yaml"

@@ -24,6 +24,7 @@ public struct BuildCodeGeneratorPipelineFactory {
     }
 
     public static func build(templates: [Template],
+                             specificationRootPath: String,
                              astNodesToExclude: Set<String>,
                              serviceName: String,
                              needRewriteExistingFiles: Bool = false,
@@ -68,9 +69,12 @@ public struct BuildCodeGeneratorPipelineFactory {
                                 next: SwaggerCorrectorStage(
                                     corrector: SwaggerCorrector(logger: logger),
                                     next: ServiceGenerationStage(
-                                        next: FileWriterStage(
-                                            needRewriteExistingFiles: needRewriteExistingFiles,
-                                            logger: logger
+                                        next: SourceCodeFolderDistributorStage(
+                                            next: FileWriterStage(
+                                                needRewriteExistingFiles: needRewriteExistingFiles,
+                                                logger: logger
+                                            ).erase(),
+                                            specificationRootPath: specificationRootPath
                                         ).erase(),
                                         templates: templates,
                                         serviceName: serviceName,
