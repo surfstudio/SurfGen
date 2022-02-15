@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  StubBuildCodeGeneratorPipelineFactory.swift
 //  
 //
 //  Created by volodina on 14.02.2022.
@@ -45,9 +45,6 @@ public struct StubBuildCodeGeneratorPipelineFactory {
             requestBodyBuilder: requestBodiesBuilder,
             responseBuilder: responsesBuilder
         )
-
-        let templateFiller = DefaultTemplateFiller()
-        let modelExtractor = ModelExtractor()
 
         return .init(
             refExtractorProvider: self.provider(str:),

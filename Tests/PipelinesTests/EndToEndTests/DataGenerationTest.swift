@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  DataGenerationTest.swift
 //  
 //
 //  Created by volodina on 14.02.2022.
@@ -41,6 +41,6 @@ class DataGenerationTest: XCTestCase {
         for item in pathes {
             print(item.apiDefinitionFileRef)
         }
-        // todo
+        // todo add a new simple api which covers desired cases; define asserts for each case
     }
 }

@@ -202,21 +202,21 @@ public struct AnySchemaBuilder: SchemaBuilder {
             case .reference(let val):
                 return val.rawValue
             case .object:
-                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and object found")
+                throw CommonError(message: "SurfGen supports only references on groups (allOf, oneOf, anyOf). But an object found")
             case .array:
-                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and array found")
+                throw CommonError(message: "SurfGen supports only references on groups (allOf, oneOf, anyOf). But an array found")
             case .group:
-                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and group found")
+                throw CommonError(message: "SurfGen supports only references on groups (allOf, oneOf, anyOf). But a group found")
             case .boolean:
-                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and boolean found")
+                throw CommonError(message: "SurfGen supports only references on groups (allOf, oneOf, anyOf). But a boolean found")
             case .string:
-                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and string found")
+                throw CommonError(message: "SurfGen supports only references on groups (allOf, oneOf, anyOf). But a string found")
             case .number:
-                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and number found")
+                throw CommonError(message: "SurfGen supports only references on groups (allOf, oneOf, anyOf). But a number found")
             case .integer:
-                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and integer found")
+                throw CommonError(message: "SurfGen supports only references on groups (allOf, oneOf, anyOf). But an integer found")
             case .any:
-                throw CommonError(message: "SurfGen support only references on groups (allOf, oneOf, anyOf). But and any found")
+                throw CommonError(message: "SurfGen supports only references on groups (allOf, oneOf, anyOf). But an any found")
             }
         }
 
@@ -240,11 +240,11 @@ private extension Schema {
         case .array(let arr):
             switch arr.items {
             case .multiple:
-                throw CommonError(message: "Array conains multiple items declaration. So we can't process it now")
+                throw CommonError(message: "Array contains multiple items declaration. So we can't process it now")
             case .single(let schema):
                 let type = try schema.extractType()
                 guard case .simple(let val) = type else {
-                    throw CommonError(message: "Array conains single item with wrong type \(type). But we can process only primitive types and $ref in this case")
+                    throw CommonError(message: "Array contains a single item with a wrong type \(type). But we can process only primitive types and $ref in this case")
                 }
                 return .array(.init(itemsType: val))
             }
