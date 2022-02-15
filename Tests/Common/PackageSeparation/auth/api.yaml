@@ -6,13 +6,19 @@ info:
 paths:
   /test:
     post:
-      summary: Test api which returns models from different packages
+      summary: Test api which is designed to return models from different packages in any way
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: "models.yaml#/components/schemas/TestModel"
+      parameters:
+        - name: test
+          in: query
+          required: true
+          schema:
+            $ref: "../very/long/dir/models.yaml#/components/schemas/TestEnum"
       responses:
         "200":
           content:

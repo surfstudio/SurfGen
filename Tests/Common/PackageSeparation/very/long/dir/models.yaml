@@ -6,3 +6,7 @@ components:
       properties:
         id:
           type: string
+          
+    TestEnum:
+      type: string
+      enum: ["first", "second"]

@@ -52,24 +52,36 @@ class DataGenerationTest: XCTestCase {
         
         // RequestModel for /test
         guard case DataModel.PossibleType.object(let requestModel) = testOperation.requestModel!.value.content.first!.type else {
-            XCTFail("Tested request model not found")
+            XCTFail("Error while request model casting")
             return
         }
         
         XCTAssertTrue(testPath.apiDefinitionFileRef.hasSuffix(testedApiUrl))
         XCTAssertTrue(requestModel.apiDefinitionFileRef.hasSuffix("auth/models.yaml"))
         
-        //todo check api parameters?
+        // Request parameter schema for /test
+        guard case ParameterModel.PossibleType.reference(let requestParameterSchema) = testOperation.parameters!.first!.value.type else {
+            XCTFail("Error while request parameter schema casting")
+            return
+        }
+        
+        // Request parameter for /test
+        guard case SchemaType.enum(let requestParameter) = requestParameterSchema else {
+            XCTFail("Error while request parameter casting")
+            return
+        }
+        
+        XCTAssertTrue(requestParameter.apiDefinitionFileRef.hasSuffix("very/long/dir/models.yaml"))
         
         for requestProperty in requestModel.properties {
             switch requestProperty.type {
             case .reference(_): do {
                 guard case PropertyModel.PossibleType.reference(let propertySchema) = requestProperty.type else {
-                    XCTFail("Error while property schema casting")
+                    XCTFail("Error while property \(requestProperty.name) schema casting")
                     return
                 }
                 guard case SchemaType.object(let propertyModel) = propertySchema else {
-                    XCTFail("Error while property casting")
+                    XCTFail("Error while property \(requestProperty.name) casting")
                     return
                 }
                 let assertedSuffix = try getModelApiFile(model: propertyModel.name)
