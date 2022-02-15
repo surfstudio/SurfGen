@@ -12,9 +12,9 @@ import UtilsForTesting
 import CodeGenerator
 import Common
 
-/// The test checks if apiDefinitionFileRef is present for each response model
 class DataGenerationTest: XCTestCase {
     
+    /// Test if apiDefinitionFileRef is present for each response model
     func testApiDefinitionFileRef() throws {
         // Arrange
 
@@ -91,6 +91,34 @@ class DataGenerationTest: XCTestCase {
                 continue
             }
         }
+    }
+    
+    /// Test if destinationPath for each model supports package separation
+    func testDestinationPath() throws {
+        // Arrange
+
+        let testedApiUrl = "auth/api.yaml"
+        let packageSeparationPath = "Common/PackageSeparation"
+        let specUrl = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/EndToEndTests/EndToEndTests.swift
+            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/EndToEndTests
+            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests
+            .deletingLastPathComponent() //.../SurfGen/Tests
+            .appendingPathComponent("\(packageSeparationPath)/\(testedApiUrl)")
+
+        let stage = AnyPipelineStageStub<[SourceCode]>()
+        let homeDirPath = FileManager.default.homeDirectoryForCurrentUser.path
+        // Act
+
+        try StubBuildCodeGeneratorPipelineFactory.build(
+            templates: TestTemplates.templateModels,
+            specificationRootPath: "\(homeDirPath)/SurfGen/Tests/\(packageSeparationPath)",
+            astNodesToExclude: [],
+            serviceName: "PackageSeparation",
+            stage: stage.erase(),
+            useNewNullableDefinitionStartegy: false
+        ).run(with: specUrl)
+        
+        //todo assert correct dest pathes
     }
     
     /// returns a file name where the model belongs

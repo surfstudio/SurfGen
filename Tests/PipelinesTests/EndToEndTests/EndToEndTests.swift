@@ -41,14 +41,14 @@ class EndToEndTests: XCTestCase {
         // Act
 
         try BuildCodeGeneratorPipelineFactory.build(
-            templates: templateModels,
+            templates: TestTemplates.templateModels,
             specificationRootPath: "",
             astNodesToExclude: [],
             serviceName: "Promotions",
             useNewNullableDefinitionStartegy: false
         ).run(with: specUrl)
 
-        let generatedFiles = try Path(testOutputPath).children()
+        let generatedFiles = try Path(TestTemplates.testOutputPath).children()
             .filter { $0.isResultFile }
             .sorted()
 
@@ -103,14 +103,14 @@ class EndToEndTests: XCTestCase {
         // Act
 
         try BuildCodeGeneratorPipelineFactory
-            .build(templates: templateModels,
+            .build(templates: TestTemplates.templateModels,
                    specificationRootPath: "",
                    astNodesToExclude: [],
                    serviceName: "Promotions",
                    useNewNullableDefinitionStartegy: false)
             .run(with: specUrl)
 
-        let generatedFiles = try Path(testOutputPath).children()
+        let generatedFiles = try Path(TestTemplates.testOutputPath).children()
             .filter { $0.isResultFile }
             .sorted()
 
@@ -138,66 +138,6 @@ class EndToEndTests: XCTestCase {
         // Cleanup
 
         try generatedFiles.forEach { try $0.delete() }
-    }
-}
-
-private extension EndToEndTests {
-
-    var baseTemplatePath: String {
-        return URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/EndToEndTests/EndToEndTests.swift
-            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/EndToEndTests
-            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests
-            .deletingLastPathComponent() //.../SurfGen/Tests
-            .deletingLastPathComponent() //.../SurfGen
-            .appendingPathComponent("Templates/v2/Swift")
-            .absoluteString
-    }
-
-    var testOutputPath: String {
-        return URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/EndToEndTests/EndToEndTests.swift
-            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/EndToEndTests
-            .appendingPathComponent("TestOutputFiles")
-            .absoluteString
-    }
-
-    var templateModels: [Template] {
-        return [
-            Template(type: .service,
-                     nameSuffix: "UrlRoute",
-                     fileExtension: "txt",
-                     templatePath: baseTemplatePath + "/UrlRoute.stencil",
-                     destinationPath: testOutputPath),
-            Template(type: .service,
-                     nameSuffix: "Service",
-                     fileExtension: "txt",
-                     templatePath: baseTemplatePath + "/Service.stencil",
-                     destinationPath: testOutputPath),
-            Template(type: .service,
-                     nameSuffix: "NetworkService",
-                     fileExtension: "txt",
-                     templatePath: baseTemplatePath + "/NetworkService.stencil",
-                     destinationPath: testOutputPath),
-            Template(type: .model,
-                     nameSuffix: "Entry",
-                     fileExtension: "txt",
-                     templatePath: baseTemplatePath + "/Entry.stencil",
-                     destinationPath: testOutputPath),
-            Template(type: .model,
-                     nameSuffix: "Entity",
-                     fileExtension: "txt",
-                     templatePath: baseTemplatePath + "/Entity.stencil",
-                     destinationPath: testOutputPath),
-            Template(type: .enum,
-                     nameSuffix: nil,
-                     fileExtension: "txt",
-                     templatePath: baseTemplatePath + "/Enum.stencil",
-                     destinationPath: testOutputPath),
-            Template(type: .typealias,
-                     nameSuffix: nil,
-                     fileExtension: "txt",
-                     templatePath: baseTemplatePath + "/Typealias.stencil",
-                     destinationPath: testOutputPath)
-        ]
     }
 }
 
