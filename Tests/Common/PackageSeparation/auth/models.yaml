@@ -1,0 +1,14 @@
+components:
+  schemas:
+
+    TestModel:
+      type: object
+      properties:
+        id:
+          type: string
+        product:
+          $ref: "../products/models.yaml#/components/schemas/Product"
+        user:
+          $ref: "../profile/models.yaml#/components/schemas/User"
+        error:
+          $ref: "../very/long/dir/models.yaml#/components/schemas/Error"

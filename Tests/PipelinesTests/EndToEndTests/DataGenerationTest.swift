@@ -10,17 +10,20 @@ import Pipelines
 import XCTest
 import UtilsForTesting
 import CodeGenerator
+import Common
 
+/// The test checks if apiDefinitionFileRef is present for each response model
 class DataGenerationTest: XCTestCase {
     
     func testDataGeneration() throws {
         // Arrange
 
+        let testedApiUrl = "auth/api.yaml"
         let specUrl = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/EndToEndTests/EndToEndTests.swift
             .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/EndToEndTests
             .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests
             .deletingLastPathComponent() //.../SurfGen/Tests
-            .appendingPathComponent("Common/ProjectA/catalog/api.yaml")
+            .appendingPathComponent("Common/PackageSeparation/\(testedApiUrl)")
 
         let stage = AnyPipelineStageStub<[[PathModel]]>()
         // Act
@@ -28,19 +31,67 @@ class DataGenerationTest: XCTestCase {
         try StubBuildCodeGeneratorPipelineFactory.build(
             templates: [],
             astNodesToExclude: [],
-            serviceName: "Catalog",
+            serviceName: "PackageSeparation",
             stage: stage.erase(),
             useNewNullableDefinitionStartegy: false
         ).run(with: specUrl)
 
         // Assert
-        guard let pathes = stage.result?.first else {
-            XCTFail()
+        
+        // PathModel for /test
+        guard let testPath = stage.result?.last?.first else {
+            XCTFail("Test api path not found")
             return
         }
-        for item in pathes {
-            print(item.apiDefinitionFileRef)
+
+        // OperationModel for /test
+        guard let testOperation = testPath.operations.first else {
+            XCTFail("Tested operation not found")
+            return
         }
-        // todo add a new simple api which covers desired cases; define asserts for each case
+        
+        // RequestModel for /test
+        guard case DataModel.PossibleType.object(let requestModel) = testOperation.requestModel!.value.content.first!.type else {
+            XCTFail("Tested request model not found")
+            return
+        }
+        
+        XCTAssertTrue(testPath.apiDefinitionFileRef.hasSuffix(testedApiUrl))
+        XCTAssertTrue(requestModel.apiDefinitionFileRef.hasSuffix("auth/models.yaml"))
+        
+        //todo check api parameters?
+        
+        for requestProperty in requestModel.properties {
+            switch requestProperty.type {
+            case .reference(_): do {
+                guard case PropertyModel.PossibleType.reference(let propertySchema) = requestProperty.type else {
+                    XCTFail("Error while property schema casting")
+                    return
+                }
+                guard case SchemaType.object(let propertyModel) = propertySchema else {
+                    XCTFail("Error while property casting")
+                    return
+                }
+                let assertedSuffix = try getModelApiFile(model: propertyModel.name)
+                XCTAssertTrue(propertyModel.apiDefinitionFileRef.hasSuffix(assertedSuffix))
+            }
+            default:
+                continue
+            }
+        }
+    }
+    
+    /// returns a file name where the model belongs
+    private func getModelApiFile(model: String) throws -> String {
+        switch model {
+        case "Error":
+            return "very/long/dir/models.yaml"
+        case "Product":
+            return "products/models.yaml"
+        case "User":
+            return "profile/models.yaml"
+        default:
+            throw CommonError(message: "Unexpected \(model)")
+        }
     }
 }
