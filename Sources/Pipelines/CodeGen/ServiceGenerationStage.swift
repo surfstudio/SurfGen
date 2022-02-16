@@ -20,6 +20,7 @@ public struct ServiceGenerationStage: PipelineStage {
     
     private let templateFiller: TemplateFiller
     private let modelExtractor: ModelExtractor
+    private let specificationRootPath: String
 
     var next: AnyPipelineStage<[SourceCode]>
 
@@ -31,6 +32,7 @@ public struct ServiceGenerationStage: PipelineStage {
         next: AnyPipelineStage<[SourceCode]>,
         templates: [Template],
         serviceName: String,
+        specificationRootPath: String,
         templateFiller: TemplateFiller,
         modelExtractor: ModelExtractor,
         prefixCutter: PrefixCutter? = nil
@@ -38,6 +40,7 @@ public struct ServiceGenerationStage: PipelineStage {
         self.next = next
         self.templates = templates
         self.serviceName = serviceName.capitalizingFirstLetter()
+        self.specificationRootPath = specificationRootPath
         self.templateFiller = templateFiller
         self.modelExtractor = modelExtractor
         self.prefixCutter = prefixCutter
@@ -110,7 +113,7 @@ public struct ServiceGenerationStage: PipelineStage {
 
     private func fillTemplates(_ templates: [Template], with model: [String: Any], name: String, apiDefinitionFileRef: String) throws -> [SourceCode] {
         return try templates.map { template in
-            let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath, with: model),
+            let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath, with: model, specificationRootPath: specificationRootPath),
                                       message: "While filling template at \(template.templatePath) with model \(name)")
             return SourceCode(code: sourceCode,
                               fileName: template.buildFileName(for: name),

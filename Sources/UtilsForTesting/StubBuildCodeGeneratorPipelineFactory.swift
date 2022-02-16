@@ -129,6 +129,7 @@ public struct StubBuildCodeGeneratorPipelineFactory {
                                         ).erase(),
                                         templates: templates,
                                         serviceName: serviceName,
+                                        specificationRootPath: specificationRootPath,
                                         templateFiller: templateFiller,
                                         modelExtractor: modelExtractor,
                                         prefixCutter: prefixCutter

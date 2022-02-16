@@ -14,9 +14,13 @@ public class DefaultTemplateFiller: TemplateFiller {
     
     public init() {}
 
-    public func fillTemplate(at path: String, with context: [String : Any]) throws -> String {
+    public func fillTemplate(
+        at path: String,
+        with context: [String : Any],
+        specificationRootPath: String
+    ) throws -> String {
         var environment = Environment()
-        environment.extensions.append(buildTemplateExtension())
+        environment.extensions.append(buildTemplateExtension(specificationRootPath))
         let template = try loadTemplate(at: path)
         do {
             return try environment.renderTemplate(string: template, context: context)
@@ -35,7 +39,7 @@ public class DefaultTemplateFiller: TemplateFiller {
                         message: "While loading template at path: \(path)")
     }
 
-    private func buildTemplateExtension() -> Extension {
+    private func buildTemplateExtension(_ specificationRootPath: String) -> Extension {
         let templateExtension = Extension()
 
         templateExtension.registerStringFilter("capitalizeFirstLetter") {
@@ -74,6 +78,10 @@ public class DefaultTemplateFiller: TemplateFiller {
             $0.upperCaseToCamelCaseOrSelf()
         }
 
+        templateExtension.registerStringFilter("getPackageName") {
+            $0.getPackageName(root: specificationRootPath)
+        }
+        
         return templateExtension
     }
 }

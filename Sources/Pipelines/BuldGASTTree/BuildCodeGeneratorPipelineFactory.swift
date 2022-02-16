@@ -78,6 +78,7 @@ public struct BuildCodeGeneratorPipelineFactory {
                                         ).erase(),
                                         templates: templates,
                                         serviceName: serviceName,
+                                        specificationRootPath: specificationRootPath,
                                         templateFiller: templateFiller,
                                         modelExtractor: modelExtractor,
                                         prefixCutter: prefixCutter

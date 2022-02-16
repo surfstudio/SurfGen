@@ -119,6 +119,18 @@ extension String {
     public func replaceNameTemplate(with name: String) -> String {
         return self.replacingOccurrences(of: "\\{.*?\\}", with: name, options: .regularExpression)
     }
+    
+    /// Return package name from a full api file name.
+    /// For example:
+    /// self = "/users/username/swagger/products/api.yaml
+    /// root = "/users/username/swagger"
+    /// returns "products"
+    public func getPackageName(root: String) -> String {
+        return self
+            .replacingOccurrences(of: "\(root)/", with: "")
+            .replacingOccurrences(of: "(\\/\\w*)\\.yaml", with: "", options: .regularExpression)
+            .replacingOccurrences(of: "/", with: ".")
+    }
 
     private func pathToCamelCase() -> String {
         return self
