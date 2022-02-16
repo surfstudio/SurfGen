@@ -28,18 +28,19 @@ public struct SourceCodeFolderDistributorStage : PipelineStage {
     }
     
     private func correctDestinationPath(_ sourceCode: SourceCode) throws -> SourceCode {
-        if !specificationRootPath.isEmpty && sourceCode.apiDefinitionFileRef.hasSuffix(SourceCode.separatedFilesSuffix) {
-            guard sourceCode.apiDefinitionFileRef.hasPrefix(specificationRootPath) else {
-                throw CommonError(message: "Invalid \(sourceCode.apiDefinitionFileRef) for root \(specificationRootPath)")
-            }
-            let correctedDir = sourceCode.apiDefinitionFileRef
-                .dropFirst(specificationRootPath.count)
-                .dropLast(SourceCode.separatedFilesSuffix.count)
-            return SourceCode(code: sourceCode.code,
-                              fileName: sourceCode.fileName,
-                              destinationPath: sourceCode.destinationPath + correctedDir,
-                              apiDefinitionFileRef: sourceCode.apiDefinitionFileRef)
+        guard !specificationRootPath.isEmpty && sourceCode.apiDefinitionFileRef.hasSuffix(SourceCode.separatedFilesSuffix)
+        else {
+            return sourceCode
         }
-        return sourceCode
+        guard sourceCode.apiDefinitionFileRef.hasPrefix(specificationRootPath) else {
+            throw CommonError(message: "Invalid \(sourceCode.apiDefinitionFileRef) for root \(specificationRootPath)")
+        }
+        let correctedDir = sourceCode.apiDefinitionFileRef
+            .dropFirst(specificationRootPath.count)
+            .dropLast(SourceCode.separatedFilesSuffix.count)
+        return SourceCode(code: sourceCode.code,
+                          fileName: sourceCode.fileName,
+                          destinationPath: sourceCode.destinationPath + correctedDir,
+                          apiDefinitionFileRef: sourceCode.apiDefinitionFileRef)
     }
 }
