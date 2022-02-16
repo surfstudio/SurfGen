@@ -19,11 +19,13 @@ class DataGenerationTest: XCTestCase {
         // Arrange
 
         let testedApiUrl = "auth/api.yaml"
-        let specUrl = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/EndToEndTests/EndToEndTests.swift
+        let homeUrl = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/EndToEndTests/EndToEndTests.swift
             .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/EndToEndTests
             .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests
             .deletingLastPathComponent() //.../SurfGen/Tests
-            .appendingPathComponent("Common/PackageSeparation/\(testedApiUrl)")
+            .appendingPathComponent("Common/PackageSeparation")
+        let specUrl = homeUrl.appendingPathComponent(testedApiUrl)
+        let homePath = homeUrl.path
 
         let stage = AnyPipelineStageStub<[[PathModel]]>()
         // Act
@@ -56,9 +58,8 @@ class DataGenerationTest: XCTestCase {
             return
         }
         
-        //todo assert a full file name instead of checking suffix
-        XCTAssertTrue(testPath.apiDefinitionFileRef.hasSuffix(testedApiUrl))
-        XCTAssertTrue(requestModel.apiDefinitionFileRef.hasSuffix("auth/models.yaml"))
+        XCTAssertEqual(testPath.apiDefinitionFileRef, "\(homePath)/\(testedApiUrl)")
+        XCTAssertEqual(requestModel.apiDefinitionFileRef, "\(homePath)/auth/models.yaml")
         
         // Request parameter schema for /test
         guard case ParameterModel.PossibleType.reference(let requestParameterSchema) = testOperation.parameters!.first!.value.type else {
@@ -86,7 +87,10 @@ class DataGenerationTest: XCTestCase {
                     return
                 }
                 let assertedSuffix = try getModelApiFile(model: propertyModel.name)
-                XCTAssertTrue(propertyModel.apiDefinitionFileRef.hasSuffix(assertedSuffix))
+                XCTAssertEqual(
+                    propertyModel.apiDefinitionFileRef,
+                    "\(homePath)/\(assertedSuffix)"
+                )
             default:
                 continue
             }
@@ -118,6 +122,8 @@ class DataGenerationTest: XCTestCase {
             useNewNullableDefinitionStartegy: false
         ).run(with: specUrl)
         
+        // Assert
+
         guard let sourceCodeModels = stage.result?.filter({
             $0.apiDefinitionFileRef.hasSuffix(SourceCode.separatedFilesSuffix)
         }) else {
