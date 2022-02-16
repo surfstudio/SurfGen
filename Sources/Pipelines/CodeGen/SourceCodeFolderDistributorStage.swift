@@ -17,7 +17,6 @@ public struct SourceCodeFolderDistributorStage : PipelineStage {
     var next: AnyPipelineStage<[SourceCode]>
     
     private let specificationRootPath: String
-    private let modelsSuffix = "models.yaml"
 
     public init(next: AnyPipelineStage<[SourceCode]>, specificationRootPath: String) {
         self.next = next
@@ -29,13 +28,13 @@ public struct SourceCodeFolderDistributorStage : PipelineStage {
     }
     
     private func correctDestinationPath(_ sourceCode: SourceCode) throws -> SourceCode {
-        if !specificationRootPath.isEmpty && sourceCode.apiDefinitionFileRef.hasSuffix(modelsSuffix) {
+        if !specificationRootPath.isEmpty && sourceCode.apiDefinitionFileRef.hasSuffix(SourceCode.separatedFilesSuffix) {
             guard sourceCode.apiDefinitionFileRef.hasPrefix(specificationRootPath) else {
                 throw CommonError(message: "Invalid \(sourceCode.apiDefinitionFileRef) for root \(specificationRootPath)")
             }
             let correctedDir = sourceCode.apiDefinitionFileRef
                 .dropFirst(specificationRootPath.count)
-                .dropLast(modelsSuffix.count)
+                .dropLast(SourceCode.separatedFilesSuffix.count)
             return SourceCode(code: sourceCode.code,
                               fileName: sourceCode.fileName,
                               destinationPath: sourceCode.destinationPath + correctedDir,

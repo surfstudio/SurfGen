@@ -56,6 +56,7 @@ class DataGenerationTest: XCTestCase {
             return
         }
         
+        //todo assert a full file name instead of checking suffix
         XCTAssertTrue(testPath.apiDefinitionFileRef.hasSuffix(testedApiUrl))
         XCTAssertTrue(requestModel.apiDefinitionFileRef.hasSuffix("auth/models.yaml"))
         
@@ -75,7 +76,7 @@ class DataGenerationTest: XCTestCase {
         
         for requestProperty in requestModel.properties {
             switch requestProperty.type {
-            case .reference(_): do {
+            case .reference(_):
                 guard case PropertyModel.PossibleType.reference(let propertySchema) = requestProperty.type else {
                     XCTFail("Error while property \(requestProperty.name) schema casting")
                     return
@@ -86,7 +87,6 @@ class DataGenerationTest: XCTestCase {
                 }
                 let assertedSuffix = try getModelApiFile(model: propertyModel.name)
                 XCTAssertTrue(propertyModel.apiDefinitionFileRef.hasSuffix(assertedSuffix))
-            }
             default:
                 continue
             }
@@ -104,20 +104,32 @@ class DataGenerationTest: XCTestCase {
             .deletingLastPathComponent() //.../SurfGen/Tests
             .appendingPathComponent("Common/PackageSeparation")
         let specUrl = homeUrl.appendingPathComponent(testedApiUrl)
+        let homePath = homeUrl.path
 
         let stage = AnyPipelineStageStub<[SourceCode]>()
         // Act
 
         try StubBuildCodeGeneratorPipelineFactory.build(
             templates: TestTemplates.templateModels,
-            specificationRootPath: homeUrl.path,
+            specificationRootPath: homePath,
             astNodesToExclude: [],
             serviceName: "PackageSeparation",
             stage: stage.erase(),
             useNewNullableDefinitionStartegy: false
         ).run(with: specUrl)
         
-        //todo assert correct dest pathes
+        guard let sourceCodeModels = stage.result?.filter({
+            $0.apiDefinitionFileRef.hasSuffix(SourceCode.separatedFilesSuffix)
+        }) else {
+            XCTFail("Test result models not found")
+            return
+        }
+        for item in sourceCodeModels {
+            let correctedPath = item.apiDefinitionFileRef
+                .dropFirst(homePath.count)
+                .dropLast(SourceCode.separatedFilesSuffix.count)
+            XCTAssertTrue(item.destinationPath.hasSuffix(correctedPath))
+        }
     }
     
     /// returns a file name where the model belongs

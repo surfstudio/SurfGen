@@ -24,4 +24,6 @@ public struct SourceCode {
     public let fileName: String
     public let destinationPath: String
     public let apiDefinitionFileRef: String
+    /// Suffix for files which require package separation for generation
+    public static let separatedFilesSuffix = "models.yaml"
 }
