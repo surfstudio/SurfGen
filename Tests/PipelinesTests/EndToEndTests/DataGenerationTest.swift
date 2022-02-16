@@ -98,20 +98,19 @@ class DataGenerationTest: XCTestCase {
         // Arrange
 
         let testedApiUrl = "auth/api.yaml"
-        let packageSeparationPath = "Common/PackageSeparation"
-        let specUrl = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/EndToEndTests/EndToEndTests.swift
+        let homeUrl = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/EndToEndTests/EndToEndTests.swift
             .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/EndToEndTests
             .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests
             .deletingLastPathComponent() //.../SurfGen/Tests
-            .appendingPathComponent("\(packageSeparationPath)/\(testedApiUrl)")
+            .appendingPathComponent("Common/PackageSeparation")
+        let specUrl = homeUrl.appendingPathComponent(testedApiUrl)
 
         let stage = AnyPipelineStageStub<[SourceCode]>()
-        let homeDirPath = FileManager.default.homeDirectoryForCurrentUser.path
         // Act
 
         try StubBuildCodeGeneratorPipelineFactory.build(
             templates: TestTemplates.templateModels,
-            specificationRootPath: "\(homeDirPath)/SurfGen/Tests/\(packageSeparationPath)",
+            specificationRootPath: homeUrl.path,
             astNodesToExclude: [],
             serviceName: "PackageSeparation",
             stage: stage.erase(),

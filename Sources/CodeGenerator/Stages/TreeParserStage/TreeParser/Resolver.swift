@@ -298,7 +298,7 @@ private extension Resolver {
     func tryResolveSurfGenReference(ref: String) -> SchemaType? {
         switch ref {
         case Common.Constants.ASTNodeReference.todo:
-            return .object(.init(name: "TODO", properties: [], description: nil, apiDefinitionFileRef: "STUB"))
+            return .object(.init(name: "TODO", properties: [], description: nil, apiDefinitionFileRef: ""))
         default: return nil
         }
     }

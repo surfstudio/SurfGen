@@ -87,7 +87,7 @@ extension AnyParametersBuilder {
             // because this method provides possiblity to parse parameters types as any schema
             // or add tests for this class for each type of parameter's type
 
-            let schemas = try self.schemaBuilder.build(schemas: [.init(name: "", value: schema.schema)], apiDefinitionFileRef: "STUB")
+            let schemas = try self.schemaBuilder.build(schemas: [.init(name: "", value: schema.schema)], apiDefinitionFileRef: "")
 
             guard schemas.count == 1 else {
                 throw CommonError(message: "After parsing parameter's schema we got \(schemas.count) modles. But awaiting only 1. Please create an issue and attach your swagger specification")
