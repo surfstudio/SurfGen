@@ -9,7 +9,15 @@ import Foundation
 import CodeGenerator
 import Common
 
-/// Fixes destinationPath: add nested folder name according specification in order to generate files in separate packages
+/// Fixes destinationPath using apiDefinitionFileRef:
+/// add nested folder name according specification in order to generate files in separate packages when the root is set.
+///
+/// For example:
+/// sourceCode.destinationPath = "/users/project/api"
+/// sourceCode.apiDefinitionFileRef = "/users/username/swagger/products/models.yaml"
+/// specificationRootPath = "/users/username/swagger"
+///
+/// The fixed sourceCode.destinationPath will be "/users/project/api/products"
 public struct SourceCodeFolderDistributorStage : PipelineStage {
     
     public typealias Input = [SourceCode]
