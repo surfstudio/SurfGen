@@ -1,0 +1,36 @@
+components:
+  schemas:
+  
+    Polygons:
+      type: array
+      items:
+        $ref: "models.yaml#/components/schemas/Boundaries"
+        
+    Boundaries:
+      type: object
+      description: Координаты точки полигона
+      properties:
+        boundary:
+          $ref: "models.yaml#/components/schemas/Boundary"
+               
+    Boundary:
+      type: array
+      items:
+        $ref: "models.yaml#/components/schemas/Coords"
+    
+    Coords:
+      type: object
+      description: Координаты точки/адреса
+      properties:
+        coord:
+          type: number
+          format: double
+          description: Координата
+          
+    CoordsArrayResponse:
+      type: object
+      properties:
+        coordsArray:
+          type: array
+          items:
+            $ref: "models.yaml#/components/schemas/Coords"
