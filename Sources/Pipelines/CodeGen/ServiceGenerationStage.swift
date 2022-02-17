@@ -113,8 +113,10 @@ public struct ServiceGenerationStage: PipelineStage {
 
     private func fillTemplates(_ templates: [Template], with model: [String: Any], name: String, apiDefinitionFileRef: String) throws -> [SourceCode] {
         return try templates.map { template in
-            let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath, with: model, specificationRootPath: specificationRootPath),
-                                      message: "While filling template at \(template.templatePath) with model \(name)")
+            let sourceCode = try wrap(
+                templateFiller.fillTemplate(at: template.templatePath, with: model),
+                message: "While filling template at \(template.templatePath) with model \(name)"
+            )
             return SourceCode(code: sourceCode,
                               fileName: template.buildFileName(for: name),
                               destinationPath: template.buildDestinationPath(for: name),

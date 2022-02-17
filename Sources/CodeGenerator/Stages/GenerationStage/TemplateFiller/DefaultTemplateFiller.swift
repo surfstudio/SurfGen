@@ -14,13 +14,9 @@ public class DefaultTemplateFiller: TemplateFiller {
     
     public init() {}
 
-    public func fillTemplate(
-        at path: String,
-        with context: [String : Any],
-        specificationRootPath: String
-    ) throws -> String {
+    public func fillTemplate(at path: String, with context: [String : Any]) throws -> String {
         var environment = Environment()
-        environment.extensions.append(buildTemplateExtension(specificationRootPath))
+        environment.extensions.append(buildTemplateExtension())
         let template = try loadTemplate(at: path)
         do {
             return try environment.renderTemplate(string: template, context: context)
@@ -33,13 +29,7 @@ public class DefaultTemplateFiller: TemplateFiller {
         }
     }
 
-    private func loadTemplate(at path: String) throws -> String {
-        let templatePath = Path(path)
-        return try wrap(templatePath.read(),
-                        message: "While loading template at path: \(path)")
-    }
-
-    private func buildTemplateExtension(_ specificationRootPath: String) -> Extension {
+    func buildTemplateExtension() -> Extension {
         let templateExtension = Extension()
 
         templateExtension.registerStringFilter("capitalizeFirstLetter") {
@@ -77,23 +67,14 @@ public class DefaultTemplateFiller: TemplateFiller {
         templateExtension.registerStringFilter("upperCaseToCamelCaseOrSelf") {
             $0.upperCaseToCamelCaseOrSelf()
         }
-
-        templateExtension.registerStringFilter("getPackageName") {
-            $0.getPackageName(root: specificationRootPath)
-        }
         
         return templateExtension
     }
-}
-
-private extension Extension {
-
-    func registerStringFilter(_ name: String, stringFilter: @escaping (String) -> Any) {
-        registerFilter(name) {
-            guard let stringValue = $0 as? String else {
-                return $0
-            }
-            return stringFilter(stringValue)
-        }
+    
+    
+    private func loadTemplate(at path: String) throws -> String {
+        let templatePath = Path(path)
+        return try wrap(templatePath.read(),
+                        message: "While loading template at path: \(path)")
     }
 }

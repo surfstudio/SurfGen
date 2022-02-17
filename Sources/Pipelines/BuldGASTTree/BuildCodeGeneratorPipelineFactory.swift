@@ -46,7 +46,7 @@ public struct BuildCodeGeneratorPipelineFactory {
             responseBuilder: responsesBuilder
         )
 
-        let templateFiller = DefaultTemplateFiller()
+        let templateFiller = !specificationRootPath.isEmpty ? SeparationTemplateFilter(specificationRootPath: specificationRootPath) : DefaultTemplateFiller()
         let modelExtractor = ModelExtractor()
 
         return .init(
