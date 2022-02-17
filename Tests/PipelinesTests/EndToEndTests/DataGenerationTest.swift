@@ -97,7 +97,7 @@ class DataGenerationTest: XCTestCase {
         }
     }
     
-    /// Test if destinationPath for each model supports package separation
+    /// Test if destinationPath for each model supports package separation when the root is set
     func testDestinationPath() throws {
         // Arrange
 
@@ -108,7 +108,14 @@ class DataGenerationTest: XCTestCase {
             .deletingLastPathComponent() //.../SurfGen/Tests
             .appendingPathComponent("Common/PackageSeparation")
         let specUrl = homeUrl.appendingPathComponent(testedApiUrl)
-        let homePath = homeUrl.path
+        
+        // Act, Assert
+        try testDestinationPathUtil(specUrl: specUrl, homePath: homeUrl.path)
+        try testDestinationPathUtil(specUrl: specUrl, homePath: "")
+    }
+    
+    private func testDestinationPathUtil(specUrl: URL, homePath: String) throws {
+        // Arrange
 
         let stage = AnyPipelineStageStub<[SourceCode]>()
         // Act
@@ -131,10 +138,18 @@ class DataGenerationTest: XCTestCase {
             return
         }
         for item in sourceCodeModels {
-            let correctedPath = item.apiDefinitionFileRef
-                .dropFirst(homePath.count)
-                .dropLast(SourceCode.separatedFilesSuffix.count)
-            XCTAssertTrue(item.destinationPath.hasSuffix(correctedPath))
+            if (homePath.isEmpty) {
+                // destinationPath is not changed if the root is not set
+                XCTAssertEqual(item.destinationPath, TestTemplates.testOutputPath)
+            } else {
+                let correctedPath = item.apiDefinitionFileRef
+                    .dropFirst(homePath.count)
+                    .dropLast(SourceCode.separatedFilesSuffix.count)
+                XCTAssertEqual(
+                    item.destinationPath,
+                    "\(TestTemplates.testOutputPath)\(correctedPath)"
+                )
+            }
         }
     }
     
