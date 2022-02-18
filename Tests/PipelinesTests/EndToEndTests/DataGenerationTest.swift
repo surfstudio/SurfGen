@@ -53,7 +53,9 @@ class DataGenerationTest: XCTestCase {
         }
    
         XCTAssertEqual(testPath.apiDefinitionFileRef, "\(homePath)/\(testedApiUrl)")
+        try testOperationParameters(testOperation: testOperation, homePath: homePath)
         try testRequestModel(testOperation: testOperation, homePath: homePath)
+        try testResponseModel(testOperation: testOperation, homePath: homePath)
     }
     
     /// Test if destinationPath for each model supports package separation when the root is set
@@ -73,38 +75,57 @@ class DataGenerationTest: XCTestCase {
         try testDestinationPathUtil(specUrl: specUrl, homePath: "")
     }
     
+    private func testOperationParameters(testOperation: OperationModel, homePath: String) throws {
+        // Request parameter schema for /test
+        guard case ParameterModel.PossibleType.reference(let requestParameterSchema) = testOperation.parameters!.first!.value.type else {
+            XCTFail("Error while request parameter schema casting")
+            return
+        }
+        // Request parameter for /test
+        guard case SchemaType.enum(let requestParameter) = requestParameterSchema else {
+            XCTFail("Error while request parameter casting")
+            return
+        }
+        XCTAssertTrue(requestParameter.apiDefinitionFileRef.hasSuffix("very/long/dir/models.yaml"))
+    }
+    
     private func testRequestModel(testOperation: OperationModel, homePath: String) throws {
         // RequestModel for /test
         guard case DataModel.PossibleType.object(let requestModel) = testOperation.requestModel!.value.content.first!.type else {
             XCTFail("Error while request model casting")
             return
         }
-        
         XCTAssertEqual(requestModel.apiDefinitionFileRef, "\(homePath)/auth/models.yaml")
-        
-        // Request parameter schema for /test
-        guard case ParameterModel.PossibleType.reference(let requestParameterSchema) = testOperation.parameters!.first!.value.type else {
-            XCTFail("Error while request parameter schema casting")
+        try testProperties(properties: requestModel.properties, homePath: homePath)
+    }
+    
+    private func testResponseModel(testOperation: OperationModel, homePath: String) throws {
+        guard case DataModel.PossibleType.array(let responseModel) = testOperation.responses!.first!.value.values.first!.type else {
+            XCTFail("Error while response model casting")
             return
         }
-        
-        // Request parameter for /test
-        guard case SchemaType.enum(let requestParameter) = requestParameterSchema else {
-            XCTFail("Error while request parameter casting")
+        guard case SchemaArrayModel.PossibleType.reference(let itemsType) = responseModel.itemsType else {
+            XCTFail("Error while itemsType casting")
             return
         }
-        
-        XCTAssertTrue(requestParameter.apiDefinitionFileRef.hasSuffix("very/long/dir/models.yaml"))
-        
-        for requestProperty in requestModel.properties {
-            switch requestProperty.type {
+        guard case SchemaType.object(let objectModel) = itemsType else {
+            XCTFail("Error while objectModel casting")
+            return
+        }
+        XCTAssertEqual(objectModel.apiDefinitionFileRef, "\(homePath)/auth/models.yaml")
+        try testProperties(properties: objectModel.properties, homePath: homePath)
+    }
+    
+    private func testProperties(properties: [PropertyModel], homePath: String) throws {
+        for property in properties {
+            switch property.type {
             case .reference(_):
-                guard case PropertyModel.PossibleType.reference(let propertySchema) = requestProperty.type else {
-                    XCTFail("Error while property \(requestProperty.name) schema casting")
+                guard case PropertyModel.PossibleType.reference(let propertySchema) = property.type else {
+                    XCTFail("Error while property \(property.name) schema casting")
                     return
                 }
                 guard case SchemaType.object(let propertyModel) = propertySchema else {
-                    XCTFail("Error while property \(requestProperty.name) casting")
+                    XCTFail("Error while property \(property.name) casting")
                     return
                 }
                 let assertedSuffix = try getModelApiFile(model: propertyModel.name)
