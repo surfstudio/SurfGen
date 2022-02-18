@@ -51,14 +51,35 @@ class DataGenerationTest: XCTestCase {
             XCTFail("Tested operation not found")
             return
         }
+   
+        XCTAssertEqual(testPath.apiDefinitionFileRef, "\(homePath)/\(testedApiUrl)")
+        try testRequestModel(testOperation: testOperation, homePath: homePath)
+    }
+    
+    /// Test if destinationPath for each model supports package separation when the root is set
+    func testDestinationPath() throws {
+        // Arrange
+
+        let testedApiUrl = "auth/api.yaml"
+        let homeUrl = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/EndToEndTests/EndToEndTests.swift
+            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/EndToEndTests
+            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests
+            .deletingLastPathComponent() //.../SurfGen/Tests
+            .appendingPathComponent("Common/PackageSeparation")
+        let specUrl = homeUrl.appendingPathComponent(testedApiUrl)
         
+        // Act, Assert
+        try testDestinationPathUtil(specUrl: specUrl, homePath: homeUrl.path)
+        try testDestinationPathUtil(specUrl: specUrl, homePath: "")
+    }
+    
+    private func testRequestModel(testOperation: OperationModel, homePath: String) throws {
         // RequestModel for /test
         guard case DataModel.PossibleType.object(let requestModel) = testOperation.requestModel!.value.content.first!.type else {
             XCTFail("Error while request model casting")
             return
         }
         
-        XCTAssertEqual(testPath.apiDefinitionFileRef, "\(homePath)/\(testedApiUrl)")
         XCTAssertEqual(requestModel.apiDefinitionFileRef, "\(homePath)/auth/models.yaml")
         
         // Request parameter schema for /test
@@ -95,23 +116,6 @@ class DataGenerationTest: XCTestCase {
                 continue
             }
         }
-    }
-    
-    /// Test if destinationPath for each model supports package separation when the root is set
-    func testDestinationPath() throws {
-        // Arrange
-
-        let testedApiUrl = "auth/api.yaml"
-        let homeUrl = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/EndToEndTests/EndToEndTests.swift
-            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/EndToEndTests
-            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests
-            .deletingLastPathComponent() //.../SurfGen/Tests
-            .appendingPathComponent("Common/PackageSeparation")
-        let specUrl = homeUrl.appendingPathComponent(testedApiUrl)
-        
-        // Act, Assert
-        try testDestinationPathUtil(specUrl: specUrl, homePath: homeUrl.path)
-        try testDestinationPathUtil(specUrl: specUrl, homePath: "")
     }
     
     private func testDestinationPathUtil(specUrl: URL, homePath: String) throws {
