@@ -237,6 +237,23 @@ Where:
 - `/api/v1.1/auth` - method URI (just like in specification)
 - `post` - operation (you can skip it to remove whole method). Symbol ~ is used to mark specific operation.
 
+### Package separation
+
+SurfGen has an ability to generate models in separate packages according specification.
+
+Define in generator config:
+```
+specificationRootPath: /Users/username/your-swagger-repo
+```
+
+The value is the same as `pwd` shell command output in your specification root.
+
+After generation you'll see same created directories as described in your specification.
+
+The feature is useful for Kotlin projects.
+
+More information [here](Templates/v2/Kotlin/PackageSeparation.md)
+
 ## Unsupported OpenAPI features
 
 - We don't support key `not`

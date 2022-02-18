@@ -15,6 +15,7 @@ public struct OpenAPIASTTree {
     public var dependencies: [String: SwaggerSpec]
     /// AST of the current OpenAPI file
     public var currentTree: SwaggerSpec
+    /// View of the ASTTree from file point of view
     public var rawDependency: Dependency
 
     public init(dependencies: [String: SwaggerSpec], currentTree: SwaggerSpec, rawDependency: Dependency) {

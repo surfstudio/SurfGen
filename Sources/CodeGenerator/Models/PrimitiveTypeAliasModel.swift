@@ -38,13 +38,15 @@ public struct PrimitiveTypeAliasModel: Encodable {
     /// For example above it will be `userID`
     public let name: String
     public let type: PrimitiveType
+    public let apiDefinitionFileRef: String
 
     /// This value will be used as type for generation
     public let typeName: String
 
-    public init(name: String, type: PrimitiveType) {
+    public init(name: String, type: PrimitiveType, apiDefinitionFileRef: String) {
         self.name = name
         self.type = type
         self.typeName = type.rawValue
+        self.apiDefinitionFileRef = apiDefinitionFileRef
     }
 }

@@ -1,0 +1,12 @@
+components:
+  schemas:
+
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+          
+    TestEnum:
+      type: string
+      enum: ["first", "second"]

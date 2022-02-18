@@ -1,8 +1,8 @@
 //
-//  BuldGASTTreeFactory.swift
+//  StubBuildCodeGeneratorPipelineFactory.swift
 //  
 //
-//  Created by Александр Кравченков on 13.12.2020.
+//  Created by volodina on 14.02.2022.
 //
 
 import Foundation
@@ -12,9 +12,9 @@ import GASTBuilder
 import CodeGenerator
 import Operations
 import ASTTree
+import Pipelines
 
-/// Configures pipeline for code generator
-public struct BuildCodeGeneratorPipelineFactory {
+public struct StubBuildCodeGeneratorPipelineFactory {
 
     public static func provider(str: URL) throws -> ReferenceExtractor {
         return try .init(
@@ -24,9 +24,63 @@ public struct BuildCodeGeneratorPipelineFactory {
     }
 
     public static func build(templates: [Template],
+                             astNodesToExclude: Set<String>,
+                             serviceName: String,
+                             stage: AnyPipelineStage<[[PathModel]]>,
+                             needRewriteExistingFiles: Bool = false,
+                             useNewNullableDefinitionStartegy: Bool,
+                             prefixCutter: PrefixCutter? = nil,
+                             logger: Loger? = nil) -> BuildGASTTreeEntryPoint {
+
+        let schemaBuilder = AnySchemaBuilder(useNewNullableDeterminationStrategy: useNewNullableDefinitionStartegy)
+
+        let parameterBuilder = AnyParametersBuilder(schemaBuilder: schemaBuilder)
+        let mediaTypesBuilder = AnyMediaTypesBuilder(schemaBuilder: schemaBuilder)
+        let responsesBuilder = AnyResponsesBuilder(mediaTypesBuilder: mediaTypesBuilder)
+        let requestBodiesBuilder = AnyRequestBodiesBuilder(mediaTypesBuilder: mediaTypesBuilder)
+
+        let serviceBuilder = AnyServiceBuilder(
+            parameterBuilder: parameterBuilder,
+            schemaBuilder: schemaBuilder,
+            requestBodyBuilder: requestBodiesBuilder,
+            responseBuilder: responsesBuilder
+        )
+
+        return .init(
+            refExtractorProvider: self.provider(str:),
+            next: OpenAPIASTBuilderStage(
+                fileProvider: FileManager.default,
+                next: OpenAPIASTExcludingStage(
+                    excluder: ASTNodeExcluder(logger: logger),
+                    excludeList: astNodesToExclude,
+                    next: BuildGastTreeParseDependenciesSatage(
+                        builder: AnyGASTBuilder(
+                            fileProvider: FileManager.default,
+                            schemaBuilder: schemaBuilder,
+                            parameterBuilder: parameterBuilder,
+                            serviceBuilder: serviceBuilder,
+                            responsesBuilder: responsesBuilder,
+                            requestBodiesBuilder: requestBodiesBuilder),
+                        next: InitCodeGenerationStage(
+                            parserStage: .init(
+                                next: SwaggerCorrectorStage(
+                                    corrector: SwaggerCorrector(logger: logger),
+                                    next: stage
+                                ).erase(),
+                                parser: buildParser(logger: logger)
+                            )
+                        ).erase()
+                    ).erase()
+                ).erase()
+            ).erase()
+        )
+    }
+
+    public static func build(templates: [Template],
                              specificationRootPath: String,
                              astNodesToExclude: Set<String>,
                              serviceName: String,
+                             stage: AnyPipelineStage<[SourceCode]>,
                              needRewriteExistingFiles: Bool = false,
                              useNewNullableDefinitionStartegy: Bool,
                              prefixCutter: PrefixCutter? = nil,
@@ -48,7 +102,7 @@ public struct BuildCodeGeneratorPipelineFactory {
 
         let templateFiller = !specificationRootPath.isEmpty ? SeparationTemplateFilter(specificationRootPath: specificationRootPath) : DefaultTemplateFiller()
         let modelExtractor = ModelExtractor()
-
+        
         return .init(
             refExtractorProvider: self.provider(str:),
             next: OpenAPIASTBuilderStage(
@@ -70,10 +124,7 @@ public struct BuildCodeGeneratorPipelineFactory {
                                     corrector: SwaggerCorrector(logger: logger),
                                     next: ServiceGenerationStage(
                                         next: SourceCodeFolderDistributorStage(
-                                            next: FileWriterStage(
-                                                needRewriteExistingFiles: needRewriteExistingFiles,
-                                                logger: logger
-                                            ).erase(),
+                                            next: stage.erase(),
                                             specificationRootPath: specificationRootPath
                                         ).erase(),
                                         templates: templates,
@@ -92,7 +143,7 @@ public struct BuildCodeGeneratorPipelineFactory {
             ).erase()
         )
     }
-
+    
     static func buildParser(logger: Loger?) -> TreeParser {
 
         let resolver = Resolver(logger: logger)

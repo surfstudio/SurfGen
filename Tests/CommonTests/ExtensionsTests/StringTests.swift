@@ -48,4 +48,22 @@ public final class StringTests: XCTestCase {
             XCTAssertEqual(key.upperCaseToCamelCaseOrSelf(), value)
         }
     }
+    
+    func testGetPackageName() {
+        // Arrange
+        
+        let root = "/Users/username/swagger"
+        let dataWithExpectedResults = [
+            "\(root)/products/api.yaml": "products",
+            "\(root)/products/models.yaml": "products",
+            "\(root)/products/123.yaml": "products",
+            "\(root)/very/long/dir/models.yaml": "very.long.dir",
+        ]
+
+        // Act - Assert
+
+        for (key, value) in dataWithExpectedResults {
+            XCTAssertEqual(key.getPackageName(root: root), value)
+        }
+    }
 }

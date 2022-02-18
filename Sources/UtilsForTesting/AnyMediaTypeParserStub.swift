@@ -48,11 +48,11 @@ public struct AnyMediaTypeParserStub: MediaTypeParser {
         // in-place declaration is unsupported
         switch schema.next {
         case .object:
-            return .object(SchemaObjectModel(name: "", properties: [], description: nil))
+            return .object(SchemaObjectModel(name: "", properties: [], description: nil, apiDefinitionFileRef: current.dependency.pathToCurrentFile))
         case .enum:
-            return .object(SchemaObjectModel(name: "", properties: [], description: nil))
+            return .object(SchemaObjectModel(name: "", properties: [], description: nil, apiDefinitionFileRef: current.dependency.pathToCurrentFile))
         case .simple:
-            return .object(SchemaObjectModel(name: "", properties: [], description: nil))
+            return .object(SchemaObjectModel(name: "", properties: [], description: nil, apiDefinitionFileRef: current.dependency.pathToCurrentFile))
         case .reference(let val):
             let schemaType = try wrap(
                 Resolver().resolveSchema(ref: val, node: current, other: other),
@@ -64,9 +64,9 @@ public struct AnyMediaTypeParserStub: MediaTypeParser {
 
             switch schemaType {
             case .alias:
-                return .object(SchemaObjectModel(name: "", properties: [], description: nil))
+                return .object(SchemaObjectModel(name: "", properties: [], description: nil, apiDefinitionFileRef: current.dependency.pathToCurrentFile))
             case .enum:
-                return .object(SchemaObjectModel(name: "", properties: [], description: nil))
+                return .object(SchemaObjectModel(name: "", properties: [], description: nil, apiDefinitionFileRef: current.dependency.pathToCurrentFile))
             case .object(let val):
                 return .object(val)
             case .array(let val):

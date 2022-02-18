@@ -20,6 +20,7 @@ public struct ServiceGenerationStage: PipelineStage {
     
     private let templateFiller: TemplateFiller
     private let modelExtractor: ModelExtractor
+    private let specificationRootPath: String
 
     var next: AnyPipelineStage<[SourceCode]>
 
@@ -31,6 +32,7 @@ public struct ServiceGenerationStage: PipelineStage {
         next: AnyPipelineStage<[SourceCode]>,
         templates: [Template],
         serviceName: String,
+        specificationRootPath: String,
         templateFiller: TemplateFiller,
         modelExtractor: ModelExtractor,
         prefixCutter: PrefixCutter? = nil
@@ -38,6 +40,7 @@ public struct ServiceGenerationStage: PipelineStage {
         self.next = next
         self.templates = templates
         self.serviceName = serviceName.capitalizingFirstLetter()
+        self.specificationRootPath = specificationRootPath
         self.templateFiller = templateFiller
         self.modelExtractor = modelExtractor
         self.prefixCutter = prefixCutter
@@ -53,7 +56,7 @@ public struct ServiceGenerationStage: PipelineStage {
             throw CommonError(message: "We expect only one service to generate, but got \(compact.count)")
         }
 
-        var generatorServicePaths = servicePaths.map { PathGenerationModel(pathModel: $0) }
+        var generatorServicePaths = servicePaths.map { PathGenerationModel(pathModel: $0, apiDefinitionFileRef: $0.apiDefinitionFileRef) }
 
         if let prefixCutter = self.prefixCutter {
             generatorServicePaths = generatorServicePaths.map { item in
@@ -65,7 +68,8 @@ public struct ServiceGenerationStage: PipelineStage {
 
         let serviceGenerationModel = ServiceGenerationModel(
             name: serviceName,
-            paths: generatorServicePaths
+            paths: generatorServicePaths,
+            apiDefinitionFileRef: servicePaths.first?.apiDefinitionFileRef ?? ""
         )
         
         let schemaModels = modelExtractor.extractModels(from: serviceGenerationModel)
@@ -76,39 +80,47 @@ public struct ServiceGenerationStage: PipelineStage {
         
         // fill templates
         
-        let generatedService = try fillTemplates(templates.filter { $0.type == .service },
-                                                 with: [ContextKeys.service: serviceGenerationModel],
-                                                 name: serviceGenerationModel.name)
+        let generatedService = try fillTemplates(
+            templates.filter { $0.type == .service },
+            with: [ContextKeys.service: serviceGenerationModel],
+            name: serviceGenerationModel.name,
+            apiDefinitionFileRef: serviceGenerationModel.apiDefinitionFileRef)
 
         let generatedModels = try objectModels.flatMap {
             return try fillTemplates(templates.filter { $0.type == .model },
                                      with: [ContextKeys.model: $0],
-                                     name: $0.name)
+                                     name: $0.name,
+                                     apiDefinitionFileRef: $0.apiDefinitionFileRef)
         }
 
         let generatedEnums = try enumModels.flatMap {
             return try fillTemplates(templates.filter { $0.type == .enum },
                                      with: [ContextKeys.enum: $0],
-                                     name: $0.name)
+                                     name: $0.name,
+                                     apiDefinitionFileRef: $0.apiDefinitionFileRef)
         }
 
         let generatedTypeAliases = try typeAliasModels.flatMap {
             return try fillTemplates(templates.filter { $0.type == .typealias },
                                      with: [ContextKeys.model: $0],
-                                     name: $0.name)
+                                     name: $0.name,
+                                     apiDefinitionFileRef: $0.apiDefinitionFileRef)
         }
 
         try next.run(with: generatedService + generatedModels + generatedEnums + generatedTypeAliases)
         
     }
 
-    private func fillTemplates(_ templates: [Template], with model: [String: Any], name: String) throws -> [SourceCode] {
+    private func fillTemplates(_ templates: [Template], with model: [String: Any], name: String, apiDefinitionFileRef: String) throws -> [SourceCode] {
         return try templates.map { template in
-            let sourceCode = try wrap(templateFiller.fillTemplate(at: template.templatePath, with: model),
-                                      message: "While filling template at \(template.templatePath) with model \(name)")
+            let sourceCode = try wrap(
+                templateFiller.fillTemplate(at: template.templatePath, with: model),
+                message: "While filling template at \(template.templatePath) with model \(name)"
+            )
             return SourceCode(code: sourceCode,
                               fileName: template.buildFileName(for: name),
-                              destinationPath: template.buildDestinationPath(for: name))
+                              destinationPath: template.buildDestinationPath(for: name),
+                              apiDefinitionFileRef: apiDefinitionFileRef)
         }
     }
 }

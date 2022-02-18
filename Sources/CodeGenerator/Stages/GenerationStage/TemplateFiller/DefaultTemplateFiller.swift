@@ -29,13 +29,7 @@ public class DefaultTemplateFiller: TemplateFiller {
         }
     }
 
-    private func loadTemplate(at path: String) throws -> String {
-        let templatePath = Path(path)
-        return try wrap(templatePath.read(),
-                        message: "While loading template at path: \(path)")
-    }
-
-    private func buildTemplateExtension() -> Extension {
+    func buildTemplateExtension() -> Extension {
         let templateExtension = Extension()
 
         templateExtension.registerStringFilter("capitalizeFirstLetter") {
@@ -73,19 +67,14 @@ public class DefaultTemplateFiller: TemplateFiller {
         templateExtension.registerStringFilter("upperCaseToCamelCaseOrSelf") {
             $0.upperCaseToCamelCaseOrSelf()
         }
-
+        
         return templateExtension
     }
-}
-
-private extension Extension {
-
-    func registerStringFilter(_ name: String, stringFilter: @escaping (String) -> Any) {
-        registerFilter(name) {
-            guard let stringValue = $0 as? String else {
-                return $0
-            }
-            return stringFilter(stringValue)
-        }
+    
+    
+    private func loadTemplate(at path: String) throws -> String {
+        let templatePath = Path(path)
+        return try wrap(templatePath.read(),
+                        message: "While loading template at path: \(path)")
     }
 }

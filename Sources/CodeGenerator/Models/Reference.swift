@@ -68,7 +68,7 @@ extension Reference: Encodable where DataType: Encodable {
         }
     }
 
-    var value: DataType {
+    public var value: DataType {
         switch self {
         case .notReference(let val):
             return val

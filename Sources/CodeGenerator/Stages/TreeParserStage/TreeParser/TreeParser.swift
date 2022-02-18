@@ -61,7 +61,7 @@ public struct TreeParser {
 
         let operations = try service.operations.map(mapper)
 
-        return .init(path: service.path, operations: operations)
+        return .init(path: service.path, operations: operations, apiDefinitionFileRef: current.dependency.pathToCurrentFile)
     }
 
     func parse(operation: OperationNode, current: DependencyWithTree, other: [DependencyWithTree]) throws -> OperationModel {

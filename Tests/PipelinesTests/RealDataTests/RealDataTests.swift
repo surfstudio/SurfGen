@@ -44,10 +44,13 @@ final class RealDataTests: XCTestCase {
             XCTAssertNoThrow(
                 try { () throws -> Void in
                     do {
-                        _ = try BuildCodeGeneratorPipelineFactory.build(templates: [],
-                                                                        astNodesToExclude: [],
-                                                                        serviceName: "",
-                                                                        useNewNullableDefinitionStartegy: false).run(with: url)
+                        _ = try BuildCodeGeneratorPipelineFactory.build(
+                            templates: [],
+                            specificationRootPath: "",
+                            astNodesToExclude: [],
+                            serviceName: "",
+                            useNewNullableDefinitionStartegy: false
+                        ).run(with: url)
                     } catch {
                         print("ERROR for \(url)")
                         print(error.localizedDescription)

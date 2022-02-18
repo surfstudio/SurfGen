@@ -13,6 +13,11 @@ public enum ConfigTemplates {
     # if set to false then `required` will be used
     # for more info look at https://github.com/surfstudio/SurfGen#nullability
     useNewNullableDeterminationStrategy: true
+    
+    # If is not empty than models will be generated to separated packages according specification.
+    # Useful for Kotlin projects.
+    # for more info look at https://github.com/surfstudio/SurfGen#package-separation
+    specificationRootPath: ""
 
     # Will remove listed prefixes from method names
     # for detais look at https://github.com/surfstudio/SurfGen#prefix-cutting
