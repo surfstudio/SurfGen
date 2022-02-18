@@ -97,7 +97,7 @@ class DataGenerationTest: XCTestCase {
         }
     }
     
-    /// Test if destinationPath for each model supports package separation
+    /// Test if destinationPath for each model supports package separation when the root is set
     func testDestinationPath() throws {
         // Arrange
 
@@ -108,34 +108,10 @@ class DataGenerationTest: XCTestCase {
             .deletingLastPathComponent() //.../SurfGen/Tests
             .appendingPathComponent("Common/PackageSeparation")
         let specUrl = homeUrl.appendingPathComponent(testedApiUrl)
-        let homePath = homeUrl.path
-
-        let stage = AnyPipelineStageStub<[SourceCode]>()
-        // Act
-
-        try StubBuildCodeGeneratorPipelineFactory.build(
-            templates: TestTemplates.templateModels,
-            specificationRootPath: homePath,
-            astNodesToExclude: [],
-            serviceName: "PackageSeparation",
-            stage: stage.erase(),
-            useNewNullableDefinitionStartegy: false
-        ).run(with: specUrl)
         
-        // Assert
-
-        guard let sourceCodeModels = stage.result?.filter({
-            $0.apiDefinitionFileRef.hasSuffix(SourceCode.separatedFilesSuffix)
-        }) else {
-            XCTFail("Test result models not found")
-            return
-        }
-        for item in sourceCodeModels {
-            let correctedPath = item.apiDefinitionFileRef
-                .dropFirst(homePath.count)
-                .dropLast(SourceCode.separatedFilesSuffix.count)
-            XCTAssertTrue(item.destinationPath.hasSuffix(correctedPath))
-        }
+        // Act, Assert
+        try testDestinationPathUtil(specUrl: specUrl, homePath: homeUrl.path)
+        try testDestinationPathUtil(specUrl: specUrl, homePath: "")
     }
     
     /// Test ref to alias support in specification
@@ -167,6 +143,45 @@ class DataGenerationTest: XCTestCase {
         guard let testPath = stage.result?.last?.first else {
             XCTFail("Test api path not found")
             return
+        }
+    }
+    
+    private func testDestinationPathUtil(specUrl: URL, homePath: String) throws {
+        // Arrange
+
+        let stage = AnyPipelineStageStub<[SourceCode]>()
+        // Act
+
+        try StubBuildCodeGeneratorPipelineFactory.build(
+            templates: TestTemplates.templateModels,
+            specificationRootPath: homePath,
+            astNodesToExclude: [],
+            serviceName: "PackageSeparation",
+            stage: stage.erase(),
+            useNewNullableDefinitionStartegy: false
+        ).run(with: specUrl)
+        
+        // Assert
+
+        guard let sourceCodeModels = stage.result?.filter({
+            $0.apiDefinitionFileRef.hasSuffix(SourceCode.separatedFilesSuffix)
+        }) else {
+            XCTFail("Test result models not found")
+            return
+        }
+        for item in sourceCodeModels {
+            if (homePath.isEmpty) {
+                // destinationPath is not changed if the root is not set
+                XCTAssertEqual(item.destinationPath, TestTemplates.testOutputPath)
+            } else {
+                let correctedPath = item.apiDefinitionFileRef
+                    .dropFirst(homePath.count)
+                    .dropLast(SourceCode.separatedFilesSuffix.count)
+                XCTAssertEqual(
+                    item.destinationPath,
+                    "\(TestTemplates.testOutputPath)\(correctedPath)"
+                )
+            }
         }
     }
     
