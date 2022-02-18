@@ -61,7 +61,7 @@ class {{ service.name }}Interactor @Inject constructor(
             #}{% elif parameter.typeModel.name == "number" or parameter.typeModel.aliasTypeName == "number" %}Double{#
             #}{% elif parameter.typeModel.name == "string" or parameter.typeModel.aliasTypeName == "string" %}String{#
             #}{% elif parameter.typeModel.name == "boolean" or parameter.typeModel.aliasTypeName == "boolean" %}Boolean{#
-            #}{% else %}{{ parameter.typeName }}{% endif %}{#
+            #}{% else %}{{ parameter.typeModel.name }}{% endif %}{#
             #}{% if parameter.typeModel.isArray %}>{% endif %}{#
             #}{% if not parameter.isRequired %}?{% endif %}{#
             #}{% if not forloop.last %},{% elif operation.parameters.count > 1 %}

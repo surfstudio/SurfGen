@@ -113,10 +113,14 @@ extension PropertyModel.PossibleType {
     }
 
     var isArray: Bool {
-        if case .array = self {
+        switch self {
+        case .array:
             return true
+        case .reference(let schema):
+            return schema.isArray
+        default:
+            return false
         }
-        return false
     }
 
     var isObject: Bool {

@@ -89,7 +89,18 @@ public indirect enum SchemaType {
 extension SchemaType {
     
     var isObject: Bool {
-        if case .object = self {
+        switch self {
+        case .array(let arrayModel):
+            return arrayModel.itemsType.isObject
+        case .object:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    var isArray: Bool {
+        if case .array = self {
             return true
         }
         return false

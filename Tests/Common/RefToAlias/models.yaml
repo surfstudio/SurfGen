@@ -27,7 +27,7 @@ components:
           format: double
           description: Координата
           
-    CoordsArrayResponse:
+    CoordsArray:
       type: object
       properties:
         coordsArray:
