@@ -81,7 +81,7 @@ public struct PropertyModel {
     public let isNullable: Bool
 
     /// This value will be used as type for generation
-    let typeModel: ItemTypeModel
+    public let typeModel: ItemTypeModel
 
     init(name: String,
          description: String?,

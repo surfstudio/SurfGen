@@ -108,7 +108,7 @@ public struct ParameterModel: Encodable {
     public let isRequired: Bool
 
     /// This value will be used as type for generation
-    let typeModel: ItemTypeModel
+    public let typeModel: ItemTypeModel
 
     init(componentName: String?,
          name: String,

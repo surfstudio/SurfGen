@@ -114,38 +114,6 @@ class DataGenerationTest: XCTestCase {
         try testDestinationPathUtil(specUrl: specUrl, homePath: "")
     }
     
-    /// Test ref to alias support in specification
-    func testRefToAliasCorrect() throws {
-        // Arrange
-
-        let testedApiUrl = "api.yaml"
-        let homeUrl = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/EndToEndTests/EndToEndTests.swift
-            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/EndToEndTests
-            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests
-            .deletingLastPathComponent() //.../SurfGen/Tests
-            .appendingPathComponent("Common/RefToAlias")
-        let specUrl = homeUrl.appendingPathComponent(testedApiUrl)
-
-        let stage = AnyPipelineStageStub<[[PathModel]]>()
-        // Act
-
-        try StubBuildCodeGeneratorPipelineFactory.build(
-            templates: [],
-            astNodesToExclude: [],
-            serviceName: "RefToAlias",
-            stage: stage.erase(),
-            useNewNullableDefinitionStartegy: false
-        ).run(with: specUrl)
-
-        // Assert
-        
-        // PathModel for /polygons
-        guard let testPath = stage.result?.last?.first else {
-            XCTFail("Test api path not found")
-            return
-        }
-    }
-    
     private func testDestinationPathUtil(specUrl: URL, homePath: String) throws {
         // Arrange
 
