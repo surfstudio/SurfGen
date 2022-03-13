@@ -14,7 +14,7 @@ import UtilsForTesting
 import CodeGenerator
 import Common
 
-/// Test api is defines in Tests/Common/RefToAlias
+/// Test api is defined in Tests/Common/RefToAlias
 /// The idea is to check `typeModel` output for an array as an example which is defined in two ways:
 /// ref to array alias (/polygons endpoint) or usual array definition as an object (/coordinates endpoint)
 class RefToAliasTest : XCTestCase {
@@ -28,7 +28,10 @@ class RefToAliasTest : XCTestCase {
         // Assert
   
         // RequestModel for /polygons
-        testRefToAliasRequestModel(testOperation: testOperation)
+        testRefToAliasDataModel(dataModel: testOperation.requestModel!.value.content.first!)
+        
+        // ResponseModel for /polygons
+        testRefToAliasDataModel(dataModel: testOperation.responses!.first!.value.values.first!)
     }
     
     func testTypeModelForArrayIsCorrect() throws {
@@ -39,7 +42,10 @@ class RefToAliasTest : XCTestCase {
         // Assert
 
         // RequestModel for /coordinates
-        testObjectRequestModel(testOperation: testOperation)
+        testObjectDataModel(dataModel: testOperation.requestModel!.value.content.first!)
+        
+        // ResponseModel for /coordinates
+        testObjectDataModel(dataModel: testOperation.responses!.first!.value.values.first!)
     }
     
     private func getRefToAliasTestOperation(operation: String) throws -> OperationModel? {
@@ -76,12 +82,12 @@ class RefToAliasTest : XCTestCase {
         return testOperation
     }
     
-    private func testRefToAliasRequestModel(testOperation: OperationModel) {
-        guard case DataModel.PossibleType.array(let schemaArrayModel) = testOperation.requestModel!.value.content.first!.type else {
-            XCTFail("Error while SchemaArrayModel casting")
+    private func testRefToAliasDataModel(dataModel: DataModel) {
+        guard case DataModel.PossibleType.array(let arrayDataModel) = dataModel.type else {
+            XCTFail("Error while arrayDataModel casting")
             return
         }
-        guard case SchemaArrayModel.PossibleType.reference(let itemsType) = schemaArrayModel.itemsType else {
+        guard case SchemaArrayModel.PossibleType.reference(let itemsType) = arrayDataModel.itemsType else {
             XCTFail("Error while itemsType casting")
             return
         }
@@ -96,12 +102,12 @@ class RefToAliasTest : XCTestCase {
         testTypeModel(typeModel: testedProperty.typeModel)
     }
     
-    private func testObjectRequestModel(testOperation: OperationModel) {
-        guard case DataModel.PossibleType.object(let schemaObjectModel) = testOperation.requestModel!.value.content.first!.type else {
-            XCTFail("Error while schemaObjectModel casting")
+    private func testObjectDataModel(dataModel: DataModel) {
+        guard case DataModel.PossibleType.object(let objectDataModel) = dataModel.type else {
+            XCTFail("Error while objectDataModel casting")
             return
         }
-        guard let typeModel = schemaObjectModel.properties.first?.typeModel else {
+        guard let typeModel = objectDataModel.properties.first?.typeModel else {
             XCTFail("Error while typeModel casting")
             return
         }
