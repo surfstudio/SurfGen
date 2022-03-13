@@ -16,6 +16,10 @@ jobs:
         run: swift test -v
       - name: Make Release Buid
         run: make executable
+      - name: Check binary
+        run: |
+          ./Binary create-config -f swift -t linter
+          ./Binary lint -c .surfgen.linter.yaml Tests/Common/RefToAlias/api.yaml
       - name: Archive
         run: |
           mv Binary surfgen
@@ -45,6 +49,10 @@ jobs:
         run: swift test -v
       - name: Make Release Buid
         run: make executable
+      - name: Check binary
+        run: |
+          ./Binary create-config -f swift -t linter
+          ./Binary lint -c .surfgen.linter.yaml Tests/Common/RefToAlias/api.yaml
       - name: Archive
         run: |
           mv Binary surfgen
