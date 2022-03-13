@@ -81,7 +81,7 @@ public struct PropertyModel {
     public let isNullable: Bool
 
     /// This value will be used as type for generation
-    let typeModel: ItemTypeModel
+    public let typeModel: ItemTypeModel
 
     init(name: String,
          description: String?,
@@ -113,10 +113,14 @@ extension PropertyModel.PossibleType {
     }
 
     var isArray: Bool {
-        if case .array = self {
+        switch self {
+        case .array:
             return true
+        case .reference(let schema):
+            return schema.isArray
+        default:
+            return false
         }
-        return false
     }
 
     var isObject: Bool {

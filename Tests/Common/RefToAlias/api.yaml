@@ -1,0 +1,38 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+  
+paths:
+
+  /polygons:
+    get:
+      summary: Test api which is designed for testing references to alias in models
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "models.yaml#/components/schemas/Polygons"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/Polygons"
+                
+  /coordinates:
+    get:
+      summary: Regular api which returns regular array
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "models.yaml#/components/schemas/CoordsArray"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/CoordsArray"
