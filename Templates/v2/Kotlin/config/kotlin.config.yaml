@@ -15,7 +15,7 @@ templates:
     nameSuffix: Api
     fileExtension: kt
     templatePath: ./Templates/Kotlin/Api.stencil
-    destinationPath: ./i_network/src/main/java/ru/surfgen/android/i_network/generated/api
+    destinationPath: ./network/src/main/kotlin/ru/surfgen/android/network/generated/api
 
   # Generate kotlin enum
   - type: enum
@@ -28,7 +28,7 @@ templates:
     nameSuffix: Entry
     fileExtension: kt
     templatePath: ./Templates/Kotlin/Entry.stencil
-    destinationPath: ./i_network/src/main/java/ru/surfgen/android/i_network/generated/entry
+    destinationPath: ./network/src/main/kotlin/ru/surfgen/android/network/generated/entry
 
   # Generate domain mapping model
   - type: model
@@ -42,25 +42,25 @@ templates:
     nameSuffix: Module
     fileExtension: kt
     templatePath: ./Templates/Kotlin/Module.stencil
-    destinationPath: ./i_network/src/main/java/ru/surfgen/android/i_network/generated/di
+    destinationPath: ./network/src/main/kotlin/ru/surfgen/android/network/generated/di
 
   # Generate repository which calls api methods
   - type: service
     nameSuffix: Repository
     fileExtension: kt
     templatePath: ./Templates/Kotlin/Repository.stencil
-    destinationPath: ./i_network/src/main/java/ru/surfgen/android/i_network/generated/repo
+    destinationPath: ./network/src/main/kotlin/ru/surfgen/android/network/generated/repo
 
   # Generate interactor which calls repository's methods
   - type: service
     nameSuffix: Interactor
     fileExtension: kt
     templatePath: ./Templates/Kotlin/Interactor.stencil
-    destinationPath: ./i_network/src/main/java/ru/surfgen/android/i_network/generated/interactor
+    destinationPath: ./network/src/main/kotlin/ru/surfgen/android/network/generated/interactor
 
   # Generate kotlin object with urls for a given service
   - type: service
     nameSuffix: Urls
     fileExtension: kt
     templatePath: ./Templates/Kotlin/Urls.stencil
-    destinationPath: ./i_network/src/main/java/ru/surfgen/android/i_network/generated/urls
+    destinationPath: ./network/src/main/kotlin/ru/surfgen/android/network/generated/urls

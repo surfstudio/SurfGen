@@ -1,0 +1,24 @@
+package ru.surfgen.android.domain.entity
+
+import androidx.compose.runtime.Immutable
+
+/**
+  * {% if model.description %}{% for line in model.description|splitLines %}{{ line }}{% endfor %}{% endif %}{% if model.properties %}{% for property in model.properties %}{% if property.description %}
+  * @property {{ property.name|snakeCaseToCamelCase }} {% for line in property.description|splitLines %}{{ line }}
+  * {% endfor %}{% endif %}{% endfor %}{% endif %}
+  */
+@Immutable
+data class {{ model.name }}Entity(
+ 	{% for property in model.properties %}val {{ property.name|snakeCaseToCamelCase }}: {#
+    	#}{% if property.typeModel.isArray %}List<{% endif %}{#
+    	#}{% if property.typeModel.name == "integer" or property.typeModel.aliasTypeName == "integer" %}Int{#
+    	#}{% elif property.typeModel.name == "number" or property.typeModel.aliasTypeName == "number" %}Double{#
+    	#}{% elif property.typeModel.name == "string" or property.typeModel.aliasTypeName == "string" %}String{#
+    	#}{% elif property.typeModel.name == "boolean" or property.typeModel.aliasTypeName == "boolean" %}Boolean{#
+    	#}{% else %}{{ property.typeModel.name }}{#
+			#}{% if property.typeModel.isObject %}Entity{#
+			#}{% else %}{% if not property.isNullable and not property.typeModel.isArray %}?{% endif %}{% endif %}{% endif %}{#
+    	#}{% if property.typeModel.isArray %}>{% endif %}{#
+    	#}{% if property.isNullable %}?{% endif %}{% if not forloop.last %},
+ 	{% endif %}{% endfor %}
+ )
