@@ -1,6 +1,7 @@
 # SurfGen Kotlin templates
 
-By default the [Surf template project][template] structure is followed.
+`RxJava` templates stand for an old tech stack in Surf, see [old template][oldTemplate].
+`Coroutines` templates stand for a new tech stack, see [new template][newTemplate].
 
 ## Usage
 1. In your project create Templates directory and copy all stencil files from the current directory.
@@ -11,5 +12,6 @@ By default the [Surf template project][template] structure is followed.
 
 See also [package separation](PackageSeparation.md)
 
-[template]: https://github.com/surfstudio/SurfAndroidStandard/tree/dev/G-0.5.0/template
+[oldTemplate]: https://github.com/surfstudio/SurfAndroidStandard/tree/dev/G-0.5.0/template
+[newTemplate]: https://github.com/surfstudio/surf-mvi-demo
 [config]: config/kotlin.config.yaml

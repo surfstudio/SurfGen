@@ -1,0 +1,17 @@
+package ru.surfgen.android.network.generated.di
+
+import ru.surfgen.android.network.generated.api.{{ service.name }}Api
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+
+@Module
+@InstallIn(SingletonComponent::class)
+internal class {{ service.name }}Module {
+    @Provides
+    internal fun provide{{ service.name }}Api(retrofit: Retrofit): {{ service.name }}Api {
+        return retrofit.create({{ service.name }}Api::class.java)
+    }
+}

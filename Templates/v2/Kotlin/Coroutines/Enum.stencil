@@ -1,0 +1,24 @@
+package ru.surfgen.android.domain.entity
+
+{% if enum.description %}/**
+ {% for line in enum.description|splitLines %}* {{ line }}
+ {% endfor %}*/
+{% endif %}enum class {{ enum.name }}(val value: {#
+    #}{% if enum.generatedType == "integer" %}Int{#
+    #}{% elif enum.generatedType == "number" %}Double{#
+    #}{% elif enum.generatedType == "string" %}String{#
+    #}{% endif %}) {
+	{% for caseValue in enum.cases %}{% if enum.generatedType == "string" %}{#
+	#}{{ caseValue|uppercase }}{% else %}/* case value */{% endif %}{#
+	#}({% if enum.generatedType == "string" %}"{{ caseValue }}"{% else %}{{ caseValue }}{% endif %}){% if not forloop.last %},
+	{% else %};{% endif %}{% endfor %}
+	
+	companion object {
+		fun getBy(value: {#
+    		#}{% if enum.generatedType == "integer" %}Int?{#
+    		#}{% elif enum.generatedType == "number" %}Double?{#
+    		#}{% elif enum.generatedType == "string" %}String?{#
+    		#}{% endif %}): {{ enum.name }}? = 
+			values().find { it.value == value }
+	}
+}

@@ -1,0 +1,81 @@
+package ru.surfgen.android.network.generated.interactor
+
+import ru.surfgen.android.domain.entity.*
+import ru.surfgen.android.network.generated.api.{{ service.name }}Api
+import ru.surfgen.android.network.generated.repo.{{ service.name }}Repository
+import ru.surfgen.android.network.generated.entry.*
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class {{ service.name }}Interactor @Inject constructor(
+	private val {{ service.name|lowercaseFirstLetter }}Repository: {{ service.name }}Repository 
+) { {% for path in service.paths %}{% for operation in path.operations %}{% for requestModelName in operation.requestGenerationModel.typeNames %}
+    /** @see [{{ service.name }}Api.{{ operation.httpMethod}}{{ path.name|capitalizeFirstLetter }}] */
+    suspend fun {{ operation.httpMethod}}{{ path.name|capitalizeFirstLetter }}{#
+	#}({% for parameter in operation.pathParameters %}
+    	{{ parameter.name|snakeCaseToCamelCase }}: String,{% endfor %}{#
+    	#}{% for parameter in operation.queryParameters %}
+    	{{ parameter.name|snakeCaseToCamelCase }}: {#
+            #}{% if parameter.typeModel.isArray %}List<{% endif %}{#
+            #}{% if parameter.typeModel.name == "integer" or parameter.typeModel.aliasTypeName == "integer" %}Int{#
+            #}{% elif parameter.typeModel.name == "number" or parameter.typeModel.aliasTypeName == "number" %}Double{#
+            #}{% elif parameter.typeModel.name == "string" or parameter.typeModel.aliasTypeName == "string" %}String{#
+            #}{% elif parameter.typeModel.name == "boolean" or parameter.typeModel.aliasTypeName == "boolean" %}Boolean{#
+            #}{% else %}{{ parameter.typeModel.name }}{% endif %}{#
+            #}{% if parameter.typeModel.isArray %}>{% endif %}{#
+            #}{% if not parameter.isRequired %}?{% endif %},{% endfor %}{% if operation.parameters.count > 0 %}
+    	{% endif %}{{ requestModelName|lowercaseFirstLetter }}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}: {#
+        #}{% if operation.requestGenerationModel.isTypeArray %}List<{% endif %}{{ requestModelName }}{#
+    	#}{% if operation.requestGenerationModel.isTypeArray %}>{% endif %}Entry{#
+    	#}{% if not operation.requestModel.isRequired %}?{% endif %}{% if operation.parameters.count > 0 %}
+    {% endif %}): {% if operation.responseGenerationModel.key == "200" %}{#
+        #}{% if operation.responseGenerationModel.value.isTypeArray %}List<{% endif %}{#
+        #}{{ operation.responseGenerationModel.value.typeNames|join }}{#
+        #}Entity{% if operation.responseGenerationModel.value.isTypeArray %}>{% endif %}{#
+        #}{% elif operation.responseGenerationModel.key == "201" or operation.responseGenerationModel.key == "204" %}Unit{% endif %} =
+    	{{ service.name|lowercaseFirstLetter }}Repository.{{ operation.httpMethod}}{{ path.name|capitalizeFirstLetter }}{#
+    	#}({% for parameter in operation.pathParameters %}
+	    	{{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }},{% endfor %}{#
+	    	#}{% for parameter in operation.queryParameters %}
+	    	{{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }},{% endfor %}{#
+            #}{% if operation.parameters.count > 0 %}
+	    	{% endif %}{{ requestModelName|lowercaseFirstLetter }}{#
+            #}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}{#
+	    	#} = {{ requestModelName|lowercaseFirstLetter }}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}{#
+            #}{% if operation.parameters.count > 0 %}
+	    {% endif %})
+	{% empty %}
+    /** @see [{{ service.name }}Api.{{ operation.httpMethod}}{{ path.name|capitalizeFirstLetter }}] */
+    suspend fun {{ operation.httpMethod}}{{ path.name|capitalizeFirstLetter }}{#
+    #}({% for parameter in operation.pathParameters %}{% if operation.parameters.count > 1 %}
+        {% endif %}{{ parameter.name|snakeCaseToCamelCase }}: String{#
+        #}{% if not forloop.last or operation.queryParameters %},{% elif operation.parameters.count > 1 %}
+    {% endif %}{% endfor %}{#
+        #}{% for parameter in operation.queryParameters %}{% if operation.parameters.count > 1 %}
+        {% endif %}{{ parameter.name|snakeCaseToCamelCase }}: {#
+            #}{% if parameter.typeModel.isArray %}List<{% endif %}{#
+            #}{% if parameter.typeModel.name == "integer" or parameter.typeModel.aliasTypeName == "integer" %}Int{#
+            #}{% elif parameter.typeModel.name == "number" or parameter.typeModel.aliasTypeName == "number" %}Double{#
+            #}{% elif parameter.typeModel.name == "string" or parameter.typeModel.aliasTypeName == "string" %}String{#
+            #}{% elif parameter.typeModel.name == "boolean" or parameter.typeModel.aliasTypeName == "boolean" %}Boolean{#
+            #}{% else %}{{ parameter.typeModel.name }}{% endif %}{#
+            #}{% if parameter.typeModel.isArray %}>{% endif %}{#
+            #}{% if not parameter.isRequired %}?{% endif %}{#
+            #}{% if not forloop.last %},{% elif operation.parameters.count > 1 %}
+    {% endif %}{% endfor %}):{% if operation.responseGenerationModel.key == "200" %}{#
+        #}{% if operation.responseGenerationModel.value.isTypeArray %}List<{% endif %}{#
+        #}{{ operation.responseGenerationModel.value.typeNames|join }}{#
+        #}Entity{% if operation.responseGenerationModel.value.isTypeArray %}>{% endif %}{#
+        #}{% elif operation.responseGenerationModel.key == "201" or operation.responseGenerationModel.key == "204" %}Unit{% endif %} =
+        {{ service.name|lowercaseFirstLetter }}Repository.{{ operation.httpMethod}}{{ path.name|capitalizeFirstLetter }}{#
+        #}({% for parameter in operation.pathParameters %}{% if operation.parameters.count > 1 %}
+            {% endif %}{{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }}{#
+            #}{% if not forloop.last or operation.queryParameters %},{% elif operation.parameters.count > 1 %}
+        {% endif %}{% endfor %}{#
+            #}{% for parameter in operation.queryParameters %}{% if operation.parameters.count > 1 %}
+            {% endif %}{{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }}{#
+            #}{% if not forloop.last %},{% elif operation.parameters.count > 1 %}
+        {% endif %}{% endfor %})
+    {% endfor %}{% endfor %}{% endfor %}
+}
