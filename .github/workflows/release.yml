@@ -30,7 +30,7 @@ jobs:
       - uses: "ncipollo/release-action@v1"
         with:
           artifacts: "*.zip"
-          token: ${{ secrets.RELEASE_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           replacesArtifacts: true
           bodyFile: CHANGELOG.md
           allowUpdates: true
@@ -60,7 +60,7 @@ jobs:
       - uses: "ncipollo/release-action@v1"
         with:
           artifacts: "*.zip"
-          token: ${{ secrets.RELEASE_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           replacesArtifacts: true
           bodyFile: CHANGELOG.md
           allowUpdates: true
