@@ -68,6 +68,10 @@ public class DefaultTemplateFiller: TemplateFiller {
             $0.upperCaseToCamelCaseOrSelf()
         }
         
+        templateExtension.registerStringFilter("sanitizeUrlPath") {
+            $0.sanitizeUrlPath()
+        }
+        
         return templateExtension
     }
     
