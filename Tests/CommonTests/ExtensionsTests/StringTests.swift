@@ -66,4 +66,20 @@ public final class StringTests: XCTestCase {
             XCTAssertEqual(key.getPackageName(root: root), value)
         }
     }
+    
+    func testSanitizeUrlPath() {
+        // Arrange
+       
+        let dataWithExpectedResults = [
+            "/sample/api/path": "sample/api/path",
+            "//sample/api/path": "sample/api/path",
+            "sample/api/path": "sample/api/path"
+        ]
+        
+        // Act - Assert
+
+        for (key, value) in dataWithExpectedResults {
+            XCTAssertEqual(key.sanitizeUrlPath(), value)
+        }
+    }
 }

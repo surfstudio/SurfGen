@@ -1,6 +1,6 @@
 package ru.surfgen.android.network.generated.urls
 
 object {{ service.name }}Urls {
-	{% for path in service.paths %}const val {{ path.name|camelCaseToCaps }} = "{{ path.path }}"{% if not forloop.last %}
+	{% for path in service.paths %}const val {{ path.name|camelCaseToCaps }} = "{{ path.path|sanitizeUrlPath }}"{% if not forloop.last %}
 	{% endif %}{% endfor %}
 }

@@ -132,6 +132,11 @@ extension String {
             .replacingOccurrences(of: "/", with: ".")
     }
 
+    /// For generated url path "/sample/api/path" drops the first slash
+    public func sanitizeUrlPath() -> String {
+        return String(self.drop { $0  == "/" })
+    }
+    
     private func pathToCamelCase() -> String {
         return self
             .split(whereSeparator: { $0 == "/" || $0 == "_" })
