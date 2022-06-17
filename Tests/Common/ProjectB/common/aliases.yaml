@@ -1,0 +1,20 @@
+components:
+  schemas:
+
+    Money:
+      type: string
+      description: |
+        Формат для передачи денежных значений между сервером и клиентом
+      example: "456.12"
+
+    Date:
+      type: string
+      description: Формат даты в приложении.
+      format: date
+      example: "2020-03-20"
+
+    DateTime:
+      type: string
+      description: Формат даты и времени в приложении в виде "yyyy-MM-dd'T'HH:mm:ssZ"
+      format: date
+      example: "2019-09-18T12:24:33+0300"

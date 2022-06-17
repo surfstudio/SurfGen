@@ -1,0 +1,11 @@
+package ru.surfgen.android.domain.entity
+
+import androidx.compose.runtime.Immutable
+
+
+@Immutable
+data class ErrorResponseEntity(
+ 	val code: Int,
+ 	val errorMessage: String,
+ 	val data: String?
+ )

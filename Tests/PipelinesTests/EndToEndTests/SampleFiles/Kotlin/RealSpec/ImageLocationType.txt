@@ -1,0 +1,12 @@
+package ru.surfgen.android.domain.entity
+
+enum class ImageLocationType(val value: String) {
+    BOTTOM("bottom"),
+    CENTER("center"),
+    TOP("top");
+    
+    companion object {
+        fun getBy(value: String?): ImageLocationType? =
+            values().find { it.value == value }
+    }
+}

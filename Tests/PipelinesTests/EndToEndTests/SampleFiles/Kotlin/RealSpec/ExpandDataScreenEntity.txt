@@ -1,0 +1,17 @@
+package ru.surfgen.android.domain.entity
+
+import androidx.compose.runtime.Immutable
+
+/**
+  * Объект содерит исчерпывающую информация для открытия экрана приложения
+  * @property categoryId id категории.
+  * Передается если необходимо открыть экран с учетом категории:
+  * * если необходимо открыть каталог с раскрытой категорией
+  * * если необходимо открыть список акций, отфильтрованный по категории
+  * 
+  */
+@Immutable
+data class ExpandDataScreenEntity(
+ 	val screenType: List<TransitionScreenType>,
+ 	val categoryId: String?
+ )

@@ -67,6 +67,30 @@ class EndToEndTests: XCTestCase {
         )
     }
     
+    func testSampleServiceSpecIsGeneratedCorrectlyForKotlin() throws {
+        // Arrange
+
+        let specUrl = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/EndToEndTests/EndToEndTests.swift
+            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/EndToEndTests
+            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests
+            .deletingLastPathComponent() //.../SurfGen/Tests
+            .appendingPathComponent("Common/ProjectB/loyalty/api.yaml")
+
+        let expectedResultDirectory = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/EndToEndTests/EndToEndTests.swift
+            .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/EndToEndTests
+            .appendingPathComponent("SampleFiles")
+            .appendingPathComponent("Kotlin")
+            .appendingPathComponent("RealSpec")
+            .absoluteString
+
+        try specGenerationTestUtil(
+            specUrl: specUrl,
+            expectedResultDirectory: expectedResultDirectory,
+            serviceName: "Loyalty",
+            templates: TestTemplates.kotlinTemplateModels
+        )
+    }
+    
     private func specGenerationTestUtil(
         specUrl: URL,
         expectedResultDirectory: String,
@@ -91,12 +115,13 @@ class EndToEndTests: XCTestCase {
             .filter { $0.isResultFile }
             .sorted()
 
+        XCTAssert(!generatedFiles.isEmpty)
+        
         // Assert
 
         // File names are equal
         XCTAssertEqual(expectedFiles.map { $0.lastComponent },
                        generatedFiles.map { $0.lastComponent })
-
 
         for i in 0..<expectedFiles.count {
             // File contents are equal

@@ -1,0 +1,19 @@
+package ru.surfgen.android.network.generated.entry
+
+import kotlinx.serialization.Serializable
+import ru.surfgen.android.domain.entity.*
+import ru.surfgen.android.network.Transformable
+import ru.surfgen.android.network.transformCollection
+
+/** Mapping-model [ExpandDataEntity] */
+@Serializable
+data class ExpandDataEntry(
+ 	val screen: ExpandDataScreenEntry?,
+ 	val url: String?
+ ): Transformable<ExpandDataEntity> {
+
+	override fun transform() = ExpandDataEntity(
+		screen = screen?.transform(),
+		url = url
+	) 
+ }

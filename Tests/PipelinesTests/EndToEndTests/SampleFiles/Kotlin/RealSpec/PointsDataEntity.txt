@@ -1,0 +1,14 @@
+package ru.surfgen.android.domain.entity
+
+import androidx.compose.runtime.Immutable
+
+/**
+  * Данные по количеству баллов и их срока списания.
+  * @property expirationDate Срок действия баллов. Если дата = null, то баллы действуют бессрочно.
+  * 
+  */
+@Immutable
+data class PointsDataEntity(
+ 	val balance: String,
+ 	val expirationDate: String?
+ )

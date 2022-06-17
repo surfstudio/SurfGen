@@ -1,0 +1,6 @@
+package ru.surfgen.android.network.generated.urls
+
+object LoyaltyUrls {
+	const val LOYALTY_CARD = "user/loyalty/card"
+	const val USERS_FIRST_SECOND = "users/{first}/{second}"
+}

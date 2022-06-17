@@ -1,0 +1,19 @@
+package ru.surfgen.android.network.generated.entry
+
+import kotlinx.serialization.Serializable
+import ru.surfgen.android.domain.entity.*
+import ru.surfgen.android.network.Transformable
+import ru.surfgen.android.network.transformCollection
+
+/** Mapping-model [LoyaltyProgressEntity] */
+@Serializable
+data class LoyaltyProgressEntry(
+ 	val current_discount: Int,
+ 	val next_level: LoyaltyProgressLevelEntry?
+ ): Transformable<LoyaltyProgressEntity> {
+
+	override fun transform() = LoyaltyProgressEntity(
+		currentDiscount = current_discount,
+		nextLevel = next_level?.transform()
+	) 
+ }

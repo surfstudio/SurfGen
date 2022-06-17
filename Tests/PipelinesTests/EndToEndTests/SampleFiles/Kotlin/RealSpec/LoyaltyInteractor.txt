@@ -1,0 +1,58 @@
+package ru.surfgen.android.network.generated.interactor
+
+import ru.surfgen.android.domain.entity.*
+import ru.surfgen.android.network.generated.api.LoyaltyApi
+import ru.surfgen.android.network.generated.repo.LoyaltyRepository
+import ru.surfgen.android.network.generated.entry.*
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class LoyaltyInteractor @Inject constructor(
+    private val loyaltyRepository: LoyaltyRepository
+) { 
+    /** @see [LoyaltyApi.deleteLoyaltyCard] */
+    suspend fun deleteLoyaltyCard(
+    ): Unit =
+        loyaltyRepository.deleteLoyaltyCard(
+        )
+    
+    /** @see [LoyaltyApi.getLoyaltyCard] */
+    suspend fun getLoyaltyCard(
+        cityId: String,
+        hell: String,
+    ): LoyaltyCardEntity =
+        loyaltyRepository.getLoyaltyCard(
+            cityId = cityId,
+            hell = hell,
+        )
+    
+    /** @see [LoyaltyApi.patchLoyaltyCard] */
+    suspend fun patchLoyaltyCard(
+        loyaltyCardRequest: LoyaltyCardRequestEntry?
+    ): Unit =
+        loyaltyRepository.patchLoyaltyCard(
+            loyaltyCardRequest = loyaltyCardRequest
+        )
+    
+    /** @see [LoyaltyApi.postLoyaltyCard] */
+    suspend fun postLoyaltyCard(
+        cityId: String,
+        loyaltyCardRequest: LoyaltyCardRequestEntry?
+    ): Unit =
+        loyaltyRepository.postLoyaltyCard(
+            cityId = cityId,
+            loyaltyCardRequest = loyaltyCardRequest
+        )
+    
+    /** @see [LoyaltyApi.getUsersFirstSecond] */
+    suspend fun getUsersFirstSecond(
+        first: String,
+        second: String,
+    ): LoyaltyCardEntity =
+        loyaltyRepository.getUsersFirstSecond(
+            first = first,
+            second = second,
+        )
+    
+}

@@ -1,0 +1,17 @@
+package ru.surfgen.android.network.generated.di
+
+import ru.surfgen.android.network.generated.api.LoyaltyApi
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+
+@Module
+@InstallIn(SingletonComponent::class)
+internal class LoyaltyModule {
+    @Provides
+    internal fun provideLoyaltyApi(retrofit: Retrofit): LoyaltyApi {
+        return retrofit.create(LoyaltyApi::class.java)
+    }
+}

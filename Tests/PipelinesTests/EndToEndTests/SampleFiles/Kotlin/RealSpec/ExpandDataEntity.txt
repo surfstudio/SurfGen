@@ -1,0 +1,14 @@
+package ru.surfgen.android.domain.entity
+
+import androidx.compose.runtime.Immutable
+
+/**
+  * Объект для роутинга внутри приложения.В зависимости от данных внутри этого объекта - осуществляется переходк той или иной его части.
+  * @property url Адрес веб ресурса, на который нужно перевести пользователя
+  * 
+  */
+@Immutable
+data class ExpandDataEntity(
+ 	val screen: ExpandDataScreenEntity?,
+ 	val url: String?
+ )

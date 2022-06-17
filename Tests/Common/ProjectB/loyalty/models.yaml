@@ -1,0 +1,97 @@
+components:
+  schemas:
+    LoyaltyCard:
+      type: object
+      description: |
+        Полная информация по карте лояльности пользователя
+      properties:
+        number:
+          type: string
+          description: Уникальный номер карты, по которому будет сгенерирован штрих-код
+        balance:
+          $ref: "../common/aliases.yaml#/components/schemas/Money"
+          description: Общий баланс карты
+        points:
+          type: array
+          description: |
+            Список данных по количеству баллов и их срока списания.
+            Если данных нет, то список пуст.
+          items:
+            $ref: "#/components/schemas/PointsData"
+        progress:
+          $ref: "#/components/schemas/LoyaltyProgress"
+        banner:
+            $ref: "../common/models.yaml#/components/schemas/InfoBanner"
+            nullable: true
+      required:
+        - number
+        - balance
+        - points
+        - progress
+    
+    PointsData:
+      type: object
+      description: Данные по количеству баллов и их срока списания.
+      properties:
+        balance:
+          $ref: "../common/aliases.yaml#/components/schemas/Money"
+        expiration_date:
+          $ref: "../common/aliases.yaml#/components/schemas/DateTime"
+          description: |
+            Срок действия баллов. Если дата = null, то баллы действуют бессрочно.
+          nullable: true
+      required:
+        - balance
+    
+    LoyaltyProgress:
+      type: object
+      description: |
+       Информацию о прогрессе пользователя в рамках программы лояльности,
+       содержит информацию о текущем уровне пользователя в программе
+       и необходимых действиях для перехода на следующий уровень.
+      properties:
+        current_discount:
+          type: integer
+          description: Текущий уровень скидки
+          example: 5
+        next_level:
+          $ref: "#/components/schemas/LoyaltyProgressLevel"
+          description: |
+            В данном поле приходит информация о следующем уровне в программе лояльности,
+            либо null, если пользователь достиг максимального уровня
+          nullable: true
+      required:
+        - current_discount
+
+    LoyaltyProgressLevel:
+      type: object
+      description: |
+        Модель связывает воедино уровень скидки, сумму денег, необходимую для его достижения,
+        (по сравнению с предыдущим уровнем), а также оставшуюся сумму, которую осталось потратить
+        пользователю, чтобы достичь его.
+
+        Пример: для 7% скидки пользователю надо накопить 10_000, пользователь уже потратил 7_000,
+        тогда в ответе придет {discount:7,sum:10_000,remainder:3_000}
+      properties:
+        discount:
+          type: integer
+          description: Соответствующий данному уровню процент скидки
+          example: 7
+        sum:
+          $ref: "../common/aliases.yaml#/components/schemas/Money"
+          description: Общая сумма, которую надо накопить, чтобы перейти с предыдущего уровня на текущий
+        remainder:
+          $ref: "../common/aliases.yaml#/components/schemas/Money"
+          description: Сумма, которую осталось накопить, чтобы перейти на данный уровень
+      required:
+        - discount
+        - sum
+        - remainder
+
+    LoyaltyCardRequest:
+      type: object
+      properties:
+        card_number:
+          type: string
+      required:
+        - card_number

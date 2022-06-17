@@ -1,0 +1,43 @@
+package ru.surfgen.android.network.generated.api
+
+import ru.surfgen.android.network.generated.urls.LoyaltyUrls
+import ru.surfgen.android.network.generated.entry.*
+import retrofit2.http.*
+import retrofit2.Response
+
+interface LoyaltyApi {
+    
+    @DELETE(LoyaltyUrls.LOYALTY_CARD)
+    suspend fun deleteLoyaltyCard(
+    ): Response<Unit>
+    
+    /**
+     * Test endpoint
+     */
+    @GET(LoyaltyUrls.LOYALTY_CARD)
+    suspend fun getLoyaltyCard(
+        @Query("city_id") cityId: String,
+        @Query("hell") hell: String,
+    ): LoyaltyCardEntry
+    
+    @PATCH(LoyaltyUrls.LOYALTY_CARD)
+    suspend fun patchLoyaltyCard(
+        @Body loyaltyCardRequest: LoyaltyCardRequestEntry?
+    ): Response<Unit>
+    
+    @POST(LoyaltyUrls.LOYALTY_CARD)
+    suspend fun postLoyaltyCard(
+        @Query("city_id") cityId: String,
+        @Body loyaltyCardRequest: LoyaltyCardRequestEntry?
+    ): Response<Unit>
+    
+    /**
+     * Get a user by ID
+     */
+    @GET(LoyaltyUrls.USERS_FIRST_SECOND)
+    suspend fun getUsersFirstSecond(
+        @Path("first") first: String,
+        @Path("second") second: String,
+    ): LoyaltyCardEntry
+    
+}

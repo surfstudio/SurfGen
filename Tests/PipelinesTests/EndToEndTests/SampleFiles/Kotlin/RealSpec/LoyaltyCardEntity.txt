@@ -1,0 +1,22 @@
+package ru.surfgen.android.domain.entity
+
+import androidx.compose.runtime.Immutable
+
+/**
+  * Полная информация по карте лояльности пользователя
+  * @property number Уникальный номер карты, по которому будет сгенерирован штрих-код
+  * 
+  * @property balance Общий баланс карты
+  * 
+  * @property points Список данных по количеству баллов и их срока списания.
+  * Если данных нет, то список пуст.
+  * 
+  */
+@Immutable
+data class LoyaltyCardEntity(
+ 	val number: String,
+ 	val balance: String,
+ 	val points: List<PointsDataEntity>,
+ 	val progress: LoyaltyProgressEntity,
+ 	val banner: InfoBannerEntity?
+ )

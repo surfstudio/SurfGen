@@ -1,0 +1,100 @@
+openapi: 3.0.2
+info:
+  title: "API"
+  version: "1.0.0"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+
+paths:
+  /users/{first}/{second}:
+    get:
+      summary: Get a user by ID
+      parameters:
+        - in: path
+          name: first
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: second
+          schema:
+            type: integer
+          required: true
+      responses: 
+        '200':
+          description: Положительный ответ с данными.
+          content:
+            application/json: 
+              schema:
+                $ref: "models.yaml#/components/schemas/LoyaltyCard"
+
+  /user/loyalty/card:
+    get: 
+      summary: |
+        Test endpoint
+      parameters:
+        - name: city_id
+          in: query
+          description: id города, ПВЗ которого необходимо вернуть
+          required: true
+          schema:
+            type: string
+        - name: hell
+          in: query
+          description: id города, ПВЗ которого необходимо вернуть
+          required: true
+          schema:
+            type: string
+      responses: 
+        '200':
+          description: Положительный ответ с данными.
+          content:
+            application/json: 
+              schema:
+                $ref: "models.yaml#/components/schemas/LoyaltyCard"
+        '500':
+          description: |
+            Возможные ошибки
+            * `108` - NoLoyaltyCard - У пользователя отсутствует карта лояльности
+          content:
+            application/json:
+              schema:
+                $ref: "../common/models.yaml#/components/schemas/ErrorResponse"
+    delete: 
+      responses: 
+        '204':
+          description: Success
+    post: 
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema:
+              $ref: "models.yaml#/components/schemas/LoyaltyCardRequest"
+      parameters:
+        - name: city_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses: 
+        '204':
+          description: Success
+    patch: 
+      requestBody:
+        required: true
+        content:
+          application/json: 
+            schema:
+              $ref: "models.yaml#/components/schemas/LoyaltyCardRequest"
+      responses: 
+        '201':
+          description: Success
