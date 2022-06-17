@@ -11,6 +11,12 @@ import javax.inject.Singleton
 class LoyaltyInteractor @Inject constructor(
     private val loyaltyRepository: LoyaltyRepository
 ) { 
+    /** @see [LoyaltyApi.getCoordinates] */
+    suspend fun getCoordinates(
+    ): CoordsArrayResponseEntity =
+        loyaltyRepository.getCoordinates(
+        )
+    
     /** @see [LoyaltyApi.deleteLoyaltyCard] */
     suspend fun deleteLoyaltyCard(
     ): Unit =
@@ -43,6 +49,16 @@ class LoyaltyInteractor @Inject constructor(
         loyaltyRepository.postLoyaltyCard(
             cityId = cityId,
             loyaltyCardRequest = loyaltyCardRequest
+        )
+    
+    /** @see [LoyaltyApi.getOnboarding] */
+    suspend fun getOnboarding(
+        cityId: Int,
+        type: OnboardingType,
+    ): List<OnboardingEntity> =
+        loyaltyRepository.getOnboarding(
+            cityId = cityId,
+            type = type,
         )
     
     /** @see [LoyaltyApi.getUsersFirstSecond] */

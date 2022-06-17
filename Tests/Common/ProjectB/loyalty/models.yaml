@@ -95,3 +95,51 @@ components:
           type: string
       required:
         - card_number
+
+    Onboardings:
+      type: array
+      items:
+        $ref: "models.yaml#/components/schemas/Onboarding"
+   
+    Onboarding:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Идентификатор онбординга
+          example: 123166546
+        backgroundColor:
+          type: string
+          description: Цвет фона экрана онбординга (формат HEX)
+          example: "#000000"
+    
+    OnboardingType:
+      description: |
+        Тип онбординга:
+        - Если онбординг при первом входе передаём Onboarding
+        - Если онбординг обновления (первый вход после увеличения версии приложения) передаём NewFeature
+      type: string
+      enum: ["Onboarding", "NewFeature"]
+
+    Coords:
+      type: object
+      description: Координаты точки/адреса
+      properties:
+        lat:
+          type: number
+          format: double
+          description: Широта в координатах
+          example: 53.205274
+        long:
+          type: number
+          format: double
+          description: Долгота в координатах
+          example: 50.106320
+    
+    CoordsArrayResponse:
+      type: object
+      properties:
+        coordsArray:
+          type: array
+          items:
+            $ref: "models.yaml#/components/schemas/Coords" 

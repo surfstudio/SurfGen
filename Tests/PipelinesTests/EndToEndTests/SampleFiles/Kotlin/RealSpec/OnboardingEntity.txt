@@ -1,0 +1,10 @@
+package ru.surfgen.android.domain.entity
+
+import androidx.compose.runtime.Immutable
+
+
+@Immutable
+data class OnboardingEntity(
+ 	val backgroundColor: String?,
+ 	val id: Int?
+ )

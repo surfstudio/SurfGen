@@ -1,0 +1,16 @@
+package ru.surfgen.android.domain.entity
+
+import androidx.compose.runtime.Immutable
+
+/**
+  * Координаты точки/адреса
+  * @property lat Широта в координатах
+  * 
+  * @property long Долгота в координатах
+  * 
+  */
+@Immutable
+data class CoordsEntity(
+ 	val lat: Double?,
+ 	val long: Double?
+ )

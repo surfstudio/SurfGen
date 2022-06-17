@@ -1,0 +1,9 @@
+package ru.surfgen.android.domain.entity
+
+import androidx.compose.runtime.Immutable
+
+
+@Immutable
+data class CoordsArrayResponseEntity(
+ 	val coordsArray: List<CoordsEntity>?
+ )

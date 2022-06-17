@@ -1,0 +1,17 @@
+package ru.surfgen.android.network.generated.entry
+
+import kotlinx.serialization.Serializable
+import ru.surfgen.android.domain.entity.*
+import ru.surfgen.android.network.Transformable
+import ru.surfgen.android.network.transformCollection
+
+/** Mapping-model [CoordsArrayResponseEntity] */
+@Serializable
+data class CoordsArrayResponseEntry(
+ 	val coordsArray: List<CoordsEntry>?
+ ): Transformable<CoordsArrayResponseEntity> {
+
+	override fun transform() = CoordsArrayResponseEntity(
+		coordsArray = coordsArray?.transformCollection()
+	) 
+ }

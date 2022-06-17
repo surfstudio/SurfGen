@@ -98,3 +98,37 @@ paths:
       responses: 
         '201':
           description: Success
+
+  /onboarding:
+    get:
+      security: []
+      parameters:
+        - name: cityId
+          in: query
+          description: Идентификатор города
+          required: true
+          schema:
+            type: integer
+        - name: type
+          in: query
+          description: Тип онбординга
+          required: true
+          schema:
+            $ref: "models.yaml#/components/schemas/OnboardingType"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+               $ref: "models.yaml#/components/schemas/Onboardings"
+               
+  /coordinates:
+    get:
+      security: []
+      responses:
+        "200":
+          description: Координаты успешно получены
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/CoordsArrayResponse"

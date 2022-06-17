@@ -7,6 +7,10 @@ import retrofit2.Response
 
 interface LoyaltyApi {
     
+    @GET(LoyaltyUrls.COORDINATES)
+    suspend fun getCoordinates(
+    ): CoordsArrayResponseEntry
+    
     @DELETE(LoyaltyUrls.LOYALTY_CARD)
     suspend fun deleteLoyaltyCard(
     ): Response<Unit>
@@ -30,6 +34,12 @@ interface LoyaltyApi {
         @Query("city_id") cityId: String,
         @Body loyaltyCardRequest: LoyaltyCardRequestEntry?
     ): Response<Unit>
+    
+    @GET(LoyaltyUrls.ONBOARDING)
+    suspend fun getOnboarding(
+        @Query("cityId") cityId: Int,
+        @Query("type") type: String,
+    ): List<OnboardingEntry>
     
     /**
      * Get a user by ID
