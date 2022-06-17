@@ -1,0 +1,17 @@
+package ru.surfgen.android.network.generated.entry
+
+import kotlinx.serialization.Serializable
+import ru.surfgen.android.domain.entity.*
+import ru.surfgen.android.network.Transformable
+import ru.surfgen.android.network.transformCollection
+
+/** Mapping-model [LoyaltyCardRequestEntity] */
+@Serializable
+data class LoyaltyCardRequestEntry(
+ 	val card_number: String
+ ): Transformable<LoyaltyCardRequestEntity> {
+
+	override fun transform() = LoyaltyCardRequestEntity(
+		cardNumber = card_number
+	) 
+ }

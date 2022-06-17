@@ -1,0 +1,16 @@
+package ru.surfgen.android.domain.entity
+
+/**
+ * Тип онбординга:
+ * - Если онбординг при первом входе передаём Onboarding
+ * - Если онбординг обновления (первый вход после увеличения версии приложения) передаём NewFeature
+ */
+enum class OnboardingType(val value: String) {
+    NEWFEATURE("NewFeature"),
+    ONBOARDING("Onboarding");
+    
+    companion object {
+        fun getBy(value: String?): OnboardingType? =
+            values().find { it.value == value }
+    }
+}

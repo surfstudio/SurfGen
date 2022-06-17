@@ -1,0 +1,19 @@
+package ru.surfgen.android.network.generated.entry
+
+import kotlinx.serialization.Serializable
+import ru.surfgen.android.domain.entity.*
+import ru.surfgen.android.network.Transformable
+import ru.surfgen.android.network.transformCollection
+
+/** Mapping-model [PointsDataEntity] */
+@Serializable
+data class PointsDataEntry(
+ 	val balance: String,
+ 	val expiration_date: String?
+ ): Transformable<PointsDataEntity> {
+
+	override fun transform() = PointsDataEntity(
+		balance = balance,
+		expirationDate = expiration_date
+	) 
+ }

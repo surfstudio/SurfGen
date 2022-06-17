@@ -1,0 +1,19 @@
+package ru.surfgen.android.network.generated.entry
+
+import kotlinx.serialization.Serializable
+import ru.surfgen.android.domain.entity.*
+import ru.surfgen.android.network.Transformable
+import ru.surfgen.android.network.transformCollection
+
+/** Mapping-model [ExpandDataScreenEntity] */
+@Serializable
+data class ExpandDataScreenEntry(
+ 	val screen_type: List<String>,
+ 	val category_id: String?
+ ): Transformable<ExpandDataScreenEntity> {
+
+	override fun transform() = ExpandDataScreenEntity(
+		screenType = screen_type.mapNotNull { TransitionScreenType.getBy(it) },
+		categoryId = category_id
+	) 
+ }

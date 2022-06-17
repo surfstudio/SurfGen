@@ -3,6 +3,8 @@
 `RxJava` templates stand for an old tech stack in Surf, see [old template][oldTemplate].
 `Coroutines` templates stand for a new tech stack, see [new template][newTemplate].
 
+Note: only coroutines templates will be supported in the future.
+
 ## Usage
 1. In your project create Templates directory and copy all stencil files from the current directory.
 1. Add SurfGen config file, sample is located [here][config].

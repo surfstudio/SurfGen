@@ -1,0 +1,19 @@
+package ru.surfgen.android.network.generated.entry
+
+import kotlinx.serialization.Serializable
+import ru.surfgen.android.domain.entity.*
+import ru.surfgen.android.network.Transformable
+import ru.surfgen.android.network.transformCollection
+
+/** Mapping-model [OnboardingEntity] */
+@Serializable
+data class OnboardingEntry(
+ 	val backgroundColor: String?,
+ 	val id: Int?
+ ): Transformable<OnboardingEntity> {
+
+	override fun transform() = OnboardingEntity(
+		backgroundColor = backgroundColor,
+		id = id
+	) 
+ }

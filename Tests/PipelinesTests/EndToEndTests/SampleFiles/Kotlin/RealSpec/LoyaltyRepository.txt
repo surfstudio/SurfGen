@@ -1,0 +1,74 @@
+package ru.surfgen.android.network.generated.repo
+
+import ru.surfgen.android.domain.entity.*
+import ru.surfgen.android.network.generated.api.LoyaltyApi
+import ru.surfgen.android.network.generated.entry.*
+import ru.surfgen.android.network.transformCollection
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class LoyaltyRepository @Inject constructor(
+    private val loyaltyApi: LoyaltyApi
+) { 
+    /** @see [LoyaltyApi.getCoordinates] */
+    suspend fun getCoordinates(
+    ): CoordsArrayResponseEntity =
+        loyaltyApi.getCoordinates(
+        ).transform()
+    
+    /** @see [LoyaltyApi.deleteLoyaltyCard] */
+    suspend fun deleteLoyaltyCard(
+    ): Unit =
+        loyaltyApi.deleteLoyaltyCard(
+        ).body() ?: Unit
+    
+    /** @see [LoyaltyApi.getLoyaltyCard] */
+    suspend fun getLoyaltyCard(
+        cityId: String,
+        hell: String,
+    ): LoyaltyCardEntity =
+        loyaltyApi.getLoyaltyCard(
+            cityId = cityId,
+            hell = hell,
+        ).transform()
+    
+    /** @see [LoyaltyApi.patchLoyaltyCard] */
+    suspend fun patchLoyaltyCard(
+        loyaltyCardRequest: LoyaltyCardRequestEntry?
+    ): Unit =
+        loyaltyApi.patchLoyaltyCard(
+            loyaltyCardRequest = loyaltyCardRequest
+        ).body() ?: Unit
+    
+    /** @see [LoyaltyApi.postLoyaltyCard] */
+    suspend fun postLoyaltyCard(
+        cityId: String,
+        loyaltyCardRequest: LoyaltyCardRequestEntry?
+    ): Unit =
+        loyaltyApi.postLoyaltyCard(
+            cityId = cityId,
+            loyaltyCardRequest = loyaltyCardRequest
+        ).body() ?: Unit
+    
+    /** @see [LoyaltyApi.getOnboarding] */
+    suspend fun getOnboarding(
+        cityId: Int,
+        type: String,
+    ): List<OnboardingEntity> =
+        loyaltyApi.getOnboarding(
+            cityId = cityId,
+            type = type,
+        ).transformCollection()
+    
+    /** @see [LoyaltyApi.getUsersFirstSecond] */
+    suspend fun getUsersFirstSecond(
+        first: String,
+        second: String,
+    ): LoyaltyCardEntity =
+        loyaltyApi.getUsersFirstSecond(
+            first = first,
+            second = second,
+        ).transform()
+    
+}

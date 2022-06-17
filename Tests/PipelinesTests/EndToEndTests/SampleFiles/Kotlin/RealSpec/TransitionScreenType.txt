@@ -1,0 +1,18 @@
+package ru.surfgen.android.domain.entity
+
+/**
+ * Тип экрана:
+ * * actions - список акций
+ * * catalog - каталог
+ * * delivery_info - условия доставки и оплаты
+ */
+enum class TransitionScreenType(val value: String) {
+    ACTIONS("actions"),
+    CATALOG("catalog"),
+    DELIVERY_INFO("delivery_info");
+    
+    companion object {
+        fun getBy(value: String?): TransitionScreenType? =
+            values().find { it.value == value }
+    }
+}

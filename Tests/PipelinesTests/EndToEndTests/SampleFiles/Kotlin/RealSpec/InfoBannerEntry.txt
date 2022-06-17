@@ -1,0 +1,29 @@
+package ru.surfgen.android.network.generated.entry
+
+import kotlinx.serialization.Serializable
+import ru.surfgen.android.domain.entity.*
+import ru.surfgen.android.network.Transformable
+import ru.surfgen.android.network.transformCollection
+
+/** Mapping-model [InfoBannerEntity] */
+@Serializable
+data class InfoBannerEntry(
+ 	val title: String,
+ 	val expand_data: ExpandDataEntry,
+ 	val end_back_color: String?,
+ 	val image_location: String?,
+ 	val image_url: String?,
+ 	val start_back_color: String?,
+ 	val subtitle: String?
+ ): Transformable<InfoBannerEntity> {
+
+	override fun transform() = InfoBannerEntity(
+		title = title,
+		expandData = expand_data.transform(),
+		endBackColor = end_back_color,
+		imageLocation = ImageLocationType.getBy(image_location),
+		imageUrl = image_url,
+		startBackColor = start_back_color,
+		subtitle = subtitle
+	) 
+ }

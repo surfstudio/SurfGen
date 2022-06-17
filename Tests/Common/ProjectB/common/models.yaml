@@ -1,0 +1,146 @@
+components:
+  schemas:
+    
+    ExpandDataProductsList:
+      type: object
+      description: |
+        Объект содержит исчерпывающую информацию для открытия подборки товаров.
+        Параметр `collection_name` обязателен, обязателен также один из параметров
+        category_id, search_string или brand_id. Параметр filters опционален.
+      properties:
+        collection_name:
+          type: string
+          description: Имя подборки, которое будет отображаться во время загрузки товаров
+        category_id:
+          type: string
+          description: |
+            id категории, если необходимо открыть категорию товаров
+          nullable: true
+        brand_id:
+          type: string
+          description: |
+            id бренда, если необходимо открыть все товары бренда
+          nullable: true
+        search_string:
+          type: string
+          description: |
+            Поисковая строка, если необходимо отобразить подборку товаров по поисковому запросу
+          nullable: true
+      required:
+        - collection_name
+
+    ExpandDataProduct:
+      type: object
+      description: |
+        Объект содерит исчерпывающую информация для открытия экрана определенного товара
+        внутри приложения
+      properties:
+        product_id:
+          type: string
+        offer_id:
+          type: string
+      required:
+        - product_id
+        - offer_id
+    
+    ExpandDataScreen:
+      type: object
+      description: |
+        Объект содерит исчерпывающую информация для открытия экрана приложения
+      properties:
+        screen_type:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransitionScreenType"
+        category_id:
+          type: string
+          description: |
+            id категории.
+            Передается если необходимо открыть экран с учетом категории:
+            * если необходимо открыть каталог с раскрытой категорией
+            * если необходимо открыть список акций, отфильтрованный по категории
+          nullable: true
+          example: "123"
+      required:
+        - screen_type
+
+    TransitionScreenType:
+      type: string
+      enum: [actions, catalog, delivery_info]
+      description: |
+        Тип экрана:
+        * actions - список акций
+        * catalog - каталог
+        * delivery_info - условия доставки и оплаты
+
+    ExpandData:
+      type: object
+      description: |
+        Объект для роутинга внутри приложения.
+        В зависимости от данных внутри этого объекта - осуществляется переход
+        к той или иной его части.
+      properties:
+        url:
+          type: string
+          description: "Адрес веб ресурса, на который нужно перевести пользователя"
+          example: "https://google.com"
+          nullable: true
+        screen:
+          $ref: "#/components/schemas/ExpandDataScreen"
+          nullable: true
+        
+    ErrorResponse:
+      properties:
+        code:
+          type: integer
+          example: 101
+        error_message:
+          type: string
+          example: "Аккаунт заблокирован"
+        data:
+          type: string
+          example: "186"
+          nullable: true
+      required:
+        - code
+        - error_message
+
+    InfoBanner:
+      type: object
+      description: |
+        Информационный баннер.
+        Используется в профиле, деталях бонусной карты.
+      properties:
+        title:
+          type: string
+          example: "Каталог товаров"
+        subtitle:
+          type: string
+          example: "Сделайте свою первую покупку в приложении"
+          nullable: true
+        image_url:
+          type: string
+          nullable: true
+        image_location:
+          $ref: "#/components/schemas/ImageLocationType"
+          description: |
+            Расположение картинки в баннере
+          example: "bottom"
+          nullable: true
+        start_back_color:
+          type: string
+          example: "#000000"
+          nullable: true
+        end_back_color:
+          type: string
+          example: "#000000"
+          nullable: true
+        expand_data:
+          $ref: "#/components/schemas/ExpandData"
+      required:
+        - title
+        - expand_data
+
+    ImageLocationType:
+      type: string
+      enum: [bottom, center, top]

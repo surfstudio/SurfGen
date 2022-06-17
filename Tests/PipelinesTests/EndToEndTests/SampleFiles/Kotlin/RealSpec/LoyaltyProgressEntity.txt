@@ -1,0 +1,17 @@
+package ru.surfgen.android.domain.entity
+
+import androidx.compose.runtime.Immutable
+
+/**
+  * Информацию о прогрессе пользователя в рамках программы лояльности,содержит информацию о текущем уровне пользователя в программеи необходимых действиях для перехода на следующий уровень.
+  * @property currentDiscount Текущий уровень скидки
+  * 
+  * @property nextLevel В данном поле приходит информация о следующем уровне в программе лояльности,
+  * либо null, если пользователь достиг максимального уровня
+  * 
+  */
+@Immutable
+data class LoyaltyProgressEntity(
+ 	val currentDiscount: Int,
+ 	val nextLevel: LoyaltyProgressLevelEntity?
+ )

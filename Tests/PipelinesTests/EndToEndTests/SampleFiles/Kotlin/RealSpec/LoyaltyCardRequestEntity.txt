@@ -1,0 +1,9 @@
+package ru.surfgen.android.domain.entity
+
+import androidx.compose.runtime.Immutable
+
+
+@Immutable
+data class LoyaltyCardRequestEntity(
+ 	val cardNumber: String
+ )

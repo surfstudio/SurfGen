@@ -25,6 +25,7 @@ data class {{ model.name }}Entry(
 		{% for property in model.properties %}{#
 			#}{{ property.name|snakeCaseToCamelCase }} = {#
 			#}{% if property.typeModel.name == "integer" or property.typeModel.aliasTypeName == "integer" or property.typeModel.name == "number" or property.typeModel.aliasTypeName == "number" or property.typeModel.name == "string" or property.typeModel.aliasTypeName == "string" or property.typeModel.name == "boolean" or property.typeModel.aliasTypeName == "boolean" or property.typeModel.isObject %}{#
+                HANDLE ALL TYPES EXCEPT ENUM
 				#}{{ property.name }}{#
 				#}{% if property.typeModel.isObject %}{#
 					#}{% if property.isNullable %}?{% endif %}{#
@@ -32,6 +33,7 @@ data class {{ model.name }}Entry(
 					#}{% else %}.transform(){% endif %}{#
 				#}{% endif %}{#
 			#}{% else %}{#
+                HANDLE ENUM
 				#}{% if property.typeModel.isArray %}{#
 				#}{{ property.name }}{#
 				#}{% if property.isNullable %}?{% endif %}.mapNotNull { {{ property.typeModel.name }}.getBy(it) }{#

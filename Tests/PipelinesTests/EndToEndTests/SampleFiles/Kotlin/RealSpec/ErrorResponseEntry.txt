@@ -1,0 +1,21 @@
+package ru.surfgen.android.network.generated.entry
+
+import kotlinx.serialization.Serializable
+import ru.surfgen.android.domain.entity.*
+import ru.surfgen.android.network.Transformable
+import ru.surfgen.android.network.transformCollection
+
+/** Mapping-model [ErrorResponseEntity] */
+@Serializable
+data class ErrorResponseEntry(
+ 	val code: Int,
+ 	val error_message: String,
+ 	val data: String?
+ ): Transformable<ErrorResponseEntity> {
+
+	override fun transform() = ErrorResponseEntity(
+		code = code,
+		errorMessage = error_message,
+		data = data
+	) 
+ }

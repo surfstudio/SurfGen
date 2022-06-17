@@ -1,0 +1,19 @@
+package ru.surfgen.android.domain.entity
+
+import androidx.compose.runtime.Immutable
+
+/**
+  * Информационный баннер.Используется в профиле, деталях бонусной карты.
+  * @property imageLocation Расположение картинки в баннере
+  * 
+  */
+@Immutable
+data class InfoBannerEntity(
+ 	val title: String,
+ 	val expandData: ExpandDataEntity,
+ 	val endBackColor: String?,
+ 	val imageLocation: ImageLocationType?,
+ 	val imageUrl: String?,
+ 	val startBackColor: String?,
+ 	val subtitle: String?
+ )

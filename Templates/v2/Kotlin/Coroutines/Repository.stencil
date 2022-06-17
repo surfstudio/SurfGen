@@ -9,14 +9,14 @@ import javax.inject.Singleton
 
 @Singleton
 class {{ service.name }}Repository @Inject constructor(
-	private val {{ service.name|lowercaseFirstLetter }}Api: {{ service.name }}Api 
-) { {% for path in service.paths %}{% for operation in path.operations %}{% for requestModelName in operation.requestGenerationModel.typeNames %}
+    private val {{ service.name|lowercaseFirstLetter }}Api: {{ service.name }}Api
+) { {% for path in service.paths %}{% for operation in path.operations %}
     /** @see [{{ service.name }}Api.{{ operation.httpMethod}}{{ path.name|capitalizeFirstLetter }}] */
     suspend fun {{ operation.httpMethod}}{{ path.name|capitalizeFirstLetter }}{#
-	#}({% for parameter in operation.pathParameters %}
-    	{{ parameter.name|snakeCaseToCamelCase }}: String,{% endfor %}{#
-    	#}{% for parameter in operation.queryParameters %}
-    	{{ parameter.name|snakeCaseToCamelCase }}: {#
+    #}({% for parameter in operation.pathParameters %}
+        {{ parameter.name|snakeCaseToCamelCase }}: String,{% endfor %}{#
+        #}{% for parameter in operation.queryParameters %}
+        {{ parameter.name|snakeCaseToCamelCase }}: {#
             #}{% if parameter.typeModel.isArray %}List<{% endif %}{#
             #}{% if parameter.typeModel.name == "integer" or parameter.typeModel.aliasTypeName == "integer" or parameter.typeModel.enumTypeName == "integer" %}Int{#
             #}{% elif parameter.typeModel.name == "number" or parameter.typeModel.aliasTypeName == "number" or parameter.typeModel.enumTypeName == "number" %}Double{#
@@ -24,63 +24,29 @@ class {{ service.name }}Repository @Inject constructor(
             #}{% elif parameter.typeModel.name == "boolean" or parameter.typeModel.aliasTypeName == "boolean" or parameter.typeModel.enumTypeName == "boolean" %}Boolean{#
             #}{% else %}{{ parameter.typeModel.name }}{% endif %}{#
             #}{% if parameter.typeModel.isArray %}>{% endif %}{#
-            #}{% if not parameter.isRequired %}?{% endif %},{% endfor %}{% if operation.parameters.count > 0 %}
-    	{% endif %}{{ requestModelName|lowercaseFirstLetter }}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}: {#
+            #}{% if not parameter.isRequired %}?{% endif %},{% endfor %}{#
+        #}{% for requestModelName in operation.requestGenerationModel.typeNames %}
+        {{ requestModelName|lowercaseFirstLetter }}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}: {#
         #}{% if operation.requestGenerationModel.isTypeArray %}List<{% endif %}{{ requestModelName }}{#
-    	#}{% if operation.requestGenerationModel.isTypeArray %}>{% endif %}Entry{#
-    	#}{% if not operation.requestModel.isRequired %}?{% endif %}{% if operation.parameters.count > 0 %}
-    {% endif %}): {% if operation.responseGenerationModel.key == "200" %}{#
-        #}{% if operation.responseGenerationModel.value.isTypeArray %}List<{% endif %}{#
-        #}{{ operation.responseGenerationModel.value.typeNames|join }}{#
-        #}Entity{% if operation.responseGenerationModel.value.isTypeArray %}>{% endif %}{#
-        #}{% elif operation.responseGenerationModel.key == "201" or operation.responseGenerationModel.key == "204" %}Unit{% endif %} =
-    	{{ service.name|lowercaseFirstLetter }}Api.{{ operation.httpMethod}}{{ path.name|capitalizeFirstLetter }}{#
-    	#}({% for parameter in operation.pathParameters %}
-	    	{{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }},{% endfor %}{#
-	    	#}{% for parameter in operation.queryParameters %}
-	    	{{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }},{% endfor %}{#
-            #}{% if operation.parameters.count > 0 %}
-	    	{% endif %}{{ requestModelName|lowercaseFirstLetter }}{#
-            #}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}{#
-	    	#} = {{ requestModelName|lowercaseFirstLetter }}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}{#
-            #}{% if operation.parameters.count > 0 %}
-	    {% endif %}){% if operation.responseGenerationModel.value %}{#
-        #}.transform{% if operation.responseGenerationModel.value.isTypeArray %}Collection{% endif %}(){% endif %}{#
-        #}{% if operation.responseGenerationModel.key == "201" or operation.responseGenerationModel.key == "204" %}.body() ?: Unit{% endif %}
-	{% empty %}
-    /** @see [{{ service.name }}Api.{{ operation.httpMethod}}{{ path.name|capitalizeFirstLetter }}] */
-    suspend fun {{ operation.httpMethod}}{{ path.name|capitalizeFirstLetter }}{#
-    #}({% for parameter in operation.pathParameters %}{% if operation.parameters.count > 1 %}
-        {% endif %}{{ parameter.name|snakeCaseToCamelCase }}: String{#
-        #}{% if not forloop.last or operation.queryParameters %},{% elif operation.parameters.count > 1 %}
-    {% endif %}{% endfor %}{#
-        #}{% for parameter in operation.queryParameters %}{% if operation.parameters.count > 1 %}
-        {% endif %}{{ parameter.name|snakeCaseToCamelCase }}: {#
-            #}{% if parameter.typeModel.isArray %}List<{% endif %}{#
-            #}{% if parameter.typeModel.name == "integer" or parameter.typeModel.aliasTypeName == "integer" or parameter.typeModel.enumTypeName == "integer" %}Int{#
-            #}{% elif parameter.typeModel.name == "number" or parameter.typeModel.aliasTypeName == "number" or parameter.typeModel.enumTypeName == "number" %}Double{#
-            #}{% elif parameter.typeModel.name == "string" or parameter.typeModel.aliasTypeName == "string" or parameter.typeModel.enumTypeName == "string" %}String{#
-            #}{% elif parameter.typeModel.name == "boolean" or parameter.typeModel.aliasTypeName == "boolean" or parameter.typeModel.enumTypeName == "boolean" %}Boolean{#
-            #}{% else %}{{ parameter.typeModel.name }}{% endif %}{#
-            #}{% if parameter.typeModel.isArray %}>{% endif %}{#
-            #}{% if not parameter.isRequired %}?{% endif %}{#
-            #}{% if not forloop.last %},{% elif operation.parameters.count > 1 %}
-    {% endif %}{% endfor %}): {% if operation.responseGenerationModel.key == "200" %}{#
+        #}{% if operation.requestGenerationModel.isTypeArray %}>{% endif %}Entry{#
+        #}{% if not operation.requestModel.isRequired %}?{% endif %}{% endfor %}
+    ): {% if operation.responseGenerationModel.key == "200" %}{#
         #}{% if operation.responseGenerationModel.value.isTypeArray %}List<{% endif %}{#
         #}{{ operation.responseGenerationModel.value.typeNames|join }}{#
         #}Entity{% if operation.responseGenerationModel.value.isTypeArray %}>{% endif %}{#
         #}{% elif operation.responseGenerationModel.key == "201" or operation.responseGenerationModel.key == "204" %}Unit{% endif %} =
         {{ service.name|lowercaseFirstLetter }}Api.{{ operation.httpMethod}}{{ path.name|capitalizeFirstLetter }}{#
-        #}({% for parameter in operation.pathParameters %}{% if operation.parameters.count > 1 %}
-            {% endif %}{{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }}{#
-            #}{% if not forloop.last or operation.queryParameters %},{% elif operation.parameters.count > 1 %}
-        {% endif %}{% endfor %}{#
-            #}{% for parameter in operation.queryParameters %}{% if operation.parameters.count > 1 %}
-            {% endif %}{{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }}{#
-            #}{% if not forloop.last %},{% elif operation.parameters.count > 1 %}
-        {% endif %}{% endfor %}{#
-        #}){% if operation.responseGenerationModel.value %}{#
+        #}({% for parameter in operation.pathParameters %}
+            {{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }},{% endfor %}{#
+            #}{% for parameter in operation.queryParameters %}
+            {{ parameter.name|snakeCaseToCamelCase }} = {{ parameter.name|snakeCaseToCamelCase }},{% endfor %}{#
+            #}{% for requestModelName in operation.requestGenerationModel.typeNames %}
+            {{ requestModelName|lowercaseFirstLetter }}{#
+            #}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}{#
+            #} = {{ requestModelName|lowercaseFirstLetter }}{% if operation.requestGenerationModel.isTypeArray %}s{% endif %}{#
+            #}{% endfor %}
+        ){% if operation.responseGenerationModel.value %}{#
         #}.transform{% if operation.responseGenerationModel.value.isTypeArray %}Collection{% endif %}(){% endif %}{#
         #}{% if operation.responseGenerationModel.key == "201" or operation.responseGenerationModel.key == "204" %}.body() ?: Unit{% endif %}
-    {% endfor %}{% endfor %}{% endfor %}
+    {% endfor %}{% endfor %}
 }
