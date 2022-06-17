@@ -14,6 +14,7 @@ data class {{ model.name }}Entity(
     	#}{% elif property.typeModel.name == "boolean" or property.typeModel.aliasTypeName == "boolean" %}Boolean{#
     	#}{% else %}{{ property.typeModel.name }}{#
 			#}{% if property.typeModel.isObject %}Entity{#
+            ENUM IS ALWAYS NULLABLE
 			#}{% else %}{% if not property.isNullable and not property.typeModel.isArray %}?{% endif %}{% endif %}{% endif %}{#
     	#}{% if property.typeModel.isArray %}>{% endif %}{#
     	#}{% if property.isNullable %}?{% endif %}{% if not forloop.last %},
