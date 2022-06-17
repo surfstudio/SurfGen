@@ -31,6 +31,7 @@ class EndToEndTests: XCTestCase {
         let expectedResultDirectory = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/EndToEndTests/EndToEndTests.swift
             .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/EndToEndTests
             .appendingPathComponent("SampleFiles")
+            .appendingPathComponent("Swift")
             .appendingPathComponent("RealSpec")
             .absoluteString
 
@@ -54,6 +55,7 @@ class EndToEndTests: XCTestCase {
         let expectedResultDirectory = URL(string: #file)! //.../SurfGen/Tests/PipelinesTests/EndToEndTests/EndToEndTests.swift
             .deletingLastPathComponent() //.../SurfGen/Tests/PipelinesTests/EndToEndTests
             .appendingPathComponent("SampleFiles")
+            .appendingPathComponent("Swift")
             .appendingPathComponent("SpecWithCycles")
             .absoluteString
 
