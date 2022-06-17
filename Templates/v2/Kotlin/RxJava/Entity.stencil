@@ -1,10 +1,10 @@
 package ru.surfgen.android.domain.entity
 
-/**
+{% if model.description or model.properties|join %}/**
   * {% if model.description %}{% for line in model.description|splitLines %}{{ line }}{% endfor %}{% endif %}{% if model.properties %}{% for property in model.properties %}{% if property.description %}
   * @property {{ property.name|snakeCaseToCamelCase }} {% for line in property.description|splitLines %}{{ line }}
   * {% endfor %}{% endif %}{% endfor %}{% endif %}
-  */
+  */{% endif %}
 data class {{ model.name }}Entity(
  	{% for property in model.properties %}val {{ property.name|snakeCaseToCamelCase }}: {#
     	#}{% if property.typeModel.isArray %}List<{% endif %}{#
