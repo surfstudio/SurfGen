@@ -80,6 +80,12 @@ public struct PropertyModel {
     public let type: PossibleType
     public let isNullable: Bool
     public let pattern: String?
+    public let example: Any?
+    public let format: String?
+    public let minimum: Double?
+    public let maximum: Double?
+    public let maxLength: Int?
+    public let minLength: Int?
 
     /// This value will be used as type for generation
     public let typeModel: ItemTypeModel
@@ -88,7 +94,13 @@ public struct PropertyModel {
          description: String?,
          type: PropertyModel.PossibleType,
          isNullable: Bool,
-         pattern: String?) {
+         pattern: String?,
+         example: Any?,
+         format: String?,
+         minimum: Double?,
+         maximum: Double?,
+         minLength: Int?,
+         maxLength: Int?) {
         self.name = name
         self.description = description
         self.type = type
@@ -99,6 +111,12 @@ public struct PropertyModel {
                                        enumTypeName: type.enumTypeName,
                                        aliasTypeName: type.aliasTypeName)
         self.pattern = pattern
+        self.example = example
+        self.format = format
+        self.minimum = minimum
+        self.maximum = maximum
+        self.minLength = minLength
+        self.maxLength = maxLength
     }
 }
 

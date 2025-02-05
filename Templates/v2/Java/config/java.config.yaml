@@ -1,0 +1,31 @@
+useNewNullableDeterminationStrategy: false
+
+prefixesToCutDownInServiceNames:
+  - /api/v1.1
+  - /api/1.1
+
+analytcsConfig:
+  logstashEnpointURI: http://logs.ps.surfstudio.ru
+  payload:
+    project: TEST
+
+templates:
+  - type: service
+    nameSuffix: Api
+    fileExtension: java
+    templatePath:
+    destinationPath:
+  - type: service
+    nameSuffix: Controller
+    fileExtension: java
+    templatePath:
+    destinationPath:
+  - type: model
+    nameSuffix:
+    fileExtension: java
+    templatePath:
+    destinationPath:
+  - type: enum
+    fileExtension: java
+    templatePath:
+    destinationPath:

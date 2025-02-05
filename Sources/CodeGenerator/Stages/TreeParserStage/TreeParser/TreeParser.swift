@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Александр Кравченков on 17.12.2020.
 //
@@ -67,7 +67,7 @@ public struct TreeParser {
     func parse(operation: OperationNode, current: DependencyWithTree, other: [DependencyWithTree]) throws -> OperationModel {
 
         let params = try operation.parameters.map { parameter -> Reference<ParameterModel> in
-            
+
             return try wrap(
                 self.parametersParser.parse(parameter: parameter, current: current, other: other),
                 message: "While parsing parameter \(parameter.view)")
@@ -94,7 +94,8 @@ public struct TreeParser {
             description: operation.description,
             parameters: params,
             responses: responses,
-            requestModel: requestBody
+            requestModel: requestBody,
+            id: operation.id
         )
     }
 }

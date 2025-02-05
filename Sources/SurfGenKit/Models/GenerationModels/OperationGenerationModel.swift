@@ -1,6 +1,6 @@
 //
 //  OperationGenerationModel.swift
-//  
+//
 //
 //  Created by Dmitry Demyanov on 04.11.2020.
 //
@@ -11,7 +11,7 @@ enum HttpMethod: String {
     case patch
     case put
     case delete
-    
+
     var name: String {
         switch self {
         case .get, .post, .delete:
@@ -29,7 +29,7 @@ enum ResponseBody: Equatable {
 }
 
 public struct OperationGenerationModel {
-    
+
     private enum Constants {
         static let multipartModel = "MultipartModel"
     }
@@ -46,11 +46,12 @@ public struct OperationGenerationModel {
 
     let hasBody: Bool
     var requestBody: RequestBodyGenerationModel?
+    let id: String?
 
     private(set) var hasUndefinedResponseBody = false
     private(set) var hasResponseModel = false
     private(set) var responseModel: String?
-    
+
     init(name: String,
          description: String?,
          path: PathGenerationModel,
@@ -58,7 +59,8 @@ public struct OperationGenerationModel {
          pathParameters: [ParameterGenerationModel],
          queryParameters: [ParameterGenerationModel],
          requestBody: RequestBodyGenerationModel.BodyType?,
-         responseBody: ResponseBody) {
+         responseBody: ResponseBody,
+         id: String?) {
         self.name = name
         self.hasDescription = description != nil
         self.description = description
@@ -70,7 +72,7 @@ public struct OperationGenerationModel {
         self.queryParameters = queryParameters
         self.hasBody = requestBody != nil
         self.requestBody = RequestBodyGenerationModel(type: requestBody)
-
+        self.id = id
         switch responseBody {
         case .model(let modelName):
             self.hasResponseModel = true

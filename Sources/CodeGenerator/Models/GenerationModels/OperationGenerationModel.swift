@@ -1,6 +1,6 @@
 //
 //  OperationGenerationModel.swift
-//  
+//
 //
 //  Created by Александр Кравченков on 19.10.2021.
 //
@@ -63,11 +63,13 @@ public struct OperationGenerationModel: Encodable {
     public let requestModel: Reference<RequestModel>?
 
     public let pathParameters: [ParameterModel]
+    public let headerParameters: [ParameterModel]
     public let queryParameters: [ParameterModel]
     public let requestGenerationModel: DataGenerationModel?
     public let responseGenerationModel: Keyed<DataGenerationModel>?
 
     public let allGenerationResponses: [ResponseGenerationModel]?
+    public let id: String?
 
     init(operationModel: OperationModel) {
         self.httpMethod = operationModel.httpMethod
@@ -82,6 +84,7 @@ public struct OperationGenerationModel: Encodable {
             .map { $0.value }
             .sorted { $0.name < $1.name }
         self.pathParameters = allParameters.filter { $0.location == .path }
+        self.headerParameters = allParameters.filter { $0.location == .header }
         self.queryParameters = allParameters.filter { $0.location == .query }
 
         let request = operationModel.requestModel?.value
@@ -108,6 +111,7 @@ public struct OperationGenerationModel: Encodable {
                     responses: response.values.map { DataGenerationModel(dataModel: $0) }
                 )
             }
+        self.id = operationModel.id
     }
 }
 

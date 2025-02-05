@@ -1,6 +1,6 @@
 //
 //  OperationModel.swift
-//  
+//
 //
 //  Created by Александр Кравченков on 17.12.2020.
 //
@@ -56,19 +56,21 @@ public struct OperationModel: Encodable {
     public let parameters: [Reference<ParameterModel>]?
     public let responses: [Reference<ResponseModel>]?
     public let requestModel: Reference<RequestModel>?
+    public let id: String?
 
     init(httpMethod: String,
          summary: String?,
          description: String?,
          parameters: [Reference<ParameterModel>]?,
          responses: [Reference<ResponseModel>]?,
-         requestModel: Reference<RequestModel>?) {
+         requestModel: Reference<RequestModel>?,
+         id: String?) {
         self.httpMethod = httpMethod
         self.summary = summary
-        
         self.description = description
         self.parameters = parameters
         self.responses = responses
         self.requestModel = requestModel
+        self.id = id
     }
 }

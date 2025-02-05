@@ -1,6 +1,6 @@
 //
 //  OperationNode.swift
-//  
+//
 //
 //  Created by Александр Кравченков on 14.12.2020.
 //
@@ -27,18 +27,21 @@ public struct OperationNode {
     public let parameters: [Referenced<ParameterNode>]
     public let requestBody: Referenced<RequestBodyNode>?
     public let responses: [ResponseBody]
+    public let id: String?
 
     public init(method: String,
                 description: String?,
                 summary: String?,
                 parameters: [Referenced<ParameterNode>],
                 requestBody: Referenced<RequestBodyNode>?,
-                responses: [ResponseBody]) {
+                responses: [ResponseBody],
+                id: String?) {
         self.method = method
         self.description = description
         self.summary = summary
         self.parameters = parameters
         self.requestBody = requestBody
         self.responses = responses
+        self.id = id
     }
 }

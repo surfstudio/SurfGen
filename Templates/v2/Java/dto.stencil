@@ -1,0 +1,24 @@
+package ru.surf.surfgen.api.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import javax.validation.constraints.*;
+import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+public class {{ model.name }} {
+    {% for property in model.properties %}
+    @Schema( description = "{{ property.description }}"{% if property.example %}, example = "{{ property.example }}"{% else %}){% endif %}{% if not property.isNullable %}
+    @NotNull{% if property.typeModel.name == "string" %}
+    @NotBlank{% endif %}{% elif property.isNullable %}
+    @Nullable{% endif %}{% if property.typeModel.name == "string" %}{% if property.minLength or property.maxLength %}
+    @Size(min = {{ property.minLength }}, max = {{ property.maxLength }}){% endif %}{% elif property.typeModel.name == "integer" %}{% if property.minimum or property.maximum %}
+    @Min({{ property.minimum}})
+    @Max({{ property.maximum }}){% endif %}{% endif %}
+    private {% if property.typeModel.isArray %}List<{{ property.typeModel.name|capitalizeFirstLetter }}>{% else %}{% if property.typeModel.name == "integer" %}{% if property.format == "int64" %}Long{% else %}Integer{% endif %}{% elif property.typeModel.name == "number" %}Double{% elif property.typeModel.name == "string" %}{% if property.format == "date-time" %}LocalDateTime{% elif property.format == "date" %}LocalDate{% else %}String{% endif %}{% else %}{{ property.typeModel.name|capitalizeFirstLetter }}{% endif %}{% endif %} {{ property.name|snakeCaseToCamelCase }};
+    {% endfor %}
+}

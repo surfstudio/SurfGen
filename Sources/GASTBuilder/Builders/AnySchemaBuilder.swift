@@ -161,34 +161,66 @@ public struct AnySchemaBuilder: SchemaBuilder {
 
     func build(object: ObjectSchema, meta: Metadata, name: String, apiDefinitionFileRef: String) throws -> SchemaModelNode {
         let properties = try object.properties.map { property -> PropertyNode in
-            let type = try wrap(property.schema.extractType(),
-                                message: "In object \(name), in property \(property.name)")
-
+            let schema = property.schema
+            let type = try wrap(
+                schema.extractType(),
+                message: "In object \(name), in property \(property.name)"
+            )
 
             var isNullable = property.isNullable
-
             if self.useNewNullableDeterminationStrategy {
-                isNullable = property.schema.metadata.nullable
+                isNullable = schema.metadata.nullable
             }
 
             var pattern: String?
+            var format: String?
+            var minimum: Double?
+            var maximum: Double?
+            var minLength: Int?
+            var maxLength: Int?
 
-            switch property.schema.type {
+            switch schema.type {
             case .string(let stringSchema):
                 pattern = stringSchema.pattern
+                format = stringSchema.format?.rawValue
+                minLength = stringSchema.minLength
+                maxLength = stringSchema.maxLength
+
+            case .number(let numberSchema):
+                format = numberSchema.format?.rawValue
+                minimum = numberSchema.minimum
+                maximum = numberSchema.maximum
+
+            case .integer(let integerSchema):
+                format = integerSchema.format?.rawValue
+                minimum = integerSchema.minimum.flatMap(Double.init)
+                maximum = integerSchema.maximum.flatMap(Double.init)
+
             default:
                 break
             }
 
-            return PropertyNode(name: property.name,
-                                type: type,
-                                description: property.schema.metadata.description,
-                                example: property.schema.metadata.example,
-                                nullable: isNullable,
-                                pattern: pattern)
+            return PropertyNode(
+                name: property.name,
+                type: type,
+                description: schema.metadata.description,
+                example: schema.metadata.example,
+                nullable: isNullable,
+                pattern: pattern,
+                format: format,
+                minimum: minimum,
+                maximum: maximum,
+                maxLength: maxLength,
+                minLength: minLength
+            )
         }
 
-        return SchemaModelNode(name: name, properties: properties, description: meta.description, apiDefinitionFileRef: apiDefinitionFileRef)
+        return SchemaModelNode(
+            name: name,
+            properties: properties,
+            description: meta.description,
+            apiDefinitionFileRef: apiDefinitionFileRef
+        )
     }
 
     func build(array: ArraySchema, name: String, apiDefinitionFileRef: String) throws -> SchemaArrayNode {

@@ -191,13 +191,25 @@ public class Resolver {
                              description: property.description,
                              type: .array(.init(name: "", itemsType: try arrayItemTypeUnwrapper(arr.itemsType))),
                              isNullable: property.nullable,
-                             pattern: property.pattern)
+                             pattern: property.pattern,
+                             example: property.example,
+                             format: property.format,
+                             minimum: property.minimum,
+                             maximum: property.maximum,
+                             minLength: property.minLength,
+                             maxLength: property.maxLength)
             case .simple(let val):
                 return .init(name: property.name,
                              description: property.description,
                              type: try propertyTypeUnwrapper(val),
                              isNullable: property.nullable,
-                             pattern: property.pattern)
+                             pattern: property.pattern,
+                             example: property.example,
+                             format: property.format,
+                             minimum: property.minimum,
+                             maximum: property.maximum,
+                             minLength: property.minLength,
+                             maxLength: property.maxLength)
             }
         }
 

@@ -1,6 +1,6 @@
 //
 //  OperationNodeParser.swift
-//  
+//
 //
 //  Created by Dmitry Demyanov on 07.11.2020.
 //
@@ -17,7 +17,7 @@ class OperationNodeParser {
 
     private let mediaContentParser: MediaContentNodeParser
     private let parametersParser: ParametersNodeParser
-
+    public var logger: Loger = DefaultLogger.default
     private let platform: Platform
 
     init(mediaContentParser: MediaContentNodeParser, parametersParser: ParametersNodeParser, platform: Platform) {
@@ -80,7 +80,7 @@ class OperationNodeParser {
         let responseBody = try wrap(mediaContentParser.parseResponseBody(node: operation.subNodes.responseBodyNode,
                                                                          forOperationName: name),
                                     with: ErrorMessages.errorMessage(for: name))
-        
+
 
         return OperationGenerationModel(name: name,
                                         description: description,
@@ -88,8 +88,10 @@ class OperationNodeParser {
                                         httpMethod: method,
                                         pathParameters: parameters.filter { $0.location == .path },
                                         queryParameters: parameters.filter { $0.location == .query },
+                                        headerParameters: parameters.filter { $0.location == .header },
                                         requestBody: requestBody,
-                                        responseBody: responseBody)
+                                        responseBody: responseBody,
+                                        id: name)
     }
-    
+
 }

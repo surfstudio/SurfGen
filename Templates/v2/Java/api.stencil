@@ -1,0 +1,25 @@
+package ru.surf.surfgen.api.contract;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+@Tag(name = "{{ service.name }} API")
+public interface {{ service.name }}Api {
+    {%for path in service.paths%}
+    {%for operation in path.operations%}
+    @Operation(summary = "{{ operation.summary }}")
+    {%if operation.httpMethod|lowercase == "delete"%}
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    {%endif%}
+    @{{ operation.httpMethod|capitalizeFirstLetter }}Mapping("{{ path.path }}")
+    {%if operation.httpMethod|lowercase == "delete"%}void{%else%}ResponseEntity<{{ operation.responseGenerationModel.value.typeNames|join }}>{%endif%} {{operation.id}}({%for parameter in operation.pathParameters%}
+        @PathVariable("{{ parameter.name }}") {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}{%endfor%}
+        {%for parameter in operation.headerParameters%}
+        @RequestHeader(name = "{{ parameter.name }}", required={{ parameter.isRequired }}) String {{ parameter.schema.type|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}{%endfor%}
+        {%for parameter in operation.queryParameters%}@RequestParam(name = "{{ parameter.name }}", required={{ parameter.isRequired }}) {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}{%endfor%}
+        {%for requestModelName in operation.requestGenerationModel.typeNames%}@Valid @RequestBody {{ requestModelName|capitalizeFirstLetter }} {{ requestModelName|snakeCaseToCamelCase }}{%endfor%});
+    {%endfor%}
+    {%endfor%}
+}

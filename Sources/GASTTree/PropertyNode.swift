@@ -20,19 +20,34 @@ public struct PropertyNode {
     public let example: Any?
     public let nullable: Bool
     public let pattern: String?
+    public let format: String?
+    public let minimum: Double?
+    public let maximum: Double?
+    public let maxLength: Int?
+    public let minLength: Int?
 
     public init(name: String,
                 type: PossibleType,
                 description: String?,
                 example: Any?,
                 nullable: Bool,
-                pattern: String?) {
+                pattern: String?,
+                format: String?,
+                minimum: Double?,
+                maximum: Double?,
+                maxLength: Int?,
+                minLength: Int?) {
         self.name = name
         self.type = type
         self.description = description
         self.example = example
         self.nullable = nullable
         self.pattern = pattern
+        self.format = format
+        self.minimum = minimum
+        self.maximum = maximum
+        self.minLength = minLength
+        self.maxLength = maxLength
     }
 }
 
