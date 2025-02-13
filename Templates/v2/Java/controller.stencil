@@ -1,10 +1,13 @@
-package ru.surf.surfgen.controller;
+package {{package}}.controller;
 
-import ru.surf.surfgen.api.contract.{{ service.name }}Api;
-import ru.surf.surfgen.service.{{ service.name }}Service;
+import {{package}}.api.contract.{{ service.name }}Api;
+import {{package}}.service.{{ service.name }}Service;
+import {{package}}.api.dto.*;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -13,22 +16,25 @@ public class {{ service.name }}Controller implements {{ service.name }}Api {
 
     {%- for path in service.paths -%}
     {%- for operation in path.operations%}
-    
+
     @Override
+    {%- if operation.responseGenerationModel.key != "204" %}
+    @NotNull
+    {%- endif %}
     public {% if operation.responseGenerationModel.key == "204" %}void{% else %}ResponseEntity<{{ operation.responseGenerationModel.value.typeNames|join }}>{% endif %} {{ operation.id }}(
-        {%- for parameter in operation.pathParameters %}{{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}
+        {%- for parameter in operation.pathParameters %}final {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}
         {%- if not forloop.last or operation.headerParameters or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
-        {% for parameter in operation.headerParameters %}{{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}
+        {% for parameter in operation.headerParameters %}final {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|splitByHyphenAndGetLastNonEmpty }}
         {%- if not forloop.last or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
-        {% for parameter in operation.queryParameters %}{{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}
+        {% for parameter in operation.queryParameters %}final {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}
         {%- if not forloop.last or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
-        {% for requestModelName in operation.requestGenerationModel.typeNames -%}{{ requestModelName|capitalizeFirstLetter }} {{ requestModelName|snakeCaseToCamelCase }}
+        {% for requestModelName in operation.requestGenerationModel.typeNames -%}final {{ requestModelName|capitalizeFirstLetter }} {{ requestModelName|snakeCaseToCamelCase }}
         {%- if not forloop.last%}, {% endif -%}{% endfor -%}) {
         {%- if operation.responseGenerationModel.key == "204" %}
         {{ service.name|lowercaseFirstLetter }}Service.{{ operation.id }}(
             {%- for parameter in operation.pathParameters %}{{ parameter.name|snakeCaseToCamelCase }}
             {%- if not forloop.last or operation.headerParameters or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
-            {%- for parameter in operation.headerParameters %}{{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}
+            {%- for parameter in operation.headerParameters %}{{ parameter.name|splitByHyphenAndGetLastNonEmpty }}
             {%- if not forloop.last or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
             {%- for parameter in operation.queryParameters %}{{ parameter.name|snakeCaseToCamelCase }}
             {%- if not forloop.last or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
@@ -40,7 +46,7 @@ public class {{ service.name }}Controller implements {{ service.name }}Api {
             {%- if not forloop.last or operation.headerParameters or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
             {% for parameter in operation.queryParameters %}{{ parameter.name|snakeCaseToCamelCase }}
             {%- if not forloop.last or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
-            {% for parameter in operation.headerParameters %}{{ parameter.name|snakeCaseToCamelCase }}
+            {% for parameter in operation.headerParameters %}{{ parameter.name|splitByHyphenAndGetLastNonEmpty }}
             {%- if not forloop.last or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
             {% for requestModelName in operation.requestGenerationModel.typeNames %}{{ requestModelName|snakeCaseToCamelCase }}
             {%- if not forloop.last%}, {% endif -%}{% endfor -%}), HttpStatus.CREATED);
@@ -50,7 +56,7 @@ public class {{ service.name }}Controller implements {{ service.name }}Api {
             {%- if not forloop.last or operation.headerParameters or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
             {% for parameter in operation.queryParameters %}{{ parameter.name|snakeCaseToCamelCase }}
             {%- if not forloop.last or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
-            {% for parameter in operation.headerParameters %}{{ parameter.name|snakeCaseToCamelCase }}
+            {% for parameter in operation.headerParameters %}{{ parameter.name|splitByHyphenAndGetLastNonEmpty }}
             {%- if not forloop.last or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
             {% for requestModelName in operation.requestGenerationModel.typeNames %}{{ requestModelName|snakeCaseToCamelCase }}
             {%- if not forloop.last%}, {% endif -%}{% endfor -%}));

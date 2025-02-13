@@ -82,8 +82,8 @@ public struct PropertyModel {
     public let pattern: String?
     public let example: Any?
     public let format: String?
-    public let minimum: Double?
-    public let maximum: Double?
+    public let minimum: Int?
+    public let maximum: Int?
     public let maxLength: Int?
     public let minLength: Int?
 
@@ -97,8 +97,8 @@ public struct PropertyModel {
          pattern: String?,
          example: Any?,
          format: String?,
-         minimum: Double?,
-         maximum: Double?,
+         minimum: Int?,
+         maximum: Int?,
          minLength: Int?,
          maxLength: Int?) {
         self.name = name

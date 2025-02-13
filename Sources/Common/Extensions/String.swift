@@ -144,6 +144,49 @@ extension String {
             .joined()
     }
 
+    /// Splits string by '-' and returns last element.
+    public func splitByHyphenAndGetLastNonEmpty() -> String {
+        let parts = self.components(separatedBy: "-").filter { !$0.isEmpty }
+        return parts.last ?? ""
+    }
+
+    /// Splits string by Uppercase letter and returns last element.
+    /// Example: UpdateProfileRequest returns Request
+    public func splitByUppercaseAndGetLast() -> String {
+        do {
+            let pattern = "(?<!^)(?=[A-Z])"
+            let regex = try NSRegularExpression(pattern: pattern, options: [])
+
+            let matches = regex.matches(in: self, options: [], range: NSRange(location: 0, length: self.utf16.count))
+
+            var splitIndices = [String.Index]()
+            for match in matches {
+                let range = match.range
+                if let index = Range(range, in: self)?.lowerBound {
+                    splitIndices.append(index)
+                }
+            }
+
+            var parts = [String]()
+            var previousIndex = self.startIndex
+
+            for index in splitIndices {
+                let part = String(self[previousIndex..<index])
+                parts.append(part)
+                previousIndex = index
+            }
+
+            parts.append(String(self[previousIndex...]))
+
+            let nonEmptyParts = parts.filter { !$0.isEmpty }
+            return nonEmptyParts.last ?? ""
+
+        } catch {
+            print("Regex error: \(error)")
+            return ""
+        }
+    }
+
     private func pathToCamelCase() -> String {
         return self
             .split(whereSeparator: { $0 == "/" || $0 == "_" })

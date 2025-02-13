@@ -1,22 +1,18 @@
-{% if enum.description %}/**
- {% for line in enum.description|splitLines %}* {{ line }}
- {% endfor %}*/
-{% endif %}public enum {{ enum.name }} {
+package {{package}}.api.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum {{ enum.name }} {
     {% for caseValue in enum.cases %}{#
     #}{{ caseValue|uppercase }}("{{ caseValue }}"){% if not forloop.last %},{% else %};{% endif %}
     {%- endfor %}
 
     private final String value;
 
-    {{ enum.name }}(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public static {{ enum.name }} getBy(String value) {
+    public static {{ enum.name }} getByValue(String value) {
         if (value == null) {
             return null;
         }

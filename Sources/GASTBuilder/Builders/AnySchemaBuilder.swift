@@ -174,8 +174,8 @@ public struct AnySchemaBuilder: SchemaBuilder {
 
             var pattern: String?
             var format: String?
-            var minimum: Double?
-            var maximum: Double?
+            var minimum: Int?
+            var maximum: Int?
             var minLength: Int?
             var maxLength: Int?
 
@@ -188,13 +188,13 @@ public struct AnySchemaBuilder: SchemaBuilder {
 
             case .number(let numberSchema):
                 format = numberSchema.format?.rawValue
-                minimum = numberSchema.minimum
-                maximum = numberSchema.maximum
+                minimum = numberSchema.minimum.flatMap { Int($0) }
+                maximum = numberSchema.maximum.flatMap { Int($0) }
 
             case .integer(let integerSchema):
                 format = integerSchema.format?.rawValue
-                minimum = integerSchema.minimum.flatMap(Double.init)
-                maximum = integerSchema.maximum.flatMap(Double.init)
+                minimum = integerSchema.minimum
+                maximum = integerSchema.maximum
 
             default:
                 break

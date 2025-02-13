@@ -21,8 +21,8 @@ public struct PropertyNode {
     public let nullable: Bool
     public let pattern: String?
     public let format: String?
-    public let minimum: Double?
-    public let maximum: Double?
+    public let minimum: Int?
+    public let maximum: Int?
     public let maxLength: Int?
     public let minLength: Int?
 
@@ -33,8 +33,8 @@ public struct PropertyNode {
                 nullable: Bool,
                 pattern: String?,
                 format: String?,
-                minimum: Double?,
-                maximum: Double?,
+                minimum: Int?,
+                maximum: Int?,
                 maxLength: Int?,
                 minLength: Int?) {
         self.name = name

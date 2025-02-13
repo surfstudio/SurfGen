@@ -76,6 +76,14 @@ public class DefaultTemplateFiller: TemplateFiller {
             $0.withEscapedCharacters()
         }
 
+        templateExtension.registerStringFilter("splitByHyphenAndGetLastNonEmpty") {
+            $0.splitByHyphenAndGetLastNonEmpty()
+        }
+
+        templateExtension.registerStringFilter("splitByUppercaseAndGetLast") {
+            $0.splitByUppercaseAndGetLast()
+        }
+
         return templateExtension
     }
     
