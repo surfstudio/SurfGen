@@ -4,7 +4,7 @@
 {% endif %}public enum {{ enum.name }} {
     {% for caseValue in enum.cases %}{#
     #}{{ caseValue|uppercase }}("{{ caseValue }}"){% if not forloop.last %},{% else %};{% endif %}
-    {% endfor %}
+    {%- endfor %}
 
     private final String value;
 

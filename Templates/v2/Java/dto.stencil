@@ -11,8 +11,9 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class {{ model.name }} {
-    {% for property in model.properties %}
-    @Schema( description = "{{ property.description }}"{% if property.example %}, example = "{{ property.example }}"{% else %}){% endif %}{% if not property.isNullable %}
+    {%- for property in model.properties %}
+    @Schema(description = "{{ property.description }}"{% if property.example %}, example = "{{ property.example }}"{% else %}){% endif %}{% if property.pattern %}
+    @Pattern(regexp = "{{ property.pattern|withEscapedCharacters }}"){% endif %}{% if not property.isNullable %}
     @NotNull{% if property.typeModel.name == "string" %}
     @NotBlank{% endif %}{% elif property.isNullable %}
     @Nullable{% endif %}{% if property.typeModel.name == "string" %}{% if property.minLength or property.maxLength %}
@@ -20,5 +21,7 @@ public class {{ model.name }} {
     @Min({{ property.minimum}})
     @Max({{ property.maximum }}){% endif %}{% endif %}
     private {% if property.typeModel.isArray %}List<{{ property.typeModel.name|capitalizeFirstLetter }}>{% else %}{% if property.typeModel.name == "integer" %}{% if property.format == "int64" %}Long{% else %}Integer{% endif %}{% elif property.typeModel.name == "number" %}Double{% elif property.typeModel.name == "string" %}{% if property.format == "date-time" %}LocalDateTime{% elif property.format == "date" %}LocalDate{% else %}String{% endif %}{% else %}{{ property.typeModel.name|capitalizeFirstLetter }}{% endif %}{% endif %} {{ property.name|snakeCaseToCamelCase }};
+    {%- if not forloop.last %}
+    {% endif -%}
     {% endfor %}
 }

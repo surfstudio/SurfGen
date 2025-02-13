@@ -7,19 +7,26 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "{{ service.name }} API")
 public interface {{ service.name }}Api {
-    {%for path in service.paths%}
-    {%for operation in path.operations%}
-    @Operation(summary = "{{ operation.summary }}")
-    {%if operation.httpMethod|lowercase == "delete"%}
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    {%endif%}
+
+{%- paths: for path in service.paths %}{% operations: for operation in path.operations %}
+	@Operation(summary = "{{ operation.summary }}")
+{%- if operation.httpMethod|lowercase == "delete" %}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+{%- endif %}
     @{{ operation.httpMethod|capitalizeFirstLetter }}Mapping("{{ path.path }}")
-    {%if operation.httpMethod|lowercase == "delete"%}void{%else%}ResponseEntity<{{ operation.responseGenerationModel.value.typeNames|join }}>{%endif%} {{operation.id}}({%for parameter in operation.pathParameters%}
-        @PathVariable("{{ parameter.name }}") {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}{%endfor%}
-        {%for parameter in operation.headerParameters%}
-        @RequestHeader(name = "{{ parameter.name }}", required={{ parameter.isRequired }}) String {{ parameter.schema.type|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}{%endfor%}
-        {%for parameter in operation.queryParameters%}@RequestParam(name = "{{ parameter.name }}", required={{ parameter.isRequired }}) {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}{%endfor%}
-        {%for requestModelName in operation.requestGenerationModel.typeNames%}@Valid @RequestBody {{ requestModelName|capitalizeFirstLetter }} {{ requestModelName|snakeCaseToCamelCase }}{%endfor%});
-    {%endfor%}
-    {%endfor%}
+{%- if operation.httpMethod|lowercase == "delete" %}
+	void{% else %}
+	ResponseEntity<{{ operation.responseGenerationModel.value.typeNames|join }}>
+	{%- endif %} {{operation.id}}(
+	{%- for parameter in operation.pathParameters %}@PathVariable("{{ parameter.name }}") {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}
+	{%- if not forloop.last or operation.headerParameters or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+	{% for parameter in operation.headerParameters %}@RequestHeader(name = "{{ parameter.name }}", required={{ parameter.isRequired }}) {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}
+	{%- if not forloop.last or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+	{% for parameter in operation.queryParameters%}@RequestParam(name = "{{ parameter.name }}", required={{ parameter.isRequired }}) {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}
+	{%- if not forloop.last or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+	{% for requestModelName in operation.requestGenerationModel.typeNames %}@Valid @RequestBody {{ requestModelName|capitalizeFirstLetter }} {{ requestModelName|snakeCaseToCamelCase }}
+	{%- if not forloop.last%}, {% endif -%}{% endfor -%});
+	{%- if not forloop.paths.last or not forloop.operations.last %}
+	{% endif -%}
+{% endfor %}{% endfor %}
 }
