@@ -67,6 +67,7 @@ public class GenerationCommand: Command {
 
         let pipeline = BuildCodeGeneratorPipelineFactory.build(
             templates: config.templates,
+            globalEnvironment: config.environment ?? [:],
             specificationRootPath: config.specificationRootPath ?? "",
             astNodesToExclude: try Utils.Urls.makeAstNodeRefsAbsolute(refs: rawAstNodesToExclude),
             serviceName: serviceName,

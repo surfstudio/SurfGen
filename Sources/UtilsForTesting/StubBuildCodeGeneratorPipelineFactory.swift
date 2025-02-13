@@ -77,6 +77,7 @@ public struct StubBuildCodeGeneratorPipelineFactory {
     }
 
     public static func build(templates: [Template],
+                             globalEnvironment: [String: String],
                              specificationRootPath: String,
                              astNodesToExclude: Set<String>,
                              serviceName: String,
@@ -132,6 +133,7 @@ public struct StubBuildCodeGeneratorPipelineFactory {
                                         specificationRootPath: specificationRootPath,
                                         templateFiller: templateFiller,
                                         modelExtractor: modelExtractor,
+                                        globalEnvironment: globalEnvironment,
                                         prefixCutter: prefixCutter
                                     ).erase()
                                 ).erase(),

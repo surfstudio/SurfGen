@@ -24,6 +24,7 @@ public struct ServiceGenerationStage: PipelineStage {
 
     var next: AnyPipelineStage<[SourceCode]>
 
+    private let globalEnvironment: [String: String]
     private let templates: [Template]
     private let serviceName: String
     private let prefixCutter: PrefixCutter?
@@ -35,6 +36,7 @@ public struct ServiceGenerationStage: PipelineStage {
         specificationRootPath: String,
         templateFiller: TemplateFiller,
         modelExtractor: ModelExtractor,
+        globalEnvironment: [String: String],
         prefixCutter: PrefixCutter? = nil
     ) {
         self.next = next
@@ -44,6 +46,7 @@ public struct ServiceGenerationStage: PipelineStage {
         self.templateFiller = templateFiller
         self.modelExtractor = modelExtractor
         self.prefixCutter = prefixCutter
+        self.globalEnvironment = globalEnvironment
     }
 
     public func run(with input: [[PathModel]]) throws {
@@ -84,12 +87,14 @@ public struct ServiceGenerationStage: PipelineStage {
             templates.filter { $0.type == .service },
             with: [ContextKeys.service: serviceGenerationModel],
             name: serviceGenerationModel.name,
+            serviceName: serviceName,
             apiDefinitionFileRef: serviceGenerationModel.apiDefinitionFileRef)
 
         let generatedModels = try objectModels.flatMap {
             return try fillTemplates(templates.filter { $0.type == .model },
                                      with: [ContextKeys.model: $0],
                                      name: $0.name,
+                                     serviceName: serviceName,
                                      apiDefinitionFileRef: $0.apiDefinitionFileRef)
         }
 
@@ -97,6 +102,7 @@ public struct ServiceGenerationStage: PipelineStage {
             return try fillTemplates(templates.filter { $0.type == .enum },
                                      with: [ContextKeys.enum: $0],
                                      name: $0.name,
+                                     serviceName: serviceName,
                                      apiDefinitionFileRef: $0.apiDefinitionFileRef)
         }
 
@@ -104,6 +110,7 @@ public struct ServiceGenerationStage: PipelineStage {
             return try fillTemplates(templates.filter { $0.type == .typealias },
                                      with: [ContextKeys.model: $0],
                                      name: $0.name,
+                                     serviceName: serviceName,
                                      apiDefinitionFileRef: $0.apiDefinitionFileRef)
         }
 
@@ -111,17 +118,36 @@ public struct ServiceGenerationStage: PipelineStage {
         
     }
 
-    private func fillTemplates(_ templates: [Template], with model: [String: Any], name: String, apiDefinitionFileRef: String) throws -> [SourceCode] {
+    private func fillTemplates(
+        _ templates: [Template],
+        with model: [String: Any],
+        name: String,
+        serviceName: String,
+        apiDefinitionFileRef: String
+    ) throws -> [SourceCode] {
         return try templates.map { template in
+            let context = makeContext(from: model, with: serviceName, in: template)
             let sourceCode = try wrap(
-                templateFiller.fillTemplate(at: template.templatePath, with: model),
-                message: "While filling template at \(template.templatePath) with model \(name)"
+                templateFiller.fillTemplate(at: template.templatePath, with: context),
+                message: "While filling template at \(template.templatePath) with model \(context)"
             )
             return SourceCode(code: sourceCode,
                               fileName: template.buildFileName(for: name),
                               destinationPath: template.buildDestinationPath(for: name),
                               apiDefinitionFileRef: apiDefinitionFileRef)
         }
+    }
+
+    private func makeContext(
+        from model: [String: Any],
+        with serviceName: String,
+        in template: Template
+    ) -> [String: Any] {
+        let templateEnvironment = template.environment ?? [:]
+        let environment = globalEnvironment.merging(templateEnvironment, uniquingKeysWith: { _, value in value })
+        return model
+            .merging(environment, uniquingKeysWith: { value, _ in value })
+            .merging(["serviceName": serviceName], uniquingKeysWith: { value, _ in value })
     }
 }
 

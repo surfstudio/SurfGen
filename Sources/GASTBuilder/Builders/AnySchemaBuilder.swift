@@ -171,12 +171,21 @@ public struct AnySchemaBuilder: SchemaBuilder {
                 isNullable = property.schema.metadata.nullable
             }
 
+            var pattern: String?
+
+            switch property.schema.type {
+            case .string(let stringSchema):
+                pattern = stringSchema.pattern
+            default:
+                break
+            }
 
             return PropertyNode(name: property.name,
                                 type: type,
                                 description: property.schema.metadata.description,
                                 example: property.schema.metadata.example,
-                                nullable: isNullable)
+                                nullable: isNullable,
+                                pattern: pattern)
         }
 
         return SchemaModelNode(name: name, properties: properties, description: meta.description, apiDefinitionFileRef: apiDefinitionFileRef)

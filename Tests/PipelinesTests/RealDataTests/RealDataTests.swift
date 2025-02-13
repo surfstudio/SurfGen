@@ -46,6 +46,7 @@ final class RealDataTests: XCTestCase {
                     do {
                         _ = try BuildCodeGeneratorPipelineFactory.build(
                             templates: [],
+                            globalEnvironment: [:],
                             specificationRootPath: "",
                             astNodesToExclude: [],
                             serviceName: "",

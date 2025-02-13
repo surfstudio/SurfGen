@@ -147,6 +147,7 @@ class DataGenerationTest: XCTestCase {
 
         try StubBuildCodeGeneratorPipelineFactory.build(
             templates: TestTemplates.swiftTemplateModels,
+            globalEnvironment: [:],
             specificationRootPath: homePath,
             astNodesToExclude: [],
             serviceName: "PackageSeparation",

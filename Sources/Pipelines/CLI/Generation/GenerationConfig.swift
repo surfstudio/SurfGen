@@ -14,6 +14,7 @@ public struct AnalytcsConfig: Decodable {
 }
 
 public struct GenerationConfig: Decodable {
+    public var environment: [String: String]?
     public var templates: [Template]
     public var analytcsConfig: AnalytcsConfig?
     public var prefixesToCutDownInServiceNames: [String]?

@@ -19,17 +19,20 @@ public struct PropertyNode {
     public let description: String?
     public let example: Any?
     public let nullable: Bool
+    public let pattern: String?
 
     public init(name: String,
                 type: PossibleType,
                 description: String?,
                 example: Any?,
-                nullable: Bool) {
+                nullable: Bool,
+                pattern: String?) {
         self.name = name
         self.type = type
         self.description = description
         self.example = example
         self.nullable = nullable
+        self.pattern = pattern
     }
 }
 
