@@ -57,17 +57,23 @@ public struct Template: Decodable {
     /// Example: Path/To/Project/Models/{name}
     public let destinationPath: String
 
+    /// Environment where custom variables are stored
+    /// These variables can be used in a Stencil template.
+    public let environment: [String: String]?
+
     public init(type: Template.TemplateType,
                 nameSuffix: String?,
                 fileExtension: String,
                 fileNameCase: FileNameCase? = .camelCase,
                 templatePath: String,
-                destinationPath: String) {
+                destinationPath: String,
+                environment: [String: String]?) {
         self.type = type
         self.nameSuffix = nameSuffix
         self.fileExtension = fileExtension
         self.fileNameCase = fileNameCase
         self.templatePath = templatePath
         self.destinationPath = destinationPath
+        self.environment = environment
     }
 }

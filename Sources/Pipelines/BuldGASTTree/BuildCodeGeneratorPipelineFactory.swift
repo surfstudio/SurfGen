@@ -24,6 +24,7 @@ public struct BuildCodeGeneratorPipelineFactory {
     }
 
     public static func build(templates: [Template],
+                             globalEnvironment: [String: String],
                              specificationRootPath: String,
                              astNodesToExclude: Set<String>,
                              serviceName: String,
@@ -81,6 +82,7 @@ public struct BuildCodeGeneratorPipelineFactory {
                                         specificationRootPath: specificationRootPath,
                                         templateFiller: templateFiller,
                                         modelExtractor: modelExtractor,
+                                        globalEnvironment: globalEnvironment,
                                         prefixCutter: prefixCutter
                                     ).erase()
                                 ).erase(),

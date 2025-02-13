@@ -71,7 +71,11 @@ public class DefaultTemplateFiller: TemplateFiller {
         templateExtension.registerStringFilter("sanitizeUrlPath") {
             $0.sanitizeUrlPath()
         }
-        
+
+        templateExtension.registerStringFilter("withEscapedCharacters") {
+            $0.withEscapedCharacters()
+        }
+
         return templateExtension
     }
     

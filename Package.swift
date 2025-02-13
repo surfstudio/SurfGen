@@ -29,8 +29,8 @@ var testTargets: [Target] = [
 var dependencies: [PackageDescription.Package.Dependency] = [
     // because SPM cant resolve it by their own ((((:
     // .package(url: "https://github.com/kylef/PathKit.git", from: "0.9.0"),
-    .package(url: "https://github.com/LastSprint/SwagGen", .revision("285ee89b027344520cbda903ea1c74bf0f9baac8")),
-    .package(url: "https://github.com/stencilproject/Stencil", from: "0.14.1"),
+    .package(url: "https://github.com/surfstudio/surf-SwagGen", .revision("c10461f6eb74d8c834e7621e82068a5d938be27d")),
+    .package(url: "https://github.com/stencilproject/Stencil", from: "0.15.1"),
     .package(url: "https://github.com/jakeheis/SwiftCLI", from: "6.0.3"),
     .package(url: "https://github.com/onevcat/Rainbow", from: "3.1.5"),
     .package(url: "https://github.com/jpsim/Yams", from: "1.0.0"),

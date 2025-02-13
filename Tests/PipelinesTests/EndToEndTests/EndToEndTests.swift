@@ -105,6 +105,7 @@ class EndToEndTests: XCTestCase {
 
         try BuildCodeGeneratorPipelineFactory
             .build(templates: templates,
+                   globalEnvironment: [:],
                    specificationRootPath: "",
                    astNodesToExclude: [],
                    serviceName: serviceName,

@@ -119,7 +119,7 @@ extension String {
     public func replaceNameTemplate(with name: String) -> String {
         return self.replacingOccurrences(of: "\\{.*?\\}", with: name, options: .regularExpression)
     }
-    
+
     /// Return package name from a full api file name.
     /// For example:
     /// self = "/users/username/swagger/products/api.yaml
@@ -136,7 +136,14 @@ extension String {
     public func sanitizeUrlPath() -> String {
         return String(self.drop { $0  == "/" })
     }
-    
+
+    /// String with all escaped characters.
+    public func withEscapedCharacters() -> String {
+        return self.unicodeScalars
+            .map { $0.escaped(asASCII: true) }
+            .joined()
+    }
+
     private func pathToCamelCase() -> String {
         return self
             .split(whereSeparator: { $0 == "/" || $0 == "_" })

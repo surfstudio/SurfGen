@@ -79,6 +79,7 @@ public struct PropertyModel {
     public let description: String?
     public let type: PossibleType
     public let isNullable: Bool
+    public let pattern: String?
 
     /// This value will be used as type for generation
     public let typeModel: ItemTypeModel
@@ -86,7 +87,8 @@ public struct PropertyModel {
     init(name: String,
          description: String?,
          type: PropertyModel.PossibleType,
-         isNullable: Bool) {
+         isNullable: Bool,
+         pattern: String?) {
         self.name = name
         self.description = description
         self.type = type
@@ -96,6 +98,7 @@ public struct PropertyModel {
                                        isObject: type.isObject,
                                        enumTypeName: type.enumTypeName,
                                        aliasTypeName: type.aliasTypeName)
+        self.pattern = pattern
     }
 }
 
