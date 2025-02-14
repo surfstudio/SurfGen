@@ -18,6 +18,9 @@ public interface {{ service.name }}Api {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 {%- endif %}
     @{{ operation.httpMethod|capitalizeFirstLetter }}Mapping("{{ path.path }}")
+{%- if operation.responseGenerationModel.key != "204" %}
+    @NotNull
+{%- endif %}
 {%- if operation.httpMethod|lowercase == "delete" %}
 	void{% else %}
 	ResponseEntity<{{ operation.responseGenerationModel.value.typeNames|join }}>

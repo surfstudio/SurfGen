@@ -18,9 +18,6 @@ public class {{ service.name }}Controller implements {{ service.name }}Api {
     {%- for operation in path.operations%}
 
     @Override
-    {%- if operation.responseGenerationModel.key != "204" %}
-    @NotNull
-    {%- endif %}
     public {% if operation.responseGenerationModel.key == "204" %}void{% else %}ResponseEntity<{{ operation.responseGenerationModel.value.typeNames|join }}>{% endif %} {{ operation.id }}(
         {%- for parameter in operation.pathParameters %}final {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}
         {%- if not forloop.last or operation.headerParameters or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
