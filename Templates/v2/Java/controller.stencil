@@ -1,0 +1,63 @@
+package {{package}}.controller;
+
+import {{package}}.api.contract.{{ service.name }}Api;
+import {{package}}.service.{{ service.name }}Service;
+import {{package}}.api.dto.*;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+public class {{ service.name }}Controller implements {{ service.name }}Api {
+    private final {{ service.name }}Service {{ service.name|lowercaseFirstLetter }}Service;
+
+    {%- for path in service.paths -%}
+    {%- for operation in path.operations%}
+
+    @Override
+    public {% if operation.responseGenerationModel.key == "204" %}void{% else %}ResponseEntity<{{ operation.responseGenerationModel.value.typeNames|join }}>{% endif %} {{ operation.id }}(
+        {%- for parameter in operation.pathParameters %}final {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}
+        {%- if not forloop.last or operation.headerParameters or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+        {% for parameter in operation.headerParameters %}final {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|splitByHyphenAndGetLastNonEmpty }}
+        {%- if not forloop.last or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+        {% for parameter in operation.queryParameters %}final {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}
+        {%- if not forloop.last or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+        {% for requestModelName in operation.requestGenerationModel.typeNames -%}final {{ requestModelName|capitalizeFirstLetter }} {{ requestModelName|snakeCaseToCamelCase }}
+        {%- if not forloop.last%}, {% endif -%}{% endfor -%}) {
+        {%- if operation.responseGenerationModel.key == "204" %}
+        {{ service.name|lowercaseFirstLetter }}Service.{{ operation.id }}(
+            {%- for parameter in operation.pathParameters %}{{ parameter.name|snakeCaseToCamelCase }}
+            {%- if not forloop.last or operation.headerParameters or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+            {%- for parameter in operation.headerParameters %}{{ parameter.name|splitByHyphenAndGetLastNonEmpty }}
+            {%- if not forloop.last or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+            {%- for parameter in operation.queryParameters %}{{ parameter.name|snakeCaseToCamelCase }}
+            {%- if not forloop.last or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+            {%- for requestModelName in operation.requestGenerationModel.typeNames %}{{ requestModelName|snakeCaseToCamelCase }}
+            {%- if not forloop.last%}, {% endif -%}{% endfor -%});
+        {%- else %}
+        return {% if operation.responseGenerationModel.key == "201" %}new ResponseEntity<>({{ service.name|lowercaseFirstLetter }}Service.{{ operation.id }}(
+            {%- for parameter in operation.pathParameters %}{{ parameter.name|snakeCaseToCamelCase }}
+            {%- if not forloop.last or operation.headerParameters or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+            {% for parameter in operation.queryParameters %}{{ parameter.name|snakeCaseToCamelCase }}
+            {%- if not forloop.last or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+            {% for parameter in operation.headerParameters %}{{ parameter.name|splitByHyphenAndGetLastNonEmpty }}
+            {%- if not forloop.last or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+            {% for requestModelName in operation.requestGenerationModel.typeNames %}{{ requestModelName|snakeCaseToCamelCase }}
+            {%- if not forloop.last%}, {% endif -%}{% endfor -%}), HttpStatus.CREATED);
+            {%- else -%}
+            ResponseEntity.ok({{ service.name|lowercaseFirstLetter }}Service.{{ operation.id }}(
+            {%- for parameter in operation.pathParameters %}{{ parameter.name|snakeCaseToCamelCase }}
+            {%- if not forloop.last or operation.headerParameters or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+            {% for parameter in operation.queryParameters %}{{ parameter.name|snakeCaseToCamelCase }}
+            {%- if not forloop.last or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+            {% for parameter in operation.headerParameters %}{{ parameter.name|splitByHyphenAndGetLastNonEmpty }}
+            {%- if not forloop.last or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+            {% for requestModelName in operation.requestGenerationModel.typeNames %}{{ requestModelName|snakeCaseToCamelCase }}
+            {%- if not forloop.last%}, {% endif -%}{% endfor -%}));
+            {%- endif -%}
+        {%- endif %}
+    }{% endfor %}{% endfor %}
+}

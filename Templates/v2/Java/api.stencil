@@ -1,0 +1,39 @@
+package {{package}}.api.contract;
+
+import {{package}}.api.dto.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@Tag(name = "{{ service.name }} API")
+public interface {{ service.name }}Api {
+
+{%- paths: for path in service.paths %}{% operations: for operation in path.operations %}
+	@Operation(summary = "{{ operation.summary }}")
+{%- if operation.httpMethod|lowercase == "delete" %}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+{%- endif %}
+    @{{ operation.httpMethod|capitalizeFirstLetter }}Mapping("{{ path.path }}")
+{%- if operation.responseGenerationModel.key != "204" %}
+    @NotNull
+{%- endif %}
+{%- if operation.httpMethod|lowercase == "delete" %}
+	void{% else %}
+	ResponseEntity<{{ operation.responseGenerationModel.value.typeNames|join }}>
+	{%- endif %} {{operation.id}}(
+	{%- for parameter in operation.pathParameters %}@PathVariable("{{ parameter.name }}") final {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}
+	{%- if not forloop.last or operation.headerParameters or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+	{% for parameter in operation.headerParameters %}@RequestHeader(name = "{{ parameter.name }}", required={{ parameter.isRequired }}) final {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|splitByHyphenAndGetLastNonEmpty }}
+	{%- if not forloop.last or operation.queryParameters or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+	{% for parameter in operation.queryParameters%}@RequestParam(name = "{{ parameter.name }}", required={{ parameter.isRequired }}) final {{ parameter.typeModel.name|capitalizeFirstLetter }} {{ parameter.name|snakeCaseToCamelCase }}
+	{%- if not forloop.last or operation.requestGenerationModel.typeNames%}, {% endif -%}{% endfor -%}
+	{% for requestModelName in operation.requestGenerationModel.typeNames %}@Valid @NotNull @RequestBody final {{ requestModelName|capitalizeFirstLetter }} {{ requestModelName|snakeCaseToCamelCase }}
+	{%- if not forloop.last%}, {% endif -%}{% endfor -%});
+	{%- if not forloop.paths.last or not forloop.operations.last %}
+	{% endif -%}
+{% endfor %}{% endfor %}
+}

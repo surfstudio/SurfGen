@@ -1,0 +1,24 @@
+package {{package}}.api.dto;
+
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+public enum {{ enum.name }} {
+    {% for caseValue in enum.cases %}{#
+    #}{{ caseValue|uppercase }}("{{ caseValue }}"){% if not forloop.last %},{% else %};{% endif %}
+    {%- endfor %}
+
+    private final String value;
+
+    public static {{ enum.name }} getByValue(String value) {
+        if (value == null) {
+            return null;
+        }
+        for ({{ enum.name }} item : values()) {
+            if (item.value.equals(value)) {
+                return item;
+            }
+        }
+        return null;
+    }
+}

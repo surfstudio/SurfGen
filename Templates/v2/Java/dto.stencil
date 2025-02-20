@@ -1,0 +1,46 @@
+package {{package}}.api.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+{%- if model.name|splitByUppercaseAndGetLast == "Request" %}
+import jakarta.validation.constraints.*;
+import jakarta.annotation.Nullable;
+{%- else %}
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+{%- endif -%}
+{%- for property in model.properties %}
+{%- if property.typeModel.isArray %}
+import java.util.List;
+{%- elif property.format == "date-time" %}
+import java.time.LocalDateTime;
+{%- elif property.format == "date" %}
+import java.time.LocalDate;
+{%- elif property.format == "uuid" %}
+import org.hibernate.validator.constraints.UUID;
+{%- endif -%}
+{% endfor %}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+{%- if model.description %}
+@Schema(description = "{{ model.description }}"){% endif %}
+public class {{ model.name }} {
+    {%- for property in model.properties %}
+    @Schema(description = "{{ property.description }}"{% if property.example %}, example = "{{ property.example }}"{% else %}){% endif %}{% if property.format == "uuid" %}
+    @UUID{% endif %}{% if property.pattern %}
+    @Pattern(regexp = "{{ property.pattern|withEscapedCharacters }}"){% endif %}{% if not property.isNullable and property.typeModel.name != "string" %}
+    @NotNull{% elif not property.isNullable and property.typeModel.name == "string" %}
+    @NotBlank{% elif property.isNullable %}
+    @Nullable{% endif %}{% if property.typeModel.name == "string" %}{% if property.minLength or property.maxLength %}
+    @Size(min = {{ property.minLength }}, max = {{ property.maxLength }}){% endif %}{% elif property.typeModel.name == "integer" %}{% if property.minimum or property.maximum %}
+    @Min({{ property.minimum }})
+    @Max({{ property.maximum }}){% endif %}{% endif %}
+    private {% if property.typeModel.isArray %}List<{{ property.typeModel.name|capitalizeFirstLetter }}>{% else %}{% if property.typeModel.name == "integer" %}{% if property.format == "int64" %}Long{% else %}Integer{% endif %}{% elif property.typeModel.name == "number" %}Double{% elif property.typeModel.name == "string" %}{% if property.format == "date-time" %}LocalDateTime{% elif property.format == "date" %}LocalDate{% else %}String{% endif %}{% else %}{{ property.typeModel.name|capitalizeFirstLetter }}{% endif %}{% endif %} {{ property.name|snakeCaseToCamelCase }};
+    {%- if not forloop.last %}
+    {% endif -%}
+    {% endfor %}
+}

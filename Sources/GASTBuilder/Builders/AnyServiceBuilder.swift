@@ -1,6 +1,6 @@
 //
 //  AnyServiceBuilder.swift
-//  
+//
 //
 //  Created by Александр Кравченков on 14.12.2020.
 //
@@ -17,7 +17,7 @@ public protocol ServiceBuilder {
 }
 
 /// Default implementation for `ServiceBuilder`
-/// 
+///
 /// Builds `path` elements of Open-API spec
 ///
 /// **WARNING**
@@ -34,7 +34,6 @@ public struct AnyServiceBuilder: ServiceBuilder {
     let schemaBuilder: SchemaBuilder
     let requestBodyBuilder: RequestBodyBuilder
     let responseBuilder: ResponseBuilder
-
     public init(parameterBuilder: ParametersBuilder,
                 schemaBuilder: SchemaBuilder,
                 requestBodyBuilder: RequestBodyBuilder,
@@ -93,7 +92,8 @@ extension AnyServiceBuilder {
                          summary: operation.summary,
                          parameters: params,
                          requestBody: requestBody,
-                         responses: responses)
+                         responses: responses,
+                         id: operation.generatedIdentifier)
         }
     }
 
